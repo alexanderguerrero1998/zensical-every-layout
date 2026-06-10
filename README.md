@@ -11,7 +11,7 @@ git push -u origin main
 Para cuando se hacen cambios
 ```sh
 git add .
-git commit -m "descripcion del cambio"
+git commit -m "update files"
 git pull --rebase origin main
 git push
 ```
