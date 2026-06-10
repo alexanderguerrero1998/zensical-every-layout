@@ -25,7 +25,17 @@ nav = [
             { "MODULAR SCALE" = "everyLayoutCss/capModularScale/modular-scale.md" },
             { "AXIOMS" = "everyLayoutCss/capAxioms/axioms.md" },
             { "THE STACK" = "everyLayoutCss/capStack/stack.md" },
-
+            { "THE BOX" = "everyLayoutCss/capBox/box.md" },
+            { "THE CENTER" = "everyLayoutCss/capCenter/center.md" },
+            { "THE CLUSTER" = "everyLayoutCss/capCluster/cluster.md" },
+            { "THE SIDEBAR" = "everyLayoutCss/capSidebar/sidebar.md" },
+            { "THE SWITCHER" = "everyLayoutCss/capSwitcher/switcher.md" },
+            { "THE COVER" = "everyLayoutCss/capCover/cover.md" },
+            { "THE GRID" = "everyLayoutCss/capGrid/grid.md" },
+            { "THE FRAME" = "everyLayoutCss/capFrame/frame.md" },
+            { "THE REEL" = "everyLayoutCss/capReel/reel.md" },
+            { "THE IMPOSTER" = "everyLayoutCss/capImposter/imposter.md" },
+            { "THE ICON" = "everyLayoutCss/capIcon/icon.md" },
 
 
           ]
