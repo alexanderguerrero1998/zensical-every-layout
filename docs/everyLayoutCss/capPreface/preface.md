@@ -24,4 +24,16 @@ Esperamos que los titulares de licencias usen su licencia de manera justa. Depos
 Si sospechamos que no estás usando tu licencia de manera justa o compartiéndola irresponsablemente, nos reservamos el derecho de revocar tu acceso a Every Layout sin reembolso, después de una advertencia justa.
 
 
+## RUDIMENTS
 
+- [x] Boxes
+- [x] Composition
+- [x] Units
+- [x] Global and local styling
+- [x] Modular scale
+- [x] Axioms
+
+## LAYOUTS
+![](layaout1.png)
+
+![](layout2.png)
