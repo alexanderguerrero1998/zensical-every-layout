@@ -7,22 +7,31 @@
 # ============================================================================
 
 [project]
+site_name = "EVERY LAYOUT"
+site_description = "Notas de aprendizaje de Express.js"
+site_author = "Alexander Guerrero"
+repo_url = "https://github.com/alexanderguerrero1998/zensical-vue"
+repo_name = "zensical-vue"
+docs_dir = "docs"
+edit_uri = "edit/main/docs/"
+nav = [
+        {
+          "EVERY LAYOUT" = [
+            { "PREFACE" = "everyLayoutCss/capPreface/preface.md" },
+            { "BOXES" = "everyLayoutCss/capBoxes/boxes.md" },
+            { "COMPOSITION" = "everyLayoutCss/capComposition/composition.md" },
+            { "UNITS" = "everyLayoutCss/capUnits/units.md" },
+            { "GLOBAL AND LOCAL STYLING" = "everyLayoutCss/capGlobalLocal/global-local.md" },
+            { "MODULAR SCALE" = "everyLayoutCss/capModularScale/modular-scale.md" },
+            { "AXIOMS" = "everyLayoutCss/capAxioms/axioms.md" },
+            { "THE STACK" = "everyLayoutCss/capStack/stack.md" },
 
-# The site_name is shown in the page header and the browser window title
-#
-# Read more: https://zensical.org/docs/setup/basics/#site_name
-site_name = "Documentation"
 
-# The site_description is included in the HTML head and should contain a
-# meaningful description of the site content for use by search engines.
-#
-# Read more: https://zensical.org/docs/setup/basics/#site_description
-site_description = "A new project generated from the default template project."
 
-# The site_author attribute. This is used in the HTML head element.
-#
-# Read more: https://zensical.org/docs/setup/basics/#site_author
-site_author = "<your name here>"
+          ]
+        },{ "OTHER BOOK" = [ { "NODE FUNDAMENTALS" = "Efficient_NodeJS/cap1/nodeFundamentals.md" },]}
+
+]
 
 # The site_url is the canonical URL for your site. When building online
 # documentation you should set this.
