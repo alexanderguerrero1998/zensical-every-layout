@@ -1,12 +1,12 @@
 # Cajas
 
-Como Rachel Andrew nos ha recordado, *todo en el diseño web es una caja* ↗, o la ausencia de una caja. No todo se ve necesariamente como una caja — `border-radius`, `clip-path` y `transform` pueden ser engañosos — pero todo ocupa un espacio con forma de caja. El layout es, inevitablemente, la disposición de cajas.
+Como Rachel Andrew nos ha recordado, [*todo en el diseño web es una caja*↗ ](https://www.smashingmagazine.com/2019/05/display-box-generation/), o la ausencia de una caja. No todo se ve necesariamente como una caja — `border-radius`, `clip-path` y `transform` pueden ser engañosos — pero todo ocupa un espacio con forma de caja. El layout es, inevitablemente, la disposición de cajas.
 
-Antes de embarcarse en combinar cajas para hacer *layouts compuestos*, es importante familiarizarse con cómo las cajas mismas están diseñadas para comportarse por defecto.
+Antes de embarcarse en combinar cajas para hacer *layouts compuestos*,  es importante familiarizarse con cómo las cajas mismas están diseñadas para comportarse por defecto.
 
 ## El modelo de caja (*box model*)
 
-El *box model* es la fórmula sobre la cual se basan las cajas de layout, y comprende contenido (*content*), relleno (*padding*), borde (*border*) y margen (*margin*). CSS nos permite alterar estos valores para cambiar el tamaño y la forma general de la visualización de los elementos.
+El  [*box model*](https://www.w3.org/TR/CSS2/box.html#box-dimensions) es la fórmula sobre la cual se basan las cajas de layout, y comprende contenido (*content*), relleno (*padding*), borde (*border*) y margen (*margin*). CSS nos permite alterar estos valores para cambiar el tamaño y la forma general de la visualización de los elementos.
 
 ![](parts.png)
 
@@ -40,10 +40,57 @@ ul {
 
 ## La propiedad `display`
 
-En ambos ejemplos anteriores, la propiedad `display` del elemento está establecida como `block`. Los elementos en bloque asumen todo el espacio disponible en una dimensión. Típicamente, esta es la dimensión horizontal, porque `writing-mode` está establecido como `horizontal-tb` (horizontal; con una dirección de flujo de arriba a abajo). En algunos casos, y para algunos idiomas (como el japonés), `vertical-rl` es el modo de escritura apropiado.
+En ambos ejemplos anteriores, la propiedad `display` del elemento está establecida como `block`. Los elementos en bloque asumen todo el espacio disponible en una dimensión. Típicamente, esta es la dimensión horizontal, porque `writing-mode` está establecido como `horizontal-tb` (horizontal; con una dirección de flujo de arriba a abajo). En algunos casos, y para algunos idiomas [como el japonés↗](https://w3c.github.io/i18n-drafts/articles/vertical-text/index.en) , `vertical-rl` es el modo de escritura apropiado.
 
 ![](inlinelements.png)
 
+!!! example "`writing-mode`: `horizontal-tb`"
+
+    <div class="contenedor-1">
+          <div class="contenedor-1-display">Block Element</div>
+          <div class="contenedor-1-display">Block Element</div>
+          <div class="contenedor-1-display">Block Element</div>
+    </div>
+
+      ```css hl_lines="2"
+      .contenedor-1 {
+            writing-mode: horizontal-tb;
+        }
+
+      .contenedor-1-display {
+            margin-bottom: 5px;
+            border-radius: 3px;
+            background-color:#1976d2;
+            padding: 10px;
+            
+        }
+
+      ```
+       
+
+!!! example "`writing-mode`: `vertical-lr`"
+
+    <div class="containerr-2">
+          <div class="containerr-2-display">Block Element</div>
+          <div class="containerr-2-display">Block Element</div>
+          <div class="containerr-2-display">Block Element</div>
+    </div>
+
+      ```css hl_lines="2"
+      .contenedor-2 {
+          writing-mode: vertical-lr;
+        }
+
+      .contenedor-2-display {
+        margin: 5px;
+        border-radius: 3px;
+        background-color:#1976d2;
+        padding: 10px;
+            
+        }
+
+      ```
+       
 ### Elementos inline
 
 Los elementos *inline* (con el valor `display: inline`) se comportan de manera diferente. Se distribuyen dentro del contexto actual, siguiendo el modo de escritura y la dirección en línea (`direction`). Solo son tan anchos como su contenido y se colocan adyacentemente donde haya espacio para hacerlo.Los elementos en bloque siguen la *dirección de flujo* (*flow direction*), y los elementos inline siguen la *dirección de escritura* (*writing direction*). 
