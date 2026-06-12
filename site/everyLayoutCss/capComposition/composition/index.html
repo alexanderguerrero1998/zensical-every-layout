@@ -1178,10 +1178,10 @@
 
 
 <h1 id="composicion">Composición<a class="headerlink" href="#composicion" title="Permanent link">&para;</a></h1>
-<p>Si eres programador, es posible que hayas oído hablar del principio <em>composition over inheritance</em> ↗ (composición frente a herencia). La idea es que combinar partes independientes simples (objetos; clases; funciones) te da más flexibilidad y conduce a más eficiencia que conectar todo — a través de la herencia — a un origen compartido.</p>
-<p><em>Composition over inheritance</em> no tiene por qué aplicarse solo a la "lógica de negocio". También es beneficioso favorecer la composición en la arquitectura front-end y el diseño visual (la documentación de React incluso tiene una página dedicada a ello ↗).</p>
+<p>Si eres programador, es posible que hayas oído hablar del principio <a href="https://en.wikipedia.org/wiki/Composition_over_inheritance">composition over inheritance ↗</a> (composición frente a herencia). La idea es que combinar partes independientes simples (objetos; clases; funciones) te da más flexibilidad y conduce a más eficiencia que conectar todo — a través de la herencia — a un origen compartido.</p>
+<p><em>Composition over inheritance</em> no tiene por qué aplicarse solo a la "lógica de negocio". También es beneficioso favorecer la composición en la arquitectura front-end y el diseño visual ( <a href="https://legacy.reactjs.org/docs/composition-vs-inheritance.html">la documentación de React incluso tiene una página dedicada a ello ↗</a> ).</p>
 <h2 id="composicion-y-layout">Composición y layout<a class="headerlink" href="#composicion-y-layout" title="Permanent link">&para;</a></h2>
-<p>Para entender cómo la composición beneficia a un layout, consideremos un componente de ejemplo. Digamos que este componente es un cuadro de diálogo, porque la interfaz (por razones en las que no entraremos ahora) un cuadro de diálogo. Aquí se ve cómo es:</p>
+<p>Para entender cómo la composición beneficia a un layout, consideremos un componente de ejemplo. Digamos que este componente es un cuadro de diálogo, porque la interfaz (por razones en las que no entraremos ahora) requiere un cuadro de diálogo. Aquí se ve cómo es:</p>
 <p><img alt="" src="../modal.png" /></p>
 <p>Pero, ¿cómo llega a verse así? Una forma es escribir CSS dedicado para el diálogo. Podrías darle al cuadro de diálogo un identificador de "bloque" (<code>.dialog</code> en CSS, y <code>class="dialog"</code> en HTML) y usar esto como tu espacio de nombres para adjuntar declaraciones de estilo.</p>
 <div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>

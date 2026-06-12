@@ -1,12 +1,12 @@
 # Composición
 
-Si eres programador, es posible que hayas oído hablar del principio *composition over inheritance* ↗ (composición frente a herencia). La idea es que combinar partes independientes simples (objetos; clases; funciones) te da más flexibilidad y conduce a más eficiencia que conectar todo — a través de la herencia — a un origen compartido.
+Si eres programador, es posible que hayas oído hablar del principio [composition over inheritance ↗](https://en.wikipedia.org/wiki/Composition_over_inheritance) (composición frente a herencia). La idea es que combinar partes independientes simples (objetos; clases; funciones) te da más flexibilidad y conduce a más eficiencia que conectar todo — a través de la herencia — a un origen compartido.
 
-*Composition over inheritance* no tiene por qué aplicarse solo a la "lógica de negocio". También es beneficioso favorecer la composición en la arquitectura front-end y el diseño visual (la documentación de React incluso tiene una página dedicada a ello ↗).
+*Composition over inheritance* no tiene por qué aplicarse solo a la "lógica de negocio". También es beneficioso favorecer la composición en la arquitectura front-end y el diseño visual ( [la documentación de React incluso tiene una página dedicada a ello ↗](https://legacy.reactjs.org/docs/composition-vs-inheritance.html) ).
 
 ## Composición y layout
 
-Para entender cómo la composición beneficia a un layout, consideremos un componente de ejemplo. Digamos que este componente es un cuadro de diálogo, porque la interfaz (por razones en las que no entraremos ahora) un cuadro de diálogo. Aquí se ve cómo es:
+Para entender cómo la composición beneficia a un layout, consideremos un componente de ejemplo. Digamos que este componente es un cuadro de diálogo, porque la interfaz (por razones en las que no entraremos ahora) requiere un cuadro de diálogo. Aquí se ve cómo es:
 
 ![](modal.png)
 

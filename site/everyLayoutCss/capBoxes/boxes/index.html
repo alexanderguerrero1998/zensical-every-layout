@@ -456,17 +456,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#display-none" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        <code>display: none</code>
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -1173,17 +1162,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#display-none" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        <code>display: none</code>
-      </span>
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -1344,94 +1322,370 @@
 <p>En ambos ejemplos anteriores, la propiedad <code>display</code> del elemento está establecida como <code>block</code>. Los elementos en bloque asumen todo el espacio disponible en una dimensión. Típicamente, esta es la dimensión horizontal, porque <code>writing-mode</code> está establecido como <code>horizontal-tb</code> (horizontal; con una dirección de flujo de arriba a abajo). En algunos casos, y para algunos idiomas <a href="https://w3c.github.io/i18n-drafts/articles/vertical-text/index.en">como el japonés↗</a> , <code>vertical-rl</code> es el modo de escritura apropiado.</p>
 <p><img alt="" src="../inlinelements.png" /></p>
 <div class="admonition example">
-<p class="admonition-title"><code>writing-mode</code>: <code>horizontal-tb</code></p>
+<p class="admonition-title"><code>display</code>:<code>block</code> | <code>writing-mode</code>: <code>horizontal-tb</code></p>
+<p>Aqui afectas <strong>unicamente</strong> a los elementos que contiene la propiedad <code>writing-mode</code>: <code>horizontal-tb</code>. El contenedor padre no se ve afectador, es decir, que si aplica esta propiedad al contenedor padre esperando que sus hijos se vean afectados por la propiedad <code>writing-mode</code>: <code>horizontal-tb</code> , eso no va a  suceder. Por eso aqui aplicamos la propiedad directamete a los hijos. Ya que esta propiedad funciona directamente aplicado en los elementos hijos.</p>
 <p><div class="contenedor-1">
       <div class="contenedor-1-display">Block Element</div>
       <div class="contenedor-1-display">Block Element</div>
       <div class="contenedor-1-display">Block Element</div>
 </div></p>
-<div class="language-css highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">.</span><span class="nc">contenedor-1</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="hll"><span class="w">      </span><span class="k">writing-mode</span><span class="p">:</span><span class="w"> </span><span class="kc">horizontal</span><span class="o">-</span><span class="n">tb</span><span class="p">;</span>
-</span></span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="p">}</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="p">.</span><span class="nc">contenedor-1-display</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">      </span><span class="k">margin-bottom</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">      </span><span class="k">border-radius</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">      </span><span class="k">background-color</span><span class="p">:</span><span class="mh">#1976d2</span><span class="p">;</span>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">      </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span><span class="p">}</span>
-</span></code></pre></div>
+<p><div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-2-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-2-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-2-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-2-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-2-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-2-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-2-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-2-10">10</a></span>
+<span class="normal"><a href="#__codelineno-2-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="p">.</span><span class="nc">contenedor-1</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="hll"><span class="w">      </span><span class="k">writing-mode</span><span class="p">:</span><span class="w"> </span><span class="kc">horizontal</span><span class="o">-</span><span class="n">tb</span><span class="p">;</span>
+</span></span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4"></a>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="p">.</span><span class="nc">contenedor-1-display</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="w">      </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">block</span><span class="p">;</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="w">      </span><span class="k">margin-bottom</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="w">      </span><span class="k">border-radius</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="w">      </span><span class="k">background-color</span><span class="p">:</span><span class="mh">#1976d2</span><span class="p">;</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="w">      </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11"></a><span class="w">  </span><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+  <div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span>
+<span class="normal"><a href="#__codelineno-3-3">3</a></span>
+<span class="normal"><a href="#__codelineno-3-4">4</a></span>
+<span class="normal"><a href="#__codelineno-3-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;contenedor-1&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2"></a>    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;contenedor-1-display&quot;</span><span class="p">&gt;</span>Block Element<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3"></a>    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;contenedor-1-display&quot;</span><span class="p">&gt;</span>Block Element<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4"></a>    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;contenedor-1-display&quot;</span><span class="p">&gt;</span>Block Element<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></code></pre></div></td></tr></table></div></p>
 </div>
 <div class="admonition example">
-<p class="admonition-title"><code>writing-mode</code>: <code>vertical-lr</code></p>
+<p class="admonition-title"><code>display</code>:<code>block</code> |<code>writing-mode</code>: <code>vertical-lr</code></p>
+<p>Aqui afectas <strong>unicamente</strong> a los elementos que contiene la propiedad <code>writing-mode</code>: <code>vertical-lr</code>. El contenedor padre no se ve afectador, es decir, que si aplicas esta propiedad al contenedor padre esperando que sus hijos se vean afectados por la propiedad <code>writing-mode</code>: <code>vertical-lr</code>, eso no va a  suceder. Por eso aqui aplicamos la propiedad directamete a los hijos. Ya que esta propiedad funciona directamente aplicado en los elementos hijos.</p>
 <p><div class="containerr-2">
       <div class="containerr-2-display">Block Element</div>
       <div class="containerr-2-display">Block Element</div>
       <div class="containerr-2-display">Block Element</div>
 </div></p>
-<div class="language-css highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">.</span><span class="nc">contenedor-2</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="hll"><span class="w">    </span><span class="k">writing-mode</span><span class="p">:</span><span class="w"> </span><span class="kc">vertical</span><span class="o">-</span><span class="n">lr</span><span class="p">;</span>
-</span></span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="p">}</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="p">.</span><span class="nc">contenedor-2-display</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="k">margin</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="k">border-radius</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="k">background-color</span><span class="p">:</span><span class="mh">#1976d2</span><span class="p">;</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span><span class="p">}</span>
-</span></code></pre></div>
+<p><div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-4-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-4-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-4-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-4-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-4-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-4-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-4-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-4-10">10</a></span>
+<span class="normal"><a href="#__codelineno-4-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="p">.</span><span class="nc">contenedor-2</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="hll"><span class="w">    </span><span class="k">writing-mode</span><span class="p">:</span><span class="w"> </span><span class="kc">vertical</span><span class="o">-</span><span class="n">lr</span><span class="p">;</span>
+</span></span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4"></a>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="p">.</span><span class="nc">contenedor-2-display</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">block</span><span class="p">;</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">  </span><span class="k">margin</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="w">  </span><span class="k">border-radius</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="w">  </span><span class="k">background-color</span><span class="p">:</span><span class="mh">#1976d2</span><span class="p">;</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="w">  </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="w">  </span><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+  <div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
+<span class="normal"><a href="#__codelineno-5-2">2</a></span>
+<span class="normal"><a href="#__codelineno-5-3">3</a></span>
+<span class="normal"><a href="#__codelineno-5-4">4</a></span>
+<span class="normal"><a href="#__codelineno-5-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;container-2&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2"></a>    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;container-2-display&quot;</span><span class="p">&gt;</span>Block Element<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3"></a>    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;container-2-display&quot;</span><span class="p">&gt;</span>Block Element<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4"></a>    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;container-2-display&quot;</span><span class="p">&gt;</span>Block Element<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></code></pre></div></td></tr></table></div></p>
 </div>
 <h3 id="elementos-inline">Elementos inline<a class="headerlink" href="#elementos-inline" title="Permanent link">&para;</a></h3>
-<p>Los elementos <em>inline</em> (con el valor <code>display: inline</code>) se comportan de manera diferente. Se distribuyen dentro del contexto actual, siguiendo el modo de escritura y la dirección en línea (<code>direction</code>). Solo son tan anchos como su contenido y se colocan adyacentemente donde haya espacio para hacerlo.Los elementos en bloque siguen la <em>dirección de flujo</em> (<em>flow direction</em>), y los elementos inline siguen la <em>dirección de escritura</em> (<em>writing direction</em>). </p>
+<p>Los elementos <em>inline</em> (con el valor <code>display: inline</code>) se comportan de manera diferente. Se distribuyen dentro del contexto actual, siguiendo el modo de escritura y la dirección en línea (<code>direction</code>). Solo son tan anchos como su contenido y se colocan adyacentemente donde haya espacio para hacerlo. </p>
+<p>Los elementos en <code>bloque</code> siguen la <em>dirección de flujo</em> (<strong>flow direction</strong>), y los elementos <code>inline</code> siguen la <em>dirección de escritura</em> (<strong>writing direction</strong>). </p>
 <p><img alt="" src="../flowdirections.png" /></p>
 <p>Pensando tipográficamente, podría decirse que los elementos en bloque son como párrafos, y los elementos inline son como palabras.</p>
-<p>Los elementos en bloque (también llamados elementos de <em>bloque</em>) te brindan control sobre ambas dimensiones (horizontal y vertical) de la caja. Es decir, puedes aplicar <code>width</code>, <code>height</code>, <code>margin</code> y <code>padding</code> a un elemento en bloque y tendrán efecto. Por otro lado, los elementos inline tienen un tamaño determinado por su contenido (los valores prescritos de <code>width</code> y <code>height</code> no tienen efecto) y solo se permiten valores de <code>margin</code> y <code>padding</code> en la dimensión inline. Los elementos inline están diseñados para conformarse al flujo de colocación horizontal entre otros elementos inline.</p>
-<h3 id="display-none"><code>display: none</code><a class="headerlink" href="#display-none" title="Permanent link">&para;</a></h3>
+<p><strong>Los elementos en bloque</strong> (también llamados elementos de <a href="https://developer.mozilla.org/en-US/docs/Glossary/Block-level_content">nivel de bloque↗</a> ) te brindan control sobre ambas dimensiones (horizontal y vertical) de la caja. Es decir, puedes aplicar <code>width</code>, <code>height</code>, <code>margin</code> y <code>padding</code> a un elemento en bloque y tendrán efecto. Por otro lado, los elementos inline tienen un tamaño determinado por su contenido (los valores prescritos de <code>width</code> y <code>height</code> no tienen efecto) y solo se permiten valores de <code>margin</code> y <code>padding</code> en la dimensión inline. Los elementos inline están diseñados para conformarse al flujo de colocación horizontal entre otros elementos inline.</p>
+<div class="admonition example">
+<p class="admonition-title"><code>display</code>:<code>inline</code></p>
+<p>Las propiedades de <code>width</code> y <code>height</code> no funcionan en elementos <code>inline</code>.</p>
+<p>Aqui afectas <strong>unicamente</strong> a los elementos que contiene la propiedad <code>display</code>: <code>inline</code>. El contenedor padre no se ve afectador, es decir, que si aplicas esta propiedad al contenedor padre esperando que sus hijos se vean afectados por la propiedad <code>display</code>: <code>inline</code>, eso no va a  suceder. Por eso aqui aplicamos la propiedad directamete a los hijos. Ya que esta propiedad funciona directamente aplicado en los elementos hijos.</p>
+<p><div class = "contenedor-3">
+  <div class ="contenedor-3-inline">Element</div>
+  <div class ="contenedor-3-inline"> Element</div>
+  <div class ="contenedor-3-inline"> Element</div>
+</div></p>
+<p><div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
+<span class="normal"><a href="#__codelineno-6-2">2</a></span>
+<span class="normal"><a href="#__codelineno-6-3">3</a></span>
+<span class="normal"><a href="#__codelineno-6-4">4</a></span>
+<span class="normal"><a href="#__codelineno-6-5">5</a></span>
+<span class="normal"><a href="#__codelineno-6-6">6</a></span>
+<span class="normal"><a href="#__codelineno-6-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="p">.</span><span class="nc">contenedor-3-inline</span><span class="p">{</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">inline</span><span class="p">;</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="w">  </span><span class="k">background-color</span><span class="p">:</span><span class="w"> </span><span class="mh">#1976d2</span><span class="p">;</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4"></a>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="hll"><span class="w">  </span><span class="k">width</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="kt">px</span><span class="p">;</span><span class="w">       </span><span class="c">/* Esta propiedad no funciona */</span>
+</span></span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="hll"><span class="w">  </span><span class="k">height</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span><span class="w">        </span><span class="c">/* Esta propiedad no funciona */</span>
+</span></span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span>
+<span class="normal"><a href="#__codelineno-7-2">2</a></span>
+<span class="normal"><a href="#__codelineno-7-3">3</a></span>
+<span class="normal"><a href="#__codelineno-7-4">4</a></span>
+<span class="normal"><a href="#__codelineno-7-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class </span><span class="o">=</span> <span class="s">&quot;contenedor-3&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class </span><span class="o">=</span><span class="s">&quot;contenedor-3-inline&quot;</span><span class="p">&gt;</span>Element<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class </span><span class="o">=</span><span class="s">&quot;contenedor-3-inline&quot;</span><span class="p">&gt;</span> Element<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class </span><span class="o">=</span><span class="s">&quot;contenedor-3-inline&quot;</span><span class="p">&gt;</span> Element<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></code></pre></div></td></tr></table></div></p>
+</div>
 <p>Una propiedad de visualización relativamente nueva, <code>inline-block</code> es un híbrido de <code>block</code> y <code>inline</code> . Puedes establecer propiedades verticales en los elementos <code>inline-block</code>,aunque esto no siempre es deseable, como se muestra en el siguiente ejemplo.</p>
 <p><img alt="" src="../inlineblocks.png" /></p>
-<p>De los tipos básicos, solo queda <code>display: none</code>. Este valor elimina el elemento del layout por completo. No tiene presencia visual ni impacto en el layout de los elementos circundantes. Es como si el elemento mismo hubiera sido eliminado del HTML. En consecuencia, los navegadores no comunican la presencia o el contenido de los elementos con <code>display: none</code> a las tecnologías de asistencia como los lectores de pantalla (<em>screen readers</em>).</p>
+<div class="admonition example">
+<p class="admonition-title"><code>display</code>:<code>inline-block</code></p>
+<p>Adiferencia de los volores anteriores, aqui cuando usamos la propiedad <code>display</code>:<code>inline-block</code> se puede aplicar <code>width</code>, <code>height</code>, <code>margin</code> y <code>padding</code> a un elemento.</p>
+<p>Igualemnete, aqui afectas <strong>unicamente</strong> a los elementos que contiene la propiedad <code>display</code>: <code>inline-block</code>. El contenedor padre no se ve afectador, es decir, que si aplicas esta propiedad al contenedor padre esperando que sus hijos se vean afectados por la propiedad <code>display</code>: <code>inline-block</code>, eso no va a  suceder. Por eso aqui aplicamos la propiedad directamete a los hijos. Ya que esta propiedad funciona directamente aplicado en los elementos hijos.</p>
+<p><div>
+  <div class="contenedor-4-inline-block"> Element </div>
+  <div class="contenedor-4-inline-block"> Element </div>
+  <div class="contenedor-4-inline-block"> Element </div>
+</div></p>
+<p><div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-8-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-8-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-8-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-8-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-8-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-8-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-8-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-8-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-8-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="p">.</span><span class="nc">contenedor-4-inline-block</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">inline-block</span><span class="p">;</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3"></a>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="w">  </span><span class="k">width</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="kt">px</span><span class="p">;</span><span class="w">  </span><span class="c">/* Esta propiedad si funciona aqui */</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="w">  </span><span class="k">height</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="kt">px</span><span class="p">;</span><span class="w">  </span><span class="c">/* Esta propiedad si funciona aqui */</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="w">  </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="c">/* Esta propiedad si funciona aqui */</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7"></a><span class="w">  </span><span class="k">margin</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="kt">px</span><span class="p">;</span><span class="w">  </span><span class="c">/* Esta propiedad si funciona aqui */</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8"></a>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9"></a><span class="w">  </span><span class="k">background-color</span><span class="p">:</span><span class="w"> </span><span class="mh">#1976d2</span><span class="p">;</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span>
+<span class="normal"><a href="#__codelineno-9-2">2</a></span>
+<span class="normal"><a href="#__codelineno-9-3">3</a></span>
+<span class="normal"><a href="#__codelineno-9-4">4</a></span>
+<span class="normal"><a href="#__codelineno-9-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;contenedor-4-inline-block&quot;</span><span class="p">&gt;</span> Element <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;contenedor-4-inline-block&quot;</span><span class="p">&gt;</span> Element <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;contenedor-4-inline-block&quot;</span><span class="p">&gt;</span> Element <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></code></pre></div></td></tr></table></div></p>
+</div>
+<p>De los tipos básicos, solo queda <code>display: none</code>. Este valor elimina el elemento del layout por completo. No tiene presencia visual ni impacto en el layout de los elementos circundantes. Es como si el elemento mismo hubiera sido eliminado del HTML. En consecuencia, los navegadores no comunican la presencia o el contenido de los elementos con <code>display: none</code> a las tecnologías de asistencia como los lectores de pantalla (<a href="https://en.wikipedia.org/wiki/Screen_reader">screen readers↗</a> ).</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>De los tres tipos de valores de la propiedad <code>display</code>: <code>block</code> <code>inline</code> <code>inlone-block</code> se tienen que aplicar directamente en los elementos que se quieren afectar. El <code>none</code> oculta totalmente al elemento dentro del HTML</p>
+</div>
 <h2 id="contextos-de-formato-formatting-contexts">Contextos de formato (<em>formatting contexts</em>)<a class="headerlink" href="#contextos-de-formato-formatting-contexts" title="Permanent link">&para;</a></h2>
-<p>Cuando aplicas <code>display: flex</code> o <code>display: grid</code> a un <code>&lt;div&gt;</code>, este continúa comportándose como un elemento en bloque, usando <code>display: block</code>. Sin embargo, cambia la forma en que se comportan sus elementos <em>hijos</em>. Por ejemplo, con solo <code>display: flex</code> (y sin otras propiedades relacionadas con Flexbox) aplicado al padre, sus hijos se distribuirán horizontalmente. O, dicho de otro modo, la <em>dirección de flujo</em> (<em>flow direction</em>) se cambia de vertical a horizontal.</p>
+<p>Cuando aplicas <code>display: flex</code> o <code>display: grid</code> a un <code>&lt;div&gt;</code>, este continúa comportándose como un elemento en bloque, usando <code>display: block</code>. </p>
+<p>Sin embargo, cambia la forma en que se comportan sus elementos <em>hijos</em>. Por ejemplo, con solo <code>display: flex</code> (y sin otras propiedades relacionadas con Flexbox) aplicado al padre, sus hijos se distribuirán horizontalmente. O, dicho de otro modo, la <em>dirección de flujo</em> (<em>flow direction</em>) se cambia de vertical a horizontal.</p>
 <p>Los contextos de formato son la base de muchos de los layouts documentados en este proyecto. Convierten los elementos en componentes de layout. En <em>Composición</em>, exploraremos cómo diferentes contextos de formato pueden anidarse para crear layouts compuestos.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>A diferencia de los valores anteriores (<code>block</code> <code>inline</code> <code>inlone-block</code>), cuando usamos <code>display:flex</code> lo aplicamos al contenedor padre para que los cambios se reflejen en los hijos.</p>
+<p>Con <code>display:flex</code> los hijo del contenedor pasan de una distribucion vertical a una distribucion horizontal.</p>
+<p><div class="contenedor-5-padre">
+  <div class="hijo-5"> Element </div>
+  <div class="hijo-5"> Element </div>
+  <div class="hijo-5"> Element </div>
+</div></p>
+<p><div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span>
+<span class="normal"><a href="#__codelineno-10-2">2</a></span>
+<span class="normal"><a href="#__codelineno-10-3">3</a></span>
+<span class="normal"><a href="#__codelineno-10-4">4</a></span>
+<span class="normal"><a href="#__codelineno-10-5">5</a></span>
+<span class="normal"><a href="#__codelineno-10-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="hll"><span class="p">.</span><span class="nc">contenedor-5-padre</span><span class="p">{</span><span class="w"> </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span></span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="p">.</span><span class="nc">hijo-5</span><span class="p">{</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="w">    </span><span class="k">background-color</span><span class="p">:</span><span class="w"> </span><span class="mh">#1976d2</span><span class="p">;</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="w">    </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5"></a><span class="w">    </span><span class="k">margin</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6"></a><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span>
+<span class="normal"><a href="#__codelineno-11-2">2</a></span>
+<span class="normal"><a href="#__codelineno-11-3">3</a></span>
+<span class="normal"><a href="#__codelineno-11-4">4</a></span>
+<span class="normal"><a href="#__codelineno-11-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;contenedor-5-padre&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;hijo-5&quot;</span><span class="p">&gt;</span> Element <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;hijo-5&quot;</span><span class="p">&gt;</span> Element <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;hijo-5&quot;</span><span class="p">&gt;</span> Element <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></code></pre></div></td></tr></table></div></p>
+</div>
 <h2 id="contenido-en-cajas">Contenido en cajas<a class="headerlink" href="#contenido-en-cajas" title="Permanent link">&para;</a></h2>
-<p>La web es un conducto para información principalmente textual, complementada por medios como imágenes y videos, a menudo referidos colectivamente como <em>contenido</em>. Los navegadores incorporan algoritmos de ajuste de línea (<em>line wrapping</em>) y desplazamiento (<em>scrolling</em>) para asegurar que el contenido se transmita al usuario en su totalidad, independientemente del tamaño y dimensión de su pantalla, y de configuraciones como el nivel de zoom. La web es en gran medida <em>responsiva</em> ↗ por defecto.</p>
-<p>Sin intervención, es el contenido de un elemento lo que determina su tamaño y forma. El contenido hace que los elementos crezcan horizontalmente y los elementos crecen verticalmente. Dejado a su suerte, el <em>tamaño</em> de una caja está determinado por el área del contenido que contiene. Debido a que el contenido web es <em>dinámico</em> (sujeto a cambios), las representaciones estáticas de los layouts web son extremadamente engañosas. Trabajar directamente con CSS y su flexibilidad desde el principio, como hacemos aquí, es altamente recomendable.</p>
+<p>La web es un conducto para información principalmente textual, complementada por medios como imágenes y videos, a menudo referidos colectivamente como <em>contenido</em>. Los navegadores incorporan algoritmos de ajuste de línea (<em>line wrapping</em>) y desplazamiento (<em>scrolling</em>) para asegurar que el contenido se transmita al usuario en su totalidad, independientemente del tamaño y dimensión de su pantalla, y de configuraciones como el nivel de zoom. La web es en gran medida <a href="https://alistapart.com/article/responsive-web-design/">responsiva ↗</a> por defecto.</p>
+<p>Sin intervención, es el contenido de un elemento lo que determina su tamaño y forma. El contenido hace que los elementos <code>inline</code> crezcan horizontalmente y los elementos <code>block</code> crezcan verticalmente. Si se deja a su suerte, el <em>tamaño</em> de una caja está determinado por el área del contenido que contiene. Debido a que el contenido web es <em>dinámico</em> (sujeto a cambios), las representaciones estáticas de los layouts web son extremadamente engañosas. Trabajar directamente con CSS y su flexibilidad desde el principio, como hacemos aquí, es altamente recomendable.</p>
 <p><img alt="" src="../twhon.png" /></p>
+<blockquote>
+<p><em>Si reduces a la mitad la anchura de un elemento, tendrá que ser el doble de alto para que quepa la misma cantidad de contenido</em></p>
+</blockquote>
 <h2 id="la-propiedad-box-sizing">La propiedad <code>box-sizing</code><a class="headerlink" href="#la-propiedad-box-sizing" title="Permanent link">&para;</a></h2>
 <p>Por defecto, las dimensiones de una caja son las dimensiones del <em>contenido</em> de la caja <em>más</em> sus valores de <code>padding</code> y <code>border</code> (implícitamente: <code>box-sizing: content-box</code>). Es decir, si estableces que un elemento tenga <code>10rem</code> de ancho, luego agregas <code>1rem</code> de padding a cada lado, tendrá <code>12rem</code> de ancho: <code>10rem</code> más <code>1rem</code> de padding izquierdo y <code>1rem</code> de padding derecho.</p>
 <p>Si optas por <code>box-sizing: border-box</code>, el área de contenido se reduce para acomodar el padding y el ancho total equivale al ancho prescrito de <code>10rem</code>.</p>
 <p><img alt="" src="../boxsizing.png" /></p>
 <p>Generalmente, se considera preferible usar el modelo <code>border-box</code> para todas las cajas. Hace que calcular/anticipar las dimensiones de las cajas sea más fácil.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>Aqui el primer elemento mantiene sus dimenciones de <code>100px</code>, mientras que el segunda elemento trendra una dimencion de <code>120px</code>.</p>
+<p><div class="contenedor-6">
+  <div class="hijo-6-box-sizing-1">Element</div>
+  <div class="hijo-6-box-sizing-2">Element</div>
+</div></p>
+<p><div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-12-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-12-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-12-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-12-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-12-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-12-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-12-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-12-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-12-10">10</a></span>
+<span class="normal"><a href="#__codelineno-12-11">11</a></span>
+<span class="normal"><a href="#__codelineno-12-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="p">.</span><span class="nc">hijo-6-box-sizing-1</span><span class="p">{</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="hll"><span class="w">      </span><span class="k">box-sizing</span><span class="p">:</span><span class="w"> </span><span class="kc">border-box</span><span class="p">;</span>
+</span></span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="w">      </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="w">      </span><span class="k">width</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="kt">px</span><span class="p">;</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5"></a><span class="w">      </span><span class="k">background-color</span><span class="p">:</span><span class="w"> </span><span class="mh">#1976d2</span><span class="p">;</span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7"></a><span class="w">  </span><span class="p">.</span><span class="nc">hijo-6-box-sizing-2</span><span class="p">{</span>
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8"></a><span class="w">      </span><span class="k">box-sizing</span><span class="p">:</span><span class="w"> </span><span class="kc">content-box</span><span class="p">;</span>
+</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9"></a><span class="w">      </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10"></a><span class="w">      </span><span class="k">width</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="kt">px</span><span class="p">;</span>
+</span><span id="__span-12-11"><a id="__codelineno-12-11" name="__codelineno-12-11"></a><span class="w">      </span><span class="k">background-color</span><span class="p">:</span><span class="w"> </span><span class="mh">#1976d2</span><span class="p">;</span>
+</span><span id="__span-12-12"><a id="__codelineno-12-12" name="__codelineno-12-12"></a><span class="w">  </span><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span>
+<span class="normal"><a href="#__codelineno-13-2">2</a></span>
+<span class="normal"><a href="#__codelineno-13-3">3</a></span>
+<span class="normal"><a href="#__codelineno-13-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;contenedor-6&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;hijo-6-box-sizing-1&quot;</span><span class="p">&gt;</span>Element<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;hijo-6-box-sizing-2&quot;</span><span class="p">&gt;</span>Element<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></code></pre></div></td></tr></table></div></p>
+</div>
 <p>Cualquier estilo, como <code>box-sizing: border-box</code>, que sea aplicable a <em>todos</em> los elementos se aplica mejor usando el selector universal (<code>*</code>). Como se cubre en detalle en <em>Estilos globales y locales</em>, poder afectar el layout de múltiples elementos (en este caso, <em>todos</em> los elementos) simultáneamente es cómo CSS aporta eficiencia al diseño de layouts.</p>
-<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
-<span class="normal"><a href="#__codelineno-4-2">2</a></span>
-<span class="normal"><a href="#__codelineno-4-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="o">*</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">  </span><span class="k">box-sizing</span><span class="p">:</span><span class="w"> </span><span class="kc">border-box</span><span class="p">;</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="p">}</span>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span>
+<span class="normal"><a href="#__codelineno-14-2">2</a></span>
+<span class="normal"><a href="#__codelineno-14-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2"></a><span class="w">  </span><span class="k">box-sizing</span><span class="p">:</span><span class="w"> </span><span class="kc">border-box</span><span class="p">;</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <h2 id="excepciones">Excepciones<a class="headerlink" href="#excepciones" title="Permanent link">&para;</a></h2>
-<p>Hay excepciones a esta regla general, como en el <em>Center layout</em> donde la medición del <em>contenido</em> es crítica. La <em>cascada</em> de CSS está diseñada para acomodar excepciones a las reglas generales.</p>
-<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
-<span class="normal"><a href="#__codelineno-5-2">2</a></span>
-<span class="normal"><a href="#__codelineno-5-3">3</a></span>
-<span class="normal"><a href="#__codelineno-5-4">4</a></span>
-<span class="normal"><a href="#__codelineno-5-5">5</a></span>
-<span class="normal"><a href="#__codelineno-5-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="o">*</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">  </span><span class="k">box-sizing</span><span class="p">:</span><span class="w"> </span><span class="kc">border-box</span><span class="p">;</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="p">}</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="p">.</span><span class="nc">center-l</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="w">  </span><span class="k">box-sizing</span><span class="p">:</span><span class="w"> </span><span class="kc">content-box</span><span class="p">;</span>
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="p">}</span>
+<p>Hay excepciones a esta regla general, como en el <em>Center layout</em> donde la medición del <em>contenido</em> es crítica. La <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Cascade/Introduction">cascada ↗</a> de CSS está diseñada para acomodar excepciones a las reglas generales.</p>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span>
+<span class="normal"><a href="#__codelineno-15-2">2</a></span>
+<span class="normal"><a href="#__codelineno-15-3">3</a></span>
+<span class="normal"><a href="#__codelineno-15-4">4</a></span>
+<span class="normal"><a href="#__codelineno-15-5">5</a></span>
+<span class="normal"><a href="#__codelineno-15-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2"></a><span class="w">  </span><span class="k">box-sizing</span><span class="p">:</span><span class="w"> </span><span class="kc">border-box</span><span class="p">;</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3"></a><span class="p">}</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4"></a><span class="p">.</span><span class="nc">center-l</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5"></a><span class="w">  </span><span class="k">box-sizing</span><span class="p">:</span><span class="w"> </span><span class="kc">content-box</span><span class="p">;</span>
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
-<p>Solo cuando la altura o el ancho de una caja está restringida, la diferencia entre <code>border-box</code> y <code>content-box</code> entra en juego. A modo de ilustración, considera un elemento en bloque colocado dentro de otro elemento en bloque. Usando el modelo <code>border-box</code> y un padding de <code>1rem</code>, el elemento hijo desbordará (<em>overflow</em>) por <code>2rem</code> cuando se aplique <code>width: 100%</code>.</p>
+<p>Solo cuando la altura o el ancho de una caja está restringida, la diferencia entre <code>border-box</code> y <code>content-box</code> entra en juego. A modo de ilustración, considera un elemento en bloque colocado dentro de otro elemento en bloque. Usando el modelo <code>content-box</code> y un padding de <code>1rem</code>, el elemento hijo desbordará (<em>overflow</em>) por <code>2rem</code> cuando se aplique <code>width: 100%</code>.</p>
 <p><img alt="" src="../witd100.png" /></p>
 <p>¿Por qué? Porque <code>width: 100%</code> significa "haz que el ancho de este elemento sea igual al del elemento padre". Ya que estamos usando el modelo <code>content-box</code>, el <code>content</code> se hace <code>100%</code> de ancho, luego el padding se suma a este valor.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><div class="contendor-7">
+  <div class="hijo-7"> Element</div>
+</div></p>
+<p><div class="language-cs highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-16-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-16-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-16-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-16-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-16-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-16-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-16-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-16-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-16-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-16-10">10</a></span>
+<span class="normal"><a href="#__codelineno-16-11">11</a></span>
+<span class="normal"><a href="#__codelineno-16-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1"></a><span class="p">.</span><span class="n">contendor</span><span class="o">-</span><span class="mi">7</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2"></a><span class="w">  </span><span class="n">padding</span><span class="o">-</span><span class="n">top</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="n">px</span><span class="p">;</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3"></a><span class="w">  </span><span class="n">width</span><span class="p">:</span><span class="w"> </span><span class="mi">300</span><span class="n">px</span><span class="p">;</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4"></a><span class="w">  </span><span class="n">height</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="n">px</span><span class="p">;</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5"></a><span class="w">  </span><span class="n">background</span><span class="o">-</span><span class="n">color</span><span class="p">:</span><span class="w"> </span><span class="err">#</span><span class="n">be3333</span><span class="p">;</span>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6"></a><span class="p">}</span>
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7"></a><span class="p">.</span><span class="n">hijo</span><span class="o">-</span><span class="mi">7</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8"></a><span class="w">  </span><span class="n">background</span><span class="o">-</span><span class="n">color</span><span class="p">:</span><span class="w"> </span><span class="err">#</span><span class="mf">1976d</span><span class="mi">2</span><span class="p">;</span>
+</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9"></a><span class="hll"><span class="w">  </span><span class="n">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="n">px</span><span class="p">;</span>
+</span></span><span id="__span-16-10"><a id="__codelineno-16-10" name="__codelineno-16-10"></a><span class="hll"><span class="w">  </span><span class="n">width</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="o">%</span><span class="p">;</span>
+</span></span><span id="__span-16-11"><a id="__codelineno-16-11" name="__codelineno-16-11"></a><span class="hll"><span class="w">  </span><span class="n">box</span><span class="o">-</span><span class="n">sizing</span><span class="p">:</span><span class="w"> </span><span class="n">content</span><span class="o">-</span><span class="n">box</span><span class="p">;</span>
+</span></span><span id="__span-16-12"><a id="__codelineno-16-12" name="__codelineno-16-12"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-17-1">1</a></span>
+<span class="normal"><a href="#__codelineno-17-2">2</a></span>
+<span class="normal"><a href="#__codelineno-17-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;contendor-7&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;hijo-7&quot;</span><span class="p">&gt;</span> Element<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></code></pre></div></td></tr></table></div></p>
+</div>
 <p>Pero si usamos <code>width: auto</code> (podemos simplemente eliminar <code>width: 100%</code>, ya que <code>width: auto</code> es el valor por defecto) la caja hija encaja perfectamente dentro de la caja padre. E independientemente del valor <code>box-sizing</code></p>
 <p><img alt="" src="../witd100.png" /></p>
 <p>Implicitamente, el <code>height</code> también está configurado como <code>auto</code>, lo que significa que se deriva del contenido. Nuevamente, <code>box-sizing</code> no tiene efecto.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><div class="contendor-8">
+  <div class="hijo-8">Element</div>
+</div></p>
+<p><div class="language-cs highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-18-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-18-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-18-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-18-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-18-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-18-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-18-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-18-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-18-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-18-10">10</a></span>
+<span class="normal"><a href="#__codelineno-18-11">11</a></span>
+<span class="normal"><a href="#__codelineno-18-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1"></a><span class="p">.</span><span class="n">contendor</span><span class="o">-</span><span class="mi">8</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2"></a><span class="w">  </span><span class="n">padding</span><span class="o">-</span><span class="n">top</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="n">px</span><span class="p">;</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3"></a><span class="w">  </span><span class="n">width</span><span class="p">:</span><span class="w"> </span><span class="mi">300</span><span class="n">px</span><span class="p">;</span>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4"></a><span class="w">  </span><span class="n">height</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="n">px</span><span class="p">;</span>
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5"></a><span class="w">  </span><span class="n">background</span><span class="o">-</span><span class="n">color</span><span class="p">:</span><span class="w"> </span><span class="err">#</span><span class="n">be3333</span><span class="p">;</span>
+</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6"></a><span class="p">}</span>
+</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7"></a><span class="p">.</span><span class="n">hijo</span><span class="o">-</span><span class="mi">8</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-18-8"><a id="__codelineno-18-8" name="__codelineno-18-8"></a><span class="w">  </span><span class="n">background</span><span class="o">-</span><span class="n">color</span><span class="p">:</span><span class="w"> </span><span class="err">#</span><span class="mf">1976d</span><span class="mi">2</span><span class="p">;</span>
+</span><span id="__span-18-9"><a id="__codelineno-18-9" name="__codelineno-18-9"></a><span class="hll"><span class="w">  </span><span class="n">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="n">px</span><span class="p">;</span>
+</span></span><span id="__span-18-10"><a id="__codelineno-18-10" name="__codelineno-18-10"></a><span class="hll"><span class="w">  </span><span class="n">width</span><span class="p">:</span><span class="w"> </span><span class="n">auto</span><span class="p">;</span>
+</span></span><span id="__span-18-11"><a id="__codelineno-18-11" name="__codelineno-18-11"></a><span class="hll"><span class="w">  </span><span class="n">box</span><span class="o">-</span><span class="n">sizing</span><span class="p">:</span><span class="w"> </span><span class="n">content</span><span class="o">-</span><span class="n">box</span><span class="p">;</span>
+</span></span><span id="__span-18-12"><a id="__codelineno-18-12" name="__codelineno-18-12"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-19-1">1</a></span>
+<span class="normal"><a href="#__codelineno-19-2">2</a></span>
+<span class="normal"><a href="#__codelineno-19-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;contendor-8&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;hijo-8&quot;</span><span class="p">&gt;</span>Element<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></code></pre></div></td></tr></table></div></p>
+</div>
 <p>La lección aquí es que las dimensiones de nuestros elementos deberían derivarse en gran medida de su contenido interno y contexto externo. Cuando tratamos de prescribir dimensiones, las cosas tienden a salir mal. Todo lo que deberíamos hacer como diseñadores visuales es hacer sugerencias sobre cómo debería tomar forma el layout. Podríamos, por ejemplo, aplicar un <code>min-height</code> (como en el <em>Cover layout</em>) u ofrecer un <code>flex-basis</code> (como en el <em>Sidebar</em>).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Esa frase quiere decir que el tamaño de los elementos no debería establecerse arbitrariamente, sino que debería depender principalmente de:</p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Su contenido interno (texto, imágenes, botones, etc.).</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> El espacio y la relación que tienen con los elementos que los rodean (su contexto externo).</li>
+</ul>
+</div>
 <p>El CSS de la sugerencia está en el corazón del diseño de layout algorítmico. En lugar de decirle a los navegadores qué hacer, permitimos que los navegadores hagan sus propios cálculos y saquen sus propias conclusiones, para adaptarse mejor al usuario, su pantalla y su dispositivo. Nadie debería experimentar contenido oscurecido bajo ninguna circunstancia.</p>
 
 

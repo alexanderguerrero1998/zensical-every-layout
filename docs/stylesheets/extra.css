@@ -1,23 +1,78 @@
-.contenedor-1 {
-    writing-mode: horizontal-tb;
-}
-
+.contenedor-1 { writing-mode: horizontal-tb; }
 .contenedor-1-display {
+    display: block;
      margin-bottom: 5px;
      border-radius: 3px;
     background-color:#1976d2;
     padding: 10px;
-    
 }
-.containerr-2 {
-    writing-mode: vertical-lr;
-}
-.containerr-2-display {
 
+.containerr-2 {  writing-mode: vertical-lr; }
+.containerr-2-display {
+    display: block;
     margin: 5px;
     border-radius: 3px;
     background-color:#1976d2;
     padding: 10px;
-
 }
 
+.contenedor-3-inline{
+background-color: #1976d2;
+display: inline;
+width: 15px;
+height: 20;
+}
+
+.contenedor-4-inline-block {
+    display: inline-block;
+    width: 100px;
+    height: 50px;
+    padding: 20px;
+    margin: 10px;
+    background-color: #1976d2;
+}
+.contenedor-5-padre{
+    display: flex;
+}
+.hijo-5{
+    background-color: #1976d2;
+    padding: 5px;
+    margin: 5px;
+}
+
+.hijo-6-box-sizing-1{
+box-sizing: border-box;
+    width: 100px;
+    background-color: #1976d2;
+    padding: 10px;
+}
+.hijo-6-box-sizing-2{
+    box-sizing: content-box;
+    padding: 10px;
+    width: 100px;
+    background-color: #1976d2;
+}
+.contendor-7 {
+    padding-top: 10px;
+    width: 300px;
+    height: 50px;
+    background-color: #be3333;
+}
+.hijo-7 {
+    background-color: #1976d2;
+    width: 100%;
+    padding: 4px;
+    box-sizing: content-box;
+}
+.contendor-8 {
+    padding-top: 10px;
+    width: 300px;
+    height: 50px;
+    background-color: #be3333;
+}
+.hijo-8 {
+    background-color: #1976d2;
+    width: auto;
+    padding: 4px;
+    box-sizing: content-box;
+}
