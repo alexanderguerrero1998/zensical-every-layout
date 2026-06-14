@@ -5,11 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        
+        .viewport{
+             width: 500px;
+            border: 2px solid black;
+            resize: horizontal; /* Permite cambiar el ancho */
+            overflow: auto;     /* Necesario para que funcione resize */
+
+             /* La convierte en un contenedor consultable */
+            container-type: inline-size;
+        }
+        @container (max-width: 368px){
+            .caja{
+                background-color: rgb(1, 14, 19);
+                color: white;
+                padding: 1em;
+              
+            }
+        }
+
+        @container (max-width: 168px){
+            .caja{
+                 background-color: rgb(15, 19, 1);
+                color: white;
+                padding: 1em;
+                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            }
+        }
     </style>
 </head>
 <body>
-
+<div class="viewport">
+    <div class="caja"> Aqui podemos ver que en este caso ya no dependemos de el tamaño del navegador. UNICAMENTE cosideramos el tamaño del componente (contenedor padre) para ver los cambios. Por lo tanto aqui utilizamos  <strong class="strong">CONTAINER QUERY</strong>
+</div>
+</div>
     
 </body>
 </html>

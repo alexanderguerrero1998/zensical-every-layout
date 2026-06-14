@@ -453,6 +453,7 @@ La unidad `em` es para la unidad `rem` lo que una [_container query_ ↗](https:
       * barras laterales
 
       y queremos que puedan vivir en cualquier parte de la página sin depender del tamaño de toda la pantalla.
+      [Show example ↗](../../examples/Unidades/containers.html)
 
       ---
 
@@ -471,7 +472,7 @@ La unidad `em` es para la unidad `rem` lo que una [_container query_ ↗](https:
 
     __Regla práctica moderna (2026)__
 
-      ### Media Queries
+    __Media Queries__
 
       Se usan para cosas globales:
 
