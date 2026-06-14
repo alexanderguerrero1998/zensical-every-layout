@@ -37,7 +37,7 @@ El error en el ejemplo anterior fue pensar que todo sobre la forma del diálogo 
 
 El término _primitiva_ tiene connotaciones lingüísticas, matemáticas y computacionales. En cada caso, una primitiva es algo sin su propio significado o propósito como tal, pero que puede usarse _en composición_ para hacer algo significativo, o _léxico_. En el lenguaje podría ser una palabra o frase, en matemáticas una ecuación, en diseño un patrón, o en desarrollo un componente.
 
-En JavaScript, el tipo de dato Boolean es una primitiva. Solo mirar el valor `true` (o `false`) fuera de contexto te dice muy poco sobre la aplicación JavaScript más grande. El tipo de dato Object, por otro lado, es primitiva. No puedes escribir un objeto sin designar tus propias propiedades. Los objetos son, por lo tanto, significativos; necesariamente te dicen algo sobre la intención del autor.
+En JavaScript, el tipo de dato Boolean es una primitiva. Solo mirar el valor `true` (o `false`) fuera de contexto te dice muy poco sobre la aplicación JavaScript más grande. El tipo de dato Object, por otro lado, no es una primitiva. No puedes escribir un objeto sin designar tus propias propiedades. Los objetos son, por lo tanto, significativos; necesariamente te dicen algo sobre la intención del autor.
 
 El diálogo es significativo, como pieza de UI, pero sus partes constituyentes no lo son. Así es como podríamos componer el cuadro de diálogo usando las primitivas de layout de _Every Layout_:
 
@@ -55,7 +55,7 @@ o un layout de diapositiva para una charla de conferencia:
 
 Cada layout en _Every Layout_ es intrínsecamente responsive. Es decir, se ajustará y reconfigurará internamente para asegurar que el contenido sea visible (y bien espaciado) para adaptarse a cualquier contexto/pantalla.
 
-Puede que te sientas compelido a agregar _breakpoints_ de `@media`, pero estos se consideran "anulaciones manuales" y las primitivas de _Every Layout_ no dependen de ellos.
+Puede que te sientas obligado a agregar _breakpoints_ de `@media`, pero estos se consideran "anulaciones manuales" y las primitivas de _Every Layout_ no dependen de ellos.
 
 Sin tipos de datos primitivos, tendrías que estar constantemente enseñando a tu lenguaje de programación cómo hacer operaciones básicas. Rápidamente perderías de vista la tarea _significativa_ específica que te propusiste lograr con el lenguaje en primer lugar. Un sistema de diseño que no aprovecha las primitivas es igualmente problemático. Si cada componente en tu biblioteca de patrones sigue sus propias reglas de layout, abundarán las ineficiencias e inconsistencias.
 
