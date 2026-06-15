@@ -13,7 +13,7 @@ Cuando la gente habla sobre la naturaleza _global_ de CSS, pueden referirse a un
 }
 ```
 
-Alternativamente, pueden referirse a usar el _selector universal_ `*` ↗ sin calificar para estilizar todos los elementos _directamente_.
+Alternativamente, pueden referirse a usar el [_selector universal_ `*` ↗](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/Universal_selectors)  para estilizar todos los elementos _directamente_.
 
 ```css linenums="1"
 * {
@@ -31,7 +31,7 @@ p {
 }
 ```
 
-Un uso liberal de selectores de elemento es la característica distintiva de un sistema de diseño integral. Los selectores de elemento se encargan de _átomos_ ↗ genéricos como encabezados, párrafos, enlaces y botones. A diferencia de cuando se usan clases (ver más abajo), los selectores de elemento pueden apuntar al contenido arbitrario y no atribuido producido por editores _WYSIWYG_ ↗ y _markdown_ ↗.
+Un uso liberal de selectores de elemento es la característica distintiva de un sistema de diseño integral. Los selectores de elemento se encargan de  [_átomos_ ↗](https://bradfrost.com/blog/post/atomic-web-design/#atoms) genéricos como encabezados, párrafos, enlaces y botones. A diferencia de cuando se usan clases (ver más abajo), los selectores de elemento pueden apuntar al contenido arbitrario y no atribuido producido por editores [_WYSIWYG_↗](https://en.wikipedia.org/wiki/WYSIWYG)  y [_markdown_ ↗](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
 
 Los layouts de _Every Layout_ no exploran ni prescriben estilos para elementos simples; eso es para que tú lo decidas. Es la _imbricación_ de elementos simples en layouts compuestos lo que nos interesa aquí.
 
