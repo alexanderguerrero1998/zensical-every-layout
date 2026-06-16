@@ -53,7 +53,150 @@ Finalmente, los estilos basados en clases, una vez definidos, pueden adherirse a
 <h2 class="sans-serif">...</h2>
 ```
 
-Debe apreciarse lo importante que es aprovechar el alcance global de las reglas CSS. CSS _existe_ para permitir el estilo de HTML globalmente, y por categoría, en lugar de elemento por elemento. Cuando se usa como se pretende, es la forma más eficiente de crear cualquier tipo de layout o estética en la web. Cuando las técnicas de estilo global (como las anteriores) se usan apropiadamente, es mucho más fácil separar la marca/estética del layout, y tratar los dos como _concerns separados_ ↗.
+Debe apreciarse lo importante que es aprovechar el alcance global de las reglas CSS. CSS te permite aplicar estilos de HTML globalmente, y por categoría _(por tipo de elemento, clase, atributo, estado, etc..)_, en lugar de elemento por elemento. Cuando se utiliza correctamente, es la forma más eficiente de crear cualquier tipo de layout o estética en la web. Cuando las técnicas de estilo global (como las anteriores) se usan apropiadamente, es mucho más fácil separar la marca/estética del layout, y tratar los dos como [_concerns separados_ ↗](https://es.wikipedia.org/wiki/Separaci%C3%B3n_de_intereses).
+
+??? info "Explicacion"
+
+    Ese párrafo está hablando de una de las ideas más importantes de CSS: **aprovechar que una sola regla puede afectar a muchos elementos al mismo tiempo**.
+
+    Por ejemplo, en lugar de hacer esto:
+
+    ```html
+    <h1 style="color: blue;">Título 1</h1>
+    <h1 style="color: blue;">Título 2</h1>
+    <h1 style="color: blue;">Título 3</h1>
+    ```
+
+    CSS permite hacer:
+
+    ```css
+    h1 {
+        color: blue;
+    }
+    ```
+
+    Y automáticamente **todos los `<h1>` serán azules**. Eso es lo que llaman *alcance global*.
+
+    ---
+
+    __Aplicar estilos por categoría__
+
+    También puedes agrupar elementos mediante clases:
+
+    ```css
+    .boton {
+        background-color: blue;
+        color: white;
+        padding: 1rem;
+    }
+    ```
+
+    ```html
+    <button class="boton">Guardar</button>
+    <a class="boton">Descargar</a>
+    <input class="boton" type="submit">
+    ```
+
+    Una sola regla sirve para muchos elementos.
+
+    ---
+
+    __Separar estética y layout__
+
+    La frase:
+
+    > separar la marca/estética del layout
+
+    significa que puedes tratar por separado:
+
+    __1. Layout (estructura)__
+
+    Cómo se acomodan los elementos:
+
+    ```css
+    .container {
+        display: flex;
+        gap: 1rem;
+    }
+    ```
+
+    Esto controla la disposición.
+
+    ---
+
+    __2. Estética o marca__
+
+    Cómo se ven:
+
+    ```css
+    .card {
+        background: white;
+        border-radius: 10px;
+        color: #333;
+    }
+    ```
+
+    Esto controla la apariencia.
+
+    ---
+
+    De esta forma, si mañana quieres cambiar los colores de toda tu página, no necesitas modificar cada elemento uno por uno. Simplemente cambias:
+
+    ```css
+    body {
+        color: #222;
+        background: #fafafa;
+    }
+    ```
+
+    o
+
+    ```css
+    .boton {
+        background-color: green;
+    }
+    ```
+
+    y todo el sitio cambia.
+
+    ---
+
+    Cuando el texto dice que ambos son **concerns separados**, quiere decir que:
+
+    * **Layout** → cómo se organizan los elementos.
+    * **Estética (branding)** → cómo lucen los elementos.
+
+    Mantener estas responsabilidades separadas hace que el CSS sea más limpio, reutilizable y fácil de mantener.
+
+    Por ejemplo, una tarjeta podría tener:
+
+    ```css
+    .card {
+        display: flex;          /* Layout */
+        flex-direction: column; /* Layout */
+
+        background: white;      /* Estética */
+        border-radius: 8px;     /* Estética */
+        box-shadow: 0 0 10px #0002; /* Estética */
+    }
+    ```
+
+    Aunque muchos desarrolladores prefieren incluso separar esas responsabilidades en clases distintas:
+
+    ```css
+    .flex-column {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .surface {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 0 10px #0002;
+    }
+    ```
+
+    Así puedes combinar estructura y apariencia según sea necesario, aprovechando al máximo la naturaleza global y reutilizable de CSS.
 
 ![](separete.png)
 
@@ -72,7 +215,7 @@ h3 {
 }
 ```
 
-Sin embargo, puede haber casos específicos donde queramos que ese `font-size` se reduzca ligeramente (quizás el espacio horizontal es limitado, o el encabezado está en un lugar donde debería tener menos peso visual). Si cambiáramos a un elemento `<h3>` para afectar este cambio visual, _haríamos una tontería de la estructura del documento_ ↗.
+Sin embargo, puede haber casos específicos donde queramos que ese `font-size` se reduzca ligeramente (quizás el espacio horizontal es limitado, o el encabezado está en un lugar donde debería tener menos peso visual). Si cambiáramos a un elemento `<h3>` para afectar este cambio visual, [_haríamos una tontería de la estructura del documento_ ↗](https://webaim.org/techniques/semanticstructure/#correctly).
 
 En su lugar, podríamos construir un selector más complejo que pertenezca al contexto del `<h2>` más pequeño:
 
@@ -134,7 +277,7 @@ Cada clase de utilidad tiene un sufijo `!important` para maximizar su especifici
 
 Los valores en el ejemplo anterior son solo para ilustración. Para consistencia en todo el diseño, tus tamaños deberían derivarse probablemente de una _escala modular_. Consulta _Modular scale_ para más información.
 
-### ⚠ Demasiadas clases de utilidad
+## ⚠ Demasiadas clases de utilidad
 
 Algo que recomendamos encarecidamente es no incluir clases de utilidad hasta que las necesites. No quieres enviar a los usuarios datos no utilizados o redundantes. Para este proyecto, mantenemos un archivo `helpers.css` y agregamos utilidades a medida que encontramos que las necesitamos. Si encontramos que la clase `text-align:center` no está teniendo efecto, es que no la hemos agregado en el CSS aún — así que la ponemos en nuestro archivo `helpers.css` para uso presente y futuro.
 
@@ -183,7 +326,7 @@ shadowRoot.innerHTML = `
 `;
 ```
 
-### Inconvenientes
+## Inconvenientes
 
 El selector `id`, los estilos inline y Shadow DOM tienen todos inconvenientes:
 
