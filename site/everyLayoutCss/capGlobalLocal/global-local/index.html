@@ -1456,7 +1456,7 @@
 </span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2"></a><span class="w">  </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mf">1.75</span><span class="kt">rem</span><span class="p">;</span>
 </span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
-<p>Si bien esto es mejor que desordenar la estructura del documento, hemos cometido el error de no tener en cuenta el sistema emergente: Hemos resuelto el problema para un elemento específico, en un contexto específico, cuando deberíamos estar resolviendo el problema general (necesidad de ajustar <code>font-size</code>) para <em>cualquier</em> elemento en <em>cualquier</em> contexto. Aquí es donde entran las clases de utilidad.</p>
+<p>Si bien esto es mejor que desordenar la estructura del documento, hemos cometido el error de no tener en cuenta el sistema emergente: Hemos resuelto el problema para un elemento específico, en un contexto específico, cuando deberíamos estar resolviendo el problema general (necesidad de ajustar/reducir <code>font-size</code>) para <em>cualquier</em> elemento en <em>cualquier</em> contexto. Aquí es donde entran las clases de utilidad.</p>
 <div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-17-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-17-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-17-3"> 3</a></span>
@@ -1478,7 +1478,7 @@
 </span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <p>Usamos una convención de nomenclatura muy <em>precisa</em>, que emula la estructura de declaración CSS: <code>property-name:value</code>. Esto ayuda con el recuerdo de los nombres de las clases de utilidad, especialmente donde el valor se hace eco del valor real, como <code>.text-align:center</code>.</p>
-<p>Compartir valores entre elementos y utilidades es un trabajo para las <em>propiedades personalizadas (custom properties)</em> ↗. Observa que hemos hecho las propiedades personalizadas mismas globalmente disponibles adjuntándolas al elemento <code>:root</code> (<code>&lt;html&gt;</code>):</p>
+<p>Compartir valores entre elementos y utilidades es un trabajo para las propiedades personalizadas <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/--*">(custom properties_ ↗)</a>. Observa que hemos hecho las propiedades personalizadas mismas globalmente disponibles adjuntándolas al elemento <code>:root</code> (<code>&lt;html&gt;</code>):</p>
 <div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-18-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-18-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-18-3"> 3</a></span>
@@ -1529,39 +1529,566 @@
 <p>Una arquitectura CSS sensata tiene "alcance" (cuántos elementos se ven afectados) inversamente proporcional a la especificidad (qué tan complejos son los selectores). Esto fue formalizado por Harry Roberts como ITCSS, donde IT significa <em>Inverted Triangle</em> (Triángulo Invertido).</p>
 </blockquote>
 <p>Los valores en el ejemplo anterior son solo para ilustración. Para consistencia en todo el diseño, tus tamaños deberían derivarse probablemente de una <em>escala modular</em>. Consulta <em>Modular scale</em> para más información.</p>
+<details class="info">
+<summary>Explicacion del texto</summary>
+<p>Este fragmento está explicando una idea importante de arquitectura CSS: <strong>las clases de utilidad existen para hacer pequeños ajustes reutilizables sin depender del contexto ni alterar la semántica del HTML</strong>.</p>
+<p>Voy por partes.</p>
+<hr />
+<p><strong>1. Estilos globales para elementos</strong></p>
+<p>Por defecto podrías tener:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="nt">h2</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mf">2.25</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="p">}</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="nt">h3</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mf">1.75</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Así, todos los <code>&lt;h2&gt;</code> serán grandes y todos los <code>&lt;h3&gt;</code> un poco más pequeños.</p>
+<hr />
+<p><strong>2. El problema</strong></p>
+<p>Imagina que tienes un <code>&lt;h2&gt;</code> en una barra lateral (sidebar) y allí se ve demasiado grande.</p>
+<p>Podrías pensar:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="p">&lt;</span><span class="nt">h3</span><span class="p">&gt;</span>Título<span class="p">&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>para hacerlo más pequeño.</p>
+<p>Pero eso es incorrecto.</p>
+<p>Un <code>&lt;h2&gt;</code> y un <code>&lt;h3&gt;</code> no existen para cambiar el tamaño visual, sino para indicar la jerarquía del documento.</p>
+<p>Por ejemplo:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Capítulo 1<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Sección A<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="p">&lt;</span><span class="nt">h3</span><span class="p">&gt;</span>Subsección<span class="p">&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>Cambiar un <code>&lt;h2&gt;</code> por un <code>&lt;h3&gt;</code> solamente para que se vea más pequeño rompería la estructura lógica del documento.</p>
+<hr />
+<p><strong>3. La solución tradicional</strong></p>
+<p>Podrías hacer:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="p">.</span><span class="nc">sidebar</span><span class="w"> </span><span class="nt">h2</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mf">1.75</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Es decir:</p>
+<blockquote>
+<p>"Si un h2 está dentro de .sidebar, entonces será más pequeño."</p>
+</blockquote>
+<p>Funciona.</p>
+<p>Pero ahora el tamaño depende del contexto:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>sidebar → h2 pequeño
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>fuera de sidebar → h2 grande
+</span></code></pre></div>
+<p>Si mañana aparece:</p>
+<ul>
+<li><code>.footer</code></li>
+<li><code>.card</code></li>
+<li><code>.modal</code></li>
+</ul>
+<p>tendrías que escribir:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="p">.</span><span class="nc">footer</span><span class="w"> </span><span class="nt">h2</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="p">.</span><span class="nc">card</span><span class="w"> </span><span class="nt">h2</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="p">.</span><span class="nc">modal</span><span class="w"> </span><span class="nt">h2</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+<p>Y el CSS empieza a crecer.</p>
+<hr />
+<p><strong>4. Resolver el problema general</strong></p>
+<p>En realidad el problema no era:</p>
+<blockquote>
+<p>"Un h2 dentro de sidebar."</p>
+</blockquote>
+<p>Sino:</p>
+<blockquote>
+<p>"Necesito reducir el tamaño de algo."</p>
+</blockquote>
+<p>Eso puede ocurrir con:</p>
+<ul>
+<li>un h2</li>
+<li>un h3</li>
+<li>un párrafo</li>
+<li>un botón</li>
+<li>un span</li>
+</ul>
+<p>Por eso se crean clases de utilidad.</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="p">.</span><span class="nc">font-size</span><span class="err">\</span><span class="p">:</span><span class="nd">base</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="p">}</span>
+</span><span id="__span-25-4"><a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>
+</span><span id="__span-25-5"><a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="p">.</span><span class="nc">font-size</span><span class="err">\</span><span class="p">:</span><span class="nd">biggish</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-25-6"><a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mf">1.75</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-25-7"><a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a><span class="p">}</span>
+</span><span id="__span-25-8"><a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a>
+</span><span id="__span-25-9"><a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a><span class="p">.</span><span class="nc">font-size</span><span class="err">\</span><span class="p">:</span><span class="nd">big</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-25-10"><a id="__codelineno-25-10" name="__codelineno-25-10" href="#__codelineno-25-10"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mf">2.25</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-25-11"><a id="__codelineno-25-11" name="__codelineno-25-11" href="#__codelineno-25-11"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Luego las aplicas donde quieras:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="p">&lt;</span><span class="nt">h2</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;font-size:biggish&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>    Título
+</span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>(En el CSS se escapan los dos puntos con <code>\</code>, pero en HTML se escriben normalmente.)</p>
+<hr />
+<p><strong>5. ¿Por qué son portables?</strong></p>
+<p>Porque ya no dependen de:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="p">.</span><span class="nc">sidebar</span><span class="w"> </span><span class="nt">h2</span>
+</span></code></pre></div>
+<p>ni de:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="p">.</span><span class="nc">card</span><span class="w"> </span><span class="nt">p</span>
+</span></code></pre></div>
+<p>Simplemente:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="p">.</span><span class="nc">font-size</span><span class="p">:</span><span class="nd">biggish</span>
+</span></code></pre></div>
+<p>puede usarse en cualquier elemento:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="p">&lt;</span><span class="nt">h2</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;font-size:biggish&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-30-2"><a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;font-size:biggish&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-30-3"><a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;font-size:biggish&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>La misma clase sirve para todos.</p>
+<hr />
+<p><strong>6. Custom Properties</strong></p>
+<p>En vez de repetir números:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="nt">h2</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mf">2.25</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-31-3"><a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="p">}</span>
+</span><span id="__span-31-4"><a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a>
+</span><span id="__span-31-5"><a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a><span class="p">.</span><span class="nc">font-size</span><span class="err">\</span><span class="p">:</span><span class="nd">big</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-31-6"><a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mf">2.25</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-31-7"><a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>se guarda el valor una sola vez:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="p">:</span><span class="nd">root</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-32-2"><a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="w">    </span><span class="nv">--font-size-base</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-32-3"><a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">    </span><span class="nv">--font-size-biggish</span><span class="p">:</span><span class="w"> </span><span class="mf">1.75</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-32-4"><a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="w">    </span><span class="nv">--font-size-big</span><span class="p">:</span><span class="w"> </span><span class="mf">2.25</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-32-5"><a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>y luego:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="nt">h2</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-33-2"><a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--font-size-big</span><span class="p">);</span>
+</span><span id="__span-33-3"><a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="p">}</span>
+</span><span id="__span-33-4"><a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a>
+</span><span id="__span-33-5"><a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a><span class="nt">h3</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-33-6"><a id="__codelineno-33-6" name="__codelineno-33-6" href="#__codelineno-33-6"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--font-size-biggish</span><span class="p">);</span>
+</span><span id="__span-33-7"><a id="__codelineno-33-7" name="__codelineno-33-7" href="#__codelineno-33-7"></a><span class="p">}</span>
+</span><span id="__span-33-8"><a id="__codelineno-33-8" name="__codelineno-33-8" href="#__codelineno-33-8"></a>
+</span><span id="__span-33-9"><a id="__codelineno-33-9" name="__codelineno-33-9" href="#__codelineno-33-9"></a><span class="p">.</span><span class="nc">font-size</span><span class="err">\</span><span class="p">:</span><span class="nd">big</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-33-10"><a id="__codelineno-33-10" name="__codelineno-33-10" href="#__codelineno-33-10"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--font-size-big</span><span class="p">);</span>
+</span><span id="__span-33-11"><a id="__codelineno-33-11" name="__codelineno-33-11" href="#__codelineno-33-11"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Si mañana cambias:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="nt">--font-size-big</span><span class="o">:</span><span class="w"> </span><span class="nt">2</span><span class="p">.</span><span class="nc">5rem</span><span class="o">;</span>
+</span></code></pre></div>
+<p>automáticamente cambian:</p>
+<ul>
+<li>todos los h2;</li>
+<li>todas las utilidades <code>.font-size:big</code>.</li>
+</ul>
+<hr />
+<p><strong>7. ¿Por qué usan <code>!important</code>?</strong></p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-35-1"><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="p">.</span><span class="nc">font-size</span><span class="err">\</span><span class="p">:</span><span class="nd">big</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-35-2"><a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--font-size-big</span><span class="p">)</span><span class="w"> </span><span class="cp">!important</span><span class="p">;</span>
+</span><span id="__span-35-3"><a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Porque las clases de utilidad están pensadas como el último ajuste.</p>
+<p>Ejemplo:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-36-1"><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="nt">h2</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-36-2"><a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mf">2.25</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-36-3"><a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-37-1"><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="p">&lt;</span><span class="nt">h2</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;font-size:base&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>Gracias al <code>!important</code>, el resultado será:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-38-1"><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="nt">font-size</span><span class="o">:</span><span class="w"> </span><span class="nt">1rem</span>
+</span></code></pre></div>
+<p>La utilidad gana sobre el estilo normal.</p>
+<hr />
+<p><strong>8. La idea de ITCSS (Triángulo invertido)</strong></p>
+<p>La filosofía es:</p>
+<p><strong>Mucho alcance → poca especificidad</strong></p>
+<p>Arriba del triángulo:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-39-1"><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="nt">body</span><span class="w"> </span><span class="p">{}</span>
+</span><span id="__span-39-2"><a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="nt">p</span><span class="w"> </span><span class="p">{}</span>
+</span><span id="__span-39-3"><a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a><span class="nt">h1</span><span class="w"> </span><span class="p">{}</span>
+</span><span id="__span-39-4"><a id="__codelineno-39-4" name="__codelineno-39-4" href="#__codelineno-39-4"></a><span class="nt">h2</span><span class="w"> </span><span class="p">{}</span>
+</span></code></pre></div>
+<p>Afectan a muchos elementos y son selectores simples.</p>
+<hr />
+<p><strong>Poco alcance → mucha especificidad</strong></p>
+<p>Abajo del triángulo:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-40-1"><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="p">.</span><span class="nc">card</span><span class="w"> </span><span class="p">.</span><span class="nc">sidebar</span><span class="w"> </span><span class="nt">h2</span><span class="p">.</span><span class="nc">active</span><span class="w"> </span><span class="p">{}</span>
+</span></code></pre></div>
+<p>Afectan muy pocos elementos y son más específicos.</p>
+<hr />
+<p>Y las utilidades están al final:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-41-1"><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="p">.</span><span class="nc">font-size</span><span class="err">\</span><span class="p">:</span><span class="nd">base</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-41-2"><a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="w"> </span><span class="cp">!important</span><span class="p">;</span>
+</span><span id="__span-41-3"><a id="__codelineno-41-3" name="__codelineno-41-3" href="#__codelineno-41-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Porque son modificaciones puntuales.</p>
+<hr />
+<p><strong>La idea más importante de todo el texto</strong></p>
+<p>El autor está diciendo:</p>
+<blockquote>
+<p>No resuelvas un problema particular ("hacer más pequeño un h2 en una sidebar"). Resuelve el problema general ("necesito una forma de cambiar tamaños") y crea algo reutilizable para cualquier elemento y cualquier contexto.</p>
+</blockquote>
+<p>Esa filosofía es la misma que siguen frameworks como:</p>
+<ul>
+<li>Tailwind CSS</li>
+<li>UnoCSS</li>
+<li>Windi CSS</li>
+</ul>
+<p>donde gran parte del CSS se construye precisamente mediante <strong>clases de utilidad</strong>.</p>
+</details>
+<details class="info">
+<summary>Utilidades vs  Valores Globales</summary>
+<blockquote>
+<p>Pero para que se crean la clases de utiliad si ya tenemos los valores globales ?</p>
+</blockquote>
+<p>Esa es una muy buena pregunta. De hecho, las <strong>variables globales (<code>:root</code>) y las clases de utilidad cumplen funciones diferentes</strong>. Las variables no sustituyen a las utilidades.</p>
+<p>Piensa así:</p>
+<p><strong>1. Las variables almacenan valores</strong></p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-42-1"><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="p">:</span><span class="nd">root</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-2"><a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a><span class="w">  </span><span class="nv">--font-size-base</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-42-3"><a id="__codelineno-42-3" name="__codelineno-42-3" href="#__codelineno-42-3"></a><span class="w">  </span><span class="nv">--font-size-biggish</span><span class="p">:</span><span class="w"> </span><span class="mf">1.75</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-42-4"><a id="__codelineno-42-4" name="__codelineno-42-4" href="#__codelineno-42-4"></a><span class="w">  </span><span class="nv">--font-size-big</span><span class="p">:</span><span class="w"> </span><span class="mf">2.25</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-42-5"><a id="__codelineno-42-5" name="__codelineno-42-5" href="#__codelineno-42-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Aquí no estás aplicando nada a ningún elemento. Solo estás guardando números con nombres.</p>
+<p>Es como tener una caja con etiquetas:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-43-1"><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a>--font-size-base → 1rem
+</span><span id="__span-43-2"><a id="__codelineno-43-2" name="__codelineno-43-2" href="#__codelineno-43-2"></a>--font-size-biggish → 1.75rem
+</span><span id="__span-43-3"><a id="__codelineno-43-3" name="__codelineno-43-3" href="#__codelineno-43-3"></a>--font-size-big → 2.25rem
+</span></code></pre></div>
+<hr />
+<p><strong>2. Los estilos globales usan esos valores</strong></p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-44-1"><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a><span class="nt">h2</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-44-2"><a id="__codelineno-44-2" name="__codelineno-44-2" href="#__codelineno-44-2"></a><span class="w">  </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--font-size-big</span><span class="p">);</span>
+</span><span id="__span-44-3"><a id="__codelineno-44-3" name="__codelineno-44-3" href="#__codelineno-44-3"></a><span class="p">}</span>
+</span><span id="__span-44-4"><a id="__codelineno-44-4" name="__codelineno-44-4" href="#__codelineno-44-4"></a>
+</span><span id="__span-44-5"><a id="__codelineno-44-5" name="__codelineno-44-5" href="#__codelineno-44-5"></a><span class="nt">h3</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-44-6"><a id="__codelineno-44-6" name="__codelineno-44-6" href="#__codelineno-44-6"></a><span class="w">  </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--font-size-biggish</span><span class="p">);</span>
+</span><span id="__span-44-7"><a id="__codelineno-44-7" name="__codelineno-44-7" href="#__codelineno-44-7"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Ahora todos los <code>&lt;h2&gt;</code> y <code>&lt;h3&gt;</code> tienen tamaños por defecto.</p>
+<hr />
+<p><strong>3. ¿Qué ocurre si un h2 debe ser más pequeño?</strong></p>
+<p>Supón:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-45-1"><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Productos<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>Por defecto será:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-46-1"><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a><span class="nt">font-size</span><span class="o">:</span><span class="w"> </span><span class="nt">2</span><span class="p">.</span><span class="nc">25rem</span><span class="o">;</span>
+</span></code></pre></div>
+<p>Pero para un caso particular quieres que sea de <code>1rem</code>.</p>
+<p><strong>Sin utilidades</strong></p>
+<p>Tendrías que crear:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-47-1"><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a><span class="p">.</span><span class="nc">sidebar</span><span class="w"> </span><span class="nt">h2</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-47-2"><a id="__codelineno-47-2" name="__codelineno-47-2" href="#__codelineno-47-2"></a><span class="w">  </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--font-size-base</span><span class="p">);</span>
+</span><span id="__span-47-3"><a id="__codelineno-47-3" name="__codelineno-47-3" href="#__codelineno-47-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>o</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-48-1"><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a><span class="p">.</span><span class="nc">card</span><span class="w"> </span><span class="nt">h2</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-48-2"><a id="__codelineno-48-2" name="__codelineno-48-2" href="#__codelineno-48-2"></a><span class="w">  </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--font-size-base</span><span class="p">);</span>
+</span><span id="__span-48-3"><a id="__codelineno-48-3" name="__codelineno-48-3" href="#__codelineno-48-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>o</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-49-1"><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a><span class="p">.</span><span class="nc">footer</span><span class="w"> </span><span class="nt">h2</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-49-2"><a id="__codelineno-49-2" name="__codelineno-49-2" href="#__codelineno-49-2"></a><span class="w">  </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--font-size-base</span><span class="p">);</span>
+</span><span id="__span-49-3"><a id="__codelineno-49-3" name="__codelineno-49-3" href="#__codelineno-49-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Empiezas a llenar el CSS de excepciones.</p>
+<hr />
+<p><strong>4. Con una utilidad</strong></p>
+<p>Simplemente:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-50-1"><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a><span class="p">&lt;</span><span class="nt">h2</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;font-size:base&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-50-2"><a id="__codelineno-50-2" name="__codelineno-50-2" href="#__codelineno-50-2"></a>    Productos
+</span><span id="__span-50-3"><a id="__codelineno-50-3" name="__codelineno-50-3" href="#__codelineno-50-3"></a><span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>La clase:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-51-1"><a id="__codelineno-51-1" name="__codelineno-51-1" href="#__codelineno-51-1"></a><span class="p">.</span><span class="nc">font-size</span><span class="err">\</span><span class="p">:</span><span class="nd">base</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-51-2"><a id="__codelineno-51-2" name="__codelineno-51-2" href="#__codelineno-51-2"></a><span class="w">  </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--font-size-base</span><span class="p">)</span><span class="w"> </span><span class="cp">!important</span><span class="p">;</span>
+</span><span id="__span-51-3"><a id="__codelineno-51-3" name="__codelineno-51-3" href="#__codelineno-51-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>sobrescribe el valor global.</p>
+<hr />
+<p><strong>La clave</strong></p>
+<p>Las variables solo responden a:</p>
+<blockquote>
+<p>¿Cuáles son mis tamaños?</p>
+</blockquote>
+<p>Las utilidades responden a:</p>
+<blockquote>
+<p>¿Cómo aplico uno de esos tamaños a un elemento específico?</p>
+</blockquote>
+<hr />
+<p>Podrías incluso eliminar las utilidades y hacer:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-52-1"><a id="__codelineno-52-1" name="__codelineno-52-1" href="#__codelineno-52-1"></a><span class="p">.</span><span class="nc">sidebar</span><span class="w"> </span><span class="nt">h2</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-52-2"><a id="__codelineno-52-2" name="__codelineno-52-2" href="#__codelineno-52-2"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--font-size-base</span><span class="p">);</span>
+</span><span id="__span-52-3"><a id="__codelineno-52-3" name="__codelineno-52-3" href="#__codelineno-52-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>porque las variables siguen existiendo.</p>
+<p>Y también podrías eliminar las variables y escribir:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-53-1"><a id="__codelineno-53-1" name="__codelineno-53-1" href="#__codelineno-53-1"></a><span class="p">.</span><span class="nc">font-size</span><span class="err">\</span><span class="p">:</span><span class="nd">base</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-53-2"><a id="__codelineno-53-2" name="__codelineno-53-2" href="#__codelineno-53-2"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-53-3"><a id="__codelineno-53-3" name="__codelineno-53-3" href="#__codelineno-53-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>porque las utilidades seguirían funcionando.</p>
+<p><strong>Las variables y las utilidades son independientes.</strong></p>
+<ul>
+<li><code>:root</code> → almacena valores reutilizables.</li>
+<li><code>h2</code>, <code>h3</code>, etc. → establecen los estilos por defecto.</li>
+<li><code>.font-size:base</code>, <code>.font-size:big</code> → permiten modificar esos estilos cuando un caso concreto lo requiere.</li>
+</ul>
+<p>Por eso se usan juntas: una guarda los valores y la otra los aplica cuando necesitas desviarte del comportamiento normal.</p>
+</details>
+<details class="info">
+<summary>Clases de utilidad directo en HTML</summary>
+<blockquote>
+<p>Veo que las clases de utilidad sirven para aplicar estilos en elementos html directamente, bueno algo asi lo voy entendiendo.</p>
+</blockquote>
+<p>Sí, vas por buen camino. Esa es precisamente la idea principal.</p>
+<p>Las <strong>clases de utilidad</strong> son pequeñas clases que representan una sola propiedad (o muy pocas) y que se aplican directamente en el HTML para modificar o complementar los estilos por defecto.</p>
+<p>Por ejemplo, supongamos que tienes:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-54-1"><a id="__codelineno-54-1" name="__codelineno-54-1" href="#__codelineno-54-1"></a><span class="nt">h2</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-54-2"><a id="__codelineno-54-2" name="__codelineno-54-2" href="#__codelineno-54-2"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mf">2.25</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-54-3"><a id="__codelineno-54-3" name="__codelineno-54-3" href="#__codelineno-54-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Entonces todos los <code>&lt;h2&gt;</code> serán grandes:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-55-1"><a id="__codelineno-55-1" name="__codelineno-55-1" href="#__codelineno-55-1"></a><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Título principal<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>Pero uno de ellos necesita ser más pequeño. En lugar de crear:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-56-1"><a id="__codelineno-56-1" name="__codelineno-56-1" href="#__codelineno-56-1"></a><span class="p">.</span><span class="nc">sidebar</span><span class="w"> </span><span class="nt">h2</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-56-2"><a id="__codelineno-56-2" name="__codelineno-56-2" href="#__codelineno-56-2"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-56-3"><a id="__codelineno-56-3" name="__codelineno-56-3" href="#__codelineno-56-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>puedes crear una utilidad:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-57-1"><a id="__codelineno-57-1" name="__codelineno-57-1" href="#__codelineno-57-1"></a><span class="p">.</span><span class="nc">font-size</span><span class="err">\</span><span class="p">:</span><span class="nd">base</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-57-2"><a id="__codelineno-57-2" name="__codelineno-57-2" href="#__codelineno-57-2"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="w"> </span><span class="cp">!important</span><span class="p">;</span>
+</span><span id="__span-57-3"><a id="__codelineno-57-3" name="__codelineno-57-3" href="#__codelineno-57-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>y usarla directamente:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-58-1"><a id="__codelineno-58-1" name="__codelineno-58-1" href="#__codelineno-58-1"></a><span class="p">&lt;</span><span class="nt">h2</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;font-size:base&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-58-2"><a id="__codelineno-58-2" name="__codelineno-58-2" href="#__codelineno-58-2"></a>    Título principal
+</span><span id="__span-58-3"><a id="__codelineno-58-3" name="__codelineno-58-3" href="#__codelineno-58-3"></a><span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>Así, el HTML mismo expresa:</p>
+<blockquote>
+<p>"Este elemento es un h2, pero quiero que use el tamaño base."</p>
+</blockquote>
+<hr />
+<p>La filosofía es:</p>
+<ul>
+<li><strong>Los selectores globales</strong> (<code>h1</code>, <code>p</code>, <code>button</code>) definen la apariencia normal.</li>
+<li><strong>Las clases de utilidad</strong> hacen ajustes puntuales.</li>
+<li><strong>Las variables (<code>:root</code>)</strong> almacenan los valores reutilizables.</li>
+</ul>
+<hr />
+<p>Por eso frameworks como Tailwind CSS están construidos casi por completo con clases de utilidad:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-59-1"><a id="__codelineno-59-1" name="__codelineno-59-1" href="#__codelineno-59-1"></a><span class="p">&lt;</span><span class="nt">h2</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;text-sm text-center mt-4&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-59-2"><a id="__codelineno-59-2" name="__codelineno-59-2" href="#__codelineno-59-2"></a>    Hola
+</span><span id="__span-59-3"><a id="__codelineno-59-3" name="__codelineno-59-3" href="#__codelineno-59-3"></a><span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>donde:</p>
+<ul>
+<li><code>text-sm</code> → tamaño pequeño.</li>
+<li><code>text-center</code> → centrar texto.</li>
+<li><code>mt-4</code> → margen superior.</li>
+</ul>
+<p>Sin embargo, el autor del texto que estás leyendo no está proponiendo un enfoque "todo utilidades" como Tailwind, sino una combinación:</p>
+<ol>
+<li><strong>Estilos globales para los elementos</strong>.</li>
+<li><strong>Variables globales para los valores</strong>.</li>
+<li><strong>Clases de utilidad para excepciones y ajustes finales</strong>.</li>
+</ol>
+<p>Eso produce un CSS bastante ordenado y escalable.</p>
+<p>En otras palabras, las utilidades no vienen a reemplazar los estilos globales, sino a decir:</p>
+<blockquote>
+<p>"Para este elemento en particular, necesito una pequeña variación sin tener que escribir nuevos selectores complejos."</p>
+</blockquote>
+</details>
 <h2 id="demasiadas-clases-de-utilidad">⚠ Demasiadas clases de utilidad<a class="headerlink" href="#demasiadas-clases-de-utilidad" title="Permanent link">&para;</a></h2>
 <p>Algo que recomendamos encarecidamente es no incluir clases de utilidad hasta que las necesites. No quieres enviar a los usuarios datos no utilizados o redundantes. Para este proyecto, mantenemos un archivo <code>helpers.css</code> y agregamos utilidades a medida que encontramos que las necesitamos. Si encontramos que la clase <code>text-align:center</code> no está teniendo efecto, es que no la hemos agregado en el CSS aún — así que la ponemos en nuestro archivo <code>helpers.css</code> para uso presente y futuro.</p>
-<p>En un enfoque <em>utility first</em> ↗ de CSS, los estilos heredados, universales y de elemento no se aprovechan realmente. En su lugar, se aplican combinaciones de estilos individuales caso por caso a elementos individuales e independientes. Usando el <em>framework utility-first Tailwind</em>, esto podría resultar — como ejemplifica la propia documentación de Tailwind — en valores de clase como los siguientes:</p>
-<div class="language-css highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="nt">class</span><span class="o">=</span><span class="s2">&quot;rounded-lg px-4 md:px-5 xl:px-4 py-3 md:py-4 xl:py-3 bg-teal-500 hover:bg-teal-600 md:text-lg xl:text-base text-white font-semibold leading-tight shadow-md&quot;</span>
+<p>En un enfoque <a href="https://tailwindcss.com/docs/styling-with-utility-classes"><em>utility first</em> ↗</a> de CSS, los estilos heredados, universales y de elemento no se aprovechan realmente. En su lugar, se aplican combinaciones de estilos individuales caso por caso a elementos individuales e independientes. Usando el <em>framework utility-first Tailwind</em>, esto podría resultar — como ejemplifica la propia documentación de Tailwind — en valores de clase como los siguientes:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-60-1"><a id="__codelineno-60-1" name="__codelineno-60-1" href="#__codelineno-60-1"></a><span class="nt">class</span><span class="o">=</span><span class="s2">&quot;rounded-lg px-4 md:px-5 xl:px-4 py-3 md:py-4 xl:py-3 bg-teal-500 hover:bg-teal-600 md:text-lg xl:text-base text-white font-semibold leading-tight shadow-md&quot;</span>
 </span></code></pre></div>
 <p>Puede haber razones, bajo circunstancias específicas, por las que uno querría ir por este camino. Quizás hay una gran cantidad de detalle y disparidad en el diseño visual que se beneficia de tener este tipo de control granular, o quizás quieres prototipar algo rápidamente sin cambiar de contexto entre CSS y HTML.</p>
 <p>El enfoque de <em>Every Layout</em> asume que quieres crear robustez y consistencia con el mínimo de intervención manual. Por lo tanto, los conceptos y técnicas aquí expuestos aprovechan <em>axiomas</em>, primitivas y los algoritmos de estilo que se extrapolan de ellos.</p>
+<details class="info">
+<summary>Explicacion</summary>
+<p>Este apartado está advirtiendo sobre un peligro: <strong>abusar de las clases de utilidad</strong>. La idea no es llenar el HTML con veinte clases para cada elemento.</p>
+<p><strong>1. Crea utilidades solo cuando realmente las necesites</strong></p>
+<p>Por ejemplo, imagina que nunca has necesitado centrar texto. Entonces no tiene sentido tener esto:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-61-1"><a id="__codelineno-61-1" name="__codelineno-61-1" href="#__codelineno-61-1"></a><span class="p">.</span><span class="nc">text-align</span><span class="err">\</span><span class="p">:</span><span class="nd">center</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-61-2"><a id="__codelineno-61-2" name="__codelineno-61-2" href="#__codelineno-61-2"></a><span class="w">    </span><span class="k">text-align</span><span class="p">:</span><span class="w"> </span><span class="kc">center</span><span class="p">;</span>
+</span><span id="__span-61-3"><a id="__codelineno-61-3" name="__codelineno-61-3" href="#__codelineno-61-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>porque nadie lo está usando.</p>
+<p>Cuando un día lo necesites:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-62-1"><a id="__codelineno-62-1" name="__codelineno-62-1" href="#__codelineno-62-1"></a><span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;text-align:center&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-62-2"><a id="__codelineno-62-2" name="__codelineno-62-2" href="#__codelineno-62-2"></a>    Hola
+</span><span id="__span-62-3"><a id="__codelineno-62-3" name="__codelineno-62-3" href="#__codelineno-62-3"></a><span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>y veas que no funciona porque la clase aún no existe, recién entonces la agregas a:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-63-1"><a id="__codelineno-63-1" name="__codelineno-63-1" href="#__codelineno-63-1"></a><span class="c">/* helpers.css */</span>
+</span><span id="__span-63-2"><a id="__codelineno-63-2" name="__codelineno-63-2" href="#__codelineno-63-2"></a>
+</span><span id="__span-63-3"><a id="__codelineno-63-3" name="__codelineno-63-3" href="#__codelineno-63-3"></a><span class="p">.</span><span class="nc">text-align</span><span class="err">\</span><span class="p">:</span><span class="nd">center</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-63-4"><a id="__codelineno-63-4" name="__codelineno-63-4" href="#__codelineno-63-4"></a><span class="w">    </span><span class="k">text-align</span><span class="p">:</span><span class="w"> </span><span class="kc">center</span><span class="p">;</span>
+</span><span id="__span-63-5"><a id="__codelineno-63-5" name="__codelineno-63-5" href="#__codelineno-63-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>La filosofía es:</p>
+<blockquote>
+<p>No escribas código para problemas que todavía no tienes.</p>
+</blockquote>
+<hr />
+<p><strong>2. El enfoque "utility first"</strong></p>
+<p>Frameworks como Tailwind CSS llevan esta idea al extremo.</p>
+<p>En lugar de:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-64-1"><a id="__codelineno-64-1" name="__codelineno-64-1" href="#__codelineno-64-1"></a><span class="p">.</span><span class="nc">card</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-64-2"><a id="__codelineno-64-2" name="__codelineno-64-2" href="#__codelineno-64-2"></a><span class="w">    </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="kc">teal</span><span class="p">;</span>
+</span><span id="__span-64-3"><a id="__codelineno-64-3" name="__codelineno-64-3" href="#__codelineno-64-3"></a><span class="w">    </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="kc">white</span><span class="p">;</span>
+</span><span id="__span-64-4"><a id="__codelineno-64-4" name="__codelineno-64-4" href="#__codelineno-64-4"></a><span class="w">    </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-64-5"><a id="__codelineno-64-5" name="__codelineno-64-5" href="#__codelineno-64-5"></a><span class="w">    </span><span class="k">border-radius</span><span class="p">:</span><span class="w"> </span><span class="mf">0.5</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-64-6"><a id="__codelineno-64-6" name="__codelineno-64-6" href="#__codelineno-64-6"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>escribes directamente:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-65-1"><a id="__codelineno-65-1" name="__codelineno-65-1" href="#__codelineno-65-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;</span>
+</span><span id="__span-65-2"><a id="__codelineno-65-2" name="__codelineno-65-2" href="#__codelineno-65-2"></a><span class="s">rounded-lg</span>
+</span><span id="__span-65-3"><a id="__codelineno-65-3" name="__codelineno-65-3" href="#__codelineno-65-3"></a><span class="s">px-4</span>
+</span><span id="__span-65-4"><a id="__codelineno-65-4" name="__codelineno-65-4" href="#__codelineno-65-4"></a><span class="s">py-3</span>
+</span><span id="__span-65-5"><a id="__codelineno-65-5" name="__codelineno-65-5" href="#__codelineno-65-5"></a><span class="s">bg-teal-500</span>
+</span><span id="__span-65-6"><a id="__codelineno-65-6" name="__codelineno-65-6" href="#__codelineno-65-6"></a><span class="s">text-white</span>
+</span><span id="__span-65-7"><a id="__codelineno-65-7" name="__codelineno-65-7" href="#__codelineno-65-7"></a><span class="s">font-semibold</span>
+</span><span id="__span-65-8"><a id="__codelineno-65-8" name="__codelineno-65-8" href="#__codelineno-65-8"></a><span class="s">shadow-md&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>Cada clase hace una sola cosa:</p>
+<ul>
+<li><code>rounded-lg</code> → borde redondeado.</li>
+<li><code>px-4</code> → padding horizontal.</li>
+<li><code>py-3</code> → padding vertical.</li>
+<li><code>bg-teal-500</code> → color de fondo.</li>
+<li><code>text-white</code> → color del texto.</li>
+<li><code>shadow-md</code> → sombra.</li>
+</ul>
+<hr />
+<p><strong>3. ¿Cuál es el problema?</strong></p>
+<p>El HTML puede terminar pareciendo esto:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-66-1"><a id="__codelineno-66-1" name="__codelineno-66-1" href="#__codelineno-66-1"></a><span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;</span>
+</span><span id="__span-66-2"><a id="__codelineno-66-2" name="__codelineno-66-2" href="#__codelineno-66-2"></a><span class="s">rounded-lg</span>
+</span><span id="__span-66-3"><a id="__codelineno-66-3" name="__codelineno-66-3" href="#__codelineno-66-3"></a><span class="s">px-4</span>
+</span><span id="__span-66-4"><a id="__codelineno-66-4" name="__codelineno-66-4" href="#__codelineno-66-4"></a><span class="s">md:px-5</span>
+</span><span id="__span-66-5"><a id="__codelineno-66-5" name="__codelineno-66-5" href="#__codelineno-66-5"></a><span class="s">xl:px-4</span>
+</span><span id="__span-66-6"><a id="__codelineno-66-6" name="__codelineno-66-6" href="#__codelineno-66-6"></a><span class="s">py-3</span>
+</span><span id="__span-66-7"><a id="__codelineno-66-7" name="__codelineno-66-7" href="#__codelineno-66-7"></a><span class="s">md:py-4</span>
+</span><span id="__span-66-8"><a id="__codelineno-66-8" name="__codelineno-66-8" href="#__codelineno-66-8"></a><span class="s">xl:py-3</span>
+</span><span id="__span-66-9"><a id="__codelineno-66-9" name="__codelineno-66-9" href="#__codelineno-66-9"></a><span class="s">bg-teal-500</span>
+</span><span id="__span-66-10"><a id="__codelineno-66-10" name="__codelineno-66-10" href="#__codelineno-66-10"></a><span class="s">hover:bg-teal-600</span>
+</span><span id="__span-66-11"><a id="__codelineno-66-11" name="__codelineno-66-11" href="#__codelineno-66-11"></a><span class="s">md:text-lg</span>
+</span><span id="__span-66-12"><a id="__codelineno-66-12" name="__codelineno-66-12" href="#__codelineno-66-12"></a><span class="s">xl:text-base</span>
+</span><span id="__span-66-13"><a id="__codelineno-66-13" name="__codelineno-66-13" href="#__codelineno-66-13"></a><span class="s">text-white</span>
+</span><span id="__span-66-14"><a id="__codelineno-66-14" name="__codelineno-66-14" href="#__codelineno-66-14"></a><span class="s">font-semibold</span>
+</span><span id="__span-66-15"><a id="__codelineno-66-15" name="__codelineno-66-15" href="#__codelineno-66-15"></a><span class="s">leading-tight</span>
+</span><span id="__span-66-16"><a id="__codelineno-66-16" name="__codelineno-66-16" href="#__codelineno-66-16"></a><span class="s">shadow-md&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>Aquí el HTML está lleno de estilos.</p>
+<p>Ya no lees:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-67-1"><a id="__codelineno-67-1" name="__codelineno-67-1" href="#__codelineno-67-1"></a><span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;primary-button&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>sino una lista enorme de clases.</p>
+<hr />
+<p><strong>4. Every Layout propone otro enfoque</strong></p>
+<p>Ellos prefieren:</p>
+<p><strong>1. Axiomas</strong></p>
+<p>Reglas generales.</p>
+<p>Por ejemplo:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-68-1"><a id="__codelineno-68-1" name="__codelineno-68-1" href="#__codelineno-68-1"></a><span class="nt">body</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-68-2"><a id="__codelineno-68-2" name="__codelineno-68-2" href="#__codelineno-68-2"></a><span class="w">    </span><span class="k">line-height</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5</span><span class="p">;</span>
+</span><span id="__span-68-3"><a id="__codelineno-68-3" name="__codelineno-68-3" href="#__codelineno-68-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<hr />
+<p><strong>2. Primitivas</strong></p>
+<p>Componentes reutilizables.</p>
+<p>Por ejemplo:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-69-1"><a id="__codelineno-69-1" name="__codelineno-69-1" href="#__codelineno-69-1"></a><span class="p">.</span><span class="nc">stack</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-69-2"><a id="__codelineno-69-2" name="__codelineno-69-2" href="#__codelineno-69-2"></a><span class="w">    </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
+</span><span id="__span-69-3"><a id="__codelineno-69-3" name="__codelineno-69-3" href="#__codelineno-69-3"></a><span class="w">    </span><span class="k">flex-direction</span><span class="p">:</span><span class="w"> </span><span class="kc">column</span><span class="p">;</span>
+</span><span id="__span-69-4"><a id="__codelineno-69-4" name="__codelineno-69-4" href="#__codelineno-69-4"></a><span class="p">}</span>
+</span></code></pre></div>
+<hr />
+<p><strong>3. Algoritmos de layout</strong></p>
+<p>Que los elementos se adapten solos.</p>
+<p>Por ejemplo:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-70-1"><a id="__codelineno-70-1" name="__codelineno-70-1" href="#__codelineno-70-1"></a><span class="p">.</span><span class="nc">cluster</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-70-2"><a id="__codelineno-70-2" name="__codelineno-70-2" href="#__codelineno-70-2"></a><span class="w">    </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
+</span><span id="__span-70-3"><a id="__codelineno-70-3" name="__codelineno-70-3" href="#__codelineno-70-3"></a><span class="w">    </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
+</span><span id="__span-70-4"><a id="__codelineno-70-4" name="__codelineno-70-4" href="#__codelineno-70-4"></a><span class="w">    </span><span class="k">gap</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-70-5"><a id="__codelineno-70-5" name="__codelineno-70-5" href="#__codelineno-70-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<hr />
+<p><strong>Entonces, en vez de esto:</strong></p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-71-1"><a id="__codelineno-71-1" name="__codelineno-71-1" href="#__codelineno-71-1"></a><span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;</span>
+</span><span id="__span-71-2"><a id="__codelineno-71-2" name="__codelineno-71-2" href="#__codelineno-71-2"></a><span class="s">rounded-lg</span>
+</span><span id="__span-71-3"><a id="__codelineno-71-3" name="__codelineno-71-3" href="#__codelineno-71-3"></a><span class="s">px-4</span>
+</span><span id="__span-71-4"><a id="__codelineno-71-4" name="__codelineno-71-4" href="#__codelineno-71-4"></a><span class="s">py-3</span>
+</span><span id="__span-71-5"><a id="__codelineno-71-5" name="__codelineno-71-5" href="#__codelineno-71-5"></a><span class="s">bg-teal-500</span>
+</span><span id="__span-71-6"><a id="__codelineno-71-6" name="__codelineno-71-6" href="#__codelineno-71-6"></a><span class="s">text-white</span>
+</span><span id="__span-71-7"><a id="__codelineno-71-7" name="__codelineno-71-7" href="#__codelineno-71-7"></a><span class="s">font-semibold&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>prefieren algo parecido a:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-72-1"><a id="__codelineno-72-1" name="__codelineno-72-1" href="#__codelineno-72-1"></a><span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;button&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>y en CSS:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-73-1"><a id="__codelineno-73-1" name="__codelineno-73-1" href="#__codelineno-73-1"></a><span class="p">.</span><span class="nc">button</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-73-2"><a id="__codelineno-73-2" name="__codelineno-73-2" href="#__codelineno-73-2"></a><span class="w">    </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="kc">teal</span><span class="p">;</span>
+</span><span id="__span-73-3"><a id="__codelineno-73-3" name="__codelineno-73-3" href="#__codelineno-73-3"></a><span class="w">    </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="kc">white</span><span class="p">;</span>
+</span><span id="__span-73-4"><a id="__codelineno-73-4" name="__codelineno-73-4" href="#__codelineno-73-4"></a><span class="w">    </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-73-5"><a id="__codelineno-73-5" name="__codelineno-73-5" href="#__codelineno-73-5"></a><span class="w">    </span><span class="k">border-radius</span><span class="p">:</span><span class="w"> </span><span class="mf">.5</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-73-6"><a id="__codelineno-73-6" name="__codelineno-73-6" href="#__codelineno-73-6"></a><span class="w">    </span><span class="k">font-weight</span><span class="p">:</span><span class="w"> </span><span class="mi">600</span><span class="p">;</span>
+</span><span id="__span-73-7"><a id="__codelineno-73-7" name="__codelineno-73-7" href="#__codelineno-73-7"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>o incluso aprovechar estilos globales:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-74-1"><a id="__codelineno-74-1" name="__codelineno-74-1" href="#__codelineno-74-1"></a><span class="nt">button</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-74-2"><a id="__codelineno-74-2" name="__codelineno-74-2" href="#__codelineno-74-2"></a><span class="w">    </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-74-3"><a id="__codelineno-74-3" name="__codelineno-74-3" href="#__codelineno-74-3"></a><span class="w">    </span><span class="k">border-radius</span><span class="p">:</span><span class="w"> </span><span class="mf">.5</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-74-4"><a id="__codelineno-74-4" name="__codelineno-74-4" href="#__codelineno-74-4"></a><span class="p">}</span>
+</span></code></pre></div>
+<hr />
+<p><strong>La idea principal de todo este apartado es:</strong></p>
+<blockquote>
+<p>Las clases de utilidad son útiles, pero deben ser una herramienta, no la base de todo el CSS.</p>
+</blockquote>
+<p>Primero aprovecha:</p>
+<ol>
+<li>La herencia.</li>
+<li>Los estilos globales.</li>
+<li>Los selectores de elementos.</li>
+<li>Las primitivas y componentes.</li>
+</ol>
+<p>Y solo cuando necesites una excepción o un ajuste puntual, añade una clase de utilidad.</p>
+<p>En otras palabras, <strong>Every Layout busca que el navegador haga la mayor parte del trabajo y que el desarrollador intervenga lo menos posible</strong>. Esa es la filosofía que están tratando de transmitir.</p>
+</details>
 <h2 id="estilos-locales-o-con-ambito-scoped">Estilos locales o con ámbito (<em>scoped</em>)<a class="headerlink" href="#estilos-locales-o-con-ambito-scoped" title="Permanent link">&para;</a></h2>
-<p>Notablemente, el atributo/propiedad <code>id</code> (por razones de <em>accesibilidad</em> ↗, sobre todo) solo puede usarse en un elemento HTML por documento. Estilizar a través del selector <code>id</code> está por lo tanto limitado a una instancia.</p>
-<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-20-1">1</a></span>
-<span class="normal"><a href="#__codelineno-20-2">2</a></span>
-<span class="normal"><a href="#__codelineno-20-3">3</a></span>
-<span class="normal"><a href="#__codelineno-20-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1"></a><span class="p">#</span><span class="nn">unique</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2"></a><span class="w">  </span><span class="c">/* ↓ Solo estiliza id=&quot;unique&quot; */</span>
-</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3"></a><span class="w">  </span><span class="k">font-family</span><span class="p">:</span><span class="w"> </span><span class="kc">sans-serif</span><span class="p">;</span>
-</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4"></a><span class="p">}</span>
+<p>Notablemente, el atributo/propiedad <code>id</code> (por razones de <a href="https://www.deque.com/blog/unique-id-attributes-matter/"><em>accesibilidad</em> ↗</a>, sobre todo) solo puede usarse en un elemento HTML por documento. Estilizar a través del selector <code>id</code> está por lo tanto limitado a una instancia.</p>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-75-1">1</a></span>
+<span class="normal"><a href="#__codelineno-75-2">2</a></span>
+<span class="normal"><a href="#__codelineno-75-3">3</a></span>
+<span class="normal"><a href="#__codelineno-75-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-75-1"><a id="__codelineno-75-1" name="__codelineno-75-1"></a><span class="p">#</span><span class="nn">unique</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-75-2"><a id="__codelineno-75-2" name="__codelineno-75-2"></a><span class="w">  </span><span class="c">/* ↓ Solo estiliza id=&quot;unique&quot; */</span>
+</span><span id="__span-75-3"><a id="__codelineno-75-3" name="__codelineno-75-3"></a><span class="w">  </span><span class="k">font-family</span><span class="p">:</span><span class="w"> </span><span class="kc">sans-serif</span><span class="p">;</span>
+</span><span id="__span-75-4"><a id="__codelineno-75-4" name="__codelineno-75-4"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
-<p>El selector <code>id</code> tiene una <em>especificidad</em> ↗ muy alta porque se asume que los estilos únicos están destinados a anular estilos genéricos competidores en todos los casos.</p>
+<p>El selector <code>id</code> tiene una <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Cascade/Specificity"><em>especificidad</em> ↗</a> muy alta porque se asume que los estilos únicos están destinados a anular estilos genéricos competidores en todos los casos.</p>
 <p>Por supuesto, no hay nada más "local" o <em>específico de instancia</em> que aplicar estilos directamente a los elementos usando el atributo/propiedad <code>style</code>:</p>
-<div class="language-html highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="p">&lt;</span><span class="nt">p</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;font-family: sans-serif&quot;</span><span class="p">&gt;</span>...<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-76-1"><a id="__codelineno-76-1" name="__codelineno-76-1" href="#__codelineno-76-1"></a><span class="p">&lt;</span><span class="nt">p</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;font-family: sans-serif&quot;</span><span class="p">&gt;</span>...<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
 </span></code></pre></div>
 <p>El único estándar restante para localizar estilos es dentro de Shadow DOM. Al hacer que un elemento sea un <code>shadowRoot</code>, se pueden usar selectores de baja especificidad que solo afectan a los elementos dentro de ese padre.</p>
-<div class="language-js highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">elem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
-</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="kd">const</span><span class="w"> </span><span class="nx">shadowRoot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">elem</span><span class="p">.</span><span class="nx">attachShadow</span><span class="p">({</span><span class="nx">mode</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;open&#39;</span><span class="p">});</span>
-</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="nx">shadowRoot</span><span class="p">.</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sb">`</span>
-</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="sb">  &lt;style&gt;</span>
-</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="sb">    p {</span>
-</span><span id="__span-22-6"><a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="sb">      /* ↓ Solo estiliza los &lt;p&gt; dentro del Shadow DOM del elemento */</span>
-</span><span id="__span-22-7"><a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="sb">      font-family: sans-serif;</span>
-</span><span id="__span-22-8"><a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a><span class="sb">    }</span>
-</span><span id="__span-22-9"><a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a><span class="sb">  &lt;/style&gt;</span>
-</span><span id="__span-22-10"><a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a><span class="sb">  &lt;p&gt;Un párrafo sans-serif&lt;/p&gt;</span>
-</span><span id="__span-22-11"><a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a><span class="sb">`</span><span class="p">;</span>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-77-1"><a id="__codelineno-77-1" name="__codelineno-77-1" href="#__codelineno-77-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">elem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
+</span><span id="__span-77-2"><a id="__codelineno-77-2" name="__codelineno-77-2" href="#__codelineno-77-2"></a><span class="kd">const</span><span class="w"> </span><span class="nx">shadowRoot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">elem</span><span class="p">.</span><span class="nx">attachShadow</span><span class="p">({</span><span class="nx">mode</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;open&#39;</span><span class="p">});</span>
+</span><span id="__span-77-3"><a id="__codelineno-77-3" name="__codelineno-77-3" href="#__codelineno-77-3"></a><span class="nx">shadowRoot</span><span class="p">.</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sb">`</span>
+</span><span id="__span-77-4"><a id="__codelineno-77-4" name="__codelineno-77-4" href="#__codelineno-77-4"></a><span class="sb">  &lt;style&gt;</span>
+</span><span id="__span-77-5"><a id="__codelineno-77-5" name="__codelineno-77-5" href="#__codelineno-77-5"></a><span class="sb">    p {</span>
+</span><span id="__span-77-6"><a id="__codelineno-77-6" name="__codelineno-77-6" href="#__codelineno-77-6"></a><span class="sb">      /* ↓ Solo estiliza los &lt;p&gt; dentro del Shadow DOM del elemento */</span>
+</span><span id="__span-77-7"><a id="__codelineno-77-7" name="__codelineno-77-7" href="#__codelineno-77-7"></a><span class="sb">      font-family: sans-serif;</span>
+</span><span id="__span-77-8"><a id="__codelineno-77-8" name="__codelineno-77-8" href="#__codelineno-77-8"></a><span class="sb">    }</span>
+</span><span id="__span-77-9"><a id="__codelineno-77-9" name="__codelineno-77-9" href="#__codelineno-77-9"></a><span class="sb">  &lt;/style&gt;</span>
+</span><span id="__span-77-10"><a id="__codelineno-77-10" name="__codelineno-77-10" href="#__codelineno-77-10"></a><span class="sb">  &lt;p&gt;Un párrafo sans-serif&lt;/p&gt;</span>
+</span><span id="__span-77-11"><a id="__codelineno-77-11" name="__codelineno-77-11" href="#__codelineno-77-11"></a><span class="sb">`</span><span class="p">;</span>
 </span></code></pre></div>
 <h2 id="inconvenientes">Inconvenientes<a class="headerlink" href="#inconvenientes" title="Permanent link">&para;</a></h2>
 <p>El selector <code>id</code>, los estilos inline y Shadow DOM tienen todos inconvenientes:</p>
@@ -1578,82 +2105,414 @@
 </ul>
 <p><img alt="" src="../shwdo.png" /></p>
 <p>Lo que necesitamos es una forma de aprovechar simultáneamente el estilo global, pero aplicar estilos locales y específicos de instancia de manera controlada.</p>
+<details class="info">
+<summary>Explicación</summary>
+<p>Esta sección está hablando de <strong>estilos locales</strong>, es decir, estilos que afectan a <strong>un elemento específico o a una pequeña parte del documento</strong>, en contraste con los estilos globales que afectan a muchos elementos.</p>
+<p>La pregunta que intenta responder es:</p>
+<blockquote>
+<p><strong>¿Cómo puedo estilizar algo concreto sin perder las ventajas del CSS global?</strong></p>
+</blockquote>
+<p>Veamos las opciones que menciona.</p>
+<hr />
+<p><strong>1. Selectores <code>id</code></strong></p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-78-1"><a id="__codelineno-78-1" name="__codelineno-78-1" href="#__codelineno-78-1"></a><span class="p">&lt;</span><span class="nt">p</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;unique&quot;</span><span class="p">&gt;</span>Hola<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-79-1"><a id="__codelineno-79-1" name="__codelineno-79-1" href="#__codelineno-79-1"></a><span class="p">#</span><span class="nn">unique</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-79-2"><a id="__codelineno-79-2" name="__codelineno-79-2" href="#__codelineno-79-2"></a><span class="w">    </span><span class="k">font-family</span><span class="p">:</span><span class="w"> </span><span class="kc">sans-serif</span><span class="p">;</span>
+</span><span id="__span-79-3"><a id="__codelineno-79-3" name="__codelineno-79-3" href="#__codelineno-79-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Este estilo solamente afecta a:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-80-1"><a id="__codelineno-80-1" name="__codelineno-80-1" href="#__codelineno-80-1"></a><span class="p">&lt;</span><span class="nt">p</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;unique&quot;</span><span class="p">&gt;</span>Hola<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>y a ningún otro elemento.</p>
+<p>Por eso se considera un estilo muy local.</p>
+<hr />
+<p><strong>¿Por qué tiene tanta especificidad?</strong></p>
+<p>Porque un <code>id</code> debe ser único en toda la página.</p>
+<p>El navegador asume:</p>
+<blockquote>
+<p>"Si alguien escribió un id, seguramente quiere que estos estilos ganen sobre los demás."</p>
+</blockquote>
+<p>Por eso:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-81-1"><a id="__codelineno-81-1" name="__codelineno-81-1" href="#__codelineno-81-1"></a><span class="nt">p</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-81-2"><a id="__codelineno-81-2" name="__codelineno-81-2" href="#__codelineno-81-2"></a><span class="w">    </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="kc">blue</span><span class="p">;</span>
+</span><span id="__span-81-3"><a id="__codelineno-81-3" name="__codelineno-81-3" href="#__codelineno-81-3"></a><span class="p">}</span>
+</span><span id="__span-81-4"><a id="__codelineno-81-4" name="__codelineno-81-4" href="#__codelineno-81-4"></a>
+</span><span id="__span-81-5"><a id="__codelineno-81-5" name="__codelineno-81-5" href="#__codelineno-81-5"></a><span class="p">#</span><span class="nn">unique</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-81-6"><a id="__codelineno-81-6" name="__codelineno-81-6" href="#__codelineno-81-6"></a><span class="w">    </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="kc">red</span><span class="p">;</span>
+</span><span id="__span-81-7"><a id="__codelineno-81-7" name="__codelineno-81-7" href="#__codelineno-81-7"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>produce:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-82-1"><a id="__codelineno-82-1" name="__codelineno-82-1" href="#__codelineno-82-1"></a><span class="p">&lt;</span><span class="nt">p</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;unique&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>en color rojo.</p>
+<hr />
+<p><strong>Problema</strong></p>
+<p>Los <code>id</code> tienen demasiada fuerza.</p>
+<p>Con el tiempo aparecen cosas como:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-83-1"><a id="__codelineno-83-1" name="__codelineno-83-1" href="#__codelineno-83-1"></a><span class="p">#</span><span class="nn">header</span><span class="w"> </span><span class="p">{}</span>
+</span><span id="__span-83-2"><a id="__codelineno-83-2" name="__codelineno-83-2" href="#__codelineno-83-2"></a><span class="p">#</span><span class="nn">footer</span><span class="w"> </span><span class="p">{}</span>
+</span><span id="__span-83-3"><a id="__codelineno-83-3" name="__codelineno-83-3" href="#__codelineno-83-3"></a><span class="p">#</span><span class="nn">sidebar</span><span class="w"> </span><span class="p">{}</span>
+</span><span id="__span-83-4"><a id="__codelineno-83-4" name="__codelineno-83-4" href="#__codelineno-83-4"></a><span class="p">#</span><span class="nn">login</span><span class="w"> </span><span class="p">{}</span>
+</span><span id="__span-83-5"><a id="__codelineno-83-5" name="__codelineno-83-5" href="#__codelineno-83-5"></a><span class="p">#</span><span class="nn">profile</span><span class="w"> </span><span class="p">{}</span>
+</span></code></pre></div>
+<p>y empiezan las guerras de especificidad.</p>
+<p>Además, para cada elemento tienes que inventar un nombre nuevo.</p>
+<hr />
+<p><strong>2. Estilos inline</strong></p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-84-1"><a id="__codelineno-84-1" name="__codelineno-84-1" href="#__codelineno-84-1"></a><span class="p">&lt;</span><span class="nt">p</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;font-family:sans-serif&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-84-2"><a id="__codelineno-84-2" name="__codelineno-84-2" href="#__codelineno-84-2"></a>    Hola
+</span><span id="__span-84-3"><a id="__codelineno-84-3" name="__codelineno-84-3" href="#__codelineno-84-3"></a><span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>Aquí el CSS está directamente dentro del HTML.</p>
+<p>Esto es todavía más local.</p>
+<hr />
+<p><strong>Problema</strong></p>
+<p>Mezcla estructura y presentación.</p>
+<p>Terminas con:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-85-1"><a id="__codelineno-85-1" name="__codelineno-85-1" href="#__codelineno-85-1"></a><span class="p">&lt;</span><span class="nt">p</span>
+</span><span id="__span-85-2"><a id="__codelineno-85-2" name="__codelineno-85-2" href="#__codelineno-85-2"></a><span class="na">style</span><span class="o">=</span><span class="s">&quot;</span>
+</span><span id="__span-85-3"><a id="__codelineno-85-3" name="__codelineno-85-3" href="#__codelineno-85-3"></a><span class="s">color:red;</span>
+</span><span id="__span-85-4"><a id="__codelineno-85-4" name="__codelineno-85-4" href="#__codelineno-85-4"></a><span class="s">font-size:2rem;</span>
+</span><span id="__span-85-5"><a id="__codelineno-85-5" name="__codelineno-85-5" href="#__codelineno-85-5"></a><span class="s">font-weight:bold;</span>
+</span><span id="__span-85-6"><a id="__codelineno-85-6" name="__codelineno-85-6" href="#__codelineno-85-6"></a><span class="s">margin-top:20px;&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>Si tienes 50 párrafos iguales y quieres cambiar el color, tendrás que modificar 50 veces.</p>
+<p>Por eso el CSS nació precisamente para evitar esto.</p>
+<hr />
+<p><strong>3. Shadow DOM</strong></p>
+<p>Supongamos:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-86-1"><a id="__codelineno-86-1" name="__codelineno-86-1" href="#__codelineno-86-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">elem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">);</span>
+</span><span id="__span-86-2"><a id="__codelineno-86-2" name="__codelineno-86-2" href="#__codelineno-86-2"></a>
+</span><span id="__span-86-3"><a id="__codelineno-86-3" name="__codelineno-86-3" href="#__codelineno-86-3"></a><span class="kd">const</span><span class="w"> </span><span class="nx">shadowRoot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">elem</span><span class="p">.</span><span class="nx">attachShadow</span><span class="p">({</span><span class="w"> </span><span class="nx">mode</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;open&quot;</span><span class="w"> </span><span class="p">});</span>
+</span></code></pre></div>
+<p>Dentro del Shadow DOM:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-87-1"><a id="__codelineno-87-1" name="__codelineno-87-1" href="#__codelineno-87-1"></a><span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+</span><span id="__span-87-2"><a id="__codelineno-87-2" name="__codelineno-87-2" href="#__codelineno-87-2"></a><span class="nt">p</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-87-3"><a id="__codelineno-87-3" name="__codelineno-87-3" href="#__codelineno-87-3"></a><span class="w">    </span><span class="k">font-family</span><span class="p">:</span><span class="kc">sans-serif</span><span class="p">;</span>
+</span><span id="__span-87-4"><a id="__codelineno-87-4" name="__codelineno-87-4" href="#__codelineno-87-4"></a><span class="p">}</span>
+</span><span id="__span-87-5"><a id="__codelineno-87-5" name="__codelineno-87-5" href="#__codelineno-87-5"></a><span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+</span><span id="__span-87-6"><a id="__codelineno-87-6" name="__codelineno-87-6" href="#__codelineno-87-6"></a>
+</span><span id="__span-87-7"><a id="__codelineno-87-7" name="__codelineno-87-7" href="#__codelineno-87-7"></a><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Un párrafo<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>Ese selector:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-88-1"><a id="__codelineno-88-1" name="__codelineno-88-1" href="#__codelineno-88-1"></a><span class="nt">p</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-88-2"><a id="__codelineno-88-2" name="__codelineno-88-2" href="#__codelineno-88-2"></a><span class="w">    </span><span class="k">font-family</span><span class="p">:</span><span class="kc">sans-serif</span><span class="p">;</span>
+</span><span id="__span-88-3"><a id="__codelineno-88-3" name="__codelineno-88-3" href="#__codelineno-88-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>solo afecta a los <code>&lt;p&gt;</code> que están dentro del Shadow DOM.</p>
+<p>No afecta al resto del documento.</p>
+<hr />
+<p><strong>Ventaja</strong></p>
+<p>Puedes usar selectores simples:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-89-1"><a id="__codelineno-89-1" name="__codelineno-89-1" href="#__codelineno-89-1"></a><span class="nt">p</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-89-2"><a id="__codelineno-89-2" name="__codelineno-89-2" href="#__codelineno-89-2"></a><span class="w">    </span><span class="err">...</span>
+</span><span id="__span-89-3"><a id="__codelineno-89-3" name="__codelineno-89-3" href="#__codelineno-89-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>sin preocuparte de que modifiquen otros párrafos de la página.</p>
+<hr />
+<p><strong>Problema</strong></p>
+<p>El aislamiento es de doble sentido.</p>
+<p>Los estilos internos no salen:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-90-1"><a id="__codelineno-90-1" name="__codelineno-90-1" href="#__codelineno-90-1"></a>Shadow DOM
+</span><span id="__span-90-2"><a id="__codelineno-90-2" name="__codelineno-90-2" href="#__codelineno-90-2"></a>│
+</span><span id="__span-90-3"><a id="__codelineno-90-3" name="__codelineno-90-3" href="#__codelineno-90-3"></a>├── p
+</span><span id="__span-90-4"><a id="__codelineno-90-4" name="__codelineno-90-4" href="#__codelineno-90-4"></a>└── button
+</span></code></pre></div>
+<p>pero los estilos globales tampoco entran.</p>
+<p>Por ejemplo:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-91-1"><a id="__codelineno-91-1" name="__codelineno-91-1" href="#__codelineno-91-1"></a><span class="nt">body</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-91-2"><a id="__codelineno-91-2" name="__codelineno-91-2" href="#__codelineno-91-2"></a><span class="w">    </span><span class="k">font-family</span><span class="p">:</span><span class="w"> </span><span class="n">Arial</span><span class="p">;</span>
+</span><span id="__span-91-3"><a id="__codelineno-91-3" name="__codelineno-91-3" href="#__codelineno-91-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>puede que no llegue a los elementos dentro del Shadow DOM.</p>
+<p>Entonces pierdes las ventajas del sistema global.</p>
+<hr />
+<p><strong>Resumen de los problemas</strong></p>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Problema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>Especificidad muy alta</td>
+</tr>
+<tr>
+<td>inline</td>
+<td>Difícil de mantener</td>
+</tr>
+<tr>
+<td>Shadow DOM</td>
+<td>Aislamiento excesivo</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>¿Qué está diciendo realmente el autor?</strong></p>
+<p>El autor ama los estilos globales porque permiten:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-92-1"><a id="__codelineno-92-1" name="__codelineno-92-1" href="#__codelineno-92-1"></a><span class="nt">body</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-92-2"><a id="__codelineno-92-2" name="__codelineno-92-2" href="#__codelineno-92-2"></a><span class="w">    </span><span class="k">line-height</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5</span><span class="p">;</span>
+</span><span id="__span-92-3"><a id="__codelineno-92-3" name="__codelineno-92-3" href="#__codelineno-92-3"></a><span class="p">}</span>
+</span><span id="__span-92-4"><a id="__codelineno-92-4" name="__codelineno-92-4" href="#__codelineno-92-4"></a>
+</span><span id="__span-92-5"><a id="__codelineno-92-5" name="__codelineno-92-5" href="#__codelineno-92-5"></a><span class="nt">h1</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-92-6"><a id="__codelineno-92-6" name="__codelineno-92-6" href="#__codelineno-92-6"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-92-7"><a id="__codelineno-92-7" name="__codelineno-92-7" href="#__codelineno-92-7"></a><span class="p">}</span>
+</span><span id="__span-92-8"><a id="__codelineno-92-8" name="__codelineno-92-8" href="#__codelineno-92-8"></a>
+</span><span id="__span-92-9"><a id="__codelineno-92-9" name="__codelineno-92-9" href="#__codelineno-92-9"></a><span class="nt">p</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-92-10"><a id="__codelineno-92-10" name="__codelineno-92-10" href="#__codelineno-92-10"></a><span class="w">    </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="kt">ch</span><span class="p">;</span>
+</span><span id="__span-92-11"><a id="__codelineno-92-11" name="__codelineno-92-11" href="#__codelineno-92-11"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>y automáticamente toda la página hereda esas reglas.</p>
+<p>Pero a veces necesitas modificar una sola instancia.</p>
+<p>Por ejemplo:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-93-1"><a id="__codelineno-93-1" name="__codelineno-93-1" href="#__codelineno-93-1"></a><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Productos<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>y solo este encabezado debe ser azul.</p>
+<p>No quiere:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-94-1"><a id="__codelineno-94-1" name="__codelineno-94-1" href="#__codelineno-94-1"></a><span class="p">#</span><span class="nn">titulo-57</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-94-2"><a id="__codelineno-94-2" name="__codelineno-94-2" href="#__codelineno-94-2"></a><span class="w">    </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="kc">blue</span><span class="p">;</span>
+</span><span id="__span-94-3"><a id="__codelineno-94-3" name="__codelineno-94-3" href="#__codelineno-94-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>ni:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-95-1"><a id="__codelineno-95-1" name="__codelineno-95-1" href="#__codelineno-95-1"></a><span class="p">&lt;</span><span class="nt">h2</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;color:blue&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>ni meterlo en un Shadow DOM.</p>
+<p>Lo que busca es algo como:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-96-1"><a id="__codelineno-96-1" name="__codelineno-96-1" href="#__codelineno-96-1"></a><span class="p">&lt;</span><span class="nt">h2</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;text-color:blue&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>o</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-97-1"><a id="__codelineno-97-1" name="__codelineno-97-1" href="#__codelineno-97-1"></a><span class="p">&lt;</span><span class="nt">h2</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;--color:blue&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>es decir:</p>
+<ul>
+<li>seguir aprovechando el sistema global;</li>
+<li>pero poder hacer ajustes locales y controlados.</li>
+</ul>
+<hr />
+<p><strong>En una frase</strong></p>
+<p>Esta sección está preparando el terreno para la idea central de Every Layout:</p>
+<blockquote>
+<p><strong>Queremos conservar todas las ventajas del CSS global, pero disponer de una forma elegante de personalizar una instancia concreta sin recurrir a ids, estilos inline o Shadow DOM.</strong></p>
+</blockquote>
+<p>Y justamente la solución que presentarán más adelante es el uso inteligente de <strong>propiedades personalizadas (custom properties)</strong> y componentes de layout.</p>
+</details>
+<details class="info">
+<summary>¿Que es Shadow DOM?</summary>
+<p>Tienes razón. El texto asume que ya sabes qué es el <strong>Shadow DOM</strong>, pero es un concepto importante y merece una explicación desde cero.</p>
+<hr />
+<p><strong>¿Qué es el Shadow DOM?</strong></p>
+<p>El Shadow DOM es una característica de los <strong>Web Components</strong> que permite crear una especie de <strong>miniárbol HTML privado</strong> dentro de un elemento.</p>
+<p>Por ejemplo, normalmente tienes un DOM así:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-98-1"><a id="__codelineno-98-1" name="__codelineno-98-1" href="#__codelineno-98-1"></a><span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+</span><span id="__span-98-2"><a id="__codelineno-98-2" name="__codelineno-98-2" href="#__codelineno-98-2"></a>    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-98-3"><a id="__codelineno-98-3" name="__codelineno-98-3" href="#__codelineno-98-3"></a>        <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Primer párrafo<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span><span id="__span-98-4"><a id="__codelineno-98-4" name="__codelineno-98-4" href="#__codelineno-98-4"></a>    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-98-5"><a id="__codelineno-98-5" name="__codelineno-98-5" href="#__codelineno-98-5"></a>
+</span><span id="__span-98-6"><a id="__codelineno-98-6" name="__codelineno-98-6" href="#__codelineno-98-6"></a>    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Segundo párrafo<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span><span id="__span-98-7"><a id="__codelineno-98-7" name="__codelineno-98-7" href="#__codelineno-98-7"></a><span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>Si escribes:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-99-1"><a id="__codelineno-99-1" name="__codelineno-99-1" href="#__codelineno-99-1"></a><span class="nt">p</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-99-2"><a id="__codelineno-99-2" name="__codelineno-99-2" href="#__codelineno-99-2"></a><span class="w">    </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="kc">red</span><span class="p">;</span>
+</span><span id="__span-99-3"><a id="__codelineno-99-3" name="__codelineno-99-3" href="#__codelineno-99-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>los dos párrafos se vuelven rojos.</p>
+<hr />
+<p><strong>Con Shadow DOM</strong></p>
+<p>Supón este HTML:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-100-1"><a id="__codelineno-100-1" name="__codelineno-100-1" href="#__codelineno-100-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;mi-componente&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-100-2"><a id="__codelineno-100-2" name="__codelineno-100-2" href="#__codelineno-100-2"></a>
+</span><span id="__span-100-3"><a id="__codelineno-100-3" name="__codelineno-100-3" href="#__codelineno-100-3"></a><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Párrafo exterior<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>y este JavaScript:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-101-1"><a id="__codelineno-101-1" name="__codelineno-101-1" href="#__codelineno-101-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">elem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s2">&quot;#mi-componente&quot;</span><span class="p">);</span>
+</span><span id="__span-101-2"><a id="__codelineno-101-2" name="__codelineno-101-2" href="#__codelineno-101-2"></a>
+</span><span id="__span-101-3"><a id="__codelineno-101-3" name="__codelineno-101-3" href="#__codelineno-101-3"></a><span class="kd">const</span><span class="w"> </span><span class="nx">shadowRoot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">elem</span><span class="p">.</span><span class="nx">attachShadow</span><span class="p">({</span><span class="w"> </span><span class="nx">mode</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;open&quot;</span><span class="w"> </span><span class="p">});</span>
+</span><span id="__span-101-4"><a id="__codelineno-101-4" name="__codelineno-101-4" href="#__codelineno-101-4"></a>
+</span><span id="__span-101-5"><a id="__codelineno-101-5" name="__codelineno-101-5" href="#__codelineno-101-5"></a><span class="nx">shadowRoot</span><span class="p">.</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sb">`</span>
+</span><span id="__span-101-6"><a id="__codelineno-101-6" name="__codelineno-101-6" href="#__codelineno-101-6"></a><span class="sb">    &lt;p&gt;Párrafo interior&lt;/p&gt;</span>
+</span><span id="__span-101-7"><a id="__codelineno-101-7" name="__codelineno-101-7" href="#__codelineno-101-7"></a><span class="sb">`</span><span class="p">;</span>
+</span></code></pre></div>
+<p>Ahora el navegador ve algo parecido a:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-102-1"><a id="__codelineno-102-1" name="__codelineno-102-1" href="#__codelineno-102-1"></a>DOM principal
+</span><span id="__span-102-2"><a id="__codelineno-102-2" name="__codelineno-102-2" href="#__codelineno-102-2"></a>│
+</span><span id="__span-102-3"><a id="__codelineno-102-3" name="__codelineno-102-3" href="#__codelineno-102-3"></a>├── div#mi-componente
+</span><span id="__span-102-4"><a id="__codelineno-102-4" name="__codelineno-102-4" href="#__codelineno-102-4"></a>│      │
+</span><span id="__span-102-5"><a id="__codelineno-102-5" name="__codelineno-102-5" href="#__codelineno-102-5"></a>│      └── Shadow DOM
+</span><span id="__span-102-6"><a id="__codelineno-102-6" name="__codelineno-102-6" href="#__codelineno-102-6"></a>│            └── p
+</span><span id="__span-102-7"><a id="__codelineno-102-7" name="__codelineno-102-7" href="#__codelineno-102-7"></a>│
+</span><span id="__span-102-8"><a id="__codelineno-102-8" name="__codelineno-102-8" href="#__codelineno-102-8"></a>└── p
+</span></code></pre></div>
+<p>El párrafo interior pertenece al Shadow DOM y el otro al DOM normal.</p>
+<hr />
+<p><strong>El aislamiento</strong></p>
+<p>Si tienes:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-103-1"><a id="__codelineno-103-1" name="__codelineno-103-1" href="#__codelineno-103-1"></a><span class="nt">p</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-103-2"><a id="__codelineno-103-2" name="__codelineno-103-2" href="#__codelineno-103-2"></a><span class="w">    </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="kc">red</span><span class="p">;</span>
+</span><span id="__span-103-3"><a id="__codelineno-103-3" name="__codelineno-103-3" href="#__codelineno-103-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>el párrafo exterior se vuelve rojo.</p>
+<p>Pero el interior normalmente no.</p>
+<p>¿Por qué?</p>
+<p>Porque el Shadow DOM está aislado del resto de la página.</p>
+<hr />
+<p><strong>También ocurre al revés</strong></p>
+<p>Si dentro del Shadow DOM escribes:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-104-1"><a id="__codelineno-104-1" name="__codelineno-104-1" href="#__codelineno-104-1"></a><span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+</span><span id="__span-104-2"><a id="__codelineno-104-2" name="__codelineno-104-2" href="#__codelineno-104-2"></a><span class="nt">p</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-104-3"><a id="__codelineno-104-3" name="__codelineno-104-3" href="#__codelineno-104-3"></a><span class="w">    </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="kc">blue</span><span class="p">;</span>
+</span><span id="__span-104-4"><a id="__codelineno-104-4" name="__codelineno-104-4" href="#__codelineno-104-4"></a><span class="p">}</span>
+</span><span id="__span-104-5"><a id="__codelineno-104-5" name="__codelineno-104-5" href="#__codelineno-104-5"></a><span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+</span><span id="__span-104-6"><a id="__codelineno-104-6" name="__codelineno-104-6" href="#__codelineno-104-6"></a>
+</span><span id="__span-104-7"><a id="__codelineno-104-7" name="__codelineno-104-7" href="#__codelineno-104-7"></a><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Párrafo interior<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>solo el párrafo interior será azul.</p>
+<p>El párrafo exterior ni se entera.</p>
+<hr />
+<p><strong>¿Por qué existe?</strong></p>
+<p>Para crear componentes que no interfieran con el resto de la página.</p>
+<p>Por ejemplo, un calendario:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-105-1"><a id="__codelineno-105-1" name="__codelineno-105-1" href="#__codelineno-105-1"></a>Mi página
+</span><span id="__span-105-2"><a id="__codelineno-105-2" name="__codelineno-105-2" href="#__codelineno-105-2"></a>│
+</span><span id="__span-105-3"><a id="__codelineno-105-3" name="__codelineno-105-3" href="#__codelineno-105-3"></a>├── Menú
+</span><span id="__span-105-4"><a id="__codelineno-105-4" name="__codelineno-105-4" href="#__codelineno-105-4"></a>├── Artículo
+</span><span id="__span-105-5"><a id="__codelineno-105-5" name="__codelineno-105-5" href="#__codelineno-105-5"></a>├── Footer
+</span><span id="__span-105-6"><a id="__codelineno-105-6" name="__codelineno-105-6" href="#__codelineno-105-6"></a>└── Calendario
+</span><span id="__span-105-7"><a id="__codelineno-105-7" name="__codelineno-105-7" href="#__codelineno-105-7"></a>      └── Shadow DOM
+</span></code></pre></div>
+<p>Los estilos del calendario no afectan al menú ni al artículo, y los estilos de la página tampoco rompen el calendario.</p>
+<hr />
+<p><strong>Ejemplo real</strong></p>
+<p>Cuando usas algo como:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-106-1"><a id="__codelineno-106-1" name="__codelineno-106-1" href="#__codelineno-106-1"></a><span class="p">&lt;</span><span class="nt">video</span> <span class="na">controls</span><span class="p">&gt;&lt;/</span><span class="nt">video</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>los botones de reproducción, volumen y pantalla completa están construidos con Shadow DOM.</p>
+<p>Aunque inspecciones el elemento:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-107-1"><a id="__codelineno-107-1" name="__codelineno-107-1" href="#__codelineno-107-1"></a><span class="p">&lt;</span><span class="nt">video</span><span class="p">&gt;&lt;/</span><span class="nt">video</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>dentro hay un montón de HTML oculto y estilos privados.</p>
+<hr />
+<p><strong>¿Por qué Every Layout menciona sus inconvenientes?</strong></p>
+<p>Porque el Shadow DOM aísla demasiado.</p>
+<p>Los estilos globales:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-108-1"><a id="__codelineno-108-1" name="__codelineno-108-1" href="#__codelineno-108-1"></a><span class="nt">body</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-108-2"><a id="__codelineno-108-2" name="__codelineno-108-2" href="#__codelineno-108-2"></a><span class="w">    </span><span class="k">font-family</span><span class="p">:</span><span class="w"> </span><span class="n">Arial</span><span class="p">;</span>
+</span><span id="__span-108-3"><a id="__codelineno-108-3" name="__codelineno-108-3" href="#__codelineno-108-3"></a><span class="p">}</span>
+</span><span id="__span-108-4"><a id="__codelineno-108-4" name="__codelineno-108-4" href="#__codelineno-108-4"></a>
+</span><span id="__span-108-5"><a id="__codelineno-108-5" name="__codelineno-108-5" href="#__codelineno-108-5"></a><span class="nt">p</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-108-6"><a id="__codelineno-108-6" name="__codelineno-108-6" href="#__codelineno-108-6"></a><span class="w">    </span><span class="k">line-height</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5</span><span class="p">;</span>
+</span><span id="__span-108-7"><a id="__codelineno-108-7" name="__codelineno-108-7" href="#__codelineno-108-7"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>ya no llegan a los elementos internos.</p>
+<p>Entonces pierdes muchas ventajas del CSS global.</p>
+<hr />
+<p><strong>Una analogía</strong></p>
+<p>Imagina una ciudad.</p>
+<p><strong>CSS normal</strong></p>
+<p>Todos los edificios siguen las mismas leyes:</p>
+<ul>
+<li>mismo sistema eléctrico;</li>
+<li>mismas tuberías;</li>
+<li>mismas señales de tráfico.</li>
+</ul>
+<p>Eso serían los estilos globales.</p>
+<hr />
+<p><strong>Shadow DOM</strong></p>
+<p>Cada edificio se convierte en un pequeño país independiente.</p>
+<p>Tiene:</p>
+<ul>
+<li>sus propias leyes;</li>
+<li>sus propias carreteras;</li>
+<li>su propia electricidad.</li>
+</ul>
+<p>Eso evita conflictos, pero también hace más difícil compartir recursos.</p>
+<hr />
+<p>Por eso el autor dice:</p>
+<blockquote>
+<p>El Shadow DOM es una forma de hacer estilos locales, pero el precio es perder parte de los beneficios de los estilos globales.</p>
+</blockquote>
+<p>Y por eso Every Layout prefiere otra solución: <strong>usar estilos globales y modificar instancias concretas mediante propiedades personalizadas y clases</strong>, sin aislar completamente los elementos.</p>
+</details>
 <h2 id="primitivas-y-props">Primitivas y props<a class="headerlink" href="#primitivas-y-props" title="Permanent link">&para;</a></h2>
-<p>Como se estableció en <em>Composición</em>, el enfoque principal de <em>Every Layout</em> son las <em>primitivas de layout</em> simples que ayudan a organizar elementos/cajas juntos. Estas son las herramientas principales para generar layout y ocupan su lugar entre los estilos globales genéricos y las utilidades.</p>
+<p>Como se estableció en <em>Composición</em>, el enfoque principal de <em>Every Layout</em> son las <a href="../../capPreface/preface/#layouts"><em>primitivas de layout</em> </a>simples que ayudan a organizar elementos/cajas juntos. Estas son las herramientas principales para generar layout y ocupan su lugar entre los estilos globales genéricos y las utilidades.</p>
 <ol>
 <li>Estilos universales (incluyendo heredados)</li>
 <li>Primitivas de layout</li>
 <li>Clases de utilidad</li>
 </ol>
-<p>Manifestados como componentes reutilizables, usando la <em>especificación de custom elements</em> ↗, estos layouts pueden usarse globalmente. Pero <em>configuraciones</em> únicas de estos layouts son posibles usando props (propiedades).</p>
+<p>Manifestados como componentes reutilizables, usando la <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements"><em>especificación de custom elements</em> ↗</a>, estos layouts pueden usarse globalmente. Pero <em>configuraciones</em> únicas de estos layouts son posibles usando props (propiedades).</p>
 <h2 id="interoperabilidad">Interoperabilidad<a class="headerlink" href="#interoperabilidad" title="Permanent link">&para;</a></h2>
-<p>Los custom elements se usan en lugar de componentes de React, Preact o Vue (que también usan props) en <em>Every Layout</em> porque son nativos y pueden usarse en <em>diferentes</em> frameworks de aplicaciones web. Cada layout también viene con un generador de código para producir solo el código CSS necesario para lograr el layout. Puedes usar esto para crear una primitiva de layout específica para Vue (por ejemplo).</p>
+<p>Los custom elements son usados en lugar de componentes de React, Preact o Vue (que también usan props) en <em>Every Layout</em> porque son nativos y pueden usarse en <em>diferentes</em> frameworks de aplicaciones web. Cada layout también viene con un generador de código para producir solo el código CSS necesario para lograr el layout. Puedes usar esto para crear una primitiva de layout específica para Vue (por ejemplo).</p>
 <h2 id="valores-por-defecto">Valores por defecto<a class="headerlink" href="#valores-por-defecto" title="Permanent link">&para;</a></h2>
 <p>Cada componente de layout tiene una hoja de estilo adjunta que define sus estilos básicos y por defecto. Por ejemplo, la hoja de estilo del <em>Stack</em> (<code>Stack.css</code>) se ve de la siguiente manera.</p>
-<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-23-1">1</a></span>
-<span class="normal"><a href="#__codelineno-23-2">2</a></span>
-<span class="normal"><a href="#__codelineno-23-3">3</a></span>
-<span class="normal"><a href="#__codelineno-23-4">4</a></span>
-<span class="normal"><a href="#__codelineno-23-5">5</a></span>
-<span class="normal"><a href="#__codelineno-23-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1"></a><span class="nt">stack-l</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">block</span><span class="p">;</span>
-</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3"></a><span class="p">}</span>
-</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4"></a><span class="nt">stack-l</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5"></a><span class="w">  </span><span class="k">margin-top</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--s1</span><span class="p">);</span>
-</span><span id="__span-23-6"><a id="__codelineno-23-6" name="__codelineno-23-6"></a><span class="p">}</span>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-109-1">1</a></span>
+<span class="normal"><a href="#__codelineno-109-2">2</a></span>
+<span class="normal"><a href="#__codelineno-109-3">3</a></span>
+<span class="normal"><a href="#__codelineno-109-4">4</a></span>
+<span class="normal"><a href="#__codelineno-109-5">5</a></span>
+<span class="normal"><a href="#__codelineno-109-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-109-1"><a id="__codelineno-109-1" name="__codelineno-109-1"></a><span class="nt">stack-l</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-109-2"><a id="__codelineno-109-2" name="__codelineno-109-2"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">block</span><span class="p">;</span>
+</span><span id="__span-109-3"><a id="__codelineno-109-3" name="__codelineno-109-3"></a><span class="p">}</span>
+</span><span id="__span-109-4"><a id="__codelineno-109-4" name="__codelineno-109-4"></a><span class="nt">stack-l</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-109-5"><a id="__codelineno-109-5" name="__codelineno-109-5"></a><span class="w">  </span><span class="k">margin-top</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--s1</span><span class="p">);</span>
+</span><span id="__span-109-6"><a id="__codelineno-109-6" name="__codelineno-109-6"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <p>Algunas cosas a tener en cuenta:</p>
 <ul>
 <li>
-<p>La declaración <code>display: block</code> es necesaria ya que los custom elements se renderizan como elementos inline por defecto. Consulta <em>Boxes</em> para más información sobre el comportamiento de elementos block e inline.</p>
+<p>La declaración <code>display: block</code> es necesaria ya que los custom elements se renderizan como elementos inline por defecto. Consulta <a href="../../capBoxes/boxes/"><em>Boxes</em></a> para más información sobre el comportamiento de elementos block e inline.</p>
 </li>
 <li>
 <p>El valor <code>margin-top</code> es lo que hace que el <em>Stack</em> sea un <em>stack</em>: inserta margen entre una pila vertical de elementos. Por defecto, ese valor de margen coincide con el primer punto en nuestra <em>escala modular</em>: <code>--s1</code>.</p>
 </li>
 <li>
-<p>El selector <code>*</code> se aplica a cualquier elemento, pero nuestro uso de <code>+</code> (combinador de <em>hermano adyacente</em> ↗) está calificado para coincidir con cualquier elemento hijo sucesivo de un <code>&lt;stack-l&gt;</code> (observa el <code>&gt; *</code>). La primitiva de layout es una composición en abstracto, y no debería prescribir el contenido, así que uso <code>*</code> para coincidir con cualquier tipo de elemento hijo que se le dé.</p>
+<p>El selector <code>*</code> se aplica a cualquier elemento, pero nuestro uso de <code>+</code> (combinador de <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/Next-sibling_combinator"><em>hermano adyacente</em> ↗</a>) está calificado para coincidir con cualquier elemento hijo sucesivo de un <code>&lt;stack-l&gt;</code> (observa el <code>&gt; *</code>). La primitiva de layout es una composición en abstracto, y no debería prescribir el contenido, así que uso <code>*</code> para coincidir con cualquier tipo de elemento hijo que se le dé.</p>
 </li>
 </ul>
 <p><img alt="" src="../otherlayaout.png" /></p>
 <p>En la definición del custom element en sí, aplicamos el valor por defecto a la propiedad <code>space</code>:</p>
-<div class="language-js highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-24-1">1</a></span>
-<span class="normal"><a href="#__codelineno-24-2">2</a></span>
-<span class="normal"><a href="#__codelineno-24-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1"></a><span class="nx">get</span><span class="w"> </span><span class="nx">space</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s1">&#39;space&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;var(--s1)&#39;</span><span class="p">;</span>
-</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3"></a><span class="p">}</span>
+<div class="language-js highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-110-1">1</a></span>
+<span class="normal"><a href="#__codelineno-110-2">2</a></span>
+<span class="normal"><a href="#__codelineno-110-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-110-1"><a id="__codelineno-110-1" name="__codelineno-110-1"></a><span class="nx">get</span><span class="w"> </span><span class="nx">space</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-110-2"><a id="__codelineno-110-2" name="__codelineno-110-2"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s1">&#39;space&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;var(--s1)&#39;</span><span class="p">;</span>
+</span><span id="__span-110-3"><a id="__codelineno-110-3" name="__codelineno-110-3"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <p>Cada custom element de <em>Every Layout</em> construye una hoja de estilo incrustada basada en los valores de propiedad de la instancia. Es decir, esto…</p>
-<div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-25-1">1</a></span>
-<span class="normal"><a href="#__codelineno-25-2">2</a></span>
-<span class="normal"><a href="#__codelineno-25-3">3</a></span>
-<span class="normal"><a href="#__codelineno-25-4">4</a></span>
-<span class="normal"><a href="#__codelineno-25-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1"></a><span class="p">&lt;</span><span class="nt">stack-l</span> <span class="na">space</span><span class="o">=</span><span class="s">&quot;var(--s3)&quot;</span><span class="p">&gt;</span>
-</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2"></a>  <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>...<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3"></a>  <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>...<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-</span><span id="__span-25-4"><a id="__codelineno-25-4" name="__codelineno-25-4"></a>  <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>...<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-</span><span id="__span-25-5"><a id="__codelineno-25-5" name="__codelineno-25-5"></a><span class="p">&lt;/</span><span class="nt">stack-l</span><span class="p">&gt;</span>
+<div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-111-1">1</a></span>
+<span class="normal"><a href="#__codelineno-111-2">2</a></span>
+<span class="normal"><a href="#__codelineno-111-3">3</a></span>
+<span class="normal"><a href="#__codelineno-111-4">4</a></span>
+<span class="normal"><a href="#__codelineno-111-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-111-1"><a id="__codelineno-111-1" name="__codelineno-111-1"></a><span class="p">&lt;</span><span class="nt">stack-l</span> <span class="na">space</span><span class="o">=</span><span class="s">&quot;var(--s3)&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-111-2"><a id="__codelineno-111-2" name="__codelineno-111-2"></a>  <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>...<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-111-3"><a id="__codelineno-111-3" name="__codelineno-111-3"></a>  <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>...<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-111-4"><a id="__codelineno-111-4" name="__codelineno-111-4"></a>  <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>...<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-111-5"><a id="__codelineno-111-5" name="__codelineno-111-5"></a><span class="p">&lt;/</span><span class="nt">stack-l</span><span class="p">&gt;</span>
 </span></code></pre></div></td></tr></table></div>
 <p>…se convertiría en esto…</p>
-<div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-26-1">1</a></span>
-<span class="normal"><a href="#__codelineno-26-2">2</a></span>
-<span class="normal"><a href="#__codelineno-26-3">3</a></span>
-<span class="normal"><a href="#__codelineno-26-4">4</a></span>
-<span class="normal"><a href="#__codelineno-26-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1"></a><span class="p">&lt;</span><span class="nt">stack-l</span> <span class="na">data-i</span><span class="o">=</span><span class="s">&quot;Stack-var(--s3)&quot;</span> <span class="na">space</span><span class="o">=</span><span class="s">&quot;var(--s3)&quot;</span><span class="p">&gt;</span>
-</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2"></a>  <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>...<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-</span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3"></a>  <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>...<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-</span><span id="__span-26-4"><a id="__codelineno-26-4" name="__codelineno-26-4"></a>  <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>...<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-</span><span id="__span-26-5"><a id="__codelineno-26-5" name="__codelineno-26-5"></a><span class="p">&lt;/</span><span class="nt">stack-l</span><span class="p">&gt;</span>
+<div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-112-1">1</a></span>
+<span class="normal"><a href="#__codelineno-112-2">2</a></span>
+<span class="normal"><a href="#__codelineno-112-3">3</a></span>
+<span class="normal"><a href="#__codelineno-112-4">4</a></span>
+<span class="normal"><a href="#__codelineno-112-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-112-1"><a id="__codelineno-112-1" name="__codelineno-112-1"></a><span class="p">&lt;</span><span class="nt">stack-l</span> <span class="na">data-i</span><span class="o">=</span><span class="s">&quot;Stack-var(--s3)&quot;</span> <span class="na">space</span><span class="o">=</span><span class="s">&quot;var(--s3)&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-112-2"><a id="__codelineno-112-2" name="__codelineno-112-2"></a>  <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>...<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-112-3"><a id="__codelineno-112-3" name="__codelineno-112-3"></a>  <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>...<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-112-4"><a id="__codelineno-112-4" name="__codelineno-112-4"></a>  <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>...<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-112-5"><a id="__codelineno-112-5" name="__codelineno-112-5"></a><span class="p">&lt;/</span><span class="nt">stack-l</span><span class="p">&gt;</span>
 </span></code></pre></div></td></tr></table></div>
 <p>…y generaría esto:</p>
-<div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-27-1">1</a></span>
-<span class="normal"><a href="#__codelineno-27-2">2</a></span>
-<span class="normal"><a href="#__codelineno-27-3">3</a></span>
-<span class="normal"><a href="#__codelineno-27-4">4</a></span>
-<span class="normal"><a href="#__codelineno-27-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1"></a><span class="p">&lt;</span><span class="nt">style</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;Stack-var(--s3)&quot;</span><span class="p">&gt;</span>
-</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2"></a><span class="w">  </span><span class="o">[</span><span class="nt">data-i</span><span class="o">=</span><span class="s1">&#39;Stack-var(--s3)&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3"></a><span class="w">    </span><span class="k">margin-top</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--s3</span><span class="p">);</span>
-</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4"></a><span class="w">  </span><span class="p">}</span>
-</span><span id="__span-27-5"><a id="__codelineno-27-5" name="__codelineno-27-5"></a><span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+<div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-113-1">1</a></span>
+<span class="normal"><a href="#__codelineno-113-2">2</a></span>
+<span class="normal"><a href="#__codelineno-113-3">3</a></span>
+<span class="normal"><a href="#__codelineno-113-4">4</a></span>
+<span class="normal"><a href="#__codelineno-113-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-113-1"><a id="__codelineno-113-1" name="__codelineno-113-1"></a><span class="p">&lt;</span><span class="nt">style</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;Stack-var(--s3)&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-113-2"><a id="__codelineno-113-2" name="__codelineno-113-2"></a><span class="w">  </span><span class="o">[</span><span class="nt">data-i</span><span class="o">=</span><span class="s1">&#39;Stack-var(--s3)&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-113-3"><a id="__codelineno-113-3" name="__codelineno-113-3"></a><span class="w">    </span><span class="k">margin-top</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--s3</span><span class="p">);</span>
+</span><span id="__span-113-4"><a id="__codelineno-113-4" name="__codelineno-113-4"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-113-5"><a id="__codelineno-113-5" name="__codelineno-113-5"></a><span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
 </span></code></pre></div></td></tr></table></div>
 <p>Sin embargo — y esta parte es importante — la cadena <code>Stack-var(--s3)</code> solo representa una <em>configuración</em> única para un layout, no una instancia única. Un elemento <code>&lt;style&gt;</code> con <code>id="Stack-var(--s3)"</code> se usa para servir <em>todas</em> las instancias de <code>&lt;stack-l&gt;</code> que compartan la configuración representada por la cadena <code>Stack-var(--s3)</code>. Entre instancias de la <em>misma</em> configuración, lo único que las diferencia es su <em>contenido</em>.</p>
 <p>Si bien cada elemento de contenido dentro de una página web debería generalmente ofrecer información única, el <em>layout</em> debería ser consistente y regular, usando patrones, motivos y disposiciones familiares y repetidos. Aprovechar los estilos globales junto con configuraciones de layout controladas resulta en consistencia y cohesión, y con un código mínimo.</p>

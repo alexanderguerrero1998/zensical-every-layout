@@ -225,7 +225,7 @@ En su lugar, podríamos construir un selector más complejo que pertenezca al co
 }
 ```
 
-Si bien esto es mejor que desordenar la estructura del documento, hemos cometido el error de no tener en cuenta el sistema emergente: Hemos resuelto el problema para un elemento específico, en un contexto específico, cuando deberíamos estar resolviendo el problema general (necesidad de ajustar `font-size`) para _cualquier_ elemento en _cualquier_ contexto. Aquí es donde entran las clases de utilidad.
+Si bien esto es mejor que desordenar la estructura del documento, hemos cometido el error de no tener en cuenta el sistema emergente: Hemos resuelto el problema para un elemento específico, en un contexto específico, cuando deberíamos estar resolviendo el problema general (necesidad de ajustar/reducir `font-size`) para _cualquier_ elemento en _cualquier_ contexto. Aquí es donde entran las clases de utilidad.
 
 ```css linenums="1"
 /* ↓ Barra invertida para escapar los dos puntos */
@@ -242,7 +242,7 @@ Si bien esto es mejor que desordenar la estructura del documento, hemos cometido
 
 Usamos una convención de nomenclatura muy _precisa_, que emula la estructura de declaración CSS: `property-name:value`. Esto ayuda con el recuerdo de los nombres de las clases de utilidad, especialmente donde el valor se hace eco del valor real, como `.text-align:center`.
 
-Compartir valores entre elementos y utilidades es un trabajo para las _propiedades personalizadas (custom properties)_ ↗. Observa que hemos hecho las propiedades personalizadas mismas globalmente disponibles adjuntándolas al elemento `:root` (`<html>`):
+Compartir valores entre elementos y utilidades es un trabajo para las propiedades personalizadas [(custom properties_ ↗)](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/--*). Observa que hemos hecho las propiedades personalizadas mismas globalmente disponibles adjuntándolas al elemento `:root` (`<html>`):
 
 ```css linenums="1"
 :root {
@@ -277,11 +277,566 @@ Cada clase de utilidad tiene un sufijo `!important` para maximizar su especifici
 
 Los valores en el ejemplo anterior son solo para ilustración. Para consistencia en todo el diseño, tus tamaños deberían derivarse probablemente de una _escala modular_. Consulta _Modular scale_ para más información.
 
+??? info "Explicacion del texto"
+
+    Este fragmento está explicando una idea importante de arquitectura CSS: **las clases de utilidad existen para hacer pequeños ajustes reutilizables sin depender del contexto ni alterar la semántica del HTML**.
+
+    Voy por partes.
+
+    ---
+
+    __1. Estilos globales para elementos__
+
+    Por defecto podrías tener:
+
+    ```css
+    h2 {
+        font-size: 2.25rem;
+    }
+
+    h3 {
+        font-size: 1.75rem;
+    }
+    ```
+
+    Así, todos los `<h2>` serán grandes y todos los `<h3>` un poco más pequeños.
+
+    ---
+
+    __2. El problema__
+
+    Imagina que tienes un `<h2>` en una barra lateral (sidebar) y allí se ve demasiado grande.
+
+    Podrías pensar:
+
+    ```html
+    <h3>Título</h3>
+    ```
+
+    para hacerlo más pequeño.
+
+    Pero eso es incorrecto.
+
+    Un `<h2>` y un `<h3>` no existen para cambiar el tamaño visual, sino para indicar la jerarquía del documento.
+
+    Por ejemplo:
+
+    ```html
+    <h1>Capítulo 1</h1>
+    <h2>Sección A</h2>
+    <h3>Subsección</h3>
+    ```
+
+    Cambiar un `<h2>` por un `<h3>` solamente para que se vea más pequeño rompería la estructura lógica del documento.
+
+    ---
+
+    __3. La solución tradicional__
+
+    Podrías hacer:
+
+    ```css
+    .sidebar h2 {
+        font-size: 1.75rem;
+    }
+    ```
+
+    Es decir:
+
+    > "Si un h2 está dentro de .sidebar, entonces será más pequeño."
+
+    Funciona.
+
+    Pero ahora el tamaño depende del contexto:
+
+    ```
+    sidebar → h2 pequeño
+    fuera de sidebar → h2 grande
+    ```
+
+    Si mañana aparece:
+
+    * `.footer`
+    * `.card`
+    * `.modal`
+
+    tendrías que escribir:
+
+    ```css
+    .footer h2 { ... }
+    .card h2 { ... }
+    .modal h2 { ... }
+    ```
+
+    Y el CSS empieza a crecer.
+
+    ---
+
+    __4. Resolver el problema general__
+
+    En realidad el problema no era:
+
+    > "Un h2 dentro de sidebar."
+
+    Sino:
+
+    > "Necesito reducir el tamaño de algo."
+
+    Eso puede ocurrir con:
+
+    * un h2
+    * un h3
+    * un párrafo
+    * un botón
+    * un span
+
+    Por eso se crean clases de utilidad.
+
+    ```css
+    .font-size\:base {
+        font-size: 1rem;
+    }
+
+    .font-size\:biggish {
+        font-size: 1.75rem;
+    }
+
+    .font-size\:big {
+        font-size: 2.25rem;
+    }
+    ```
+
+    Luego las aplicas donde quieras:
+
+    ```html
+    <h2 class="font-size:biggish">
+        Título
+    </h2>
+    ```
+
+    (En el CSS se escapan los dos puntos con `\`, pero en HTML se escriben normalmente.)
+
+    ---
+
+    __5. ¿Por qué son portables?__
+
+    Porque ya no dependen de:
+
+    ```css
+    .sidebar h2
+    ```
+
+    ni de:
+
+    ```css
+    .card p
+    ```
+
+    Simplemente:
+
+    ```css
+    .font-size:biggish
+    ```
+
+    puede usarse en cualquier elemento:
+
+    ```html
+    <h2 class="font-size:biggish">
+    <p class="font-size:biggish">
+    <button class="font-size:biggish">
+    ```
+
+    La misma clase sirve para todos.
+
+    ---
+
+    __6. Custom Properties__
+
+    En vez de repetir números:
+
+    ```css
+    h2 {
+        font-size: 2.25rem;
+    }
+
+    .font-size\:big {
+        font-size: 2.25rem;
+    }
+    ```
+
+    se guarda el valor una sola vez:
+
+    ```css
+    :root {
+        --font-size-base: 1rem;
+        --font-size-biggish: 1.75rem;
+        --font-size-big: 2.25rem;
+    }
+    ```
+
+    y luego:
+
+    ```css
+    h2 {
+        font-size: var(--font-size-big);
+    }
+
+    h3 {
+        font-size: var(--font-size-biggish);
+    }
+
+    .font-size\:big {
+        font-size: var(--font-size-big);
+    }
+    ```
+
+    Si mañana cambias:
+
+    ```css
+    --font-size-big: 2.5rem;
+    ```
+
+    automáticamente cambian:
+
+    * todos los h2;
+    * todas las utilidades `.font-size:big`.
+
+    ---
+
+    __7. ¿Por qué usan `!important`?__
+
+    ```css
+    .font-size\:big {
+        font-size: var(--font-size-big) !important;
+    }
+    ```
+
+    Porque las clases de utilidad están pensadas como el último ajuste.
+
+    Ejemplo:
+
+    ```css
+    h2 {
+        font-size: 2.25rem;
+    }
+    ```
+
+    ```html
+    <h2 class="font-size:base">
+    ```
+
+    Gracias al `!important`, el resultado será:
+
+    ```css
+    font-size: 1rem
+    ```
+
+    La utilidad gana sobre el estilo normal.
+
+    ---
+
+    __8. La idea de ITCSS (Triángulo invertido)__
+
+    La filosofía es:
+
+    __Mucho alcance → poca especificidad__
+
+    Arriba del triángulo:
+
+    ```css
+    body {}
+    p {}
+    h1 {}
+    h2 {}
+    ```
+
+    Afectan a muchos elementos y son selectores simples.
+
+    ---
+
+    __Poco alcance → mucha especificidad__
+
+    Abajo del triángulo:
+
+    ```css
+    .card .sidebar h2.active {}
+    ```
+
+    Afectan muy pocos elementos y son más específicos.
+
+    ---
+
+    Y las utilidades están al final:
+
+    ```css
+    .font-size\:base {
+        font-size: 1rem !important;
+    }
+    ```
+
+    Porque son modificaciones puntuales.
+
+    ---
+
+    __La idea más importante de todo el texto__
+
+    El autor está diciendo:
+
+    > No resuelvas un problema particular ("hacer más pequeño un h2 en una sidebar"). Resuelve el problema general ("necesito una forma de cambiar tamaños") y crea algo reutilizable para cualquier elemento y cualquier contexto.
+
+    Esa filosofía es la misma que siguen frameworks como:
+
+    * Tailwind CSS
+    * UnoCSS
+    * Windi CSS
+
+    donde gran parte del CSS se construye precisamente mediante **clases de utilidad**.
+
+??? Info "Utilidades vs  Valores Globales"
+
+    > Pero para que se crean la clases de utiliad si ya tenemos los valores globales ?
+
+    Esa es una muy buena pregunta. De hecho, las **variables globales (`:root`) y las clases de utilidad cumplen funciones diferentes**. Las variables no sustituyen a las utilidades.
+
+    Piensa así:
+
+    __1. Las variables almacenan valores__
+
+    ```css
+    :root {
+      --font-size-base: 1rem;
+      --font-size-biggish: 1.75rem;
+      --font-size-big: 2.25rem;
+    }
+    ```
+
+    Aquí no estás aplicando nada a ningún elemento. Solo estás guardando números con nombres.
+
+    Es como tener una caja con etiquetas:
+
+    ```
+    --font-size-base → 1rem
+    --font-size-biggish → 1.75rem
+    --font-size-big → 2.25rem
+    ```
+
+    ---
+
+    __2. Los estilos globales usan esos valores__
+
+    ```css
+    h2 {
+      font-size: var(--font-size-big);
+    }
+
+    h3 {
+      font-size: var(--font-size-biggish);
+    }
+    ```
+
+    Ahora todos los `<h2>` y `<h3>` tienen tamaños por defecto.
+
+    ---
+
+    __3. ¿Qué ocurre si un h2 debe ser más pequeño?__
+
+    Supón:
+
+    ```html
+    <h2>Productos</h2>
+    ```
+
+    Por defecto será:
+
+    ```css
+    font-size: 2.25rem;
+    ```
+
+    Pero para un caso particular quieres que sea de `1rem`.
+
+    __Sin utilidades__
+
+    Tendrías que crear:
+
+    ```css
+    .sidebar h2 {
+      font-size: var(--font-size-base);
+    }
+    ```
+
+    o
+
+    ```css
+    .card h2 {
+      font-size: var(--font-size-base);
+    }
+    ```
+
+    o
+
+    ```css
+    .footer h2 {
+      font-size: var(--font-size-base);
+    }
+    ```
+
+    Empiezas a llenar el CSS de excepciones.
+
+    ---
+
+    __4. Con una utilidad__
+
+    Simplemente:
+
+    ```html
+    <h2 class="font-size:base">
+        Productos
+    </h2>
+    ```
+
+    La clase:
+
+    ```css
+    .font-size\:base {
+      font-size: var(--font-size-base) !important;
+    }
+    ```
+
+    sobrescribe el valor global.
+
+    ---
+
+    __La clave__
+
+    Las variables solo responden a:
+
+    > ¿Cuáles son mis tamaños?
+
+    Las utilidades responden a:
+
+    > ¿Cómo aplico uno de esos tamaños a un elemento específico?
+
+    ---
+
+    Podrías incluso eliminar las utilidades y hacer:
+
+    ```css
+    .sidebar h2 {
+        font-size: var(--font-size-base);
+    }
+    ```
+
+    porque las variables siguen existiendo.
+
+    Y también podrías eliminar las variables y escribir:
+
+    ```css
+    .font-size\:base {
+        font-size: 1rem;
+    }
+    ```
+
+    porque las utilidades seguirían funcionando.
+
+    **Las variables y las utilidades son independientes.**
+
+    * `:root` → almacena valores reutilizables.
+    * `h2`, `h3`, etc. → establecen los estilos por defecto.
+    * `.font-size:base`, `.font-size:big` → permiten modificar esos estilos cuando un caso concreto lo requiere.
+
+    Por eso se usan juntas: una guarda los valores y la otra los aplica cuando necesitas desviarte del comportamiento normal.
+
+??? info "Clases de utilidad directo en HTML"
+
+    > Veo que las clases de utilidad sirven para aplicar estilos en elementos html directamente, bueno algo asi lo voy entendiendo.
+
+    Sí, vas por buen camino. Esa es precisamente la idea principal.
+
+    Las **clases de utilidad** son pequeñas clases que representan una sola propiedad (o muy pocas) y que se aplican directamente en el HTML para modificar o complementar los estilos por defecto.
+
+    Por ejemplo, supongamos que tienes:
+
+    ```css
+    h2 {
+        font-size: 2.25rem;
+    }
+    ```
+
+    Entonces todos los `<h2>` serán grandes:
+
+    ```html
+    <h2>Título principal</h2>
+    ```
+
+    Pero uno de ellos necesita ser más pequeño. En lugar de crear:
+
+    ```css
+    .sidebar h2 {
+        font-size: 1rem;
+    }
+    ```
+
+    puedes crear una utilidad:
+
+    ```css
+    .font-size\:base {
+        font-size: 1rem !important;
+    }
+    ```
+
+    y usarla directamente:
+
+    ```html
+    <h2 class="font-size:base">
+        Título principal
+    </h2>
+    ```
+
+    Así, el HTML mismo expresa:
+
+    > "Este elemento es un h2, pero quiero que use el tamaño base."
+
+    ---
+
+    La filosofía es:
+
+    * **Los selectores globales** (`h1`, `p`, `button`) definen la apariencia normal.
+    * **Las clases de utilidad** hacen ajustes puntuales.
+    * **Las variables (`:root`)** almacenan los valores reutilizables.
+
+    ---
+
+    Por eso frameworks como Tailwind CSS están construidos casi por completo con clases de utilidad:
+
+    ```html
+    <h2 class="text-sm text-center mt-4">
+        Hola
+    </h2>
+    ```
+
+    donde:
+
+    * `text-sm` → tamaño pequeño.
+    * `text-center` → centrar texto.
+    * `mt-4` → margen superior.
+
+    Sin embargo, el autor del texto que estás leyendo no está proponiendo un enfoque "todo utilidades" como Tailwind, sino una combinación:
+
+    1. **Estilos globales para los elementos**.
+    2. **Variables globales para los valores**.
+    3. **Clases de utilidad para excepciones y ajustes finales**.
+
+    Eso produce un CSS bastante ordenado y escalable.
+
+    En otras palabras, las utilidades no vienen a reemplazar los estilos globales, sino a decir:
+
+    > "Para este elemento en particular, necesito una pequeña variación sin tener que escribir nuevos selectores complejos."
+
 ## ⚠ Demasiadas clases de utilidad
 
 Algo que recomendamos encarecidamente es no incluir clases de utilidad hasta que las necesites. No quieres enviar a los usuarios datos no utilizados o redundantes. Para este proyecto, mantenemos un archivo `helpers.css` y agregamos utilidades a medida que encontramos que las necesitamos. Si encontramos que la clase `text-align:center` no está teniendo efecto, es que no la hemos agregado en el CSS aún — así que la ponemos en nuestro archivo `helpers.css` para uso presente y futuro.
 
-En un enfoque _utility first_ ↗ de CSS, los estilos heredados, universales y de elemento no se aprovechan realmente. En su lugar, se aplican combinaciones de estilos individuales caso por caso a elementos individuales e independientes. Usando el _framework utility-first Tailwind_, esto podría resultar — como ejemplifica la propia documentación de Tailwind — en valores de clase como los siguientes:
+En un enfoque [_utility first_ ↗](https://tailwindcss.com/docs/styling-with-utility-classes) de CSS, los estilos heredados, universales y de elemento no se aprovechan realmente. En su lugar, se aplican combinaciones de estilos individuales caso por caso a elementos individuales e independientes. Usando el _framework utility-first Tailwind_, esto podría resultar — como ejemplifica la propia documentación de Tailwind — en valores de clase como los siguientes:
 
 ```css
 class="rounded-lg px-4 md:px-5 xl:px-4 py-3 md:py-4 xl:py-3 bg-teal-500 hover:bg-teal-600 md:text-lg xl:text-base text-white font-semibold leading-tight shadow-md"
@@ -291,9 +846,228 @@ Puede haber razones, bajo circunstancias específicas, por las que uno querría 
 
 El enfoque de _Every Layout_ asume que quieres crear robustez y consistencia con el mínimo de intervención manual. Por lo tanto, los conceptos y técnicas aquí expuestos aprovechan _axiomas_, primitivas y los algoritmos de estilo que se extrapolan de ellos.
 
+??? info "Explicacion"
+
+    Este apartado está advirtiendo sobre un peligro: **abusar de las clases de utilidad**. La idea no es llenar el HTML con veinte clases para cada elemento.
+
+    __1. Crea utilidades solo cuando realmente las necesites__
+
+    Por ejemplo, imagina que nunca has necesitado centrar texto. Entonces no tiene sentido tener esto:
+
+    ```css
+    .text-align\:center {
+        text-align: center;
+    }
+    ```
+
+    porque nadie lo está usando.
+
+    Cuando un día lo necesites:
+
+    ```html
+    <p class="text-align:center">
+        Hola
+    </p>
+    ```
+
+    y veas que no funciona porque la clase aún no existe, recién entonces la agregas a:
+
+    ```css
+    /* helpers.css */
+
+    .text-align\:center {
+        text-align: center;
+    }
+    ```
+
+    La filosofía es:
+
+    > No escribas código para problemas que todavía no tienes.
+
+    ---
+
+    __2. El enfoque "utility first"__
+
+    Frameworks como Tailwind CSS llevan esta idea al extremo.
+
+    En lugar de:
+
+    ```css
+    .card {
+        background: teal;
+        color: white;
+        padding: 1rem;
+        border-radius: 0.5rem;
+    }
+    ```
+
+    escribes directamente:
+
+    ```html
+    <div class="
+    rounded-lg
+    px-4
+    py-3
+    bg-teal-500
+    text-white
+    font-semibold
+    shadow-md">
+    ```
+
+    Cada clase hace una sola cosa:
+
+    * `rounded-lg` → borde redondeado.
+    * `px-4` → padding horizontal.
+    * `py-3` → padding vertical.
+    * `bg-teal-500` → color de fondo.
+    * `text-white` → color del texto.
+    * `shadow-md` → sombra.
+
+    ---
+
+    __3. ¿Cuál es el problema?__
+
+    El HTML puede terminar pareciendo esto:
+
+    ```html
+    <button class="
+    rounded-lg
+    px-4
+    md:px-5
+    xl:px-4
+    py-3
+    md:py-4
+    xl:py-3
+    bg-teal-500
+    hover:bg-teal-600
+    md:text-lg
+    xl:text-base
+    text-white
+    font-semibold
+    leading-tight
+    shadow-md">
+    ```
+
+    Aquí el HTML está lleno de estilos.
+
+    Ya no lees:
+
+    ```html
+    <button class="primary-button">
+    ```
+
+    sino una lista enorme de clases.
+
+    ---
+
+    __4. Every Layout propone otro enfoque__
+
+    Ellos prefieren:
+
+    __1. Axiomas__
+
+    Reglas generales.
+
+    Por ejemplo:
+
+    ```css
+    body {
+        line-height: 1.5;
+    }
+    ```
+
+    ---
+
+    __2. Primitivas__
+
+    Componentes reutilizables.
+
+    Por ejemplo:
+
+    ```css
+    .stack {
+        display: flex;
+        flex-direction: column;
+    }
+    ```
+
+    ---
+
+    __3. Algoritmos de layout__
+
+    Que los elementos se adapten solos.
+
+    Por ejemplo:
+
+    ```css
+    .cluster {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    ```
+
+    ---
+
+    __Entonces, en vez de esto:__
+
+    ```html
+    <button class="
+    rounded-lg
+    px-4
+    py-3
+    bg-teal-500
+    text-white
+    font-semibold">
+    ```
+
+    prefieren algo parecido a:
+
+    ```html
+    <button class="button">
+    ```
+
+    y en CSS:
+
+    ```css
+    .button {
+        background: teal;
+        color: white;
+        padding: 1rem;
+        border-radius: .5rem;
+        font-weight: 600;
+    }
+    ```
+
+    o incluso aprovechar estilos globales:
+
+    ```css
+    button {
+        padding: 1rem;
+        border-radius: .5rem;
+    }
+    ```
+
+    ---
+
+    __La idea principal de todo este apartado es:__
+
+    > Las clases de utilidad son útiles, pero deben ser una herramienta, no la base de todo el CSS.
+
+    Primero aprovecha:
+
+    1. La herencia.
+    2. Los estilos globales.
+    3. Los selectores de elementos.
+    4. Las primitivas y componentes.
+
+    Y solo cuando necesites una excepción o un ajuste puntual, añade una clase de utilidad.
+
+    En otras palabras, **Every Layout busca que el navegador haga la mayor parte del trabajo y que el desarrollador intervenga lo menos posible**. Esa es la filosofía que están tratando de transmitir.
+
 ## Estilos locales o con ámbito (*scoped*)
 
-Notablemente, el atributo/propiedad `id` (por razones de _accesibilidad_ ↗, sobre todo) solo puede usarse en un elemento HTML por documento. Estilizar a través del selector `id` está por lo tanto limitado a una instancia.
+Notablemente, el atributo/propiedad `id` (por razones de [_accesibilidad_ ↗](https://www.deque.com/blog/unique-id-attributes-matter/), sobre todo) solo puede usarse en un elemento HTML por documento. Estilizar a través del selector `id` está por lo tanto limitado a una instancia.
 
 ```css linenums="1"
 #unique {
@@ -302,7 +1076,7 @@ Notablemente, el atributo/propiedad `id` (por razones de _accesibilidad_ ↗, so
 }
 ```
 
-El selector `id` tiene una _especificidad_ ↗ muy alta porque se asume que los estilos únicos están destinados a anular estilos genéricos competidores en todos los casos.
+El selector `id` tiene una [_especificidad_ ↗](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Cascade/Specificity) muy alta porque se asume que los estilos únicos están destinados a anular estilos genéricos competidores en todos los casos.
 
 Por supuesto, no hay nada más "local" o _específico de instancia_ que aplicar estilos directamente a los elementos usando el atributo/propiedad `style`:
 
@@ -340,19 +1114,514 @@ El selector `id`, los estilos inline y Shadow DOM tienen todos inconvenientes:
 
 Lo que necesitamos es una forma de aprovechar simultáneamente el estilo global, pero aplicar estilos locales y específicos de instancia de manera controlada.
 
+??? info "Explicación"
+
+    Esta sección está hablando de **estilos locales**, es decir, estilos que afectan a **un elemento específico o a una pequeña parte del documento**, en contraste con los estilos globales que afectan a muchos elementos.
+
+    La pregunta que intenta responder es:
+
+    > **¿Cómo puedo estilizar algo concreto sin perder las ventajas del CSS global?**
+
+    Veamos las opciones que menciona.
+
+    ---
+
+    __1. Selectores `id`__
+
+    ```html
+    <p id="unique">Hola</p>
+    ```
+
+    ```css
+    #unique {
+        font-family: sans-serif;
+    }
+    ```
+
+    Este estilo solamente afecta a:
+
+    ```html
+    <p id="unique">Hola</p>
+    ```
+
+    y a ningún otro elemento.
+
+    Por eso se considera un estilo muy local.
+
+    ---
+
+    __¿Por qué tiene tanta especificidad?__
+
+    Porque un `id` debe ser único en toda la página.
+
+    El navegador asume:
+
+    > "Si alguien escribió un id, seguramente quiere que estos estilos ganen sobre los demás."
+
+    Por eso:
+
+    ```css
+    p {
+        color: blue;
+    }
+
+    #unique {
+        color: red;
+    }
+    ```
+
+    produce:
+
+    ```html
+    <p id="unique">
+    ```
+
+    en color rojo.
+
+    ---
+
+    __Problema__
+
+    Los `id` tienen demasiada fuerza.
+
+    Con el tiempo aparecen cosas como:
+
+    ```css
+    #header {}
+    #footer {}
+    #sidebar {}
+    #login {}
+    #profile {}
+    ```
+
+    y empiezan las guerras de especificidad.
+
+    Además, para cada elemento tienes que inventar un nombre nuevo.
+
+    ---
+
+    __2. Estilos inline__
+
+    ```html
+    <p style="font-family:sans-serif">
+        Hola
+    </p>
+    ```
+
+    Aquí el CSS está directamente dentro del HTML.
+
+    Esto es todavía más local.
+
+    ---
+
+    __Problema__
+
+    Mezcla estructura y presentación.
+
+    Terminas con:
+
+    ```html
+    <p
+    style="
+    color:red;
+    font-size:2rem;
+    font-weight:bold;
+    margin-top:20px;">
+    ```
+
+    Si tienes 50 párrafos iguales y quieres cambiar el color, tendrás que modificar 50 veces.
+
+    Por eso el CSS nació precisamente para evitar esto.
+
+    ---
+
+    __3. Shadow DOM__
+
+    Supongamos:
+
+    ```javascript
+    const elem = document.querySelector("div");
+
+    const shadowRoot = elem.attachShadow({ mode: "open" });
+    ```
+
+    Dentro del Shadow DOM:
+
+    ```html
+    <style>
+    p {
+        font-family:sans-serif;
+    }
+    </style>
+
+    <p>Un párrafo</p>
+    ```
+
+    Ese selector:
+
+    ```css
+    p {
+        font-family:sans-serif;
+    }
+    ```
+
+    solo afecta a los `<p>` que están dentro del Shadow DOM.
+
+    No afecta al resto del documento.
+
+    ---
+
+    __Ventaja__
+
+    Puedes usar selectores simples:
+
+    ```css
+    p {
+        ...
+    }
+    ```
+
+    sin preocuparte de que modifiquen otros párrafos de la página.
+
+    ---
+
+    __Problema__
+
+    El aislamiento es de doble sentido.
+
+    Los estilos internos no salen:
+
+    ```
+    Shadow DOM
+    │
+    ├── p
+    └── button
+    ```
+
+    pero los estilos globales tampoco entran.
+
+    Por ejemplo:
+
+    ```css
+    body {
+        font-family: Arial;
+    }
+    ```
+
+    puede que no llegue a los elementos dentro del Shadow DOM.
+
+    Entonces pierdes las ventajas del sistema global.
+
+    ---
+
+    __Resumen de los problemas__
+
+    | Método     | Problema               |
+    | ---------- | ---------------------- |
+    | id         | Especificidad muy alta |
+    | inline     | Difícil de mantener    |
+    | Shadow DOM | Aislamiento excesivo   |
+
+    ---
+
+    __¿Qué está diciendo realmente el autor?__
+
+    El autor ama los estilos globales porque permiten:
+
+    ```css
+    body {
+        line-height: 1.5;
+    }
+
+    h1 {
+        font-size: 3rem;
+    }
+
+    p {
+        max-width: 60ch;
+    }
+    ```
+
+    y automáticamente toda la página hereda esas reglas.
+
+    Pero a veces necesitas modificar una sola instancia.
+
+    Por ejemplo:
+
+    ```html
+    <h2>Productos</h2>
+    ```
+
+    y solo este encabezado debe ser azul.
+
+    No quiere:
+
+    ```css
+    #titulo-57 {
+        color: blue;
+    }
+    ```
+
+    ni:
+
+    ```html
+    <h2 style="color:blue">
+    ```
+
+    ni meterlo en un Shadow DOM.
+
+    Lo que busca es algo como:
+
+    ```html
+    <h2 class="text-color:blue">
+    ```
+
+    o
+
+    ```html
+    <h2 style="--color:blue">
+    ```
+
+    es decir:
+
+    * seguir aprovechando el sistema global;
+    * pero poder hacer ajustes locales y controlados.
+
+    ---
+
+    __En una frase__
+
+    Esta sección está preparando el terreno para la idea central de Every Layout:
+
+    > **Queremos conservar todas las ventajas del CSS global, pero disponer de una forma elegante de personalizar una instancia concreta sin recurrir a ids, estilos inline o Shadow DOM.**
+
+    Y justamente la solución que presentarán más adelante es el uso inteligente de **propiedades personalizadas (custom properties)** y componentes de layout.
+
+
+
+??? info "¿Que es Shadow DOM?"
+
+    Tienes razón. El texto asume que ya sabes qué es el **Shadow DOM**, pero es un concepto importante y merece una explicación desde cero.
+
+    ---
+
+    __¿Qué es el Shadow DOM?__
+
+    El Shadow DOM es una característica de los **Web Components** que permite crear una especie de **miniárbol HTML privado** dentro de un elemento.
+
+    Por ejemplo, normalmente tienes un DOM así:
+
+    ```html
+    <body>
+        <div>
+            <p>Primer párrafo</p>
+        </div>
+
+        <p>Segundo párrafo</p>
+    </body>
+    ```
+
+    Si escribes:
+
+    ```css
+    p {
+        color: red;
+    }
+    ```
+
+    los dos párrafos se vuelven rojos.
+
+    ---
+
+    __Con Shadow DOM__
+
+    Supón este HTML:
+
+    ```html
+    <div id="mi-componente"></div>
+
+    <p>Párrafo exterior</p>
+    ```
+
+    y este JavaScript:
+
+    ```javascript
+    const elem = document.querySelector("#mi-componente");
+
+    const shadowRoot = elem.attachShadow({ mode: "open" });
+
+    shadowRoot.innerHTML = `
+        <p>Párrafo interior</p>
+    `;
+    ```
+
+    Ahora el navegador ve algo parecido a:
+
+    ```
+    DOM principal
+    │
+    ├── div#mi-componente
+    │      │
+    │      └── Shadow DOM
+    │            └── p
+    │
+    └── p
+    ```
+
+    El párrafo interior pertenece al Shadow DOM y el otro al DOM normal.
+
+    ---
+
+    __El aislamiento__
+
+    Si tienes:
+
+    ```css
+    p {
+        color: red;
+    }
+    ```
+
+    el párrafo exterior se vuelve rojo.
+
+    Pero el interior normalmente no.
+
+    ¿Por qué?
+
+    Porque el Shadow DOM está aislado del resto de la página.
+
+    ---
+
+    __También ocurre al revés__
+
+    Si dentro del Shadow DOM escribes:
+
+    ```html
+    <style>
+    p {
+        color: blue;
+    }
+    </style>
+
+    <p>Párrafo interior</p>
+    ```
+
+    solo el párrafo interior será azul.
+
+    El párrafo exterior ni se entera.
+
+    ---
+
+    __¿Por qué existe?__
+
+    Para crear componentes que no interfieran con el resto de la página.
+
+    Por ejemplo, un calendario:
+
+    ```
+    Mi página
+    │
+    ├── Menú
+    ├── Artículo
+    ├── Footer
+    └── Calendario
+          └── Shadow DOM
+    ```
+
+    Los estilos del calendario no afectan al menú ni al artículo, y los estilos de la página tampoco rompen el calendario.
+
+    ---
+
+    __Ejemplo real__
+
+    Cuando usas algo como:
+
+    ```html
+    <video controls></video>
+    ```
+
+    los botones de reproducción, volumen y pantalla completa están construidos con Shadow DOM.
+
+    Aunque inspecciones el elemento:
+
+    ```html
+    <video></video>
+    ```
+
+    dentro hay un montón de HTML oculto y estilos privados.
+
+    ---
+
+    __¿Por qué Every Layout menciona sus inconvenientes?__
+
+    Porque el Shadow DOM aísla demasiado.
+
+    Los estilos globales:
+
+    ```css
+    body {
+        font-family: Arial;
+    }
+
+    p {
+        line-height: 1.5;
+    }
+    ```
+
+    ya no llegan a los elementos internos.
+
+    Entonces pierdes muchas ventajas del CSS global.
+
+    ---
+
+    __Una analogía__
+
+    Imagina una ciudad.
+
+    __CSS normal__
+
+    Todos los edificios siguen las mismas leyes:
+
+    * mismo sistema eléctrico;
+    * mismas tuberías;
+    * mismas señales de tráfico.
+
+    Eso serían los estilos globales.
+
+    ---
+
+    __Shadow DOM__
+
+    Cada edificio se convierte en un pequeño país independiente.
+
+    Tiene:
+
+    * sus propias leyes;
+    * sus propias carreteras;
+    * su propia electricidad.
+
+    Eso evita conflictos, pero también hace más difícil compartir recursos.
+
+    ---
+
+    Por eso el autor dice:
+
+    > El Shadow DOM es una forma de hacer estilos locales, pero el precio es perder parte de los beneficios de los estilos globales.
+
+    Y por eso Every Layout prefiere otra solución: **usar estilos globales y modificar instancias concretas mediante propiedades personalizadas y clases**, sin aislar completamente los elementos.
 ## Primitivas y props
 
-Como se estableció en _Composición_, el enfoque principal de _Every Layout_ son las _primitivas de layout_ simples que ayudan a organizar elementos/cajas juntos. Estas son las herramientas principales para generar layout y ocupan su lugar entre los estilos globales genéricos y las utilidades.
+Como se estableció en _Composición_, el enfoque principal de _Every Layout_ son las [_primitivas de layout_ ](../capPreface/preface.md#layouts)simples que ayudan a organizar elementos/cajas juntos. Estas son las herramientas principales para generar layout y ocupan su lugar entre los estilos globales genéricos y las utilidades.
 
 1. Estilos universales (incluyendo heredados)
 2. Primitivas de layout
 3. Clases de utilidad
 
-Manifestados como componentes reutilizables, usando la _especificación de custom elements_ ↗, estos layouts pueden usarse globalmente. Pero _configuraciones_ únicas de estos layouts son posibles usando props (propiedades).
+Manifestados como componentes reutilizables, usando la [_especificación de custom elements_ ↗](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements), estos layouts pueden usarse globalmente. Pero _configuraciones_ únicas de estos layouts son posibles usando props (propiedades).
 
 ## Interoperabilidad
 
-Los custom elements se usan en lugar de componentes de React, Preact o Vue (que también usan props) en _Every Layout_ porque son nativos y pueden usarse en _diferentes_ frameworks de aplicaciones web. Cada layout también viene con un generador de código para producir solo el código CSS necesario para lograr el layout. Puedes usar esto para crear una primitiva de layout específica para Vue (por ejemplo).
+Los custom elements son usados en lugar de componentes de React, Preact o Vue (que también usan props) en _Every Layout_ porque son nativos y pueden usarse en _diferentes_ frameworks de aplicaciones web. Cada layout también viene con un generador de código para producir solo el código CSS necesario para lograr el layout. Puedes usar esto para crear una primitiva de layout específica para Vue (por ejemplo).
 
 ## Valores por defecto
 
@@ -369,11 +1638,11 @@ stack-l > * + * {
 
 Algunas cosas a tener en cuenta:
 
-- La declaración `display: block` es necesaria ya que los custom elements se renderizan como elementos inline por defecto. Consulta _Boxes_ para más información sobre el comportamiento de elementos block e inline.
+- La declaración `display: block` es necesaria ya que los custom elements se renderizan como elementos inline por defecto. Consulta [_Boxes_](../capBoxes/boxes.md) para más información sobre el comportamiento de elementos block e inline.
 
 - El valor `margin-top` es lo que hace que el _Stack_ sea un _stack_: inserta margen entre una pila vertical de elementos. Por defecto, ese valor de margen coincide con el primer punto en nuestra _escala modular_: `--s1`.
 
-- El selector `*` se aplica a cualquier elemento, pero nuestro uso de `+` (combinador de _hermano adyacente_ ↗) está calificado para coincidir con cualquier elemento hijo sucesivo de un `<stack-l>` (observa el `> *`). La primitiva de layout es una composición en abstracto, y no debería prescribir el contenido, así que uso `*` para coincidir con cualquier tipo de elemento hijo que se le dé.
+- El selector `*` se aplica a cualquier elemento, pero nuestro uso de `+` (combinador de [_hermano adyacente_ ↗](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/Next-sibling_combinator)) está calificado para coincidir con cualquier elemento hijo sucesivo de un `<stack-l>` (observa el `> *`). La primitiva de layout es una composición en abstracto, y no debería prescribir el contenido, así que uso `*` para coincidir con cualquier tipo de elemento hijo que se le dé.
 
 ![](otherlayaout.png)
 
