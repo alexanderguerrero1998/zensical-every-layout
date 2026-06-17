@@ -871,7 +871,7 @@ Los valores en el ejemplo anterior son solo para ilustración. Para consistencia
     ```
 
     ```html linenums="1"
-    <div id="contenedor">
+    <div id="contenedor" class="text-align:auto">
         <h1>E-COOMERCE</h1>
         <div id="card"  
             class="padding:xs 
@@ -1759,9 +1759,285 @@ Como se estableció en _Composición_, el enfoque principal de _Every Layout_ so
 
 Manifestados como componentes reutilizables, usando la [_especificación de custom elements_ ↗](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements), estos layouts pueden usarse globalmente. Pero _configuraciones_ únicas de estos layouts son posibles usando props (propiedades).
 
+??? info "Explicacion"
+
+
+    Este texto está describiendo una **jerarquía de estilos** en la filosofía de **Every Layout**. La idea es que no debes crear CSS específico para cada elemento, sino construir tu diseño con piezas reutilizables.
+
+    La jerarquía sería algo así:
+
+    1. **Estilos universales**
+
+    - [x] Son reglas que afectan a toda la página.
+    - [x] Incluyen estilos heredados, como la tipografía, colores base, `box-sizing`, etc.
+    - [x] Ejemplo:
+
+    ```css
+    body {
+        font-family: sans-serif;
+        line-height: 1.5;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+    ```
+
+    ---
+
+    2. **Primitivas de layout**
+
+    - [x] Son componentes cuya única responsabilidad es organizar elementos.
+    - [x] No se preocupan por colores, bordes o apariencia.
+    - [x] Ejemplos de primitivas en Every Layout:
+
+    ```html
+    <stack-l>
+        <h1>Título</h1>
+        <p>Párrafo</p>
+    </stack-l>
+    ```
+
+    o
+
+    ```html
+    <cluster-l>
+        <button>Aceptar</button>
+        <button>Cancelar</button>
+    </cluster-l>
+    ```
+
+    Estas primitivas definen cómo se distribuyen las cajas.
+
+    ---
+
+    3. **Clases de utilidad**
+
+    - [x] Son pequeñas clases con una sola responsabilidad.
+    - [x] Ejemplos:
+
+    ```css
+    .text-center {
+        text-align: center;
+    }
+
+    .bg-primary {
+        background: blue;
+    }
+    ```
+
+    Se aplican cuando necesitas un ajuste concreto.
+
+    ---
+
+    __¿Qué significa "Manifestados como componentes reutilizables"?__
+
+    Que las primitivas se implementan como componentes que puedes usar muchas veces:
+
+    ```html
+    <stack-l>
+        ...
+    </stack-l>
+    ```
+
+    o
+
+    ```html
+    <sidebar-l>
+        ...
+    </sidebar-l>
+    ```
+
+    Son como piezas de Lego que puedes colocar en cualquier parte.
+
+    ---
+
+    __¿Qué son las props?__
+
+    **Props (properties)** son propiedades que permiten modificar el comportamiento de una misma primitiva sin crear otra diferente.
+
+    Por ejemplo, un componente `stack-l` podría tener una separación predeterminada de `1rem`, pero puedes cambiarla:
+
+    ```html
+    <stack-l space="2rem">
+        <h1>Título</h1>
+        <p>Texto</p>
+    </stack-l>
+    ```
+
+    Aquí:
+
+    * `stack-l` es la **primitiva**.
+    * `space="2rem"` es una **prop**.
+
+    Otro ejemplo:
+
+    ```html
+    <sidebar-l side="left" width="20rem">
+        ...
+    </sidebar-l>
+    ```
+
+    Las props cambian la configuración del layout, pero no cambian su naturaleza.
+
+    ---
+
+    En resumen, el texto está diciendo:
+
+    ```
+    Estilos globales
+        ↓
+    Primitivas de layout (Stack, Cluster, Sidebar, etc.)
+        ↓
+    Clases de utilidad
+        ↓
+    Componentes finales de la interfaz
+    ```
+
+    Y esas primitivas son reutilizables y pueden configurarse mediante **props**, que son simplemente propiedades o atributos que modifican cómo se comporta el layout.
+
 ## Interoperabilidad
 
 Los custom elements son usados en lugar de componentes de React, Preact o Vue (que también usan props) en _Every Layout_ porque son nativos y pueden usarse en _diferentes_ frameworks de aplicaciones web. Cada layout también viene con un generador de código para producir solo el código CSS necesario para lograr el layout. Puedes usar esto para crear una primitiva de layout específica para Vue (por ejemplo).
+
+??? info "Explicacion"
+
+    Este párrafo habla de una de las ideas más importantes de **Every Layout**: **sus layouts no dependen de ningún framework**.
+
+    __¿Por qué no usan componentes de React, Vue o Preact?__
+
+    En React, normalmente crearías un componente así:
+
+    ```jsx
+    <Stack space="1rem">
+        <h1>Título</h1>
+        <p>Texto</p>
+    </Stack>
+    ```
+
+    En Vue sería algo parecido:
+
+    ```html
+    <Stack :space="'1rem'">
+        ...
+    </Stack>
+    ```
+
+    El problema es que ese componente solo funciona dentro de ese framework. Si mañana cambias de React a Vue, debes volver a implementarlo.
+
+    ---
+
+    __Los Custom Elements son nativos__
+
+    Every Layout prefiere usar **Custom Elements**, una característica estándar del navegador.
+
+    Por ejemplo:
+
+    ```html
+    <stack-l space="1rem">
+        <h1>Título</h1>
+        <p>Texto</p>
+    </stack-l>
+    ```
+
+    Este código puede funcionar en:
+
+    - [x] HTML puro.
+    - [x] React.
+    - [x] Vue.
+    - [x] Preact.
+    - [x] Svelte.
+    - [x] Angular.
+
+    Porque `<stack-l>` es simplemente un elemento HTML personalizado. El navegador sabe manejarlo y no pertenece a ningún framework.
+
+    ---
+
+    __¿Qué significa interoperabilidad?__
+
+    Significa que una misma primitiva de layout puede "hablar" con diferentes tecnologías.
+
+    ```
+                    stack-l
+                        │
+        ┌──────────────┼──────────────┐
+        │              │              │
+    React          Vue            Svelte
+        │              │              │
+        └──────────────┼──────────────┘
+                        │
+                    HTML puro
+    ```
+
+    No estás atado a una herramienta específica.
+
+    ---
+
+    __¿Qué es el generador de código?__
+
+    Every Layout proporciona una herramienta que genera únicamente el CSS necesario para un layout.
+
+    Por ejemplo, supón que quieres un Stack.
+
+    En lugar de importar una biblioteca enorme, el generador puede producir algo como:
+
+    ```css
+    .stack {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .stack > * + * {
+        margin-top: var(--space, 1rem);
+    }
+    ```
+
+    Ese CSS es todo lo necesario para que exista un Stack.
+
+    ---
+
+    __Entonces puedes crear componentes específicos para tu framework__
+
+    Si trabajas con Vue, puedes hacer:
+
+    ```vue
+    <template>
+        <div class="stack">
+            <slot></slot>
+        </div>
+    </template>
+    ```
+
+    y usar el CSS generado por Every Layout.
+
+    Luego utilizarías:
+
+    ```html
+    <Stack space="2rem">
+        <h1>Título</h1>
+        <p>Texto</p>
+    </Stack>
+    ```
+
+    Pero el comportamiento del layout sigue siendo el mismo.
+
+    ---
+
+    __En resumen__
+
+    El párrafo quiere decir:
+
+    1. **Every Layout no depende de React, Vue o Preact.**
+    2. Utiliza **Custom Elements**, que son una tecnología estándar del navegador.
+    3. Por eso sus primitivas son reutilizables en cualquier framework.
+    4. Además, proporciona un generador que produce solamente el CSS necesario.
+    5. Si quieres, puedes envolver ese CSS dentro de componentes propios de React, Vue o cualquier otro framework.
+
+    La filosofía es:
+
+    > **Primero el layout; el framework es un detalle de implementación.**
+
+    Es decir, el Stack, Cluster o Sidebar son conceptos universales; React o Vue son solo diferentes maneras de utilizarlos.
 
 ## Valores por defecto
 
@@ -1828,4 +2104,507 @@ Sin embargo — y esta parte es importante — la cadena `Stack-var(--s3)` solo 
 
 Si bien cada elemento de contenido dentro de una página web debería generalmente ofrecer información única, el _layout_ debería ser consistente y regular, usando patrones, motivos y disposiciones familiares y repetidos. Aprovechar los estilos globales junto con configuraciones de layout controladas resulta en consistencia y cohesión, y con un código mínimo.
 
+??? info "Explicacion"
+
+    Este apartado es muy importante porque explica **cómo funcionan internamente las primitivas de Every Layout**. Vamos por partes.
+
+    ---
+
+    # 1. Cada layout tiene estilos por defecto
+
+    Por ejemplo, el Stack tiene esta hoja de estilos:
+
+    ```css
+    stack-l {
+    display: block;
+    }
+
+    stack-l > * + * {
+    margin-top: var(--s1);
+    }
+    ```
+
+    Eso significa que cualquier:
+
+    ```html
+    <stack-l>
+        <div>Uno</div>
+        <div>Dos</div>
+        <div>Tres</div>
+    </stack-l>
+    ```
+
+    automáticamente tendrá espacio entre sus elementos.
+
+    ---
+
+    # 2. ¿Por qué `display: block`?
+
+    Los **Custom Elements** son inline por defecto.
+
+    Es decir, si escribieras:
+
+    ```html
+    <stack-l></stack-l>
+    ```
+
+    el navegador lo trataría como si fuera un `<span>`.
+
+    Por eso Every Layout añade:
+
+    ```css
+    stack-l {
+        display: block;
+    }
+    ```
+
+    para que se comporte como un `<div>`.
+
+    ---
+
+    # 3. ¿Qué hace realmente el Stack?
+
+    Esta regla:
+
+    ```css
+    stack-l > * + * {
+    margin-top: var(--s1);
+    }
+    ```
+
+    es la magia del Stack.
+
+    Supongamos:
+
+    ```html
+    <stack-l>
+        <h1>Título</h1>
+        <p>Párrafo 1</p>
+        <p>Párrafo 2</p>
+    </stack-l>
+    ```
+
+    El selector:
+
+    ```css
+    * + *
+    ```
+
+    significa:
+
+    > "selecciona cualquier elemento que tenga inmediatamente antes otro hermano".
+
+    Entonces:
+
+    * El `<h1>` no recibe margen.
+    * El primer `<p>` sí.
+    * El segundo `<p>` también.
+
+    Visualmente:
+
+    ```
+    Título
+
+    Párrafo 1
+
+    Párrafo 2
+    ```
+    ??? note
+
+        > Osea como ? "selecciona cualquier elemento que tenga inmediatamente antes otro hermano". 
+
+        Sí, esa parte suele ser confusa al principio. Veámosla con calma.
+
+        Supón que tienes:
+
+        ```html
+        <stack-l>
+            <h1>Título</h1>
+            <p>Párrafo 1</p>
+            <p>Párrafo 2</p>
+            <button>Botón</button>
+        </stack-l>
+        ```
+
+        y el CSS:
+
+        ```css
+        stack-l > * + * {
+            margin-top: 1rem;
+        }
+        ```
+
+        Desglosemos el selector:
+
+        * `stack-l > *` → cualquier hijo directo de `<stack-l>`.
+        * `+ *` → que además tenga **un hermano inmediatamente anterior**.
+
+        Entonces el navegador analiza:
+
+        ```html
+        <h1>Título</h1>        ← No tiene hermano anterior ❌
+        <p>Párrafo 1</p>       ← Antes está el h1 ✔
+        <p>Párrafo 2</p>       ← Antes está el p anterior ✔
+        <button>Botón</button> ← Antes está el p anterior ✔
+        ```
+
+        Por tanto, el margen se aplica a:
+
+        ```html
+        <p>Párrafo 1</p>
+        <p>Párrafo 2</p>
+        <button>Botón</button>
+        ```
+
+        pero no al primer elemento.
+
+        Visualmente:
+
+        ```text
+        Título
+        ↑ sin margen
+
+        Párrafo 1
+        ↑ margin-top
+
+        Párrafo 2
+        ↑ margin-top
+
+        Botón
+        ↑ margin-top
+        ```
+
+        Por eso se dice que `* + *` significa:
+
+        > "Selecciona cualquier elemento que esté inmediatamente después de otro elemento hermano."
+
+        Es una técnica muy elegante porque evita cosas como:
+
+        ```css
+        stack-l > :not(:first-child) {
+            margin-top: 1rem;
+        }
+        ```
+
+        y funciona sin importar qué tipos de elementos haya dentro del Stack. Puede haber `<div>`, `<img>`, `<section>`, `<button>`, etc.; todos los elementos excepto el primero recibirán el espacio vertical.
+
+        ??? note
+
+            Esa es una excelente pregunta, y precisamente ahí está la elegancia del patrón Stack.
+
+            La razón es que el espacio pertenece a la separación entre elementos, no a los elementos en sí.
+
+            Supongamos que tienes:
+            
+            ```html
+            <stack-l>
+            <h1>Título</h1>
+            <p>Párrafo 1</p>
+            <p>Párrafo 2</p>
+            </stack-l>
+            ```
+            Lo que quieres realmente es esto:
+            ```
+            Título
+            ↑
+            (1rem de espacio)
+            ↓
+            Párrafo 1
+            ↑
+            (1rem de espacio)
+            ↓
+            Párrafo 2
+            ```
+            Hay dos separaciones:
+
+            Entre el título y el primer párrafo.
+            Entre los dos párrafos.
+
+            Pero no hay una separación antes del primer elemento, porque no hay nada encima de él.
+
+            Si pusieras:
+            ```css
+            stack-l > * {
+                margin-top: 1rem;
+            }
+            ```
+            todos los elementos recibirían margen:
+            ```
+            (1rem)
+            Título
+
+            (1rem)
+            Párrafo 1
+
+            (1rem)
+            Párrafo 2
+            ```
+            Ahora tendrías un espacio extra arriba del Stack, que generalmente no deseas.
+            
+            ---
+            Otra forma sería:
+            
+            ```css
+            stack-l > :not(:first-child) {
+                margin-top: 1rem;
+            }
+            ```
+            que produce:
+            ```
+            Título
+
+            (1rem)
+            Párrafo 1
+
+            (1rem)
+            Párrafo 2
+            ```
+            y eso es exactamente lo mismo que hace:
+            ```css
+            stack-l > * + * {
+                margin-top: 1rem;
+            }
+            ```
+            pero de una manera más elegante y eficiente.
+
+            La filosofía de Every Layout es:
+
+            > El espacio existe entre las cajas, no alrededor del contenedor ni antes del primer elemento.
+
+            Por eso se seleccionan todos los hijos excepto el primero. No es que el primer elemento sea especial; simplemente no tiene un hermano anterior con el cual formar una separación.
+
+            De hecho, si añades otro elemento al principio:
+            ```html
+            <stack-l>
+                <img>
+                <h1>Título</h1>
+                <p>Párrafo 1</p>
+            </stack-l>
+            ```
+            automáticamente obtendrás:
+            ```
+            Imagen
+
+            (1rem)
+            Título
+
+            (1rem)
+            Párrafo 1
+            ```
+            La imagen ahora es el primer elemento y tampoco recibe margen. El patrón sigue funcionando sin necesidad de cambiar el CSS. Esa es una de las razones por las que * + * es tan popular en sistemas de diseño modernos.
+
+
+        
+
+    ---
+
+    # 4. ¿Por qué usa `*`?
+
+    Porque Stack no sabe qué elementos tendrá.
+
+    Podría contener:
+
+    ```html
+    <stack-l>
+        <img>
+        <article>
+        <button>
+        <section>
+    </stack-l>
+    ```
+
+    o:
+
+    ```html
+    <stack-l>
+        <h1>
+        <p>
+        <ul>
+    </stack-l>
+    ```
+
+    La primitiva no impone contenido.
+
+    Solo organiza cajas.
+
+    Por eso usa:
+
+    ```css
+    *
+    ```
+
+    ("cualquier elemento").
+
+    ---
+
+    # 5. El espacio por defecto es `--s1`
+
+    Internamente, el componente tiene algo parecido a:
+
+    ```javascript
+    get space() {
+    return this.getAttribute('space') || 'var(--s1)';
+    }
+    ```
+
+    Esto significa:
+
+    ### Si escribes:
+
+    ```html
+    <stack-l>
+    ```
+
+    el espacio será:
+
+    ```css
+    margin-top: var(--s1);
+    ```
+
+    ---
+
+    ### Pero si escribes:
+
+    ```html
+    <stack-l space="var(--s3)">
+    ```
+
+    entonces el espacio será:
+
+    ```css
+    margin-top: var(--s3);
+    ```
+
+    ---
+
+    # 6. Every Layout genera CSS automáticamente
+
+    Si escribes:
+
+    ```html
+    <stack-l space="var(--s3)">
+        ...
+    </stack-l>
+    ```
+
+    el componente se transforma en algo parecido a:
+
+    ```html
+    <stack-l
+        data-i="Stack-var(--s3)"
+        space="var(--s3)">
+    ```
+
+    y crea:
+
+    ```html
+    <style id="Stack-var(--s3)">
+    [data-i='Stack-var(--s3)'] > * + * {
+        margin-top: var(--s3);
+    }
+    </style>
+    ```
+
+    ---
+
+    # 7. Lo importante: no genera un `<style>` para cada Stack
+
+    Si tienes:
+
+    ```html
+    <stack-l space="var(--s3)">
+    ...
+    </stack-l>
+
+    <stack-l space="var(--s3)">
+    ...
+    </stack-l>
+
+    <stack-l space="var(--s3)">
+    ...
+    </stack-l>
+    ```
+
+    NO se crean tres estilos.
+
+    Solo uno:
+
+    ```css
+    [data-i='Stack-var(--s3)'] > * + * {
+        margin-top: var(--s3);
+    }
+    ```
+
+    y los tres Stack lo comparten.
+
+    ---
+
+    Pero si aparece:
+
+    ```html
+    <stack-l space="var(--s5)">
+    ```
+
+    entonces se genera otro:
+
+    ```css
+    [data-i='Stack-var(--s5)'] > * + * {
+        margin-top: var(--s5);
+    }
+    ```
+
+    ---
+
+    # La filosofía detrás de esto
+
+    Every Layout considera que:
+
+    ### El contenido cambia
+
+    ```html
+    Noticias
+    Productos
+    Comentarios
+    Artículos
+    ```
+
+    pero el patrón visual debería repetirse.
+
+    Por ejemplo:
+
+    ```
+    Título
+    ↓
+    Texto
+    ↓
+    Botón
+    ```
+
+    puede aparecer cientos de veces.
+
+    Entonces no tiene sentido escribir:
+
+    ```css
+    .card1 { ... }
+    .card2 { ... }
+    .card3 { ... }
+    ```
+
+    sino usar siempre el mismo patrón:
+
+    ```html
+    <stack-l space="var(--s3)">
+    ```
+
+    y reutilizarlo.
+
+    ---
+
+    ## En una frase, todo este apartado quiere decir:
+
+    > **Cada primitiva tiene una configuración por defecto, pero puede personalizarse mediante props. Cuando una configuración se repite, Every Layout reutiliza el mismo CSS para todas las instancias, consiguiendo consistencia y usando muy poco código.**
+
+    Es una filosofía muy parecida a decir:
+
+    > "Muchos contenidos diferentes, pocos layouts diferentes".
 
