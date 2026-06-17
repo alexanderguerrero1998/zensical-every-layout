@@ -1,6 +1,6 @@
 # Escala modular
 
-La música es fundamentalmente una exposición matemática, y cuando hablamos de _la musicalidad de la tipografía_ ↗ es porque la composición tipográfica y la música comparten una base matemática.
+La música es fundamentalmente una exposición matemática, y cuando hablamos de  [_la musicalidad de la tipografía_ ↗](https://typeandmusic.com/introducing-modular-scales/) es porque la composición tipográfica y la música comparten una base matemática.
 
 Estamos seguros de que habrás oído hablar de conceptos como frecuencia, tono y armonía. Todos estos son matemáticamente determinables, pero ¿sabías que el tono percibido puede estar formado por múltiples frecuencias?
 

@@ -37,6 +37,7 @@ Los layouts de _Every Layout_ no exploran ni prescriben estilos para elementos s
 
 ![](layout.png)
 
+
 > Cada layout requiere un elemento contenedor que establece un _contexto de formato_ para sus hijos. Los elementos simples, sin hijos para los cuales establecen un contexto, pueden considerarse como 'nodos finales' en la jerarquía de layout.
 
 Finalmente, los estilos basados en clases, una vez definidos, pueden adherirse a cualquier elemento HTML, en cualquier lugar de un documento. Estos son más portátiles y componibles que los estilos de elemento, pero requieren que el autor afecte el marcado directamente.
@@ -54,6 +55,24 @@ Finalmente, los estilos basados en clases, una vez definidos, pueden adherirse a
 ```
 
 Debe apreciarse lo importante que es aprovechar el alcance global de las reglas CSS. CSS te permite aplicar estilos de HTML globalmente, y por categoría _(por tipo de elemento, clase, atributo, estado, etc..)_, en lugar de elemento por elemento. Cuando se utiliza correctamente, es la forma más eficiente de crear cualquier tipo de layout o estética en la web. Cuando las técnicas de estilo global (como las anteriores) se usan apropiadamente, es mucho más fácil separar la marca/estética del layout, y tratar los dos como [_concerns separados_ ↗](https://es.wikipedia.org/wiki/Separaci%C3%B3n_de_intereses).
+
+!!! Example
+
+    __Ejemplo de seccion [Estilo Global↗](../../examples/Global&Local/estiloglobal.html)__
+
+    ```html linenums="1"
+    <h1 class="gill-sans">Title News</h1>
+    <p class="gill-sans">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod at esse reprehenderit quo ipsa dolor, qui architecto veritatis optio, praesentium sunt ut rerum assumenda dolorem nostrum culpa eos consequatur inventore?</p>
+    <button class="gill-sans">See news</button>
+    ```
+    ```css linenums="1"
+    .gill-sans {
+            font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+    ```
+
+
+
 
 ??? info "Explicacion"
 
@@ -831,6 +850,127 @@ Los valores en el ejemplo anterior son solo para ilustración. Para consistencia
     En otras palabras, las utilidades no vienen a reemplazar los estilos globales, sino a decir:
 
     > "Para este elemento en particular, necesito una pequeña variación sin tener que escribir nuevos selectores complejos."
+
+!!! example
+
+    Ejemplo de seccion [Clases de utilidad ↗](../../examples/Global&Local/claseUtilidad.html)
+
+    ```css linenums="1"
+    .font-size\:minbase { font-size: 0.8rem; }
+    .font-size\:base { font-size: 1rem; }
+    .font-size\:medium { font-size: 1.75rem; }
+    .font-size\:big{ font-size: 2.5rem; }
+    .background-color\:violet{ background-color: rgb(16, 14, 27); }
+    .background-color\:gray{ background-color: rgb(192, 192, 192); }
+    .color-letter\:white{ color: white;}
+    .padding\:xs { padding: 0.5em; }
+    .display\:inline-block{ display: inline-block; } 
+    .width\:medium { width: 45vw;}
+    .text-align\:auto{text-align: center;}
+
+    ```
+
+    ```html linenums="1"
+    <div id="contenedor">
+        <h1>E-COOMERCE</h1>
+        <div id="card"  
+            class="padding:xs 
+                   background-color:gray 
+                   display:inline-block
+                   width:medium">
+            <h2>Nissan Tsru 2002</h2>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maxime provident at, molestiae quam fuga deserunt nobis iusto laboriosam suscipit quia hic maiores omnis excepturi quas consequatur voluptas alias libero optio?</p>
+            <p>4500$</p>
+        </div>
+
+        <div id="footer" 
+            class="background-color:violet 
+                   padding:xs color-letter:white 
+                   display:inline-block
+                   width:medium">
+            <h2 class="font-size:base" >Bussiness A & G</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat, nihil! Dolorum quod magni architecto, assumenda soluta nobis facere minus cumque, fuga animi quia nostrum possimus? Eius facilis reprehenderit animi sit!</p>
+            <p class="font-size:minbase"> Edisson Guerrero &copy; 2026</p>
+        </div>
+    </div>
+    ```
+    ??? note "Explicacion"
+
+        > Le puse esta propiedad: width: 20vw; con inline-block pero no se baja a una nueva linea.
+
+        Eso es completamente normal. De hecho, **darle un `width` más pequeño a un `inline-block` hace más probable que quepan varios en la misma línea**, no que se bajen.
+
+        Por ejemplo, si tienes:
+
+        ```css
+        .card {
+            display: inline-block;
+            width: 20vw;
+        }
+        ```
+
+        y la ventana mide 1000 px de ancho:
+
+        ```text
+        1vw = 10px
+        20vw = 200px
+        ```
+
+        Entonces cada caja mide aproximadamente 200 px.
+
+        Si tienes dos cajas:
+
+        ```text
+        [ Caja 1 200px ][ Caja 2 200px ]
+        ```
+
+        y el contenedor mide 1000 px, ambas caben perfectamente y no hay razón para bajar una a la siguiente línea.
+
+        ---
+
+        __Solo se bajarán si no caben__
+
+        Por ejemplo, si tienes seis cajas de 20vw:
+
+        ```text
+        [1][2][3][4][5]
+        [6]
+        ```
+
+        porque:
+
+        ```text
+        6 × 20vw = 120vw
+        ```
+
+        y eso excede el ancho disponible.
+
+        ---
+
+        __Una pregunta importante__
+
+        Cuando dices:
+
+        > "le puse `width: 20vw;` con `inline-block` pero no se baja a una nueva línea"
+
+        ¿esperabas que **cada elemento estuviera en una línea diferente**?
+
+        Si es así, entonces `inline-block` no es el comportamiento adecuado, porque precisamente está diseñado para:
+
+        > "Colocarse uno al lado del otro mientras haya espacio."
+
+        Si quieres que cada caja esté debajo de la anterior, entonces usarías:
+
+        ```css
+        display: block;
+        ```
+
+        o más adelante, cuando llegues a ello, un contenedor con Flexbox en dirección columna (`Stack` en Every Layout).
+
+        Si quieres, puedes mostrar el HTML y CSS completos y vemos exactamente qué comportamiento esperas y por qué no está ocurriendo.
+
+
+
 
 ## ⚠ Demasiadas clases de utilidad
 
