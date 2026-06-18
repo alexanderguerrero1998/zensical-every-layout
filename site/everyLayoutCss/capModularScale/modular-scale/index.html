@@ -598,10 +598,9 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Pasando mediante props">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
+</li>
+      
+        <li class="md-nav__item">
   <a href="#evitando-shadow-dom" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -611,8 +610,8 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#imponiendo-consistencia" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -622,9 +621,15 @@
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#que-propone-el-autor" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        ¿Qué propone el autor?
+      </span>
+    </span>
+  </a>
   
 </li>
       
@@ -1203,10 +1208,9 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Pasando mediante props">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
+</li>
+      
+        <li class="md-nav__item">
   <a href="#evitando-shadow-dom" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -1216,8 +1220,8 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#imponiendo-consistencia" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -1227,9 +1231,15 @@
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#que-propone-el-autor" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        ¿Qué propone el autor?
+      </span>
+    </span>
+  </a>
   
 </li>
       
@@ -1347,76 +1357,997 @@
 </span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <p><img alt="" src="../curve.png" /></p>
-<h2 id="la-funcion-pow">La función <code>pow()</code><a class="headerlink" href="#la-funcion-pow" title="Permanent link">&para;</a></h2>
-<p>Al momento de escribir esto, los navegadores solo soportan aritmética básica en operaciones <code>calc()</code>. Sin embargo, un <em>nuevo conjunto de funciones matemáticas/expresiones</em> ↗ están llegando a CSS. Crucialmente, esto incluye la función <code>pow()</code>, con la cual acceder y crear puntos de escala modular se vuelve mucho más fácil.</p>
-<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
-<span class="normal"><a href="#__codelineno-3-2">2</a></span>
-<span class="normal"><a href="#__codelineno-3-3">3</a></span>
-<span class="normal"><a href="#__codelineno-3-4">4</a></span>
-<span class="normal"><a href="#__codelineno-3-5">5</a></span>
-<span class="normal"><a href="#__codelineno-3-6">6</a></span>
-<span class="normal"><a href="#__codelineno-3-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="p">:</span><span class="nd">root</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">  </span><span class="nv">--ratio</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5</span><span class="kt">rem</span><span class="p">;</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="p">}</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="p">.</span><span class="nc">my-element</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">  </span><span class="c">/* ↓ 1.5 * 1.5 * 1.5 es igual a 1.5³ */</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">  </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="nf">pow</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--ratio</span><span class="p">),</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="p">}</span>
+<details class="info">
+<summary>Explicacion</summary>
+<p>La idea principal de todo este apartado es:</p>
+<blockquote>
+<p><strong>Los tamaños y espacios de una interfaz no deberían elegirse al azar, sino seguir una progresión matemática regular para producir armonía visual.</strong></p>
+</blockquote>
+<p>La comparación con la música es más una analogía que algo que necesites memorizar. Lo importante empieza realmente en "Armonía visual".</p>
+<hr />
+<p><strong>1. Tomamos una medida base</strong></p>
+<p>Supongamos:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">font-size</span><span class="o">:</span><span class="w"> </span><span class="nt">1rem</span><span class="o">;</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">line-height</span><span class="o">:</span><span class="w"> </span><span class="nt">1</span><span class="p">.</span><span class="nc">5</span><span class="o">;</span>
+</span></code></pre></div>
+<p>Entonces la altura de una línea de texto será:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>1rem × 1.5 = 1.5rem
+</span></code></pre></div>
+<p>Ese 1.5rem puede servir como unidad básica para construir todos los espacios de la página.</p>
+<hr />
+<p><strong>2. ¿Por qué no sumar siempre 1.5?</strong></p>
+<p>Podríamos hacer:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>1.5
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>3
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>4.5
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>6
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>7.5
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>9
+</span></code></pre></div>
+<p>(sumando 1.5 cada vez)</p>
+<p>Pero los saltos entre valores son grandes y constantes.</p>
+<hr />
+<p><strong>3. En lugar de sumar, multiplicamos</strong></p>
+<p>Usamos un ratio, por ejemplo:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>1 × 1.5 = 1.5
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>1.5 × 1.5 = 2.25
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>2.25 × 1.5 = 3.375
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>3.375 × 1.5 = 5.0625
+</span></code></pre></div>
+<p>La secuencia queda:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>1
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>1.5
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>2.25
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>3.375
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>5.0625
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>7.59375
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>...
+</span></code></pre></div>
+<p>Los tamaños siguen una progresión regular, parecida a las notas musicales.</p>
+<p>Eso es una <strong>escala modular</strong>.</p>
+<hr />
+<p><strong>4. ¿Para qué sirve?</strong></p>
+<p>En lugar de inventarte tamaños:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">margin</span><span class="o">:</span><span class="w"> </span><span class="nt">17px</span><span class="o">;</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nt">padding</span><span class="o">:</span><span class="w"> </span><span class="nt">23px</span><span class="o">;</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nt">gap</span><span class="o">:</span><span class="w"> </span><span class="nt">42px</span><span class="o">;</span>
+</span></code></pre></div>
+<p>utilizas valores pertenecientes a la escala:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nt">padding</span><span class="o">:</span><span class="w"> </span><span class="nt">1</span><span class="p">.</span><span class="nc">5rem</span><span class="o">;</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nt">gap</span><span class="o">:</span><span class="w"> </span><span class="nt">2</span><span class="p">.</span><span class="nc">25rem</span><span class="o">;</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="nt">margin-bottom</span><span class="o">:</span><span class="w"> </span><span class="nt">3</span><span class="p">.</span><span class="nc">375rem</span><span class="o">;</span>
+</span></code></pre></div>
+<p>Todo mantiene una relación matemática.</p>
+<hr />
+<p><strong>5. ¿Qué hacen estas variables?</strong></p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">:</span><span class="nd">root</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nv">--ratio</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5</span><span class="p">;</span>
+</span></code></pre></div>
+<p>El factor de multiplicación es 1.5.</p>
+<p>La medida central es:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nt">--s0</span><span class="o">:</span><span class="w"> </span><span class="nt">1rem</span><span class="o">;</span>
+</span></code></pre></div>
+<p>A partir de ella se generan las demás.</p>
+<hr />
+<p><strong>Hacia arriba</strong></p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nt">--s1</span><span class="o">:</span><span class="w"> </span><span class="nt">calc</span><span class="o">(</span><span class="nt">var</span><span class="o">(</span><span class="nt">--s0</span><span class="o">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nt">var</span><span class="o">(</span><span class="nt">--ratio</span><span class="o">));</span>
+</span></code></pre></div>
+<p>equivale a:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>1 × 1.5 = 1.5rem
+</span></code></pre></div>
+<hr />
+<div class="language-css highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nt">--s2</span><span class="o">:</span><span class="w"> </span><span class="nt">calc</span><span class="o">(</span><span class="nt">var</span><span class="o">(</span><span class="nt">--s1</span><span class="o">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nt">var</span><span class="o">(</span><span class="nt">--ratio</span><span class="o">));</span>
+</span></code></pre></div>
+<p>equivale a:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>1.5 × 1.5 = 2.25rem
+</span></code></pre></div>
+<hr />
+<div class="language-css highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nt">--s3</span><span class="o">:</span><span class="w"> </span><span class="nt">calc</span><span class="o">(</span><span class="nt">var</span><span class="o">(</span><span class="nt">--s2</span><span class="o">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nt">var</span><span class="o">(</span><span class="nt">--ratio</span><span class="o">));</span>
+</span></code></pre></div>
+<p>equivale a:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>2.25 × 1.5 = 3.375rem
+</span></code></pre></div>
+<hr />
+<p><strong>6. También puede crecer hacia abajo</strong></p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="nt">--s-1</span><span class="o">:</span><span class="w"> </span><span class="nt">calc</span><span class="o">(</span><span class="nt">var</span><span class="o">(</span><span class="nt">--s0</span><span class="o">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nt">var</span><span class="o">(</span><span class="nt">--ratio</span><span class="o">));</span>
+</span></code></pre></div>
+<p>produce:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>1 / 1.5 = 0.667rem
+</span></code></pre></div>
+<hr />
+<div class="language-css highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="nt">--s-2</span><span class="o">:</span><span class="w"> </span><span class="nt">calc</span><span class="o">(</span><span class="nt">var</span><span class="o">(</span><span class="nt">--s-1</span><span class="o">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nt">var</span><span class="o">(</span><span class="nt">--ratio</span><span class="o">));</span>
+</span></code></pre></div>
+<p>produce:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>0.667 / 1.5 = 0.444rem
+</span></code></pre></div>
+<hr />
+<p>Por tanto, la escala completa sería:</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Valor aproximado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>--s-2</td>
+<td>0.444rem</td>
+</tr>
+<tr>
+<td>--s-1</td>
+<td>0.667rem</td>
+</tr>
+<tr>
+<td>--s0</td>
+<td>1rem</td>
+</tr>
+<tr>
+<td>--s1</td>
+<td>1.5rem</td>
+</tr>
+<tr>
+<td>--s2</td>
+<td>2.25rem</td>
+</tr>
+<tr>
+<td>--s3</td>
+<td>3.375rem</td>
+</tr>
+<tr>
+<td>--s4</td>
+<td>5.063rem</td>
+</tr>
+<tr>
+<td>--s5</td>
+<td>7.594rem</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>7. ¿Por qué Every Layout usa esto?</strong></p>
+<p>Porque luego puedes escribir:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="p">&lt;</span><span class="nt">stack-l</span> <span class="na">space</span><span class="o">=</span><span class="s">&quot;var(--s1)&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>o</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="p">&lt;</span><span class="nt">stack-l</span> <span class="na">space</span><span class="o">=</span><span class="s">&quot;var(--s3)&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>o</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="p">.</span><span class="nc">card</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">    </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--s2</span><span class="p">);</span>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>y todos los espacios de la página estarán relacionados entre sí.</p>
+<hr />
+<p><strong>La filosofía detrás de esto</strong></p>
+<p>Imagina una casa construida por varias personas.</p>
+<p>Sin una escala:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>Ventana → 17 cm
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>Puerta → 91 cm
+</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>Mesa → 63 cm
+</span><span id="__span-25-4"><a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>Escalón → 24 cm
+</span></code></pre></div>
+<p>Todo funciona, pero parece improvisado.</p>
+<p>Con una escala modular:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>Ventana → s2
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>Puerta → s4
+</span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>Mesa → s3
+</span><span id="__span-26-4"><a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a>Escalón → s1
+</span></code></pre></div>
+<p>Todo guarda proporciones y la composición resulta más armoniosa.</p>
+<p>Por eso Every Layout recomienda no pensar en:</p>
+<blockquote>
+<p>"¿Cuántos píxeles pongo aquí?"</p>
+</blockquote>
+<p>sino en:</p>
+<blockquote>
+<p>"¿Qué punto de mi escala quiero utilizar aquí?".</p>
+</blockquote>
+<p>De esta forma, el diseño se vuelve más consistente y mucho más fácil de mantener.</p>
+</details>
+<details class="example">
+<summary>Example</summary>
+<p>Ejemplo de seccion <a href="../../../examples/modularScale/custumProperties.html">Aqui ↗</a></p>
+<p><div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-27-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-27-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-27-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-27-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-27-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-27-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-27-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-27-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-27-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-27-10">10</a></span>
+<span class="normal"><a href="#__codelineno-27-11">11</a></span>
+<span class="normal"><a href="#__codelineno-27-12">12</a></span>
+<span class="normal"><a href="#__codelineno-27-13">13</a></span>
+<span class="normal"><a href="#__codelineno-27-14">14</a></span>
+<span class="normal"><a href="#__codelineno-27-15">15</a></span>
+<span class="normal"><a href="#__codelineno-27-16">16</a></span>
+<span class="normal"><a href="#__codelineno-27-17">17</a></span>
+<span class="normal"><a href="#__codelineno-27-18">18</a></span>
+<span class="normal"><a href="#__codelineno-27-19">19</a></span>
+<span class="normal"><a href="#__codelineno-27-20">20</a></span>
+<span class="normal"><a href="#__codelineno-27-21">21</a></span>
+<span class="normal"><a href="#__codelineno-27-22">22</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1"></a><span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2"></a>    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;contenedor&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3"></a>        <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Exercices<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4"></a>
+</span><span id="__span-27-5"><a id="__codelineno-27-5" name="__codelineno-27-5"></a>        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;card&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-27-6"><a id="__codelineno-27-6" name="__codelineno-27-6"></a>            <span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>NVIDIA-750GH | CARD <span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+</span><span id="__span-27-7"><a id="__codelineno-27-7" name="__codelineno-27-7"></a>            <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur odit enim blanditiis mollitia nesciunt amet, aut quae. Expedita voluptate eum excepturi, aliquam dolorem doloremque impedit cum, laboriosam ex pariatur accusamus?<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span><span id="__span-27-8"><a id="__codelineno-27-8" name="__codelineno-27-8"></a>            <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>259$<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span><span id="__span-27-9"><a id="__codelineno-27-9" name="__codelineno-27-9"></a>        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-27-10"><a id="__codelineno-27-10" name="__codelineno-27-10"></a>
+</span><span id="__span-27-11"><a id="__codelineno-27-11" name="__codelineno-27-11"></a>        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;buttoms&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-27-12"><a id="__codelineno-27-12" name="__codelineno-27-12"></a>            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;btn-1&quot;</span><span class="p">&gt;</span>Mesage<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</span><span id="__span-27-13"><a id="__codelineno-27-13" name="__codelineno-27-13"></a>            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;btn-2&quot;</span><span class="p">&gt;</span>Mesage<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</span><span id="__span-27-14"><a id="__codelineno-27-14" name="__codelineno-27-14"></a>            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;btn-3&quot;</span><span class="p">&gt;</span>Mesage<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</span><span id="__span-27-15"><a id="__codelineno-27-15" name="__codelineno-27-15"></a>            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;btn-4&quot;</span><span class="p">&gt;</span>Mesage<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</span><span id="__span-27-16"><a id="__codelineno-27-16" name="__codelineno-27-16"></a>            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;btn-5&quot;</span><span class="p">&gt;</span>Mesage<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</span><span id="__span-27-17"><a id="__codelineno-27-17" name="__codelineno-27-17"></a>        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-27-18"><a id="__codelineno-27-18" name="__codelineno-27-18"></a>        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;article&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-27-19"><a id="__codelineno-27-19" name="__codelineno-27-19"></a>
+</span><span id="__span-27-20"><a id="__codelineno-27-20" name="__codelineno-27-20"></a>        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-27-21"><a id="__codelineno-27-21" name="__codelineno-27-21"></a>    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-27-22"><a id="__codelineno-27-22" name="__codelineno-27-22"></a><span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
 </span></code></pre></div></td></tr></table></div>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-28-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-28-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-28-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-28-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-28-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-28-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-28-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-28-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-28-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-28-10">10</a></span>
+<span class="normal"><a href="#__codelineno-28-11">11</a></span>
+<span class="normal"><a href="#__codelineno-28-12">12</a></span>
+<span class="normal"><a href="#__codelineno-28-13">13</a></span>
+<span class="normal"><a href="#__codelineno-28-14">14</a></span>
+<span class="normal"><a href="#__codelineno-28-15">15</a></span>
+<span class="normal"><a href="#__codelineno-28-16">16</a></span>
+<span class="normal"><a href="#__codelineno-28-17">17</a></span>
+<span class="normal"><a href="#__codelineno-28-18">18</a></span>
+<span class="normal"><a href="#__codelineno-28-19">19</a></span>
+<span class="normal"><a href="#__codelineno-28-20">20</a></span>
+<span class="normal"><a href="#__codelineno-28-21">21</a></span>
+<span class="normal"><a href="#__codelineno-28-22">22</a></span>
+<span class="normal"><a href="#__codelineno-28-23">23</a></span>
+<span class="normal"><a href="#__codelineno-28-24">24</a></span>
+<span class="normal"><a href="#__codelineno-28-25">25</a></span>
+<span class="normal"><a href="#__codelineno-28-26">26</a></span>
+<span class="normal"><a href="#__codelineno-28-27">27</a></span>
+<span class="normal"><a href="#__codelineno-28-28">28</a></span>
+<span class="normal"><a href="#__codelineno-28-29">29</a></span>
+<span class="normal"><a href="#__codelineno-28-30">30</a></span>
+<span class="normal"><a href="#__codelineno-28-31">31</a></span>
+<span class="normal"><a href="#__codelineno-28-32">32</a></span>
+<span class="normal"><a href="#__codelineno-28-33">33</a></span>
+<span class="normal"><a href="#__codelineno-28-34">34</a></span>
+<span class="normal"><a href="#__codelineno-28-35">35</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1"></a><span class="p">:</span><span class="nd">root</span><span class="p">{</span>
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2"></a><span class="w">  </span><span class="nv">--ratio</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5</span><span class="p">;</span>
+</span><span id="__span-28-3"><a id="__codelineno-28-3" name="__codelineno-28-3"></a><span class="w">  </span><span class="nv">--s5</span><span class="p">:</span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--s4</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--ratio</span><span class="p">));</span>
+</span><span id="__span-28-4"><a id="__codelineno-28-4" name="__codelineno-28-4"></a><span class="w">  </span><span class="nv">--s4</span><span class="p">:</span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--s3</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--ratio</span><span class="p">));</span>
+</span><span id="__span-28-5"><a id="__codelineno-28-5" name="__codelineno-28-5"></a><span class="w">  </span><span class="nv">--s3</span><span class="p">:</span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--s2</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--ratio</span><span class="p">));</span>
+</span><span id="__span-28-6"><a id="__codelineno-28-6" name="__codelineno-28-6"></a><span class="w">  </span><span class="nv">--s2</span><span class="p">:</span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--s1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--ratio</span><span class="p">));</span>
+</span><span id="__span-28-7"><a id="__codelineno-28-7" name="__codelineno-28-7"></a><span class="w">  </span><span class="nv">--s1</span><span class="p">:</span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--s0</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--ratio</span><span class="p">));</span>
+</span><span id="__span-28-8"><a id="__codelineno-28-8" name="__codelineno-28-8"></a><span class="w">  </span><span class="nv">--s0</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-28-9"><a id="__codelineno-28-9" name="__codelineno-28-9"></a><span class="w">  </span><span class="nv">--s-1</span><span class="p">:</span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--s0</span><span class="p">)</span><span class="w">  </span><span class="o">/</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--ratio</span><span class="p">));</span>
+</span><span id="__span-28-10"><a id="__codelineno-28-10" name="__codelineno-28-10"></a><span class="w">  </span><span class="nv">--s-2</span><span class="p">:</span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--s-</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--ratio</span><span class="p">));</span>
+</span><span id="__span-28-11"><a id="__codelineno-28-11" name="__codelineno-28-11"></a><span class="w">  </span><span class="nv">--s-3</span><span class="p">:</span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--s-</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--ratio</span><span class="p">));</span>
+</span><span id="__span-28-12"><a id="__codelineno-28-12" name="__codelineno-28-12"></a><span class="w">  </span><span class="nv">--s-4</span><span class="p">:</span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--s-</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--ratio</span><span class="p">));</span>
+</span><span id="__span-28-13"><a id="__codelineno-28-13" name="__codelineno-28-13"></a><span class="w">  </span><span class="nv">--s-5</span><span class="p">:</span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--s-</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--ratio</span><span class="p">));</span>
+</span><span id="__span-28-14"><a id="__codelineno-28-14" name="__codelineno-28-14"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-28-15"><a id="__codelineno-28-15" name="__codelineno-28-15"></a><span class="w">  </span><span class="nt">body</span><span class="p">{</span>
+</span><span id="__span-28-16"><a id="__codelineno-28-16" name="__codelineno-28-16"></a><span class="w">      </span><span class="k">background-color</span><span class="p">:</span><span class="w"> </span><span class="nb">rgb</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">);</span>
+</span><span id="__span-28-17"><a id="__codelineno-28-17" name="__codelineno-28-17"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-28-18"><a id="__codelineno-28-18" name="__codelineno-28-18"></a><span class="w">  </span><span class="nt">h1</span><span class="p">{</span><span class="w"> </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--s2</span><span class="p">);}</span>
+</span><span id="__span-28-19"><a id="__codelineno-28-19" name="__codelineno-28-19"></a><span class="w">  </span><span class="p">.</span><span class="nc">card</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-28-20"><a id="__codelineno-28-20" name="__codelineno-28-20"></a><span class="w">      </span><span class="k">background-color</span><span class="p">:</span><span class="w"> </span><span class="nb">rgb</span><span class="p">(</span><span class="mi">230</span><span class="p">,</span><span class="w"> </span><span class="mi">241</span><span class="p">,</span><span class="w"> </span><span class="mi">251</span><span class="p">);</span>
+</span><span id="__span-28-21"><a id="__codelineno-28-21" name="__codelineno-28-21"></a><span class="w">      </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--s-</span><span class="mi">1</span><span class="p">);</span>
+</span><span id="__span-28-22"><a id="__codelineno-28-22" name="__codelineno-28-22"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-28-23"><a id="__codelineno-28-23" name="__codelineno-28-23"></a><span class="w">  </span><span class="p">.</span><span class="nc">card</span><span class="w"> </span><span class="nt">h2</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--s0</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-28-24"><a id="__codelineno-28-24" name="__codelineno-28-24"></a><span class="w">  </span><span class="p">.</span><span class="nc">card</span><span class="w"> </span><span class="nt">p</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--s0</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-28-25"><a id="__codelineno-28-25" name="__codelineno-28-25"></a><span class="w">  </span><span class="p">.</span><span class="nc">buttoms</span><span class="p">{</span>
+</span><span id="__span-28-26"><a id="__codelineno-28-26" name="__codelineno-28-26"></a><span class="w">      </span><span class="k">margin-top</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--s-</span><span class="mi">1</span><span class="p">);</span>
+</span><span id="__span-28-27"><a id="__codelineno-28-27" name="__codelineno-28-27"></a><span class="w">      </span><span class="k">background-color</span><span class="p">:</span><span class="w"> </span><span class="nb">rgb</span><span class="p">(</span><span class="mi">35</span><span class="p">,</span><span class="w"> </span><span class="mi">41</span><span class="p">,</span><span class="w"> </span><span class="mi">39</span><span class="p">);</span>
+</span><span id="__span-28-28"><a id="__codelineno-28-28" name="__codelineno-28-28"></a><span class="w">      </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--s-</span><span class="mi">2</span><span class="p">);</span>
+</span><span id="__span-28-29"><a id="__codelineno-28-29" name="__codelineno-28-29"></a>
+</span><span id="__span-28-30"><a id="__codelineno-28-30" name="__codelineno-28-30"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-28-31"><a id="__codelineno-28-31" name="__codelineno-28-31"></a><span class="w">  </span><span class="p">.</span><span class="nc">btn-1</span><span class="p">{</span><span class="w"> </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--s2</span><span class="p">);}</span>
+</span><span id="__span-28-32"><a id="__codelineno-28-32" name="__codelineno-28-32"></a><span class="w">  </span><span class="p">.</span><span class="nc">btn-2</span><span class="p">{</span><span class="w"> </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--s1</span><span class="p">);}</span>
+</span><span id="__span-28-33"><a id="__codelineno-28-33" name="__codelineno-28-33"></a><span class="w">  </span><span class="p">.</span><span class="nc">btn-3</span><span class="p">{</span><span class="w"> </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--s0</span><span class="p">);}</span>
+</span><span id="__span-28-34"><a id="__codelineno-28-34" name="__codelineno-28-34"></a><span class="w">  </span><span class="p">.</span><span class="nc">btn-4</span><span class="p">{</span><span class="w"> </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--s-</span><span class="mi">1</span><span class="p">);}</span>
+</span><span id="__span-28-35"><a id="__codelineno-28-35" name="__codelineno-28-35"></a><span class="w">  </span><span class="p">.</span><span class="nc">btn-5</span><span class="p">{</span><span class="w"> </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--s-</span><span class="mi">2</span><span class="p">);}</span>
+</span></code></pre></div></td></tr></table></div></p>
+</details>
+<h2 id="la-funcion-pow">La función <code>pow()</code><a class="headerlink" href="#la-funcion-pow" title="Permanent link">&para;</a></h2>
+<p>Al momento de escribir esto, los navegadores solo soportan aritmética básica en operaciones <code>calc()</code>. Sin embargo, un <a href="https://drafts.csswg.org/css-values/#math"><em>nuevo conjunto de funciones matemáticas/expresiones</em> ↗</a> están llegando a CSS. Crucialmente, esto incluye la función <code>pow()</code>, con la cual acceder y crear puntos de escala modular se vuelve mucho más fácil.</p>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-29-1">1</a></span>
+<span class="normal"><a href="#__codelineno-29-2">2</a></span>
+<span class="normal"><a href="#__codelineno-29-3">3</a></span>
+<span class="normal"><a href="#__codelineno-29-4">4</a></span>
+<span class="normal"><a href="#__codelineno-29-5">5</a></span>
+<span class="normal"><a href="#__codelineno-29-6">6</a></span>
+<span class="normal"><a href="#__codelineno-29-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1"></a><span class="p">:</span><span class="nd">root</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2"></a><span class="w">  </span><span class="nv">--ratio</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-29-3"><a id="__codelineno-29-3" name="__codelineno-29-3"></a><span class="p">}</span>
+</span><span id="__span-29-4"><a id="__codelineno-29-4" name="__codelineno-29-4"></a><span class="p">.</span><span class="nc">my-element</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-29-5"><a id="__codelineno-29-5" name="__codelineno-29-5"></a><span class="w">  </span><span class="c">/* ↓ 1.5 * 1.5 * 1.5 es igual a 1.5³ */</span>
+</span><span id="__span-29-6"><a id="__codelineno-29-6" name="__codelineno-29-6"></a><span class="w">  </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="nf">pow</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--ratio</span><span class="p">),</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
+</span><span id="__span-29-7"><a id="__codelineno-29-7" name="__codelineno-29-7"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<details class="info">
+<summary>Explicacion</summary>
+<p>A día de hoy (2026) ya puedes usar pow() en CSS moderno. La función forma parte del conjunto de funciones matemáticas de CSS y está disponible en los navegadores actuales. La idea principal es:</p>
+<blockquote>
+<p><strong>En vez de multiplicar repetidamente para construir una escala modular, podremos elevar un número a una potencia usando <code>pow()</code>.</strong></p>
+</blockquote>
+<p>Por ejemplo, hasta ahora haces:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="p">:</span><span class="nd">root</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-30-2"><a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="w">    </span><span class="nv">--ratio</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5</span><span class="p">;</span>
+</span><span id="__span-30-3"><a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="w">    </span><span class="nv">--s0</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-30-4"><a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a><span class="w">    </span><span class="nv">--s1</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--s0</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--ratio</span><span class="p">));</span>
+</span><span id="__span-30-5"><a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a><span class="w">    </span><span class="nv">--s2</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--s1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--ratio</span><span class="p">));</span>
+</span><span id="__span-30-6"><a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a><span class="w">    </span><span class="nv">--s3</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--s2</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--ratio</span><span class="p">));</span>
+</span><span id="__span-30-7"><a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Lo que matemáticamente es:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>s1 = 1 × 1.5
+</span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>s2 = 1 × 1.5 × 1.5
+</span><span id="__span-31-3"><a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>s3 = 1 × 1.5 × 1.5 × 1.5
+</span></code></pre></div>
+<p>o equivalentemente:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>s1 = 1.5¹
+</span><span id="__span-32-2"><a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>s2 = 1.5²
+</span><span id="__span-32-3"><a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a>s3 = 1.5³
+</span></code></pre></div>
+<hr />
+<p><strong>¿Qué hace <code>pow()</code>?</strong></p>
+<p>La función:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="nt">pow</span><span class="o">(</span><span class="nt">base</span><span class="o">,</span><span class="w"> </span><span class="nt">exponente</span><span class="o">)</span>
+</span></code></pre></div>
+<p>devuelve:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>baseexponente
+</span></code></pre></div>
+<p>(es decir, la base elevada al exponente).</p>
+<p>Por ejemplo:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-35-1"><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="nt">pow</span><span class="o">(</span><span class="nt">2</span><span class="o">,</span><span class="w"> </span><span class="nt">3</span><span class="o">)</span>
+</span></code></pre></div>
+<p>significa:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-36-1"><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a>2³ = 2 × 2 × 2 = 8
+</span></code></pre></div>
+<hr />
+<p><strong>Aplicado a una escala modular</strong></p>
+<p>Si tienes:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-37-1"><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="p">:</span><span class="nd">root</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-37-2"><a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a><span class="w">    </span><span class="nv">--ratio</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5</span><span class="p">;</span>
+</span><span id="__span-37-3"><a id="__codelineno-37-3" name="__codelineno-37-3" href="#__codelineno-37-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>entonces:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-38-1"><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="nt">font-size</span><span class="o">:</span><span class="w"> </span><span class="nt">pow</span><span class="o">(</span><span class="nt">var</span><span class="o">(</span><span class="nt">--ratio</span><span class="o">),</span><span class="w"> </span><span class="nt">3</span><span class="o">);</span>
+</span></code></pre></div>
+<p>es equivalente a:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-39-1"><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a>1.5³
+</span></code></pre></div>
+<p>es decir:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-40-1"><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a>1.5 × 1.5 × 1.5 = 3.375
+</span></code></pre></div>
+<p>Por tanto:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-41-1"><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="nt">font-size</span><span class="o">:</span><span class="w"> </span><span class="nt">3</span><span class="p">.</span><span class="nc">375rem</span><span class="o">;</span>
+</span></code></pre></div>
+<hr />
+<p><strong>Hay un pequeño detalle</strong></p>
+<p>En el ejemplo del libro aparece:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-42-1"><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="p">:</span><span class="nd">root</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-2"><a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a><span class="w">  </span><span class="nv">--ratio</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-42-3"><a id="__codelineno-42-3" name="__codelineno-42-3" href="#__codelineno-42-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>pero normalmente el ratio debería ser:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-43-1"><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="p">:</span><span class="nd">root</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-43-2"><a id="__codelineno-43-2" name="__codelineno-43-2" href="#__codelineno-43-2"></a><span class="w">  </span><span class="nv">--ratio</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5</span><span class="p">;</span>
+</span><span id="__span-43-3"><a id="__codelineno-43-3" name="__codelineno-43-3" href="#__codelineno-43-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>sin unidades, porque el ratio representa una proporción.</p>
+<p>Entonces podrías escribir algo como:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-44-1"><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a><span class="p">:</span><span class="nd">root</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-44-2"><a id="__codelineno-44-2" name="__codelineno-44-2" href="#__codelineno-44-2"></a><span class="w">    </span><span class="nv">--ratio</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5</span><span class="p">;</span>
+</span><span id="__span-44-3"><a id="__codelineno-44-3" name="__codelineno-44-3" href="#__codelineno-44-3"></a><span class="w">    </span><span class="nv">--base-size</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-44-4"><a id="__codelineno-44-4" name="__codelineno-44-4" href="#__codelineno-44-4"></a><span class="p">}</span>
+</span><span id="__span-44-5"><a id="__codelineno-44-5" name="__codelineno-44-5" href="#__codelineno-44-5"></a>
+</span><span id="__span-44-6"><a id="__codelineno-44-6" name="__codelineno-44-6" href="#__codelineno-44-6"></a><span class="nt">h1</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-44-7"><a id="__codelineno-44-7" name="__codelineno-44-7" href="#__codelineno-44-7"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--base-size</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">pow</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--ratio</span><span class="p">),</span><span class="w"> </span><span class="mi">3</span><span class="p">));</span>
+</span><span id="__span-44-8"><a id="__codelineno-44-8" name="__codelineno-44-8" href="#__codelineno-44-8"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>que sería:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-45-1"><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a>1rem × 1.5³
+</span><span id="__span-45-2"><a id="__codelineno-45-2" name="__codelineno-45-2" href="#__codelineno-45-2"></a>= 1rem × 3.375
+</span><span id="__span-45-3"><a id="__codelineno-45-3" name="__codelineno-45-3" href="#__codelineno-45-3"></a>= 3.375rem
+</span></code></pre></div>
+<hr />
+<p><strong>¿Por qué es mejor?</strong></p>
+<p>Con la forma actual necesitas:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-46-1"><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a><span class="nt">--s1</span>
+</span><span id="__span-46-2"><a id="__codelineno-46-2" name="__codelineno-46-2" href="#__codelineno-46-2"></a><span class="nt">--s2</span>
+</span><span id="__span-46-3"><a id="__codelineno-46-3" name="__codelineno-46-3" href="#__codelineno-46-3"></a><span class="nt">--s3</span>
+</span><span id="__span-46-4"><a id="__codelineno-46-4" name="__codelineno-46-4" href="#__codelineno-46-4"></a><span class="nt">--s4</span>
+</span><span id="__span-46-5"><a id="__codelineno-46-5" name="__codelineno-46-5" href="#__codelineno-46-5"></a><span class="nt">--s5</span>
+</span></code></pre></div>
+<p>y mantener toda la cadena.</p>
+<p>Con <code>pow()</code> podrías simplemente decir:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-47-1"><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a><span class="nt">padding</span><span class="o">:</span><span class="w"> </span><span class="nt">calc</span><span class="o">(</span><span class="nt">1rem</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nt">pow</span><span class="o">(</span><span class="nt">1</span><span class="p">.</span><span class="nc">5</span><span class="o">,</span><span class="w"> </span><span class="nt">2</span><span class="o">));</span>
+</span><span id="__span-47-2"><a id="__codelineno-47-2" name="__codelineno-47-2" href="#__codelineno-47-2"></a><span class="nt">font-size</span><span class="o">:</span><span class="w"> </span><span class="nt">calc</span><span class="o">(</span><span class="nt">1rem</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nt">pow</span><span class="o">(</span><span class="nt">1</span><span class="p">.</span><span class="nc">5</span><span class="o">,</span><span class="w"> </span><span class="nt">4</span><span class="o">));</span>
+</span><span id="__span-47-3"><a id="__codelineno-47-3" name="__codelineno-47-3" href="#__codelineno-47-3"></a><span class="nt">margin-top</span><span class="o">:</span><span class="w"> </span><span class="nt">calc</span><span class="o">(</span><span class="nt">1rem</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nt">pow</span><span class="o">(</span><span class="nt">1</span><span class="p">.</span><span class="nc">5</span><span class="o">,</span><span class="w"> </span><span class="nt">-1</span><span class="o">));</span>
+</span></code></pre></div>
+<p>sin tener que declarar:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-48-1"><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a><span class="nt">--s-1</span>
+</span><span id="__span-48-2"><a id="__codelineno-48-2" name="__codelineno-48-2" href="#__codelineno-48-2"></a><span class="nt">--s0</span>
+</span><span id="__span-48-3"><a id="__codelineno-48-3" name="__codelineno-48-3" href="#__codelineno-48-3"></a><span class="nt">--s1</span>
+</span><span id="__span-48-4"><a id="__codelineno-48-4" name="__codelineno-48-4" href="#__codelineno-48-4"></a><span class="nt">--s2</span>
+</span><span id="__span-48-5"><a id="__codelineno-48-5" name="__codelineno-48-5" href="#__codelineno-48-5"></a><span class="nt">--s3</span>
+</span><span id="__span-48-6"><a id="__codelineno-48-6" name="__codelineno-48-6" href="#__codelineno-48-6"></a><span class="nt">--s4</span>
+</span><span id="__span-48-7"><a id="__codelineno-48-7" name="__codelineno-48-7" href="#__codelineno-48-7"></a><span class="o">...</span>
+</span></code></pre></div>
+<hr />
+<p>Por ejemplo:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-49-1"><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a><span class="p">.</span><span class="nc">card</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-49-2"><a id="__codelineno-49-2" name="__codelineno-49-2" href="#__codelineno-49-2"></a><span class="w">    </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="mi">1</span><span class="kt">rem</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">pow</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">));</span><span class="w"> </span><span class="c">/* 2.25rem */</span>
+</span><span id="__span-49-3"><a id="__codelineno-49-3" name="__codelineno-49-3" href="#__codelineno-49-3"></a><span class="p">}</span>
+</span><span id="__span-49-4"><a id="__codelineno-49-4" name="__codelineno-49-4" href="#__codelineno-49-4"></a>
+</span><span id="__span-49-5"><a id="__codelineno-49-5" name="__codelineno-49-5" href="#__codelineno-49-5"></a><span class="p">.</span><span class="nc">card</span><span class="w"> </span><span class="nt">h2</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-49-6"><a id="__codelineno-49-6" name="__codelineno-49-6" href="#__codelineno-49-6"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="mi">1</span><span class="kt">rem</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">pow</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">));</span><span class="w"> </span><span class="c">/* 3.375rem */</span>
+</span><span id="__span-49-7"><a id="__codelineno-49-7" name="__codelineno-49-7" href="#__codelineno-49-7"></a><span class="p">}</span>
+</span><span id="__span-49-8"><a id="__codelineno-49-8" name="__codelineno-49-8" href="#__codelineno-49-8"></a>
+</span><span id="__span-49-9"><a id="__codelineno-49-9" name="__codelineno-49-9" href="#__codelineno-49-9"></a><span class="p">.</span><span class="nc">card</span><span class="w"> </span><span class="nt">p</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-49-10"><a id="__codelineno-49-10" name="__codelineno-49-10" href="#__codelineno-49-10"></a><span class="w">    </span><span class="k">margin-top</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="mi">1</span><span class="kt">rem</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">pow</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">));</span><span class="w"> </span><span class="c">/* 0.667rem */</span>
+</span><span id="__span-49-11"><a id="__codelineno-49-11" name="__codelineno-49-11" href="#__codelineno-49-11"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>La ventaja es que el índice de la escala (<code>2</code>, <code>3</code>, <code>-1</code>, etc.) se convierte directamente en el exponente. Así, en el futuro, construir una escala modular en CSS será mucho más sencillo y flexible.</p>
+</details>
 <h2 id="acceso-desde-javascript">Acceso desde JavaScript<a class="headerlink" href="#acceso-desde-javascript" title="Permanent link">&para;</a></h2>
 <p>Nuestras variables de escala se colocan en el elemento <code>:root</code>, haciéndolas globalmente disponibles. Y por global, queremos decir <em>verdaderamente</em> global. Las custom properties están disponibles para JavaScript y también "atraviesan" los límites de Shadow DOM para afectar el CSS de una hoja de estilo <code>shadowRoot</code>.</p>
 <p>JavaScript consume las custom properties de CSS como propiedades JSON. Puedes pensar en las custom properties globales como configuraciones compartidas por CSS y JavaScript. Así es como obtendrías el punto <code>--s3</code> en la escala usando JavaScript (<code>document.documentElement</code> representa el elemento <code>:root</code> o <code>&lt;html&gt;</code>):</p>
-<div class="language-js highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">rootStyles</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">getComputedStyle</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">);</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kd">const</span><span class="w"> </span><span class="nx">scale3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">rootStyles</span><span class="p">.</span><span class="nx">getPropertyValue</span><span class="p">(</span><span class="s1">&#39;--s3&#39;</span><span class="p">);</span>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-50-1"><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">rootStyles</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">getComputedStyle</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">);</span>
+</span><span id="__span-50-2"><a id="__codelineno-50-2" name="__codelineno-50-2" href="#__codelineno-50-2"></a><span class="kd">const</span><span class="w"> </span><span class="nx">scale3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">rootStyles</span><span class="p">.</span><span class="nx">getPropertyValue</span><span class="p">(</span><span class="s1">&#39;--s3&#39;</span><span class="p">);</span>
 </span></code></pre></div>
+<details class="info">
+<summary>Explicacion</summary>
+<p>Esta sección te está diciendo algo muy poderoso:</p>
+<blockquote>
+<p>Las variables CSS no pertenecen exclusivamente al CSS. También pueden ser leídas y modificadas desde JavaScript.</p>
+</blockquote>
+<p>Por ejemplo, si tienes:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-51-1"><a id="__codelineno-51-1" name="__codelineno-51-1" href="#__codelineno-51-1"></a><span class="p">:</span><span class="nd">root</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-51-2"><a id="__codelineno-51-2" name="__codelineno-51-2" href="#__codelineno-51-2"></a><span class="w">    </span><span class="nv">--ratio</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5</span><span class="p">;</span>
+</span><span id="__span-51-3"><a id="__codelineno-51-3" name="__codelineno-51-3" href="#__codelineno-51-3"></a><span class="w">    </span><span class="nv">--s0</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-51-4"><a id="__codelineno-51-4" name="__codelineno-51-4" href="#__codelineno-51-4"></a><span class="w">    </span><span class="nv">--s1</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--s0</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--ratio</span><span class="p">));</span>
+</span><span id="__span-51-5"><a id="__codelineno-51-5" name="__codelineno-51-5" href="#__codelineno-51-5"></a><span class="w">    </span><span class="nv">--s2</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--s1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--ratio</span><span class="p">));</span>
+</span><span id="__span-51-6"><a id="__codelineno-51-6" name="__codelineno-51-6" href="#__codelineno-51-6"></a><span class="w">    </span><span class="nv">--s3</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--s2</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--ratio</span><span class="p">));</span>
+</span><span id="__span-51-7"><a id="__codelineno-51-7" name="__codelineno-51-7" href="#__codelineno-51-7"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>esas variables viven en <code>:root</code>, es decir, en:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-52-1"><a id="__codelineno-52-1" name="__codelineno-52-1" href="#__codelineno-52-1"></a><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>y por ser heredables, toda la página puede utilizarlas.</p>
+<hr />
+<p><strong>Accediendo desde JavaScript</strong></p>
+<p>Primero obtenemos el elemento raíz:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-53-1"><a id="__codelineno-53-1" name="__codelineno-53-1" href="#__codelineno-53-1"></a><span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span>
+</span></code></pre></div>
+<p>que representa:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-54-1"><a id="__codelineno-54-1" name="__codelineno-54-1" href="#__codelineno-54-1"></a><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>Luego usamos:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-55-1"><a id="__codelineno-55-1" name="__codelineno-55-1" href="#__codelineno-55-1"></a><span class="nx">getComputedStyle</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">)</span>
+</span></code></pre></div>
+<p>para obtener todos los estilos calculados del elemento <code>&lt;html&gt;</code>.</p>
+<p>Por ejemplo:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-56-1"><a id="__codelineno-56-1" name="__codelineno-56-1" href="#__codelineno-56-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">rootStyles</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">getComputedStyle</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">);</span>
+</span></code></pre></div>
+<p>Ahora <code>rootStyles</code> contiene todas las propiedades calculadas de <code>&lt;html&gt;</code>, incluyendo nuestras custom properties.</p>
+<hr />
+<p><strong>Obteniendo una variable concreta</strong></p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-57-1"><a id="__codelineno-57-1" name="__codelineno-57-1" href="#__codelineno-57-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">scale3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">rootStyles</span><span class="p">.</span><span class="nx">getPropertyValue</span><span class="p">(</span><span class="s1">&#39;--s3&#39;</span><span class="p">);</span>
+</span></code></pre></div>
+<p>Esto devuelve algo como:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-58-1"><a id="__codelineno-58-1" name="__codelineno-58-1" href="#__codelineno-58-1"></a><span class="s2">&quot;3.375rem&quot;</span>
+</span></code></pre></div>
+<hr />
+<p><strong>¿Por qué dice que las consume como propiedades JSON?</strong></p>
+<p>No es que las convierta literalmente en JSON.</p>
+<p>Lo que quiere decir es que JavaScript las trata como pares:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-59-1"><a id="__codelineno-59-1" name="__codelineno-59-1" href="#__codelineno-59-1"></a>nombre → valor
+</span></code></pre></div>
+<p>igual que un objeto:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-60-1"><a id="__codelineno-60-1" name="__codelineno-60-1" href="#__codelineno-60-1"></a><span class="p">{</span>
+</span><span id="__span-60-2"><a id="__codelineno-60-2" name="__codelineno-60-2" href="#__codelineno-60-2"></a><span class="w">    </span><span class="s2">&quot;--s1&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;1.5rem&quot;</span><span class="p">,</span>
+</span><span id="__span-60-3"><a id="__codelineno-60-3" name="__codelineno-60-3" href="#__codelineno-60-3"></a><span class="w">    </span><span class="s2">&quot;--s2&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;2.25rem&quot;</span><span class="p">,</span>
+</span><span id="__span-60-4"><a id="__codelineno-60-4" name="__codelineno-60-4" href="#__codelineno-60-4"></a><span class="w">    </span><span class="s2">&quot;--s3&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;3.375rem&quot;</span>
+</span><span id="__span-60-5"><a id="__codelineno-60-5" name="__codelineno-60-5" href="#__codelineno-60-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>aunque internamente no sea un objeto JSON.</p>
+<hr />
+<p><strong>¿Para qué serviría esto?</strong></p>
+<p>Supongamos que quieres crear dinámicamente una tarjeta:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-61-1"><a id="__codelineno-61-1" name="__codelineno-61-1" href="#__codelineno-61-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">card</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;.card&#39;</span><span class="p">);</span>
+</span><span id="__span-61-2"><a id="__codelineno-61-2" name="__codelineno-61-2" href="#__codelineno-61-2"></a>
+</span><span id="__span-61-3"><a id="__codelineno-61-3" name="__codelineno-61-3" href="#__codelineno-61-3"></a><span class="nx">card</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">padding</span><span class="w"> </span><span class="o">=</span>
+</span><span id="__span-61-4"><a id="__codelineno-61-4" name="__codelineno-61-4" href="#__codelineno-61-4"></a><span class="w">    </span><span class="nx">rootStyles</span><span class="p">.</span><span class="nx">getPropertyValue</span><span class="p">(</span><span class="s1">&#39;--s2&#39;</span><span class="p">);</span>
+</span></code></pre></div>
+<p>y la tarjeta tendrá:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-62-1"><a id="__codelineno-62-1" name="__codelineno-62-1" href="#__codelineno-62-1"></a><span class="nt">padding</span><span class="o">:</span><span class="w"> </span><span class="nt">2</span><span class="p">.</span><span class="nc">25rem</span><span class="o">;</span>
+</span></code></pre></div>
+<hr />
+<p><strong>O hacer una animación</strong></p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-63-1"><a id="__codelineno-63-1" name="__codelineno-63-1" href="#__codelineno-63-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">modal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;.modal&#39;</span><span class="p">);</span>
+</span><span id="__span-63-2"><a id="__codelineno-63-2" name="__codelineno-63-2" href="#__codelineno-63-2"></a>
+</span><span id="__span-63-3"><a id="__codelineno-63-3" name="__codelineno-63-3" href="#__codelineno-63-3"></a><span class="nx">modal</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">marginTop</span><span class="w"> </span><span class="o">=</span>
+</span><span id="__span-63-4"><a id="__codelineno-63-4" name="__codelineno-63-4" href="#__codelineno-63-4"></a><span class="w">    </span><span class="nx">rootStyles</span><span class="p">.</span><span class="nx">getPropertyValue</span><span class="p">(</span><span class="s1">&#39;--s3&#39;</span><span class="p">);</span>
+</span></code></pre></div>
+<hr />
+<p><strong>O cambiar la escala completa</strong></p>
+<p>Imagina:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-64-1"><a id="__codelineno-64-1" name="__codelineno-64-1" href="#__codelineno-64-1"></a><span class="p">:</span><span class="nd">root</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-64-2"><a id="__codelineno-64-2" name="__codelineno-64-2" href="#__codelineno-64-2"></a><span class="w">    </span><span class="nv">--ratio</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5</span><span class="p">;</span>
+</span><span id="__span-64-3"><a id="__codelineno-64-3" name="__codelineno-64-3" href="#__codelineno-64-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Desde JavaScript podrías hacer:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-65-1"><a id="__codelineno-65-1" name="__codelineno-65-1" href="#__codelineno-65-1"></a><span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span>
+</span><span id="__span-65-2"><a id="__codelineno-65-2" name="__codelineno-65-2" href="#__codelineno-65-2"></a><span class="w">    </span><span class="p">.</span><span class="nx">style</span>
+</span><span id="__span-65-3"><a id="__codelineno-65-3" name="__codelineno-65-3" href="#__codelineno-65-3"></a><span class="w">    </span><span class="p">.</span><span class="nx">setProperty</span><span class="p">(</span><span class="s1">&#39;--ratio&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2&#39;</span><span class="p">);</span>
+</span></code></pre></div>
+<p>y toda la interfaz que dependa de esa variable cambiaría automáticamente.</p>
+<hr />
+<p><strong>¿Qué significa que atraviesan el Shadow DOM?</strong></p>
+<p>Normalmente, el Shadow DOM aísla los estilos.</p>
+<p>Sin embargo, las custom properties son especiales.</p>
+<p>Si tienes:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-66-1"><a id="__codelineno-66-1" name="__codelineno-66-1" href="#__codelineno-66-1"></a><span class="p">:</span><span class="nd">root</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-66-2"><a id="__codelineno-66-2" name="__codelineno-66-2" href="#__codelineno-66-2"></a><span class="w">    </span><span class="nv">--color-primary</span><span class="p">:</span><span class="w"> </span><span class="kc">blue</span><span class="p">;</span>
+</span><span id="__span-66-3"><a id="__codelineno-66-3" name="__codelineno-66-3" href="#__codelineno-66-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>un componente con Shadow DOM todavía puede hacer:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-67-1"><a id="__codelineno-67-1" name="__codelineno-67-1" href="#__codelineno-67-1"></a><span class="nt">button</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-67-2"><a id="__codelineno-67-2" name="__codelineno-67-2" href="#__codelineno-67-2"></a><span class="w">    </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--color-primary</span><span class="p">);</span>
+</span><span id="__span-67-3"><a id="__codelineno-67-3" name="__codelineno-67-3" href="#__codelineno-67-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>porque las custom properties atraviesan esa barrera.</p>
+<hr />
+<p><strong>La idea más importante</strong></p>
+<p>Every Layout quiere que veas las variables globales como:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-68-1"><a id="__codelineno-68-1" name="__codelineno-68-1" href="#__codelineno-68-1"></a>            Configuración compartida
+</span><span id="__span-68-2"><a id="__codelineno-68-2" name="__codelineno-68-2" href="#__codelineno-68-2"></a>
+</span><span id="__span-68-3"><a id="__codelineno-68-3" name="__codelineno-68-3" href="#__codelineno-68-3"></a>                  :root
+</span><span id="__span-68-4"><a id="__codelineno-68-4" name="__codelineno-68-4" href="#__codelineno-68-4"></a>                    │
+</span><span id="__span-68-5"><a id="__codelineno-68-5" name="__codelineno-68-5" href="#__codelineno-68-5"></a>        ┌────────────┼────────────┐
+</span><span id="__span-68-6"><a id="__codelineno-68-6" name="__codelineno-68-6" href="#__codelineno-68-6"></a>        │            │            │
+</span><span id="__span-68-7"><a id="__codelineno-68-7" name="__codelineno-68-7" href="#__codelineno-68-7"></a>      CSS        JavaScript    Shadow DOM
+</span></code></pre></div>
+<p>De modo que:</p>
+<ul>
+<li>CSS puede usar:</li>
+</ul>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-69-1"><a id="__codelineno-69-1" name="__codelineno-69-1" href="#__codelineno-69-1"></a><span class="nt">padding</span><span class="o">:</span><span class="w"> </span><span class="nt">var</span><span class="o">(</span><span class="nt">--s2</span><span class="o">);</span>
+</span></code></pre></div>
+<ul>
+<li>JavaScript puede leer:</li>
+</ul>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-70-1"><a id="__codelineno-70-1" name="__codelineno-70-1" href="#__codelineno-70-1"></a><span class="nx">rootStyles</span><span class="p">.</span><span class="nx">getPropertyValue</span><span class="p">(</span><span class="s1">&#39;--s2&#39;</span><span class="p">);</span>
+</span></code></pre></div>
+<ul>
+<li>JavaScript puede modificar:</li>
+</ul>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-71-1"><a id="__codelineno-71-1" name="__codelineno-71-1" href="#__codelineno-71-1"></a><span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span>
+</span><span id="__span-71-2"><a id="__codelineno-71-2" name="__codelineno-71-2" href="#__codelineno-71-2"></a><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">setProperty</span><span class="p">(</span><span class="s1">&#39;--s2&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;4rem&#39;</span><span class="p">);</span>
+</span></code></pre></div>
+<p>y todo el sistema se mantiene sincronizado.</p>
+<p>Por eso las custom properties son mucho más que "variables de CSS". Son una especie de <strong>sistema global de configuración compartido entre CSS y JavaScript</strong>.</p>
+</details>
 <h2 id="soporte-de-shadow-dom">Soporte de Shadow DOM<a class="headerlink" href="#soporte-de-shadow-dom" title="Permanent link">&para;</a></h2>
 <p>La misma propiedad <code>--s3</code> se aplica exitosamente cuando se invoca en Shadow DOM, como en el siguiente ejemplo. El selector <code>:host</code> se refiere al propio custom element hipotético.</p>
-<div class="language-js highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">this</span><span class="p">.</span><span class="nx">shadowRoot</span><span class="p">.</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sb">`</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="sb">  &lt;style&gt;</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="sb">    :host {</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="sb">      padding: var(--s3);</span>
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="sb">    }</span>
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="sb">  &lt;/style&gt;</span>
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="sb">  &lt;slot&gt;&lt;/slot&gt;</span>
-</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="sb">`</span><span class="p">;</span>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-72-1"><a id="__codelineno-72-1" name="__codelineno-72-1" href="#__codelineno-72-1"></a><span class="k">this</span><span class="p">.</span><span class="nx">shadowRoot</span><span class="p">.</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sb">`</span>
+</span><span id="__span-72-2"><a id="__codelineno-72-2" name="__codelineno-72-2" href="#__codelineno-72-2"></a><span class="sb">  &lt;style&gt;</span>
+</span><span id="__span-72-3"><a id="__codelineno-72-3" name="__codelineno-72-3" href="#__codelineno-72-3"></a><span class="sb">    :host {</span>
+</span><span id="__span-72-4"><a id="__codelineno-72-4" name="__codelineno-72-4" href="#__codelineno-72-4"></a><span class="sb">      padding: var(--s3);</span>
+</span><span id="__span-72-5"><a id="__codelineno-72-5" name="__codelineno-72-5" href="#__codelineno-72-5"></a><span class="sb">    }</span>
+</span><span id="__span-72-6"><a id="__codelineno-72-6" name="__codelineno-72-6" href="#__codelineno-72-6"></a><span class="sb">  &lt;/style&gt;</span>
+</span><span id="__span-72-7"><a id="__codelineno-72-7" name="__codelineno-72-7" href="#__codelineno-72-7"></a><span class="sb">  &lt;slot&gt;&lt;/slot&gt;</span>
+</span><span id="__span-72-8"><a id="__codelineno-72-8" name="__codelineno-72-8" href="#__codelineno-72-8"></a><span class="sb">`</span><span class="p">;</span>
 </span></code></pre></div>
 <h2 id="pasando-mediante-props">Pasando mediante props<a class="headerlink" href="#pasando-mediante-props" title="Permanent link">&para;</a></h2>
 <p>A veces podríamos querer que nuestro custom element consuma ciertos estilos desde propiedades (props) — en este caso una prop <code>padding</code>.</p>
-<div class="language-html highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">&lt;</span><span class="nt">my-element</span> <span class="na">padding</span><span class="o">=</span><span class="s">&quot;var(--s3)&quot;</span><span class="p">&gt;</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>  <span class="cm">&lt;!-- Light DOM contents --&gt;</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="p">&lt;/</span><span class="nt">my-element</span><span class="p">&gt;</span>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-73-1"><a id="__codelineno-73-1" name="__codelineno-73-1" href="#__codelineno-73-1"></a><span class="p">&lt;</span><span class="nt">my-element</span> <span class="na">padding</span><span class="o">=</span><span class="s">&quot;var(--s3)&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-73-2"><a id="__codelineno-73-2" name="__codelineno-73-2" href="#__codelineno-73-2"></a>  <span class="cm">&lt;!-- Light DOM contents --&gt;</span>
+</span><span id="__span-73-3"><a id="__codelineno-73-3" name="__codelineno-73-3" href="#__codelineno-73-3"></a><span class="p">&lt;/</span><span class="nt">my-element</span><span class="p">&gt;</span>
 </span></code></pre></div>
-<p>La cadena <code>var(--s3)</code> puede ser interpolada en el CSS de la instancia del custom element usando un <em>template literal</em> ↗:</p>
-<div class="language-js highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">this</span><span class="p">.</span><span class="nx">shadowRoot</span><span class="p">.</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sb">`</span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="sb">  &lt;style&gt;</span>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="sb">    :host {</span>
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="sb">      padding: </span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">padding</span><span class="si">}</span><span class="sb">;</span>
-</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="sb">    }</span>
-</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="sb">  &lt;/style&gt;</span>
-</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="sb">  &lt;slot&gt;&lt;/slot&gt;</span>
-</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="sb">`</span><span class="p">;</span>
+<p>La cadena <code>var(--s3)</code> puede ser interpolada en el CSS de la instancia del custom element usando un <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals"><em>template literal</em> ↗</a>:</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-74-1"><a id="__codelineno-74-1" name="__codelineno-74-1" href="#__codelineno-74-1"></a><span class="k">this</span><span class="p">.</span><span class="nx">shadowRoot</span><span class="p">.</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sb">`</span>
+</span><span id="__span-74-2"><a id="__codelineno-74-2" name="__codelineno-74-2" href="#__codelineno-74-2"></a><span class="sb">  &lt;style&gt;</span>
+</span><span id="__span-74-3"><a id="__codelineno-74-3" name="__codelineno-74-3" href="#__codelineno-74-3"></a><span class="sb">    :host {</span>
+</span><span id="__span-74-4"><a id="__codelineno-74-4" name="__codelineno-74-4" href="#__codelineno-74-4"></a><span class="sb">      padding: </span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">padding</span><span class="si">}</span><span class="sb">;</span>
+</span><span id="__span-74-5"><a id="__codelineno-74-5" name="__codelineno-74-5" href="#__codelineno-74-5"></a><span class="sb">    }</span>
+</span><span id="__span-74-6"><a id="__codelineno-74-6" name="__codelineno-74-6" href="#__codelineno-74-6"></a><span class="sb">  &lt;/style&gt;</span>
+</span><span id="__span-74-7"><a id="__codelineno-74-7" name="__codelineno-74-7" href="#__codelineno-74-7"></a><span class="sb">  &lt;slot&gt;&lt;/slot&gt;</span>
+</span><span id="__span-74-8"><a id="__codelineno-74-8" name="__codelineno-74-8" href="#__codelineno-74-8"></a><span class="sb">`</span><span class="p">;</span>
 </span></code></pre></div>
-<p>Pero primero necesitamos escribir un <em>getter</em> y un <em>setter</em> para nuestra prop. El sufijo <code>|| 'var(--s1)'</code> en la línea del getter es el valor de retorno por defecto. El uso de valores por defecto sensatos hace que trabajar con componentes de layout sea menos laborioso; apuntamos a <em>convención sobre configuración</em> ↗.</p>
-<div class="language-js highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nx">get</span><span class="w"> </span><span class="nx">padding</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s1">&#39;padding&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;var(--s1)&#39;</span><span class="p">;</span>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="p">}</span>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="nx">set</span><span class="w"> </span><span class="nx">padding</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;padding&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">val</span><span class="p">);</span>
-</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="p">}</span>
+<p>Pero primero necesitamos escribir un <em>getter</em> y un <em>setter</em> para nuestra prop. El sufijo <code>|| 'var(--s1)'</code> en la línea del getter es el valor de retorno por defecto. El uso de valores por defecto sensatos hace que trabajar con componentes de layout sea menos laborioso; apuntamos a <a href="https://en.wikipedia.org/wiki/Convention_over_configuration"><em>convención sobre configuración</em> ↗</a>.</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-75-1"><a id="__codelineno-75-1" name="__codelineno-75-1" href="#__codelineno-75-1"></a><span class="nx">get</span><span class="w"> </span><span class="nx">padding</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-75-2"><a id="__codelineno-75-2" name="__codelineno-75-2" href="#__codelineno-75-2"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s1">&#39;padding&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;var(--s1)&#39;</span><span class="p">;</span>
+</span><span id="__span-75-3"><a id="__codelineno-75-3" name="__codelineno-75-3" href="#__codelineno-75-3"></a><span class="p">}</span>
+</span><span id="__span-75-4"><a id="__codelineno-75-4" name="__codelineno-75-4" href="#__codelineno-75-4"></a><span class="nx">set</span><span class="w"> </span><span class="nx">padding</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-75-5"><a id="__codelineno-75-5" name="__codelineno-75-5" href="#__codelineno-75-5"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;padding&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">val</span><span class="p">);</span>
+</span><span id="__span-75-6"><a id="__codelineno-75-6" name="__codelineno-75-6" href="#__codelineno-75-6"></a><span class="p">}</span>
 </span></code></pre></div>
-<h3 id="evitando-shadow-dom">⚠ Evitando Shadow DOM<a class="headerlink" href="#evitando-shadow-dom" title="Permanent link">&para;</a></h3>
+<details class="info">
+<summary>Explicacion</summary>
+<p>Este apartado te está enseñando algo muy importante: <strong>cómo un custom element puede recibir valores desde el HTML y usarlos dentro de su CSS</strong>. Es decir, cómo funcionan las <strong>props</strong>.</p>
+<p>La idea es muy parecida a pasar argumentos a una función.</p>
+<hr />
+<p><strong>1. El usuario escribe</strong></p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-76-1"><a id="__codelineno-76-1" name="__codelineno-76-1" href="#__codelineno-76-1"></a><span class="p">&lt;</span><span class="nt">my-element</span> <span class="na">padding</span><span class="o">=</span><span class="s">&quot;var(--s3)&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-76-2"><a id="__codelineno-76-2" name="__codelineno-76-2" href="#__codelineno-76-2"></a>    <span class="cm">&lt;!-- contenido --&gt;</span>
+</span><span id="__span-76-3"><a id="__codelineno-76-3" name="__codelineno-76-3" href="#__codelineno-76-3"></a><span class="p">&lt;/</span><span class="nt">my-element</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>Aquí:</p>
+<ul>
+<li><code>&lt;my-element&gt;</code> es tu custom element.</li>
+<li><code>padding="var(--s3)"</code> es una prop.</li>
+<li>El usuario está diciendo:</li>
+</ul>
+<blockquote>
+<p>"Quiero que este componente tenga un padding de <code>var(--s3)</code>."</p>
+</blockquote>
+<hr />
+<p><strong>2. Dentro del componente</strong></p>
+<p>Imagina que tienes:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-77-1"><a id="__codelineno-77-1" name="__codelineno-77-1" href="#__codelineno-77-1"></a><span class="kd">class</span><span class="w"> </span><span class="nx">MyElement</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">HTMLElement</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-77-2"><a id="__codelineno-77-2" name="__codelineno-77-2" href="#__codelineno-77-2"></a><span class="w">    </span><span class="p">...</span>
+</span><span id="__span-77-3"><a id="__codelineno-77-3" name="__codelineno-77-3" href="#__codelineno-77-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>y defines:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-78-1"><a id="__codelineno-78-1" name="__codelineno-78-1" href="#__codelineno-78-1"></a><span class="nx">get</span><span class="w"> </span><span class="nx">padding</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-78-2"><a id="__codelineno-78-2" name="__codelineno-78-2" href="#__codelineno-78-2"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s1">&#39;padding&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;var(--s1)&#39;</span><span class="p">;</span>
+</span><span id="__span-78-3"><a id="__codelineno-78-3" name="__codelineno-78-3" href="#__codelineno-78-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<hr />
+<p><strong>¿Qué hace <code>this.getAttribute('padding')</code>?</strong></p>
+<p>Lee el atributo:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-79-1"><a id="__codelineno-79-1" name="__codelineno-79-1" href="#__codelineno-79-1"></a><span class="p">&lt;</span><span class="nt">my-element</span> <span class="na">padding</span><span class="o">=</span><span class="s">&quot;var(--s3)&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>y devuelve:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-80-1"><a id="__codelineno-80-1" name="__codelineno-80-1" href="#__codelineno-80-1"></a><span class="s2">&quot;var(--s3)&quot;</span>
+</span></code></pre></div>
+<hr />
+<p><strong>¿Y el <code>|| 'var(--s1)'</code>?</strong></p>
+<p>Significa:</p>
+<blockquote>
+<p>"Si no existe el atributo <code>padding</code>, usa <code>var(--s1)</code>."</p>
+</blockquote>
+<p>Por ejemplo:</p>
+<p><strong>Caso 1</strong></p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-81-1"><a id="__codelineno-81-1" name="__codelineno-81-1" href="#__codelineno-81-1"></a><span class="p">&lt;</span><span class="nt">my-element</span> <span class="na">padding</span><span class="o">=</span><span class="s">&quot;var(--s3)&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>el getter devuelve:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-82-1"><a id="__codelineno-82-1" name="__codelineno-82-1" href="#__codelineno-82-1"></a><span class="s2">&quot;var(--s3)&quot;</span>
+</span></code></pre></div>
+<hr />
+<p><strong>Caso 2</strong></p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-83-1"><a id="__codelineno-83-1" name="__codelineno-83-1" href="#__codelineno-83-1"></a><span class="p">&lt;</span><span class="nt">my-element</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>como no hay atributo <code>padding</code>, devuelve:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-84-1"><a id="__codelineno-84-1" name="__codelineno-84-1" href="#__codelineno-84-1"></a><span class="s2">&quot;var(--s1)&quot;</span>
+</span></code></pre></div>
+<p>que es el valor por defecto.</p>
+<hr />
+<p><strong>3. El template literal</strong></p>
+<p>Luego aparece esto:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-85-1"><a id="__codelineno-85-1" name="__codelineno-85-1" href="#__codelineno-85-1"></a><span class="k">this</span><span class="p">.</span><span class="nx">shadowRoot</span><span class="p">.</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sb">`</span>
+</span><span id="__span-85-2"><a id="__codelineno-85-2" name="__codelineno-85-2" href="#__codelineno-85-2"></a><span class="sb">  &lt;style&gt;</span>
+</span><span id="__span-85-3"><a id="__codelineno-85-3" name="__codelineno-85-3" href="#__codelineno-85-3"></a><span class="sb">    :host {</span>
+</span><span id="__span-85-4"><a id="__codelineno-85-4" name="__codelineno-85-4" href="#__codelineno-85-4"></a><span class="sb">      padding: </span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">padding</span><span class="si">}</span><span class="sb">;</span>
+</span><span id="__span-85-5"><a id="__codelineno-85-5" name="__codelineno-85-5" href="#__codelineno-85-5"></a><span class="sb">    }</span>
+</span><span id="__span-85-6"><a id="__codelineno-85-6" name="__codelineno-85-6" href="#__codelineno-85-6"></a><span class="sb">  &lt;/style&gt;</span>
+</span><span id="__span-85-7"><a id="__codelineno-85-7" name="__codelineno-85-7" href="#__codelineno-85-7"></a><span class="sb">  &lt;slot&gt;&lt;/slot&gt;</span>
+</span><span id="__span-85-8"><a id="__codelineno-85-8" name="__codelineno-85-8" href="#__codelineno-85-8"></a><span class="sb">`</span><span class="p">;</span>
+</span></code></pre></div>
+<p>El símbolo:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-86-1"><a id="__codelineno-86-1" name="__codelineno-86-1" href="#__codelineno-86-1"></a><span class="nx">$</span><span class="p">{...}</span>
+</span></code></pre></div>
+<p>significa:</p>
+<blockquote>
+<p>"Inserta aquí el valor."</p>
+</blockquote>
+<hr />
+<p>Si:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-87-1"><a id="__codelineno-87-1" name="__codelineno-87-1" href="#__codelineno-87-1"></a><span class="k">this</span><span class="p">.</span><span class="nx">padding</span>
+</span></code></pre></div>
+<p>vale:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-88-1"><a id="__codelineno-88-1" name="__codelineno-88-1" href="#__codelineno-88-1"></a><span class="s2">&quot;var(--s3)&quot;</span>
+</span></code></pre></div>
+<p>entonces el navegador construye:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-89-1"><a id="__codelineno-89-1" name="__codelineno-89-1" href="#__codelineno-89-1"></a><span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+</span><span id="__span-89-2"><a id="__codelineno-89-2" name="__codelineno-89-2" href="#__codelineno-89-2"></a><span class="w">    </span><span class="p">:</span><span class="nd">host</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-89-3"><a id="__codelineno-89-3" name="__codelineno-89-3" href="#__codelineno-89-3"></a><span class="w">        </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--s3</span><span class="p">);</span>
+</span><span id="__span-89-4"><a id="__codelineno-89-4" name="__codelineno-89-4" href="#__codelineno-89-4"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-89-5"><a id="__codelineno-89-5" name="__codelineno-89-5" href="#__codelineno-89-5"></a><span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<hr />
+<p>Si el usuario escribió:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-90-1"><a id="__codelineno-90-1" name="__codelineno-90-1" href="#__codelineno-90-1"></a><span class="p">&lt;</span><span class="nt">my-element</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>el getter devuelve:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-91-1"><a id="__codelineno-91-1" name="__codelineno-91-1" href="#__codelineno-91-1"></a><span class="s2">&quot;var(--s1)&quot;</span>
+</span></code></pre></div>
+<p>y el CSS generado será:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-92-1"><a id="__codelineno-92-1" name="__codelineno-92-1" href="#__codelineno-92-1"></a><span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+</span><span id="__span-92-2"><a id="__codelineno-92-2" name="__codelineno-92-2" href="#__codelineno-92-2"></a><span class="w">    </span><span class="p">:</span><span class="nd">host</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-92-3"><a id="__codelineno-92-3" name="__codelineno-92-3" href="#__codelineno-92-3"></a><span class="w">        </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--s1</span><span class="p">);</span>
+</span><span id="__span-92-4"><a id="__codelineno-92-4" name="__codelineno-92-4" href="#__codelineno-92-4"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-92-5"><a id="__codelineno-92-5" name="__codelineno-92-5" href="#__codelineno-92-5"></a><span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<hr />
+<p><strong>¿Qué es <code>:host</code>?</strong></p>
+<p>Dentro del Shadow DOM, <code>:host</code> representa:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-93-1"><a id="__codelineno-93-1" name="__codelineno-93-1" href="#__codelineno-93-1"></a><span class="p">&lt;</span><span class="nt">my-element</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>Es decir:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-94-1"><a id="__codelineno-94-1" name="__codelineno-94-1" href="#__codelineno-94-1"></a><span class="p">:</span><span class="nd">host</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-94-2"><a id="__codelineno-94-2" name="__codelineno-94-2" href="#__codelineno-94-2"></a><span class="w">    </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--s3</span><span class="p">);</span>
+</span><span id="__span-94-3"><a id="__codelineno-94-3" name="__codelineno-94-3" href="#__codelineno-94-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>es equivalente a decir:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-95-1"><a id="__codelineno-95-1" name="__codelineno-95-1" href="#__codelineno-95-1"></a><span class="nt">my-element</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-95-2"><a id="__codelineno-95-2" name="__codelineno-95-2" href="#__codelineno-95-2"></a><span class="w">    </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--s3</span><span class="p">);</span>
+</span><span id="__span-95-3"><a id="__codelineno-95-3" name="__codelineno-95-3" href="#__codelineno-95-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>pero desde dentro del Shadow DOM.</p>
+<hr />
+<p><strong>¿Y el setter?</strong></p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-96-1"><a id="__codelineno-96-1" name="__codelineno-96-1" href="#__codelineno-96-1"></a><span class="nx">set</span><span class="w"> </span><span class="nx">padding</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-96-2"><a id="__codelineno-96-2" name="__codelineno-96-2" href="#__codelineno-96-2"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;padding&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">val</span><span class="p">);</span>
+</span><span id="__span-96-3"><a id="__codelineno-96-3" name="__codelineno-96-3" href="#__codelineno-96-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>permite hacer:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-97-1"><a id="__codelineno-97-1" name="__codelineno-97-1" href="#__codelineno-97-1"></a><span class="nx">element</span><span class="p">.</span><span class="nx">padding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;var(--s4)&#39;</span><span class="p">;</span>
+</span></code></pre></div>
+<p>y eso producirá:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-98-1"><a id="__codelineno-98-1" name="__codelineno-98-1" href="#__codelineno-98-1"></a><span class="p">&lt;</span><span class="nt">my-element</span> <span class="na">padding</span><span class="o">=</span><span class="s">&quot;var(--s4)&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<hr />
+<p><strong>La filosofía de Every Layout</strong></p>
+<p>Los layouts tienen valores razonables por defecto:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-99-1"><a id="__codelineno-99-1" name="__codelineno-99-1" href="#__codelineno-99-1"></a><span class="nx">get</span><span class="w"> </span><span class="nx">space</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-99-2"><a id="__codelineno-99-2" name="__codelineno-99-2" href="#__codelineno-99-2"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s1">&#39;space&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;var(--s1)&#39;</span><span class="p">;</span>
+</span><span id="__span-99-3"><a id="__codelineno-99-3" name="__codelineno-99-3" href="#__codelineno-99-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Así puedes escribir simplemente:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-100-1"><a id="__codelineno-100-1" name="__codelineno-100-1" href="#__codelineno-100-1"></a><span class="p">&lt;</span><span class="nt">stack-l</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>y obtendrás:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-101-1"><a id="__codelineno-101-1" name="__codelineno-101-1" href="#__codelineno-101-1"></a><span class="nt">margin-top</span><span class="o">:</span><span class="w"> </span><span class="nt">var</span><span class="o">(</span><span class="nt">--s1</span><span class="o">);</span>
+</span></code></pre></div>
+<p>sin configurar nada.</p>
+<p>Pero si necesitas más espacio:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-102-1"><a id="__codelineno-102-1" name="__codelineno-102-1" href="#__codelineno-102-1"></a><span class="p">&lt;</span><span class="nt">stack-l</span> <span class="na">space</span><span class="o">=</span><span class="s">&quot;var(--s3)&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>entonces el layout se adapta.</p>
+<hr />
+<p>Piensa en ello como una función:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-103-1"><a id="__codelineno-103-1" name="__codelineno-103-1" href="#__codelineno-103-1"></a><span class="nx">crearStack</span><span class="p">(</span><span class="nx">space</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;var(--s1)&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>y luego:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-104-1"><a id="__codelineno-104-1" name="__codelineno-104-1" href="#__codelineno-104-1"></a><span class="nx">crearStack</span><span class="p">()</span>
+</span></code></pre></div>
+<p>usa:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-105-1"><a id="__codelineno-105-1" name="__codelineno-105-1" href="#__codelineno-105-1"></a>var(--s1)
+</span></code></pre></div>
+<p>mientras que:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-106-1"><a id="__codelineno-106-1" name="__codelineno-106-1" href="#__codelineno-106-1"></a><span class="nx">crearStack</span><span class="p">(</span><span class="s2">&quot;var(--s3)&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>usa:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-107-1"><a id="__codelineno-107-1" name="__codelineno-107-1" href="#__codelineno-107-1"></a>var(--s3)
+</span></code></pre></div>
+<p>Las props son simplemente los parámetros con los que configuras una instancia particular del componente sin modificar el componente en sí.</p>
+<p>Y precisamente por eso Every Layout puede tener un solo <code>&lt;stack-l&gt;</code> y cientos de configuraciones diferentes:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-108-1"><a id="__codelineno-108-1" name="__codelineno-108-1" href="#__codelineno-108-1"></a><span class="p">&lt;</span><span class="nt">stack-l</span><span class="p">&gt;</span>
+</span><span id="__span-108-2"><a id="__codelineno-108-2" name="__codelineno-108-2" href="#__codelineno-108-2"></a><span class="p">&lt;</span><span class="nt">stack-l</span> <span class="na">space</span><span class="o">=</span><span class="s">&quot;var(--s2)&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-108-3"><a id="__codelineno-108-3" name="__codelineno-108-3" href="#__codelineno-108-3"></a><span class="p">&lt;</span><span class="nt">stack-l</span> <span class="na">space</span><span class="o">=</span><span class="s">&quot;var(--s4)&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>todos usando la misma lógica interna.</p>
+</details>
+<h2 id="evitando-shadow-dom">⚠ Evitando Shadow DOM<a class="headerlink" href="#evitando-shadow-dom" title="Permanent link">&para;</a></h2>
 <p>Los custom elements utilizados para implementar los layouts de <em>Every Layout</em> no usan Shadow DOM porque están diseñados para aprovechar más plenamente los estilos 'globales'. Consulta <em>Global and local styling</em> para más información.</p>
 <p>No usar Shadow DOM también facilita el renderizado del lado del servidor de los estilos incrustados. El estilo de <em>cualquier</em> layout inicial de <em>Every Layout</em> se incrusta en el documento como parte del proceso de construcción, lo que significa que los custom elements no dependen de JavaScript, <em>excepto</em> para el procesamiento dinámico de sus valores en herramientas de desarrollo, o a través de tu propio scripting personalizado.</p>
-<h3 id="imponiendo-consistencia">Imponiendo consistencia<a class="headerlink" href="#imponiendo-consistencia" title="Permanent link">&para;</a></h3>
+<h2 id="imponiendo-consistencia">Imponiendo consistencia<a class="headerlink" href="#imponiendo-consistencia" title="Permanent link">&para;</a></h2>
 <p>Esta prop <code>padding</code> es actualmente permisiva; el autor puede proporcionar una custom property, o un valor de longitud simple como <code>1.25rem</code>. Si quisiéramos imponer el uso de nuestra escala modular, aceptaríamos solo números (<code>2</code>, <code>3</code>, <code>-1</code>) y los interpolaríamos así: <code>var(--${this.padding})</code>.</p>
-<p>Podríamos verificar que se está pasando un valor numérico usando <code>isNaN()</code>. El doble "!!" es porque primero debemos realizar <em>type coercion</em> ↗, convirtiendo un potencial "1" o "2" en <code>1</code> o <code>2</code>.</p>
-<div class="language-js highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!!</span><span class="nb">isNaN</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">padding</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;&lt;my-component&gt; el valor de padding debe ser un número que represente un punto en la escala modular&#39;</span><span class="p">);</span>
-</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="k">return</span><span class="p">;</span>
-</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="p">}</span>
+<p>Podríamos verificar que se está pasando un valor numérico usando <code>isNaN()</code>. El doble "!!" es porque primero debemos realizar <a href="https://developer.mozilla.org/en-US/docs/Glossary/Type_coercion"><em>type coercion</em> ↗</a>, convirtiendo un potencial "1" o "2" en <code>1</code> o <code>2</code>.</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-109-1"><a id="__codelineno-109-1" name="__codelineno-109-1" href="#__codelineno-109-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!!</span><span class="nb">isNaN</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">padding</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-109-2"><a id="__codelineno-109-2" name="__codelineno-109-2" href="#__codelineno-109-2"></a><span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;&lt;my-component&gt; el valor de padding debe ser un número que represente un punto en la escala modular&#39;</span><span class="p">);</span>
+</span><span id="__span-109-3"><a id="__codelineno-109-3" name="__codelineno-109-3" href="#__codelineno-109-3"></a><span class="w">  </span><span class="k">return</span><span class="p">;</span>
+</span><span id="__span-109-4"><a id="__codelineno-109-4" name="__codelineno-109-4" href="#__codelineno-109-4"></a><span class="p">}</span>
 </span></code></pre></div>
 <p>La escala modular se basa en un único número, en este caso <code>1.5</code>. A través de la extrapolación — como multiplicador y divisor — la presencia del número se puede sentir en todo el diseño visual. El diseño consistente y equilibrado se siembra a partir de axiomas simples como la relación de la escala modular.</p>
-<p>Algunos creen que la relación específica utilizada para la escala modular es importante, y muchos se adhieren a la <em>proporción áurea</em> ↗ de <code>1.61803398875</code>. Pero es en la adherencia estricta a la relación <em>que elijas</em> donde se crea la armonía.</p>
+<p>Algunos creen que la relación específica utilizada para la escala modular es importante, y muchos se adhieren a la <a href="https://en.wikipedia.org/wiki/Golden_ratio"><em>proporción áurea</em> ↗</a> de <code>1.61803398875</code>. Pero es en la adherencia estricta a la relación <em>que elijas</em> donde se crea la armonía.</p>
+<details class="info">
+<summary>Explicacion</summary>
+<p>Este apartado está hablando de algo muy importante en diseño de componentes: <strong>cómo evitar que los usuarios rompan el sistema de diseño</strong>.</p>
+<p>Hasta ahora, supongamos que tu componente es así:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-110-1"><a id="__codelineno-110-1" name="__codelineno-110-1" href="#__codelineno-110-1"></a><span class="p">&lt;</span><span class="nt">my-element</span> <span class="na">padding</span><span class="o">=</span><span class="s">&quot;var(--s3)&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>o incluso:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-111-1"><a id="__codelineno-111-1" name="__codelineno-111-1" href="#__codelineno-111-1"></a><span class="p">&lt;</span><span class="nt">my-element</span> <span class="na">padding</span><span class="o">=</span><span class="s">&quot;1.25rem&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>y tu getter:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-112-1"><a id="__codelineno-112-1" name="__codelineno-112-1" href="#__codelineno-112-1"></a><span class="nx">get</span><span class="w"> </span><span class="nx">padding</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-112-2"><a id="__codelineno-112-2" name="__codelineno-112-2" href="#__codelineno-112-2"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s1">&#39;padding&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;var(--s1)&#39;</span><span class="p">;</span>
+</span><span id="__span-112-3"><a id="__codelineno-112-3" name="__codelineno-112-3" href="#__codelineno-112-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>es muy permisivo, porque acepta:</p>
+<ul>
+<li><code>"var(--s3)"</code></li>
+<li><code>"1rem"</code></li>
+<li><code>"25px"</code></li>
+<li><code>"banana"</code> 😆</li>
+<li><code>"123abc"</code></li>
+</ul>
+<p>En otras palabras, cualquiera puede poner cualquier cosa.</p>
+<hr />
+<h2 id="que-propone-el-autor">¿Qué propone el autor?<a class="headerlink" href="#que-propone-el-autor" title="Permanent link">&para;</a></h2>
+<p>Que en vez de permitir cualquier valor, el usuario solo pueda escribir:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-113-1"><a id="__codelineno-113-1" name="__codelineno-113-1" href="#__codelineno-113-1"></a><span class="p">&lt;</span><span class="nt">my-element</span> <span class="na">padding</span><span class="o">=</span><span class="s">&quot;3&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>o:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-114-1"><a id="__codelineno-114-1" name="__codelineno-114-1" href="#__codelineno-114-1"></a><span class="p">&lt;</span><span class="nt">my-element</span> <span class="na">padding</span><span class="o">=</span><span class="s">&quot;-1&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>es decir, <strong>el índice del punto de la escala</strong>.</p>
+<p>Luego, dentro del componente, tú construyes la variable CSS:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-115-1"><a id="__codelineno-115-1" name="__codelineno-115-1" href="#__codelineno-115-1"></a><span class="kd">var</span><span class="p">(</span><span class="o">--</span><span class="nx">s3</span><span class="p">)</span>
+</span></code></pre></div>
+<p>o</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-116-1"><a id="__codelineno-116-1" name="__codelineno-116-1" href="#__codelineno-116-1"></a><span class="kd">var</span><span class="p">(</span><span class="o">--</span><span class="nx">s</span><span class="o">-</span><span class="mf">1</span><span class="p">)</span>
+</span></code></pre></div>
+<p>haciendo:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-117-1"><a id="__codelineno-117-1" name="__codelineno-117-1" href="#__codelineno-117-1"></a><span class="kd">var</span><span class="p">(</span><span class="o">--</span><span class="nx">s$</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">padding</span><span class="p">})</span>
+</span></code></pre></div>
+<p>Por ejemplo:</p>
+<p>Si:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-118-1"><a id="__codelineno-118-1" name="__codelineno-118-1" href="#__codelineno-118-1"></a><span class="p">&lt;</span><span class="nt">my-element</span> <span class="na">padding</span><span class="o">=</span><span class="s">&quot;3&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>entonces:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-119-1"><a id="__codelineno-119-1" name="__codelineno-119-1" href="#__codelineno-119-1"></a><span class="k">this</span><span class="p">.</span><span class="nx">padding</span>
+</span></code></pre></div>
+<p>vale:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-120-1"><a id="__codelineno-120-1" name="__codelineno-120-1" href="#__codelineno-120-1"></a><span class="s2">&quot;3&quot;</span>
+</span></code></pre></div>
+<p>y puedes generar:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-121-1"><a id="__codelineno-121-1" name="__codelineno-121-1" href="#__codelineno-121-1"></a><span class="kd">var</span><span class="p">(</span><span class="o">--</span><span class="nx">s3</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Si:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-122-1"><a id="__codelineno-122-1" name="__codelineno-122-1" href="#__codelineno-122-1"></a><span class="p">&lt;</span><span class="nt">my-element</span> <span class="na">padding</span><span class="o">=</span><span class="s">&quot;-1&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>obtienes:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-123-1"><a id="__codelineno-123-1" name="__codelineno-123-1" href="#__codelineno-123-1"></a><span class="kd">var</span><span class="p">(</span><span class="o">--</span><span class="nx">s</span><span class="o">-</span><span class="mf">1</span><span class="p">)</span>
+</span></code></pre></div>
+<hr />
+<h1 id="por-que-hacer-esto">¿Por qué hacer esto?<a class="headerlink" href="#por-que-hacer-esto" title="Permanent link">&para;</a></h1>
+<p>Porque así nadie puede hacer:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-124-1"><a id="__codelineno-124-1" name="__codelineno-124-1" href="#__codelineno-124-1"></a><span class="p">&lt;</span><span class="nt">my-element</span> <span class="na">padding</span><span class="o">=</span><span class="s">&quot;17px&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>y romper la armonía del sistema.</p>
+<p>Todos los espacios provendrán de la escala modular.</p>
+<hr />
+<h1 id="que-hace-esto">¿Qué hace esto?<a class="headerlink" href="#que-hace-esto" title="Permanent link">&para;</a></h1>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-125-1"><a id="__codelineno-125-1" name="__codelineno-125-1" href="#__codelineno-125-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!!</span><span class="nb">isNaN</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">padding</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-125-2"><a id="__codelineno-125-2" name="__codelineno-125-2" href="#__codelineno-125-2"></a><span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span>
+</span><span id="__span-125-3"><a id="__codelineno-125-3" name="__codelineno-125-3" href="#__codelineno-125-3"></a><span class="w">        </span><span class="s1">&#39;&lt;my-component&gt; el valor de padding debe ser un número&#39;</span>
+</span><span id="__span-125-4"><a id="__codelineno-125-4" name="__codelineno-125-4" href="#__codelineno-125-4"></a><span class="w">    </span><span class="p">);</span>
+</span><span id="__span-125-5"><a id="__codelineno-125-5" name="__codelineno-125-5" href="#__codelineno-125-5"></a><span class="w">    </span><span class="k">return</span><span class="p">;</span>
+</span><span id="__span-125-6"><a id="__codelineno-125-6" name="__codelineno-125-6" href="#__codelineno-125-6"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="isnan"><code>isNaN()</code><a class="headerlink" href="#isnan" title="Permanent link">&para;</a></h2>
+<p>significa:</p>
+<blockquote>
+<p>"¿Esto no es un número?"</p>
+</blockquote>
+<p>Por ejemplo:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-126-1"><a id="__codelineno-126-1" name="__codelineno-126-1" href="#__codelineno-126-1"></a><span class="nb">isNaN</span><span class="p">(</span><span class="s2">&quot;3&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>devuelve:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-127-1"><a id="__codelineno-127-1" name="__codelineno-127-1" href="#__codelineno-127-1"></a><span class="kc">false</span>
+</span></code></pre></div>
+<p>porque <code>"3"</code> puede convertirse en el número <code>3</code>.</p>
+<hr />
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-128-1"><a id="__codelineno-128-1" name="__codelineno-128-1" href="#__codelineno-128-1"></a><span class="nb">isNaN</span><span class="p">(</span><span class="s2">&quot;hola&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>devuelve:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-129-1"><a id="__codelineno-129-1" name="__codelineno-129-1" href="#__codelineno-129-1"></a><span class="kc">true</span>
+</span></code></pre></div>
+<p>porque <code>"hola"</code> no puede convertirse en un número.</p>
+<hr />
+<h3 id="entonces">Entonces:<a class="headerlink" href="#entonces" title="Permanent link">&para;</a></h3>
+<p>Si alguien hace:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-130-1"><a id="__codelineno-130-1" name="__codelineno-130-1" href="#__codelineno-130-1"></a><span class="p">&lt;</span><span class="nt">my-element</span> <span class="na">padding</span><span class="o">=</span><span class="s">&quot;hola&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>el componente mostrará:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-131-1"><a id="__codelineno-131-1" name="__codelineno-131-1" href="#__codelineno-131-1"></a>&lt;my-component&gt; el valor de padding debe ser un número que represente un punto en la escala modular
+</span></code></pre></div>
+<hr />
+<h1 id="y-por-que-el-doble">¿Y por qué el doble <code>!!</code>?<a class="headerlink" href="#y-por-que-el-doble" title="Permanent link">&para;</a></h1>
+<p>La verdad es que aquí el autor está siendo un poco rebuscado.</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-132-1"><a id="__codelineno-132-1" name="__codelineno-132-1" href="#__codelineno-132-1"></a><span class="o">!!</span><span class="nb">isNaN</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">padding</span><span class="p">)</span>
+</span></code></pre></div>
+<p>simplemente fuerza el resultado a un booleano:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-133-1"><a id="__codelineno-133-1" name="__codelineno-133-1" href="#__codelineno-133-1"></a><span class="kc">true</span>
+</span></code></pre></div>
+<p>o</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-134-1"><a id="__codelineno-134-1" name="__codelineno-134-1" href="#__codelineno-134-1"></a><span class="kc">false</span>
+</span></code></pre></div>
+<p>Pero realmente podrías escribir:</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-135-1"><a id="__codelineno-135-1" name="__codelineno-135-1" href="#__codelineno-135-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">isNaN</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">padding</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-135-2"><a id="__codelineno-135-2" name="__codelineno-135-2" href="#__codelineno-135-2"></a><span class="w">    </span><span class="p">...</span>
+</span><span id="__span-135-3"><a id="__codelineno-135-3" name="__codelineno-135-3" href="#__codelineno-135-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>y funcionaría igual.</p>
+<hr />
+<h1 id="la-idea-filosofica">La idea filosófica<a class="headerlink" href="#la-idea-filosofica" title="Permanent link">&para;</a></h1>
+<p>Imagina que tu sistema tiene:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-136-1"><a id="__codelineno-136-1" name="__codelineno-136-1" href="#__codelineno-136-1"></a>s-2
+</span><span id="__span-136-2"><a id="__codelineno-136-2" name="__codelineno-136-2" href="#__codelineno-136-2"></a>s-1
+</span><span id="__span-136-3"><a id="__codelineno-136-3" name="__codelineno-136-3" href="#__codelineno-136-3"></a>s0
+</span><span id="__span-136-4"><a id="__codelineno-136-4" name="__codelineno-136-4" href="#__codelineno-136-4"></a>s1
+</span><span id="__span-136-5"><a id="__codelineno-136-5" name="__codelineno-136-5" href="#__codelineno-136-5"></a>s2
+</span><span id="__span-136-6"><a id="__codelineno-136-6" name="__codelineno-136-6" href="#__codelineno-136-6"></a>s3
+</span></code></pre></div>
+<p>y alguien escribe:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-137-1"><a id="__codelineno-137-1" name="__codelineno-137-1" href="#__codelineno-137-1"></a><span class="p">&lt;</span><span class="nt">my-element</span> <span class="na">padding</span><span class="o">=</span><span class="s">&quot;2&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>Tú sabes inmediatamente que eso significa:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-138-1"><a id="__codelineno-138-1" name="__codelineno-138-1" href="#__codelineno-138-1"></a><span class="nt">padding</span><span class="o">:</span><span class="w"> </span><span class="nt">var</span><span class="o">(</span><span class="nt">--s2</span><span class="o">);</span>
+</span></code></pre></div>
+<p>Nadie puede poner:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-139-1"><a id="__codelineno-139-1" name="__codelineno-139-1" href="#__codelineno-139-1"></a>padding=&quot;13px&quot;
+</span><span id="__span-139-2"><a id="__codelineno-139-2" name="__codelineno-139-2" href="#__codelineno-139-2"></a>padding=&quot;1.73rem&quot;
+</span><span id="__span-139-3"><a id="__codelineno-139-3" name="__codelineno-139-3" href="#__codelineno-139-3"></a>padding=&quot;42px&quot;
+</span></code></pre></div>
+<p>porque esos valores romperían la coherencia del diseño.</p>
+<hr />
+<h1 id="lo-mas-importante-del-apartado">Lo más importante del apartado<a class="headerlink" href="#lo-mas-importante-del-apartado" title="Permanent link">&para;</a></h1>
+<p>No es la proporción áurea ni el <code>1.5</code>.</p>
+<p>El mensaje principal es:</p>
+<blockquote>
+<p><strong>La armonía no proviene del número mágico que elijas, sino de usarlo consistentemente.</strong></p>
+</blockquote>
+<p>Puedes escoger:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-140-1"><a id="__codelineno-140-1" name="__codelineno-140-1" href="#__codelineno-140-1"></a>1.2
+</span><span id="__span-140-2"><a id="__codelineno-140-2" name="__codelineno-140-2" href="#__codelineno-140-2"></a>1.333
+</span><span id="__span-140-3"><a id="__codelineno-140-3" name="__codelineno-140-3" href="#__codelineno-140-3"></a>1.5
+</span><span id="__span-140-4"><a id="__codelineno-140-4" name="__codelineno-140-4" href="#__codelineno-140-4"></a>1.618
+</span></code></pre></div>
+<p>y todos producirán sistemas armoniosos.</p>
+<p>Lo que destruye la armonía es hacer:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-141-1"><a id="__codelineno-141-1" name="__codelineno-141-1" href="#__codelineno-141-1"></a>1rem
+</span><span id="__span-141-2"><a id="__codelineno-141-2" name="__codelineno-141-2" href="#__codelineno-141-2"></a>2.25rem
+</span><span id="__span-141-3"><a id="__codelineno-141-3" name="__codelineno-141-3" href="#__codelineno-141-3"></a>17px
+</span><span id="__span-141-4"><a id="__codelineno-141-4" name="__codelineno-141-4" href="#__codelineno-141-4"></a>31px
+</span><span id="__span-141-5"><a id="__codelineno-141-5" name="__codelineno-141-5" href="#__codelineno-141-5"></a>0.93rem
+</span><span id="__span-141-6"><a id="__codelineno-141-6" name="__codelineno-141-6" href="#__codelineno-141-6"></a>42px
+</span></code></pre></div>
+<p>sin una relación clara entre ellos.</p>
+<p>Por eso Every Layout prefiere restringir a los usuarios a los índices:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-142-1"><a id="__codelineno-142-1" name="__codelineno-142-1" href="#__codelineno-142-1"></a>-2, -1, 0, 1, 2, 3...
+</span></code></pre></div>
+<p>y que el propio componente traduzca esos números a:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-143-1"><a id="__codelineno-143-1" name="__codelineno-143-1" href="#__codelineno-143-1"></a>var(--s-2)
+</span><span id="__span-143-2"><a id="__codelineno-143-2" name="__codelineno-143-2" href="#__codelineno-143-2"></a>var(--s-1)
+</span><span id="__span-143-3"><a id="__codelineno-143-3" name="__codelineno-143-3" href="#__codelineno-143-3"></a>var(--s0)
+</span><span id="__span-143-4"><a id="__codelineno-143-4" name="__codelineno-143-4" href="#__codelineno-143-4"></a>var(--s1)
+</span><span id="__span-143-5"><a id="__codelineno-143-5" name="__codelineno-143-5" href="#__codelineno-143-5"></a>var(--s2)
+</span><span id="__span-143-6"><a id="__codelineno-143-6" name="__codelineno-143-6" href="#__codelineno-143-6"></a>var(--s3)
+</span></code></pre></div>
+<p>manteniendo así la coherencia y la armonía visual del sistema.</p>
+</details>
 
 
 
