@@ -615,10 +615,9 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Valores por defecto globales">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
+</li>
+      
+        <li class="md-nav__item">
   <a href="#estilo-basado-en-excepciones" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -626,11 +625,6 @@
       </span>
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1209,10 +1203,9 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Valores por defecto globales">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
+</li>
+      
+        <li class="md-nav__item">
   <a href="#estilo-basado-en-excepciones" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -1220,11 +1213,6 @@
       </span>
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1334,15 +1322,168 @@
 
 
 <h1 id="axiomas">Axiomas<a class="headerlink" href="#axiomas" title="Permanent link">&para;</a></h1>
-<p>Como <em>el matemático Euclides era consciente</em> ↗, incluso las geometrías más complejas se fundamentan en axiomas (o <em>postulados</em>) simples e irreducibles. A menos que tu diseño se base en axiomas, tu resultado será inconsistente y malformado. El tema de esta sección es cómo honrar un sistema de axiomas de diseño en todo el sistema, usando la <em>medida tipográfica</em> como ejemplo.</p>
+<p>Como <a href="https://mathworld.wolfram.com/EuclidsPostulates.html"><em>el matemático Euclides era consciente</em> ↗</a>, incluso las geometrías más complejas se fundamentan en axiomas (o <em>postulados</em>) simples e irreducibles. A menos que tu diseño se base en axiomas, tu resultado será inconsistente y malformado. El tema de esta sección es cómo honrar un sistema de axiomas de diseño en todo el sistema, usando la <em>medida tipográfica</em> como ejemplo.</p>
+<details class="info">
+<summary>Explicacion</summary>
+<p>Este fragmento está usando una analogía con las matemáticas y la geometría de Euclides.</p>
+<p>La idea es la siguiente:</p>
+<ul>
+<li>En geometría, todo se construye a partir de unas pocas reglas básicas llamadas <strong>axiomas</strong> o <strong>postulados</strong>. Estas reglas no se demuestran; simplemente se aceptan y sirven como base para todo lo demás.</li>
+</ul>
+<p>Por ejemplo, si cambias una regla básica, toda la geometría cambia.</p>
+<p>El texto dice que <strong>el diseño de interfaces debería funcionar igual</strong>. Es decir, en lugar de elegir tamaños, espacios y medidas de forma arbitraria, deberías definir unas pocas reglas fundamentales y construir todo a partir de ellas.</p>
+<p><strong>Ejemplo con la tipografía</strong></p>
+<p>Supongamos que decides:</p>
+<ul>
+<li>Tamaño base del texto: <code>1rem</code> (16 px).</li>
+<li>Escala tipográfica: multiplicar por <code>1.25</code>.</li>
+</ul>
+<p>Esos serían tus "axiomas".</p>
+<p>Entonces:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">--size-0</span><span class="o">:</span><span class="w"> </span><span class="nt">1rem</span><span class="o">;</span><span class="w">      </span><span class="c">/* 16px */</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">--size-1</span><span class="o">:</span><span class="w"> </span><span class="nt">1</span><span class="p">.</span><span class="nc">25rem</span><span class="o">;</span><span class="w">   </span><span class="c">/* 20px */</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">--size-2</span><span class="o">:</span><span class="w"> </span><span class="nt">1</span><span class="p">.</span><span class="nc">56rem</span><span class="o">;</span><span class="w">   </span><span class="c">/* 25px */</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nt">--size-3</span><span class="o">:</span><span class="w"> </span><span class="nt">1</span><span class="p">.</span><span class="nc">95rem</span><span class="o">;</span><span class="w">   </span><span class="c">/* 31px */</span>
+</span></code></pre></div>
+<p>Y todo el sistema se construye con esas medidas:</p>
+<ul>
+<li>Títulos.</li>
+<li>Márgenes.</li>
+<li>Espaciados.</li>
+<li>Padding.</li>
+<li>Componentes.</li>
+</ul>
+<p>De esta manera, todas las partes del diseño mantienen una relación coherente entre sí.</p>
+<p><strong>¿Qué ocurre si no tienes axiomas?</strong></p>
+<p>Empiezas a poner valores al azar:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">font-size</span><span class="o">:</span><span class="w"> </span><span class="nt">19px</span><span class="o">;</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nt">padding</span><span class="o">:</span><span class="w"> </span><span class="nt">13px</span><span class="o">;</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nt">margin</span><span class="o">:</span><span class="w"> </span><span class="nt">27px</span><span class="o">;</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nt">gap</span><span class="o">:</span><span class="w"> </span><span class="nt">22px</span><span class="o">;</span>
+</span></code></pre></div>
+<p>Cada componente termina teniendo proporciones distintas y el diseño se siente inconsistente. A eso se refiere con:</p>
+<blockquote>
+<p>"tu resultado será inconsistente y malformado".</p>
+</blockquote>
+<p><strong>En resumen</strong></p>
+<p>El autor está diciendo:</p>
+<blockquote>
+<p><strong>Antes de construir componentes, define unas pocas reglas fundamentales (axiomas) para tamaños, espaciados, colores, etc. Luego deriva todo lo demás a partir de esas reglas.</strong></p>
+</blockquote>
+<p>Así como toda la geometría de Euclides surge de unos pocos postulados, un sistema de diseño sólido surge de unas pocas decisiones fundamentales.</p>
+</details>
 <h2 id="medida-measure">Medida (<em>measure</em>)<a class="headerlink" href="#medida-measure" title="Permanent link">&para;</a></h2>
-<p>El ancho de una línea de texto, en caracteres, se conoce como su <em>medida</em> (<em>measure</em>). Elegir una medida es crítico para el escaneo cómodo de líneas sucesivas. <em>The Elements Of Typographic Style</em> ↗ considera que cualquier valor entre 45 y 75 es razonable.</p>
-<p>Establecer una medida para medios impresos es relativamente sencillo. Es simplemente el ancho del artefacto de papel dividido por el número de columnas de texto colocadas dentro de él — menos los <em>márgenes y canalones (gutters)</em> ↗, por supuesto.</p>
+<p>El ancho de una línea de texto, en caracteres, se conoce como su <a href="https://en.wikipedia.org/wiki/Line_length"><em>medida</em></a> (<em>measure</em>). Elegir una medida es crítico para el escaneo cómodo de líneas sucesivas. <a href="https://webtypography.net/2.1.2"><em>The Elements Of Typographic Style</em> ↗</a> considera que cualquier valor entre 45 y 75 es razonable.</p>
+<p>Establecer una medida para medios impresos es relativamente sencillo. Es simplemente el ancho del artefacto de papel dividido por el número de columnas de texto colocadas dentro de él — menos los <a href="https://en.wikipedia.org/wiki/Column_(typography)"><em>márgenes y canalones (gutters)</em> ↗</a>, por supuesto.</p>
 <p><img alt="" src="../mesure.png" /></p>
 <p>La web no es estática o predecible como la impresión. Cada palabra está separada por un <em>espacio de ruptura (breaking space)</em> (unicode point U+0020 ↗), liberando secuencias de texto para que se ajusten dinámicamente según el espacio disponible. La cantidad de espacio disponible está determinada por una serie de factores interrelacionados que incluyen el tamaño y la orientación del dispositivo, el tamaño del texto y el nivel de zoom.</p>
-<p>Como diseñadores, buscamos controlar la experiencia de los usuarios. Pero, como John Allsopp escribió en <em>The Dao Of Web Design</em> ↗ del año 2000, intentar el control <em>directo</em> sobre la forma en que los usuarios consumen contenido en la web es temerario. Imponer una medida específica significaría establecer un ancho fijo. Muchos usuarios experimentarían desplazamiento horizontal y funcionalidad de zoom rota.</p>
+<p>Como diseñadores, buscamos controlar la experiencia de los usuarios. Pero, como John Allsopp escribió en <a href="https://alistapart.com/article/dao/"><em>The Dao Of Web Design</em> ↗</a> del año 2000, intentar el control <em>directo</em> sobre la forma en que los usuarios consumen contenido en la web es temerario. Imponer una medida específica significaría establecer un ancho fijo. Muchos usuarios experimentarían desplazamiento horizontal y funcionalidad de zoom rota.</p>
 <p><img alt="" src="../cellpage.png" /></p>
 <p>Para diseñar "páginas adaptables" (término de Allsopp), debemos ceder el control a los algoritmos (como el ajuste de texto) que los navegadores usan para maquetar páginas web automáticamente. Pero eso no significa que no haya lugar para el layout. Piensa en ti mismo como el <em>mentor</em> del navegador, en lugar de su <em>microgestor</em>.</p>
+<details class="info">
+<summary>Explicacion</summary>
+<p>Este texto habla de uno de los principios más importantes de la tipografía y del diseño web: la <strong>medida</strong> (<em>measure</em>), es decir, <strong>cuántos caracteres tiene una línea de texto</strong>.</p>
+<p><strong>1. ¿Qué es la medida?</strong></p>
+<p>La medida es simplemente la longitud de una línea de texto.</p>
+<p>Por ejemplo:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Esta línea es demasiado corta.
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Esta línea tiene una longitud razonable y resulta cómoda para leer porque el ojo puede pasar fácilmente a la siguiente línea sin perderse.
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Esta línea es exageradamente larga y el lector tiene que recorrer una gran distancia con la vista para encontrar el comienzo de la siguiente línea, lo que vuelve la lectura cansada y lenta.
+</span></code></pre></div>
+<p>Según el libro <em>The Elements of Typographic Style</em>, una longitud de <strong>45 a 75 caracteres por línea</strong> suele ser la más cómoda para leer.</p>
+<hr />
+<p><strong>2. En papel es fácil controlar esto</strong></p>
+<p>Si diseñas una revista o un libro, sabes exactamente:</p>
+<ul>
+<li>el tamaño de la hoja;</li>
+<li>los márgenes;</li>
+<li>cuántas columnas habrá.</li>
+</ul>
+<p>Por eso puedes controlar perfectamente la longitud de las líneas.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>----------------------------------
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>| margen | columna | margen      |
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>|         | texto   |             |
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>|         | texto   |             |
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>----------------------------------
+</span></code></pre></div>
+<hr />
+<p><strong>3. En la web todo cambia constantemente</strong></p>
+<p>En cambio, una página web puede verse en:</p>
+<ul>
+<li>un teléfono;</li>
+<li>una tablet;</li>
+<li>un monitor de 27";</li>
+<li>con el navegador ampliado al 200%;</li>
+<li>con distintos tamaños de letra.</li>
+</ul>
+<p>Además, los navegadores van moviendo automáticamente las palabras a la siguiente línea gracias a los espacios entre ellas.</p>
+<p>Por ejemplo:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>Lorem ipsum dolor sit amet consectetur adipisicing elit...
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>En una pantalla ancha podría verse así:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Lorem ipsum dolor sit amet consectetur adipisicing elit,
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>sed do eiusmod tempor incididunt ut labore.
+</span></code></pre></div>
+<p>Y en una pantalla pequeña:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Lorem ipsum dolor sit
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>amet consectetur
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>adipisicing elit,
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>sed do eiusmod tempor
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>incididunt ut labore.
+</span></code></pre></div>
+<p>El navegador decide dónde romper las líneas.</p>
+<hr />
+<p><strong>4. No debemos intentar controlar todo</strong></p>
+<p>El autor menciona a John Allsopp, quien decía que tratar de controlar exactamente cómo verá el usuario una página es una batalla perdida.</p>
+<p>Sería un error decir:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nt">width</span><span class="o">:</span><span class="w"> </span><span class="nt">600px</span><span class="o">;</span>
+</span></code></pre></div>
+<p>porque en un teléfono de 360 px aparecería una barra de desplazamiento horizontal.</p>
+<p>El usuario tendría que hacer esto:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>←────────────→
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>desplazarse lateralmente
+</span></code></pre></div>
+<p>y además el zoom podría comportarse mal.</p>
+<hr />
+<p><strong>5. En vez de microgestionar, debemos guiar al navegador</strong></p>
+<p>Esta es la idea más profunda del texto.</p>
+<p>No eres un "dictador" del layout, sino una especie de <strong>mentor del navegador</strong>.</p>
+<p>En vez de imponer:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nt">width</span><span class="o">:</span><span class="w"> </span><span class="nt">600px</span><span class="o">;</span>
+</span></code></pre></div>
+<p>le das límites razonables:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="p">.</span><span class="nc">article</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">    </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="mi">65</span><span class="kt">ch</span><span class="p">;</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p><code>ch</code> representa aproximadamente el ancho de un carácter.</p>
+<p>Así, el navegador intentará mantener unas 65 letras por línea:</p>
+<ul>
+<li>En pantallas grandes, la línea no será excesivamente larga.</li>
+<li>En pantallas pequeñas, el ancho se reducirá automáticamente.</li>
+<li>El zoom seguirá funcionando.</li>
+<li>El texto continuará siendo legible.</li>
+</ul>
+<hr />
+<p><strong>La idea principal de todo el párrafo</strong></p>
+<p>En diseño web no debes pensar:</p>
+<blockquote>
+<p>«Yo voy a decidir exactamente dónde termina cada línea».</p>
+</blockquote>
+<p>Sino:</p>
+<blockquote>
+<p>«Voy a establecer reglas y dejar que el navegador haga el trabajo».</p>
+</blockquote>
+<p>Por eso el autor dice:</p>
+<blockquote>
+<p><strong>Piensa en ti mismo como el mentor del navegador, y no como su microgestor.</strong></p>
+</blockquote>
+<p>Es una filosofía muy importante del diseño web moderno: <strong>cooperar con los algoritmos del navegador en lugar de luchar contra ellos</strong>.</p>
+</details>
 <h2 id="el-axioma-de-la-medida">El axioma de la medida<a class="headerlink" href="#el-axioma-de-la-medida" title="Permanent link">&para;</a></h2>
 <p>Es una buena práctica intentar enunciar un axioma de diseño en una frase u oración corta. En este caso, esa declaración podría ser: <em>"la medida nunca debería exceder 60ch"</em>.</p>
 <p>¿La medida de <em>qué</em>? ¿Y <em>dónde</em>? No hay razón por la que <em>ninguna</em> línea de texto deba volverse demasiado larga. Este axioma, como todos los axiomas, debería impregnar el diseño sin calificaciones ni excepciones. La verdadera pregunta es: ¿cómo? En <em>Global and local styling</em> establecimos tres niveles principales de estilo:</p>
@@ -1352,19 +1493,366 @@
 <li>Clases de utilidad</li>
 </ol>
 <p>El axioma de la medida debería sembrarse tan pervasiveamente como sea posible en los estilos universales, pero también estar disponible para las primitivas de layout (ver <em>Composición</em>) y las clases de utilidad. Pero primero, ¿qué propiedad y qué valor deberían inscribir la regla?</p>
+<details class="info">
+<summary>Explicacion</summary>
+<p><strong>1. El axioma</strong></p>
+<p>El autor propone esta frase:</p>
+<blockquote>
+<p><strong>"La medida nunca debería exceder 60ch".</strong></p>
+</blockquote>
+<p>Es decir:</p>
+<blockquote>
+<p>Ninguna línea de texto debería ser demasiado larga.</p>
+</blockquote>
+<p>La idea es expresarla en una frase corta, igual que un principio fundamental.</p>
+<p>Por ejemplo:</p>
+<ul>
+<li>"Los colores deben provenir de la paleta."</li>
+<li>"Los espacios deben seguir la escala modular."</li>
+<li>"La medida nunca debe exceder 60ch."</li>
+</ul>
+<p>Estas frases son los <strong>axiomas del sistema de diseño</strong>.</p>
+<hr />
+<p><strong>2. ¿La medida de qué?</strong></p>
+<p>El autor se hace dos preguntas:</p>
+<blockquote>
+<p>¿La medida de qué?</p>
+<p>¿Y dónde?</p>
+</blockquote>
+<p>Porque podrías pensar:</p>
+<ul>
+<li>¿Solo los párrafos?</li>
+<li>¿Solo los artículos?</li>
+<li>¿Solo en escritorio?</li>
+</ul>
+<p>Y la respuesta es:</p>
+<blockquote>
+<p><strong>De cualquier línea de texto y en cualquier parte.</strong></p>
+</blockquote>
+<p>No existe ninguna razón para que un texto se vuelva excesivamente largo.</p>
+<p>Por eso dice:</p>
+<blockquote>
+<p>Este axioma debería impregnar el diseño sin excepciones.</p>
+</blockquote>
+<p>Es decir, la regla debería estar presente en todo el sistema.</p>
+<hr />
+<p><strong>3. ¿Qué significa "impregnar"?</strong></p>
+<p>Imagina que una empresa tiene una cultura de puntualidad.</p>
+<p>No basta con poner un cartel:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>Sea puntual
+</span></code></pre></div>
+<p>La puntualidad debe reflejarse en:</p>
+<ul>
+<li>los horarios;</li>
+<li>las reuniones;</li>
+<li>los procesos;</li>
+<li>las políticas.</li>
+</ul>
+<p>Toda la organización está "impregnada" de esa idea.</p>
+<p>Con el diseño sucede igual.</p>
+<p>La regla:</p>
+<blockquote>
+<p>"La medida nunca debe superar 60ch"</p>
+</blockquote>
+<p>debería aparecer en todos los niveles del sistema.</p>
+<hr />
+<p><strong>4. Los tres niveles de estilo</strong></p>
+<p>El autor recuerda que anteriormente definió tres niveles:</p>
+<p><strong>Estilos universales</strong></p>
+<p>Son los estilos globales.</p>
+<p>Por ejemplo:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nt">body</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">    </span><span class="k">font-family</span><span class="p">:</span><span class="w"> </span><span class="kc">sans-serif</span><span class="p">;</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>o</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nt">p</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span><span class="k">line-height</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5</span><span class="p">;</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Estos afectan a todo el documento.</p>
+<hr />
+<p><strong>Primitivas de layout</strong></p>
+<p>Son componentes básicos reutilizables.</p>
+<p>Por ejemplo:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="p">.</span><span class="nc">stack</span><span class="w"> </span><span class="p">{}</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="p">.</span><span class="nc">cluster</span><span class="w"> </span><span class="p">{}</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="p">.</span><span class="nc">sidebar</span><span class="w"> </span><span class="p">{}</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="p">.</span><span class="nc">center</span><span class="w"> </span><span class="p">{}</span>
+</span></code></pre></div>
+<p>No representan un botón o una tarjeta, sino estructuras para organizar elementos.</p>
+<hr />
+<p><strong>Clases de utilidad</strong></p>
+<p>Son clases pequeñas y específicas:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="p">.</span><span class="nc">measure</span><span class="w"> </span><span class="p">{}</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="p">.</span><span class="nc">mt-2</span><span class="w"> </span><span class="p">{}</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="p">.</span><span class="nc">text-center</span><span class="w"> </span><span class="p">{}</span>
+</span></code></pre></div>
+<p>que puedes aplicar cuando las necesites.</p>
+<hr />
+<p><strong>5. El axioma debe existir en los tres niveles</strong></p>
+<p>El autor dice:</p>
+<blockquote>
+<p>El axioma debería sembrarse tan ampliamente como sea posible.</p>
+</blockquote>
+<p>La palabra "sembrarse" es importante.</p>
+<p>Significa que la idea debe aparecer en todas partes.</p>
+<p><strong>En estilos globales</strong></p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="nt">p</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">    </span><span class="err">...</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p><strong>En primitivas</strong></p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="p">.</span><span class="nc">center</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">    </span><span class="err">...</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p><strong>En utilidades</strong></p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="p">.</span><span class="nc">measure</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">    </span><span class="err">...</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Así, la regla deja de depender de la memoria del desarrollador.</p>
+<p>El sistema mismo ayuda a cumplirla.</p>
+<hr />
+<p><strong>6. La pregunta importante</strong></p>
+<p>Todo esto conduce a una pregunta:</p>
+<blockquote>
+<p>Si la regla es:</p>
+</blockquote>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>La medida nunca debería exceder 60ch.
+</span></code></pre></div>
+<p>¿Con qué propiedad CSS y con qué valor se implementa?</p>
+<p>Es decir:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="err">¿</span><span class="nt">width</span><span class="o">?</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="err">¿</span><span class="nt">max-width</span><span class="o">?</span>
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="err">¿</span><span class="nt">700px</span><span class="o">?</span>
+</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="err">¿</span><span class="nt">60ch</span><span class="o">?</span>
+</span></code></pre></div>
+<p>Y precisamente esa es la pregunta que la siguiente sección va a responder.</p>
+<hr />
+<p>En el fondo, esta parte no trata sobre CSS todavía. Trata sobre una filosofía:</p>
+<blockquote>
+<p><strong>Un principio de diseño valioso no debería existir solo en la documentación o en la cabeza del diseñador. Debe estar incorporado en todas las capas del sistema para que se cumpla de manera natural.</strong></p>
+</blockquote>
+</details>
 <h2 id="la-declaracion-max-width">La declaración <code>max-width</code><a class="headerlink" href="#la-declaracion-max-width" title="Permanent link">&para;</a></h2>
 <p>¡Los anchos (y alturas) fijos son anatema para el diseño responsivo, como establecimos en <em>Boxes</em> y nuevamente aquí. En su lugar, deberíamos trabajar con <em>tolerancias</em>. La propiedad <code>max-width</code>, por ejemplo, tolera cualquier longitud de texto <em>hasta</em> un cierto valor.</p>
-<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
-<span class="normal"><a href="#__codelineno-0-2">2</a></span>
-<span class="normal"><a href="#__codelineno-0-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nt">p</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">  </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="mi">700</span><span class="kt">px</span><span class="p">;</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="p">}</span>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-23-1">1</a></span>
+<span class="normal"><a href="#__codelineno-23-2">2</a></span>
+<span class="normal"><a href="#__codelineno-23-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1"></a><span class="nt">p</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2"></a><span class="w">  </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="mi">700</span><span class="kt">px</span><span class="p">;</span>
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <p>Esa es la propiedad cubierta. Sin embargo, la unidad <code>px</code> es problemática. Podemos juzgar, a simple vista, que <code>700px</code> crea una medida razonable para el <code>font-size</code> dado. Pero el <code>font-size</code> dado es realmente solo el <code>font-size</code> que nuestra pantalla resulta estar mostrando en ese momento — es nuestra visión <em>parroquial</em> de nuestro propio diseño.</p>
 <p>Cambiar <code>font-size</code> para los párrafos, o ajustar el tamaño de fuente del sistema por defecto, creará una medida (máxima) diferente. Debido a que no hay una <em>relación</em> entre la longitud de caracteres y el ancho en píxeles, no tenemos un algoritmo que pueda garantizar el valor correcto de medida máxima.</p>
 <p><img alt="" src="../fontsize.png" /></p>
 <p>Afortunadamente, CSS incluye la unidad <code>ch</code>. El valor de <code>1ch</code> se basa en el ancho del carácter <code>0</code> de la fuente. Importantemente, esto significa que cambiar el <code>font-size</code> cambia el valor de <code>1ch</code>, adaptando así la medida. Usar unidades <code>ch</code> es un enfoque innatamente algorítmico para la medida, porque el resultado se basa en un cálculo que permites que el navegador haga por ti.</p>
 <p>Usar <code>ch</code> nos permite imponer el axioma independientemente del <code>font-size</code>, permitiendo que sea altamente pervasivo y sin peligro de "salir mal". Donde "<em>la medida nunca debería exceder 60ch</em>" podría haber sido una nota en alguna documentación, puede en su lugar ser una calidad directamente codificada en el carácter del diseño.</p>
+<details class="example">
+<summary>Example</summary>
+</details>
+<details class="info">
+<summary>Explicacion</summary>
+<p>Esta sección responde a la pregunta que dejó pendiente la anterior:</p>
+<blockquote>
+<p><strong>¿Con qué propiedad y con qué valor implementamos el axioma "la medida nunca debería exceder 60ch"?</strong></p>
+</blockquote>
+<hr />
+<p><strong>1. Los anchos fijos son enemigos del diseño responsivo</strong></p>
+<p>El autor dice que los anchos y alturas fijos son "anatema" para el diseño responsivo.</p>
+<p>En otras palabras:</p>
+<blockquote>
+<p><strong>Son algo que deberíamos evitar.</strong></p>
+</blockquote>
+<p>Por ejemplo:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nt">p</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">    </span><span class="k">width</span><span class="p">:</span><span class="w"> </span><span class="mi">700</span><span class="kt">px</span><span class="p">;</span>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Aquí el párrafo tendrá siempre exactamente 700 píxeles.</p>
+<p>Da igual si:</p>
+<ul>
+<li>la pantalla es pequeña;</li>
+<li>el usuario hizo zoom;</li>
+<li>el tamaño de fuente aumentó.</li>
+</ul>
+<p>El ancho seguirá siendo 700 px.</p>
+<p>Eso rompe la adaptabilidad.</p>
+<hr />
+<p><strong>2. Debemos trabajar con tolerancias</strong></p>
+<p>En lugar de imponer:</p>
+<blockquote>
+<p>"Debes medir exactamente esto"</p>
+</blockquote>
+<p>debemos decir:</p>
+<blockquote>
+<p>"Puedes tener cualquier tamaño, siempre y cuando no sobrepases cierto límite".</p>
+</blockquote>
+<p>Por eso se utiliza:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="nt">p</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">    </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="mi">700</span><span class="kt">px</span><span class="p">;</span>
+</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p><code>max-width</code> significa:</p>
+<blockquote>
+<p>"Puedes ser más estrecho si hace falta, pero nunca más ancho que esto".</p>
+</blockquote>
+<p>Por ejemplo:</p>
+<p><strong>Pantalla pequeña</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>┌──────┐
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>│texto │
+</span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>│texto │
+</span><span id="__span-26-4"><a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a>└──────┘
+</span></code></pre></div>
+<p><strong>Pantalla grande</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>┌─────────────────┐
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>│ texto texto     │
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>│ texto texto     │
+</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a>└─────────────────┘
+</span></code></pre></div>
+<hr />
+<p><strong>3. Pero 700px tiene un problema</strong></p>
+<p>Supongamos:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="nt">p</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="w">    </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="mi">700</span><span class="kt">px</span><span class="p">;</span>
+</span><span id="__span-28-3"><a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="kt">px</span><span class="p">;</span>
+</span><span id="__span-28-4"><a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Visualmente puede verse bien.</p>
+<p>Quizá entren unas 60 letras por línea.</p>
+<p>Pero mañana decides:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="nt">font-size</span><span class="o">:</span><span class="w"> </span><span class="nt">24px</span><span class="o">;</span>
+</span></code></pre></div>
+<p>Ahora las letras son más grandes.</p>
+<p>Sin embargo:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="nt">max-width</span><span class="o">:</span><span class="w"> </span><span class="nt">700px</span><span class="o">;</span>
+</span></code></pre></div>
+<p>sigue siendo 700 px.</p>
+<p>Por tanto, ya no caben 60 caracteres.</p>
+<p>Quizá ahora solo entren 40.</p>
+<p>La medida cambió.</p>
+<hr />
+<p><strong>4. Los píxeles no saben nada sobre caracteres</strong></p>
+<p>Aquí está la idea fundamental.</p>
+<p>No existe una relación fija entre:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>700px
+</span></code></pre></div>
+<p>y</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>60 caracteres
+</span></code></pre></div>
+<p>Porque depende de:</p>
+<ul>
+<li>la fuente;</li>
+<li>el tamaño de la letra;</li>
+<li>el zoom del navegador;</li>
+<li>la configuración del usuario.</li>
+</ul>
+<p>Por eso el autor dice:</p>
+<blockquote>
+<p>No tenemos un algoritmo que garantice una medida correcta usando píxeles.</p>
+</blockquote>
+<hr />
+<p><strong>5. Entonces aparece <code>ch</code></strong></p>
+<p>CSS tiene una unidad especial:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="nt">1ch</span>
+</span></code></pre></div>
+<p>que equivale aproximadamente al ancho del carácter:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>0
+</span></code></pre></div>
+<p>de la fuente actual.</p>
+<hr />
+<p><strong>6. Lo importante de <code>ch</code></strong></p>
+<p>Si tienes:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-35-1"><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="nt">font-size</span><span class="o">:</span><span class="w"> </span><span class="nt">16px</span><span class="o">;</span>
+</span></code></pre></div>
+<p>entonces:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-36-1"><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="nt">1ch</span>
+</span></code></pre></div>
+<p>vale cierta cantidad.</p>
+<p>Pero si aumentas:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-37-1"><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="nt">font-size</span><span class="o">:</span><span class="w"> </span><span class="nt">24px</span><span class="o">;</span>
+</span></code></pre></div>
+<p>el ancho del carácter también aumenta.</p>
+<p>Y por tanto:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-38-1"><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="nt">1ch</span>
+</span></code></pre></div>
+<p>también aumenta.</p>
+<p>Así:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-39-1"><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="nt">60ch</span>
+</span></code></pre></div>
+<p>crece automáticamente.</p>
+<hr />
+<p><strong>Con píxeles</strong></p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-40-1"><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="nt">font-size</span><span class="o">:</span><span class="w"> </span><span class="nt">16px</span><span class="o">;</span>
+</span><span id="__span-40-2"><a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a><span class="nt">max-width</span><span class="o">:</span><span class="w"> </span><span class="nt">700px</span><span class="o">;</span>
+</span></code></pre></div>
+<p>↓</p>
+<p>caben unas 60 letras.</p>
+<p>Luego:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-41-1"><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="nt">font-size</span><span class="o">:</span><span class="w"> </span><span class="nt">24px</span><span class="o">;</span>
+</span><span id="__span-41-2"><a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a><span class="nt">max-width</span><span class="o">:</span><span class="w"> </span><span class="nt">700px</span><span class="o">;</span>
+</span></code></pre></div>
+<p>↓</p>
+<p>caben quizá 40 letras.</p>
+<p>La medida cambia.</p>
+<hr />
+<p><strong>Con <code>ch</code></strong></p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-42-1"><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="nt">font-size</span><span class="o">:</span><span class="w"> </span><span class="nt">16px</span><span class="o">;</span>
+</span><span id="__span-42-2"><a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a><span class="nt">max-width</span><span class="o">:</span><span class="w"> </span><span class="nt">60ch</span><span class="o">;</span>
+</span></code></pre></div>
+<p>↓</p>
+<p>unas 60 letras.</p>
+<p>Luego:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-43-1"><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="nt">font-size</span><span class="o">:</span><span class="w"> </span><span class="nt">24px</span><span class="o">;</span>
+</span><span id="__span-43-2"><a id="__codelineno-43-2" name="__codelineno-43-2" href="#__codelineno-43-2"></a><span class="nt">max-width</span><span class="o">:</span><span class="w"> </span><span class="nt">60ch</span><span class="o">;</span>
+</span></code></pre></div>
+<p>↓</p>
+<p>siguen siendo aproximadamente 60 letras.</p>
+<p>La medida se conserva.</p>
+<hr />
+<p><strong>7. Por eso el autor habla de un enfoque algorítmico</strong></p>
+<p>Tú no haces los cálculos.</p>
+<p>Simplemente escribes:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-44-1"><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a><span class="nt">max-width</span><span class="o">:</span><span class="w"> </span><span class="nt">60ch</span><span class="o">;</span>
+</span></code></pre></div>
+<p>Y le dices al navegador:</p>
+<blockquote>
+<p>"Mantén aproximadamente 60 caracteres por línea. Tú calcula cuánto ancho necesitas".</p>
+</blockquote>
+<p>El navegador hará el resto.</p>
+<hr />
+<p><strong>8. El axioma se vuelve parte del sistema</strong></p>
+<p>Antes la regla podía existir solo en un documento:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-45-1"><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a>No superar 60 caracteres por línea.
+</span></code></pre></div>
+<p>Y alguien podía olvidarla.</p>
+<p>Pero si escribes:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-46-1"><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a><span class="p">.</span><span class="nc">measure</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-46-2"><a id="__codelineno-46-2" name="__codelineno-46-2" href="#__codelineno-46-2"></a><span class="w">    </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="kt">ch</span><span class="p">;</span>
+</span><span id="__span-46-3"><a id="__codelineno-46-3" name="__codelineno-46-3" href="#__codelineno-46-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>o</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-47-1"><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a><span class="nt">article</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-47-2"><a id="__codelineno-47-2" name="__codelineno-47-2" href="#__codelineno-47-2"></a><span class="w">    </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="kt">ch</span><span class="p">;</span>
+</span><span id="__span-47-3"><a id="__codelineno-47-3" name="__codelineno-47-3" href="#__codelineno-47-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>entonces la regla deja de ser una recomendación.</p>
+<p>Ahora está incorporada en el CSS.</p>
+<p>El diseño mismo la hace cumplir.</p>
+<hr />
+<p><strong>La idea más profunda de toda esta sección</strong></p>
+<p>El autor quiere que dejes de pensar así:</p>
+<blockquote>
+<p>"Con mi pantalla y mi tamaño de letra, 700px se ven bien."</p>
+</blockquote>
+<p>porque eso es una visión muy limitada y centrada en tu propia computadora.</p>
+<p>Y quiere que empieces a pensar así:</p>
+<blockquote>
+<p>"No sé qué pantalla tendrá el usuario ni qué tamaño de letra usará. Le diré al navegador cuál es mi intención (unas 60 letras por línea) y dejaré que él haga las cuentas."</p>
+</blockquote>
+<p>Esa es una de las filosofías más importantes del diseño responsivo moderno: <strong>describir restricciones y objetivos, no imponer dimensiones rígidas</strong>.</p>
+</details>
 <h2 id="disenar-sin-ver">Diseñar sin ver<a class="headerlink" href="#disenar-sin-ver" title="Permanent link">&para;</a></h2>
 <p>Diseñar por axioma requiere un cambio mental. Los axiomas no crean directamente artefactos visuales, solo las <em>características</em> de los artefactos que podrían emerger.</p>
 <p>A veces los artefactos resultantes se ven y se comportan de maneras que podrías no haber previsto. Por ejemplo, en un contenedor que es más ancho que la medida acordada aplicada al tamaño de fuente base, los elementos con diferentes tamaños de fuente ocuparán diferentes proporciones del ancho de ese contenedor. Esto se debe a que <code>1ch</code> es más ancho para un tamaño de fuente más grande.</p>
@@ -1376,131 +1864,495 @@
 <li>Las circunstancias y configuraciones de cada usuario final</li>
 </ol>
 <p>En lugar de pensar en diseñar para la web como crear artefactos visuales, piensa en ello como escribir <em>programas que generan</em> artefactos visuales. Los axiomas son las reglas que influyen en cómo el navegador crea esos artefactos, y cuanto mejor pensados estén, mejor puede el navegador acomodar al usuario.</p>
+<details class="info">
+<summary>Explicacion</summary>
+<p>Esta es una de las ideas más profundas del libro. El autor está diciendo que <strong>diseñar para la web no consiste en dibujar exactamente cómo se verá algo</strong>, sino en establecer reglas para que el navegador produzca resultados adecuados en muchísimas situaciones distintas.</p>
+<hr />
+<p><strong>1. Los axiomas no crean imágenes, crean propiedades</strong></p>
+<p>Supongamos que defines este axioma:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-48-1"><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a><span class="nt">max-width</span><span class="o">:</span><span class="w"> </span><span class="nt">60ch</span><span class="o">;</span>
+</span></code></pre></div>
+<p>Ese axioma no dice:</p>
+<blockquote>
+<p>"Quiero una caja de exactamente 600 píxeles."</p>
+</blockquote>
+<p>Tampoco dice:</p>
+<blockquote>
+<p>"Quiero que el texto se vea exactamente así."</p>
+</blockquote>
+<p>Lo único que expresa es:</p>
+<blockquote>
+<p>"No quiero líneas excesivamente largas."</p>
+</blockquote>
+<p>Es decir, estás describiendo una <strong>característica deseable</strong>, no una apariencia concreta.</p>
+<hr />
+<p><strong>2. Pueden aparecer resultados que no imaginaste</strong></p>
+<p>Supón un contenedor ancho:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-49-1"><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a>-------------------------------------
+</span><span id="__span-49-2"><a id="__codelineno-49-2" name="__codelineno-49-2" href="#__codelineno-49-2"></a>|                                   |
+</span><span id="__span-49-3"><a id="__codelineno-49-3" name="__codelineno-49-3" href="#__codelineno-49-3"></a>|                                   |
+</span><span id="__span-49-4"><a id="__codelineno-49-4" name="__codelineno-49-4" href="#__codelineno-49-4"></a>-------------------------------------
+</span></code></pre></div>
+<p>Y dentro tienes:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-50-1"><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a><span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Título<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</span><span id="__span-50-2"><a id="__codelineno-50-2" name="__codelineno-50-2" href="#__codelineno-50-2"></a><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Párrafo...<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>con:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-51-1"><a id="__codelineno-51-1" name="__codelineno-51-1" href="#__codelineno-51-1"></a><span class="nt">h1</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-51-2"><a id="__codelineno-51-2" name="__codelineno-51-2" href="#__codelineno-51-2"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-51-3"><a id="__codelineno-51-3" name="__codelineno-51-3" href="#__codelineno-51-3"></a><span class="w">    </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="kt">ch</span><span class="p">;</span>
+</span><span id="__span-51-4"><a id="__codelineno-51-4" name="__codelineno-51-4" href="#__codelineno-51-4"></a><span class="p">}</span>
+</span><span id="__span-51-5"><a id="__codelineno-51-5" name="__codelineno-51-5" href="#__codelineno-51-5"></a>
+</span><span id="__span-51-6"><a id="__codelineno-51-6" name="__codelineno-51-6" href="#__codelineno-51-6"></a><span class="nt">p</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-51-7"><a id="__codelineno-51-7" name="__codelineno-51-7" href="#__codelineno-51-7"></a><span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-51-8"><a id="__codelineno-51-8" name="__codelineno-51-8" href="#__codelineno-51-8"></a><span class="w">    </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="kt">ch</span><span class="p">;</span>
+</span><span id="__span-51-9"><a id="__codelineno-51-9" name="__codelineno-51-9" href="#__codelineno-51-9"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Como <code>1ch</code> depende del tamaño de la fuente:</p>
+<ul>
+<li>en el título, <code>60ch</code> será más ancho;</li>
+<li>en el párrafo, <code>60ch</code> será más estrecho.</li>
+</ul>
+<p>Por eso ambos elementos ocuparán proporciones diferentes del contenedor.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-52-1"><a id="__codelineno-52-1" name="__codelineno-52-1" href="#__codelineno-52-1"></a>Contenedor
+</span><span id="__span-52-2"><a id="__codelineno-52-2" name="__codelineno-52-2" href="#__codelineno-52-2"></a>------------------------------------------------
+</span><span id="__span-52-3"><a id="__codelineno-52-3" name="__codelineno-52-3" href="#__codelineno-52-3"></a>
+</span><span id="__span-52-4"><a id="__codelineno-52-4" name="__codelineno-52-4" href="#__codelineno-52-4"></a>Título (3rem)
+</span><span id="__span-52-5"><a id="__codelineno-52-5" name="__codelineno-52-5" href="#__codelineno-52-5"></a>
+</span><span id="__span-52-6"><a id="__codelineno-52-6" name="__codelineno-52-6" href="#__codelineno-52-6"></a>┌─────────────────────────────┐
+</span><span id="__span-52-7"><a id="__codelineno-52-7" name="__codelineno-52-7" href="#__codelineno-52-7"></a>│ GRAN TITULO                 │
+</span><span id="__span-52-8"><a id="__codelineno-52-8" name="__codelineno-52-8" href="#__codelineno-52-8"></a>└─────────────────────────────┘
+</span><span id="__span-52-9"><a id="__codelineno-52-9" name="__codelineno-52-9" href="#__codelineno-52-9"></a>
+</span><span id="__span-52-10"><a id="__codelineno-52-10" name="__codelineno-52-10" href="#__codelineno-52-10"></a>Párrafo (1rem)
+</span><span id="__span-52-11"><a id="__codelineno-52-11" name="__codelineno-52-11" href="#__codelineno-52-11"></a>
+</span><span id="__span-52-12"><a id="__codelineno-52-12" name="__codelineno-52-12" href="#__codelineno-52-12"></a>┌───────────────┐
+</span><span id="__span-52-13"><a id="__codelineno-52-13" name="__codelineno-52-13" href="#__codelineno-52-13"></a>│ texto texto   │
+</span><span id="__span-52-14"><a id="__codelineno-52-14" name="__codelineno-52-14" href="#__codelineno-52-14"></a>│ texto texto   │
+</span><span id="__span-52-15"><a id="__codelineno-52-15" name="__codelineno-52-15" href="#__codelineno-52-15"></a>└───────────────┘
+</span></code></pre></div>
+<p>Quizá nunca imaginaste ese resultado visual.</p>
+<hr />
+<p><strong>3. Pero eso no significa que esté mal</strong></p>
+<p>El autor dice:</p>
+<blockquote>
+<p>Que no lo hayas previsto no significa que no sea correcto.</p>
+</blockquote>
+<p>De hecho, el navegador está obedeciendo perfectamente la intención original:</p>
+<blockquote>
+<p>Mantener una longitud cómoda de lectura para cualquier tamaño de letra.</p>
+</blockquote>
+<p>El sistema está funcionando.</p>
+<hr />
+<p><strong>4. Diseñar para la web es diseñar sin ver</strong></p>
+<p>Esta frase es muy importante:</p>
+<blockquote>
+<p><strong>Diseñar para la web es diseñar sin ver.</strong></p>
+</blockquote>
+<p>¿Por qué?</p>
+<p>Porque es imposible prever todas las combinaciones posibles.</p>
+<p>Los usuarios pueden tener:</p>
+<ul>
+<li>pantallas grandes;</li>
+<li>teléfonos;</li>
+<li>tablets;</li>
+<li>zoom al 200%;</li>
+<li>fuentes distintas;</li>
+<li>tamaños de letra aumentados;</li>
+<li>configuraciones de accesibilidad;</li>
+<li>componentes organizados de muchas maneras diferentes.</li>
+</ul>
+<p>No puedes dibujar todas esas posibilidades.</p>
+<hr />
+<p><strong>5. Tampoco puedes prever cómo se combinarán tus componentes</strong></p>
+<p>Supón que tienes componentes independientes:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-53-1"><a id="__codelineno-53-1" name="__codelineno-53-1" href="#__codelineno-53-1"></a>Stack
+</span><span id="__span-53-2"><a id="__codelineno-53-2" name="__codelineno-53-2" href="#__codelineno-53-2"></a>Sidebar
+</span><span id="__span-53-3"><a id="__codelineno-53-3" name="__codelineno-53-3" href="#__codelineno-53-3"></a>Cluster
+</span><span id="__span-53-4"><a id="__codelineno-53-4" name="__codelineno-53-4" href="#__codelineno-53-4"></a>Center
+</span><span id="__span-53-5"><a id="__codelineno-53-5" name="__codelineno-53-5" href="#__codelineno-53-5"></a>Card
+</span></code></pre></div>
+<p>Un desarrollador podría combinarlos así:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-54-1"><a id="__codelineno-54-1" name="__codelineno-54-1" href="#__codelineno-54-1"></a>Sidebar
+</span><span id="__span-54-2"><a id="__codelineno-54-2" name="__codelineno-54-2" href="#__codelineno-54-2"></a>└── Stack
+</span><span id="__span-54-3"><a id="__codelineno-54-3" name="__codelineno-54-3" href="#__codelineno-54-3"></a>      ├── Card
+</span><span id="__span-54-4"><a id="__codelineno-54-4" name="__codelineno-54-4" href="#__codelineno-54-4"></a>      ├── Card
+</span><span id="__span-54-5"><a id="__codelineno-54-5" name="__codelineno-54-5" href="#__codelineno-54-5"></a>      └── Cluster
+</span></code></pre></div>
+<p>Otro podría hacerlo de otra forma completamente distinta.</p>
+<p>Los componentes son modulares.</p>
+<p>Y eso genera muchísimas disposiciones posibles.</p>
+<hr />
+<p><strong>6. Por eso CSS se parece más a la programación que al dibujo</strong></p>
+<p>Normalmente pensamos:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-55-1"><a id="__codelineno-55-1" name="__codelineno-55-1" href="#__codelineno-55-1"></a>Diseño
+</span><span id="__span-55-2"><a id="__codelineno-55-2" name="__codelineno-55-2" href="#__codelineno-55-2"></a>↓
+</span><span id="__span-55-3"><a id="__codelineno-55-3" name="__codelineno-55-3" href="#__codelineno-55-3"></a>Imagen final
+</span></code></pre></div>
+<p>Pero el autor propone otra visión:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-56-1"><a id="__codelineno-56-1" name="__codelineno-56-1" href="#__codelineno-56-1"></a>Reglas
+</span><span id="__span-56-2"><a id="__codelineno-56-2" name="__codelineno-56-2" href="#__codelineno-56-2"></a>↓
+</span><span id="__span-56-3"><a id="__codelineno-56-3" name="__codelineno-56-3" href="#__codelineno-56-3"></a>Navegador
+</span><span id="__span-56-4"><a id="__codelineno-56-4" name="__codelineno-56-4" href="#__codelineno-56-4"></a>↓
+</span><span id="__span-56-5"><a id="__codelineno-56-5" name="__codelineno-56-5" href="#__codelineno-56-5"></a>Imagen final
+</span></code></pre></div>
+<p>Es decir, el navegador es quien genera el resultado.</p>
+<p>Tú no dibujas directamente la página.</p>
+<p>Tú escribes un programa:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-57-1"><a id="__codelineno-57-1" name="__codelineno-57-1" href="#__codelineno-57-1"></a><span class="nt">max-width</span><span class="o">:</span><span class="w"> </span><span class="nt">60ch</span><span class="o">;</span>
+</span><span id="__span-57-2"><a id="__codelineno-57-2" name="__codelineno-57-2" href="#__codelineno-57-2"></a><span class="nt">line-height</span><span class="o">:</span><span class="w"> </span><span class="nt">1</span><span class="p">.</span><span class="nc">5</span><span class="o">;</span>
+</span><span id="__span-57-3"><a id="__codelineno-57-3" name="__codelineno-57-3" href="#__codelineno-57-3"></a><span class="nt">display</span><span class="o">:</span><span class="w"> </span><span class="nt">flex</span><span class="o">;</span>
+</span><span id="__span-57-4"><a id="__codelineno-57-4" name="__codelineno-57-4" href="#__codelineno-57-4"></a><span class="nt">gap</span><span class="o">:</span><span class="w"> </span><span class="nt">1rem</span><span class="o">;</span>
+</span></code></pre></div>
+<p>Y el navegador produce la interfaz.</p>
+<hr />
+<p><strong>7. Los axiomas son como leyes físicas</strong></p>
+<p>Imagina que Dios creara el universo.</p>
+<p>No tendría que colocar manualmente cada ola, cada nube o cada montaña.</p>
+<p>Simplemente establecería las leyes:</p>
+<ul>
+<li>gravedad;</li>
+<li>electromagnetismo;</li>
+<li>movimiento.</li>
+</ul>
+<p>Y a partir de ellas emergerían millones de formas distintas.</p>
+<p>El autor propone algo parecido para el diseño.</p>
+<p>Los axiomas son las "leyes de la física" de tu sistema:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-58-1"><a id="__codelineno-58-1" name="__codelineno-58-1" href="#__codelineno-58-1"></a><span class="nt">max-width</span><span class="o">:</span><span class="w"> </span><span class="nt">60ch</span><span class="o">;</span>
+</span><span id="__span-58-2"><a id="__codelineno-58-2" name="__codelineno-58-2" href="#__codelineno-58-2"></a><span class="nt">line-height</span><span class="o">:</span><span class="w"> </span><span class="nt">1</span><span class="p">.</span><span class="nc">5</span><span class="o">;</span>
+</span><span id="__span-58-3"><a id="__codelineno-58-3" name="__codelineno-58-3" href="#__codelineno-58-3"></a><span class="nt">gap</span><span class="o">:</span><span class="w"> </span><span class="nt">1rem</span><span class="o">;</span>
+</span><span id="__span-58-4"><a id="__codelineno-58-4" name="__codelineno-58-4" href="#__codelineno-58-4"></a><span class="nt">padding</span><span class="o">:</span><span class="w"> </span><span class="nt">var</span><span class="o">(</span><span class="nt">--space-m</span><span class="o">);</span>
+</span></code></pre></div>
+<p>A partir de esas leyes, el navegador genera las distintas interfaces.</p>
+<hr />
+<p><strong>La idea más profunda de toda esta sección</strong></p>
+<p>El autor quiere que abandones esta mentalidad:</p>
+<blockquote>
+<p>«Estoy creando una imagen.»</p>
+</blockquote>
+<p>y adoptes esta:</p>
+<blockquote>
+<p><strong>«Estoy escribiendo un conjunto de reglas para que el navegador genere imágenes correctas en circunstancias que ni siquiera puedo prever.»</strong></p>
+</blockquote>
+<p>Por eso afirma:</p>
+<blockquote>
+<p><strong>Diseñar para la web es escribir programas que producen artefactos visuales, no dibujar artefactos visuales directamente.</strong></p>
+</blockquote>
+<p>Esa es una de las filosofías fundamentales detrás del diseño responsivo moderno y de la arquitectura CSS basada en sistemas.</p>
+</details>
 <h2 id="valores-por-defecto-globales">Valores por defecto globales<a class="headerlink" href="#valores-por-defecto-globales" title="Permanent link">&para;</a></h2>
 <p>Para realizar el axioma, necesitamos asegurar que todos los elementos aplicables estén sujetos a él. Esto es una cuestión de selectores. Podríamos crear un selector de clase…</p>
-<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
-<span class="normal"><a href="#__codelineno-1-2">2</a></span>
-<span class="normal"><a href="#__codelineno-1-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="p">.</span><span class="nc">measure-cap</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">  </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="kt">ch</span><span class="p">;</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="p">}</span>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-59-1">1</a></span>
+<span class="normal"><a href="#__codelineno-59-2">2</a></span>
+<span class="normal"><a href="#__codelineno-59-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-59-1"><a id="__codelineno-59-1" name="__codelineno-59-1"></a><span class="p">.</span><span class="nc">measure-cap</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-59-2"><a id="__codelineno-59-2" name="__codelineno-59-2"></a><span class="w">  </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="kt">ch</span><span class="p">;</span>
+</span><span id="__span-59-3"><a id="__codelineno-59-3" name="__codelineno-59-3"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <p>…pero es un error pensar en términos de clases (de utilidad) demasiado pronto. Significaría aplicar el estilo manualmente, a elementos individuales en el HTML, dondequiera que sintiéramos que es aplicable. La intervención manual es laboriosa, propensa a errores (omitir elementos), y llevará a un marcado inflado.</p>
 <p>En su lugar, deberíamos preguntarnos a qué <em>tipos</em> de elementos podría aplicarse la regla. Ciertamente, los elementos de flujo diseñados para texto. Elementos inline como <code>&lt;em&gt;</code> y <code>&lt;small&gt;</code> no necesitarían ser incluidos, ya que ocuparían solo una parte de la medida total de sus elementos de flujo padre.</p>
-<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-2-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-2-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-2-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-2-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-2-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-2-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-2-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-2-10">10</a></span>
-<span class="normal"><a href="#__codelineno-2-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nt">p</span><span class="o">,</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="nt">h1</span><span class="o">,</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="nt">h2</span><span class="o">,</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="nt">h3</span><span class="o">,</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="nt">h4</span><span class="o">,</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="nt">h5</span><span class="o">,</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="nt">h6</span><span class="o">,</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="nt">li</span><span class="o">,</span>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="nt">figcaption</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="w">  </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="kt">ch</span><span class="p">;</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11"></a><span class="p">}</span>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-60-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-60-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-60-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-60-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-60-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-60-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-60-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-60-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-60-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-60-10">10</a></span>
+<span class="normal"><a href="#__codelineno-60-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-60-1"><a id="__codelineno-60-1" name="__codelineno-60-1"></a><span class="nt">p</span><span class="o">,</span>
+</span><span id="__span-60-2"><a id="__codelineno-60-2" name="__codelineno-60-2"></a><span class="nt">h1</span><span class="o">,</span>
+</span><span id="__span-60-3"><a id="__codelineno-60-3" name="__codelineno-60-3"></a><span class="nt">h2</span><span class="o">,</span>
+</span><span id="__span-60-4"><a id="__codelineno-60-4" name="__codelineno-60-4"></a><span class="nt">h3</span><span class="o">,</span>
+</span><span id="__span-60-5"><a id="__codelineno-60-5" name="__codelineno-60-5"></a><span class="nt">h4</span><span class="o">,</span>
+</span><span id="__span-60-6"><a id="__codelineno-60-6" name="__codelineno-60-6"></a><span class="nt">h5</span><span class="o">,</span>
+</span><span id="__span-60-7"><a id="__codelineno-60-7" name="__codelineno-60-7"></a><span class="nt">h6</span><span class="o">,</span>
+</span><span id="__span-60-8"><a id="__codelineno-60-8" name="__codelineno-60-8"></a><span class="nt">li</span><span class="o">,</span>
+</span><span id="__span-60-9"><a id="__codelineno-60-9" name="__codelineno-60-9"></a><span class="nt">figcaption</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-60-10"><a id="__codelineno-60-10" name="__codelineno-60-10"></a><span class="w">  </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="kt">ch</span><span class="p">;</span>
+</span><span id="__span-60-11"><a id="__codelineno-60-11" name="__codelineno-60-11"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
-<h3 id="estilo-basado-en-excepciones">Estilo basado en excepciones<a class="headerlink" href="#estilo-basado-en-excepciones" title="Permanent link">&para;</a></h3>
+<details class="info">
+<summary>Explicacion</summary>
+<p>Esta sección continúa con la filosofía de los <strong>axiomas</strong> y responde a la pregunta:</p>
+<blockquote>
+<p><strong>¿Cómo hacemos que el axioma "la medida nunca debe superar 60ch" se cumpla en toda la página?</strong></p>
+</blockquote>
+<p>La respuesta del autor es:</p>
+<blockquote>
+<p><strong>Usando estilos globales, no aplicando clases manualmente a cada elemento.</strong></p>
+</blockquote>
+<hr />
+<p><strong>1. La solución obvia: una clase</strong></p>
+<p>Podrías crear:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-61-1"><a id="__codelineno-61-1" name="__codelineno-61-1" href="#__codelineno-61-1"></a><span class="p">.</span><span class="nc">measure-cap</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-61-2"><a id="__codelineno-61-2" name="__codelineno-61-2" href="#__codelineno-61-2"></a><span class="w">    </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="kt">ch</span><span class="p">;</span>
+</span><span id="__span-61-3"><a id="__codelineno-61-3" name="__codelineno-61-3" href="#__codelineno-61-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>y luego escribir:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-62-1"><a id="__codelineno-62-1" name="__codelineno-62-1" href="#__codelineno-62-1"></a><span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;measure-cap&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-62-2"><a id="__codelineno-62-2" name="__codelineno-62-2" href="#__codelineno-62-2"></a>...
+</span><span id="__span-62-3"><a id="__codelineno-62-3" name="__codelineno-62-3" href="#__codelineno-62-3"></a><span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span><span id="__span-62-4"><a id="__codelineno-62-4" name="__codelineno-62-4" href="#__codelineno-62-4"></a>
+</span><span id="__span-62-5"><a id="__codelineno-62-5" name="__codelineno-62-5" href="#__codelineno-62-5"></a><span class="p">&lt;</span><span class="nt">h2</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;measure-cap&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-62-6"><a id="__codelineno-62-6" name="__codelineno-62-6" href="#__codelineno-62-6"></a>...
+</span><span id="__span-62-7"><a id="__codelineno-62-7" name="__codelineno-62-7" href="#__codelineno-62-7"></a><span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+</span><span id="__span-62-8"><a id="__codelineno-62-8" name="__codelineno-62-8" href="#__codelineno-62-8"></a>
+</span><span id="__span-62-9"><a id="__codelineno-62-9" name="__codelineno-62-9" href="#__codelineno-62-9"></a><span class="p">&lt;</span><span class="nt">li</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;measure-cap&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-62-10"><a id="__codelineno-62-10" name="__codelineno-62-10" href="#__codelineno-62-10"></a>...
+</span><span id="__span-62-11"><a id="__codelineno-62-11" name="__codelineno-62-11" href="#__codelineno-62-11"></a><span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>Funciona.</p>
+<p>Pero el autor dice que <strong>es un error pensar así demasiado pronto</strong>.</p>
+<hr />
+<p><strong>2. ¿Por qué es una mala idea?</strong></p>
+<p>Porque ahora dependes de la memoria humana.</p>
+<p>Debes acordarte de escribir:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-63-1"><a id="__codelineno-63-1" name="__codelineno-63-1" href="#__codelineno-63-1"></a>class=&quot;measure-cap&quot;
+</span></code></pre></div>
+<p>en todos lados.</p>
+<p>Y tarde o temprano sucederá esto:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-64-1"><a id="__codelineno-64-1" name="__codelineno-64-1" href="#__codelineno-64-1"></a><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
+</span><span id="__span-64-2"><a id="__codelineno-64-2" name="__codelineno-64-2" href="#__codelineno-64-2"></a>Olvidé poner la clase.
+</span><span id="__span-64-3"><a id="__codelineno-64-3" name="__codelineno-64-3" href="#__codelineno-64-3"></a><span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>o:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-65-1"><a id="__codelineno-65-1" name="__codelineno-65-1" href="#__codelineno-65-1"></a><span class="p">&lt;</span><span class="nt">h3</span><span class="p">&gt;</span>
+</span><span id="__span-65-2"><a id="__codelineno-65-2" name="__codelineno-65-2" href="#__codelineno-65-2"></a>Otro desarrollador tampoco la puso.
+</span><span id="__span-65-3"><a id="__codelineno-65-3" name="__codelineno-65-3" href="#__codelineno-65-3"></a><span class="p">&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>Y el axioma se rompe.</p>
+<hr />
+<p><strong>3. Además, el HTML se llena de clases</strong></p>
+<p>Terminas con cosas como:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-66-1"><a id="__codelineno-66-1" name="__codelineno-66-1" href="#__codelineno-66-1"></a><span class="p">&lt;</span><span class="nt">h1</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;measure-cap&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-66-2"><a id="__codelineno-66-2" name="__codelineno-66-2" href="#__codelineno-66-2"></a>...
+</span><span id="__span-66-3"><a id="__codelineno-66-3" name="__codelineno-66-3" href="#__codelineno-66-3"></a><span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</span><span id="__span-66-4"><a id="__codelineno-66-4" name="__codelineno-66-4" href="#__codelineno-66-4"></a>
+</span><span id="__span-66-5"><a id="__codelineno-66-5" name="__codelineno-66-5" href="#__codelineno-66-5"></a><span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;measure-cap&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-66-6"><a id="__codelineno-66-6" name="__codelineno-66-6" href="#__codelineno-66-6"></a>...
+</span><span id="__span-66-7"><a id="__codelineno-66-7" name="__codelineno-66-7" href="#__codelineno-66-7"></a><span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span><span id="__span-66-8"><a id="__codelineno-66-8" name="__codelineno-66-8" href="#__codelineno-66-8"></a>
+</span><span id="__span-66-9"><a id="__codelineno-66-9" name="__codelineno-66-9" href="#__codelineno-66-9"></a><span class="p">&lt;</span><span class="nt">li</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;measure-cap&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-66-10"><a id="__codelineno-66-10" name="__codelineno-66-10" href="#__codelineno-66-10"></a>...
+</span><span id="__span-66-11"><a id="__codelineno-66-11" name="__codelineno-66-11" href="#__codelineno-66-11"></a><span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+</span><span id="__span-66-12"><a id="__codelineno-66-12" name="__codelineno-66-12" href="#__codelineno-66-12"></a>
+</span><span id="__span-66-13"><a id="__codelineno-66-13" name="__codelineno-66-13" href="#__codelineno-66-13"></a><span class="p">&lt;</span><span class="nt">figcaption</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;measure-cap&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-66-14"><a id="__codelineno-66-14" name="__codelineno-66-14" href="#__codelineno-66-14"></a>...
+</span><span id="__span-66-15"><a id="__codelineno-66-15" name="__codelineno-66-15" href="#__codelineno-66-15"></a><span class="p">&lt;/</span><span class="nt">figcaption</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>La misma clase repetida una y otra vez.</p>
+<p>Eso hace que el marcado se vuelva innecesariamente grande y ruidoso.</p>
+<hr />
+<p><strong>4. El cambio de mentalidad</strong></p>
+<p>En vez de preguntarte:</p>
+<blockquote>
+<p>¿Dónde debería poner esta clase?</p>
+</blockquote>
+<p>deberías preguntarte:</p>
+<blockquote>
+<p>¿Qué tipos de elementos necesitan esta regla?</p>
+</blockquote>
+<p>Y la respuesta es:</p>
+<ul>
+<li>párrafos;</li>
+<li>encabezados;</li>
+<li>elementos de listas;</li>
+<li>pies de figura;</li>
+<li>cualquier elemento cuyo propósito principal sea contener texto.</li>
+</ul>
+<hr />
+<p><strong>5. Entonces usamos selectores globales</strong></p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-67-1"><a id="__codelineno-67-1" name="__codelineno-67-1" href="#__codelineno-67-1"></a><span class="nt">p</span><span class="o">,</span>
+</span><span id="__span-67-2"><a id="__codelineno-67-2" name="__codelineno-67-2" href="#__codelineno-67-2"></a><span class="nt">h1</span><span class="o">,</span>
+</span><span id="__span-67-3"><a id="__codelineno-67-3" name="__codelineno-67-3" href="#__codelineno-67-3"></a><span class="nt">h2</span><span class="o">,</span>
+</span><span id="__span-67-4"><a id="__codelineno-67-4" name="__codelineno-67-4" href="#__codelineno-67-4"></a><span class="nt">h3</span><span class="o">,</span>
+</span><span id="__span-67-5"><a id="__codelineno-67-5" name="__codelineno-67-5" href="#__codelineno-67-5"></a><span class="nt">h4</span><span class="o">,</span>
+</span><span id="__span-67-6"><a id="__codelineno-67-6" name="__codelineno-67-6" href="#__codelineno-67-6"></a><span class="nt">h5</span><span class="o">,</span>
+</span><span id="__span-67-7"><a id="__codelineno-67-7" name="__codelineno-67-7" href="#__codelineno-67-7"></a><span class="nt">h6</span><span class="o">,</span>
+</span><span id="__span-67-8"><a id="__codelineno-67-8" name="__codelineno-67-8" href="#__codelineno-67-8"></a><span class="nt">li</span><span class="o">,</span>
+</span><span id="__span-67-9"><a id="__codelineno-67-9" name="__codelineno-67-9" href="#__codelineno-67-9"></a><span class="nt">figcaption</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-67-10"><a id="__codelineno-67-10" name="__codelineno-67-10" href="#__codelineno-67-10"></a><span class="w">    </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="kt">ch</span><span class="p">;</span>
+</span><span id="__span-67-11"><a id="__codelineno-67-11" name="__codelineno-67-11" href="#__codelineno-67-11"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Ahora sucede automáticamente:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-68-1"><a id="__codelineno-68-1" name="__codelineno-68-1" href="#__codelineno-68-1"></a><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>...<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span><span id="__span-68-2"><a id="__codelineno-68-2" name="__codelineno-68-2" href="#__codelineno-68-2"></a><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>...<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+</span><span id="__span-68-3"><a id="__codelineno-68-3" name="__codelineno-68-3" href="#__codelineno-68-3"></a><span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>...<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>Todos ellos respetarán el axioma sin hacer nada más.</p>
+<hr />
+<p><strong>6. ¿Por qué no se incluyen elementos inline?</strong></p>
+<p>Por ejemplo:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-69-1"><a id="__codelineno-69-1" name="__codelineno-69-1" href="#__codelineno-69-1"></a><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
+</span><span id="__span-69-2"><a id="__codelineno-69-2" name="__codelineno-69-2" href="#__codelineno-69-2"></a>Texto <span class="p">&lt;</span><span class="nt">em</span><span class="p">&gt;</span>importante<span class="p">&lt;/</span><span class="nt">em</span><span class="p">&gt;</span>.
+</span><span id="__span-69-3"><a id="__codelineno-69-3" name="__codelineno-69-3" href="#__codelineno-69-3"></a><span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>o</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-70-1"><a id="__codelineno-70-1" name="__codelineno-70-1" href="#__codelineno-70-1"></a><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
+</span><span id="__span-70-2"><a id="__codelineno-70-2" name="__codelineno-70-2" href="#__codelineno-70-2"></a>Texto <span class="p">&lt;</span><span class="nt">small</span><span class="p">&gt;</span>pequeño<span class="p">&lt;/</span><span class="nt">small</span><span class="p">&gt;</span>.
+</span><span id="__span-70-3"><a id="__codelineno-70-3" name="__codelineno-70-3" href="#__codelineno-70-3"></a><span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p><code>&lt;em&gt;</code> y <code>&lt;small&gt;</code> son elementos <strong>inline</strong>.</p>
+<p>No forman líneas independientes.</p>
+<p>Viven dentro del párrafo:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-71-1"><a id="__codelineno-71-1" name="__codelineno-71-1" href="#__codelineno-71-1"></a>---------------------------------
+</span><span id="__span-71-2"><a id="__codelineno-71-2" name="__codelineno-71-2" href="#__codelineno-71-2"></a>Texto importante.
+</span><span id="__span-71-3"><a id="__codelineno-71-3" name="__codelineno-71-3" href="#__codelineno-71-3"></a>---------------------------------
+</span><span id="__span-71-4"><a id="__codelineno-71-4" name="__codelineno-71-4" href="#__codelineno-71-4"></a>↑
+</span><span id="__span-71-5"><a id="__codelineno-71-5" name="__codelineno-71-5" href="#__codelineno-71-5"></a>todo esto es el párrafo
+</span></code></pre></div>
+<p>Si el <code>&lt;p&gt;</code> tiene:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-72-1"><a id="__codelineno-72-1" name="__codelineno-72-1" href="#__codelineno-72-1"></a><span class="nt">max-width</span><span class="p">:</span><span class="nd">60ch</span><span class="o">;</span>
+</span></code></pre></div>
+<p>entonces:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-73-1"><a id="__codelineno-73-1" name="__codelineno-73-1" href="#__codelineno-73-1"></a><span class="p">&lt;</span><span class="nt">em</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>y</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-74-1"><a id="__codelineno-74-1" name="__codelineno-74-1" href="#__codelineno-74-1"></a><span class="p">&lt;</span><span class="nt">small</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>ya están contenidos dentro de esos 60 caracteres.</p>
+<p>No necesitan una regla propia.</p>
+<hr />
+<p><strong>7. La filosofía que hay detrás</strong></p>
+<p>El autor quiere aprovechar una de las mayores fortalezas de CSS:</p>
+<blockquote>
+<p><strong>Los estilos globales.</strong></p>
+</blockquote>
+<p>En lugar de decir:</p>
+<blockquote>
+<p>"Este párrafo tiene esta clase."</p>
+</blockquote>
+<p>dice:</p>
+<blockquote>
+<p>"Todos los párrafos son así."</p>
+</blockquote>
+<p>En lugar de:</p>
+<blockquote>
+<p>"Este h2 tiene esta clase."</p>
+</blockquote>
+<p>dice:</p>
+<blockquote>
+<p>"Todos los h2 son así."</p>
+</blockquote>
+<hr />
+<p><strong>8. ¿Por qué esto encaja con los axiomas?</strong></p>
+<p>Porque un axioma es una regla universal.</p>
+<p>No dice:</p>
+<blockquote>
+<p>Algunos párrafos tendrán una medida razonable.</p>
+</blockquote>
+<p>Ni:</p>
+<blockquote>
+<p>Solo los elementos que recuerde marcar.</p>
+</blockquote>
+<p>Dice:</p>
+<blockquote>
+<p><strong>Ninguna línea de texto debe ser demasiado larga.</strong></p>
+</blockquote>
+<p>Por tanto, es lógico que la regla se implemente de manera global.</p>
+<hr />
+<p><strong>La idea principal de toda esta sección es:</strong></p>
+<blockquote>
+<p><strong>Si una regla es universal, impleméntala con selectores globales y no obligues a los desarrolladores a recordarla manualmente mediante clases.</strong></p>
+</blockquote>
+<p>Es otra manifestación de una filosofía que aparece constantemente en este libro:</p>
+<blockquote>
+<p><strong>Haz que el sistema haga automáticamente lo correcto, en lugar de depender de la disciplina y memoria de las personas.</strong></p>
+</blockquote>
+</details>
+<h2 id="estilo-basado-en-excepciones">Estilo basado en excepciones<a class="headerlink" href="#estilo-basado-en-excepciones" title="Permanent link">&para;</a></h2>
 <p>Es difícil saber si nos hemos acordado de todo aquí. Un enfoque basado en excepciones es más inteligente, ya que solo tenemos que recordar qué elementos <em>no</em> deberían estar sujetos a la regla. Observa que los elementos inline <em>no</em> están incluidos en el siguiente ejemplo pero, dado que ocuparían un espacio horizontal igual o menor que sus padres, no surgirían efectos negativos.</p>
-<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-3-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-3-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-3-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-3-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-3-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-3-10">10</a></span>
-<span class="normal"><a href="#__codelineno-3-11">11</a></span>
-<span class="normal"><a href="#__codelineno-3-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="o">*</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">  </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="kt">ch</span><span class="p">;</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="p">}</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="nt">html</span><span class="o">,</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="nt">body</span><span class="o">,</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="nt">div</span><span class="o">,</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="nt">header</span><span class="o">,</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="nt">nav</span><span class="o">,</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="nt">main</span><span class="o">,</span>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="nt">footer</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="w">  </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span>
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="p">}</span>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-75-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-75-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-75-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-75-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-75-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-75-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-75-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-75-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-75-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-75-10">10</a></span>
+<span class="normal"><a href="#__codelineno-75-11">11</a></span>
+<span class="normal"><a href="#__codelineno-75-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-75-1"><a id="__codelineno-75-1" name="__codelineno-75-1"></a><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-75-2"><a id="__codelineno-75-2" name="__codelineno-75-2"></a><span class="w">  </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="kt">ch</span><span class="p">;</span>
+</span><span id="__span-75-3"><a id="__codelineno-75-3" name="__codelineno-75-3"></a><span class="p">}</span>
+</span><span id="__span-75-4"><a id="__codelineno-75-4" name="__codelineno-75-4"></a><span class="nt">html</span><span class="o">,</span>
+</span><span id="__span-75-5"><a id="__codelineno-75-5" name="__codelineno-75-5"></a><span class="nt">body</span><span class="o">,</span>
+</span><span id="__span-75-6"><a id="__codelineno-75-6" name="__codelineno-75-6"></a><span class="nt">div</span><span class="o">,</span>
+</span><span id="__span-75-7"><a id="__codelineno-75-7" name="__codelineno-75-7"></a><span class="nt">header</span><span class="o">,</span>
+</span><span id="__span-75-8"><a id="__codelineno-75-8" name="__codelineno-75-8"></a><span class="nt">nav</span><span class="o">,</span>
+</span><span id="__span-75-9"><a id="__codelineno-75-9" name="__codelineno-75-9"></a><span class="nt">main</span><span class="o">,</span>
+</span><span id="__span-75-10"><a id="__codelineno-75-10" name="__codelineno-75-10"></a><span class="nt">footer</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-75-11"><a id="__codelineno-75-11" name="__codelineno-75-11"></a><span class="w">  </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span>
+</span><span id="__span-75-12"><a id="__codelineno-75-12" name="__codelineno-75-12"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <p>El elemento <code>&lt;div&gt;</code> particularmente tiende a usarse como contenedor/envoltorio genérico. Es probable que algunos de estos elementos contengan múltiples cajas adyacentes, con una o más de cada una deseando ocupar los <code>60ch</code> completos. Esto hace que sus padres sean excepciones lógicas.</p>
 <p>Un enfoque basado en excepciones para CSS nos permite hacer <em>la mayor parte</em> de nuestro estilo con <em>la menor cantidad</em> de nuestro código. Si no estás adoptando un enfoque basado en excepciones, puede ser porque hacer excepciones se siente como <em>corregir errores</em>. Pero esto está lejos de ser el caso. CSS, con su <em>cascada y otras características</em> ↗, está diseñado para esto. En la tesis <em>ITCSS (Inverted Triangle CSS)</em> ↗ de Harry Roberts, la especificidad (qué tan específicos son los selectores) es inversamente proporcional al alcance (a cuántos elementos deberían afectar).</p>
 <h2 id="un-valor-universal">Un valor universal<a class="headerlink" href="#un-valor-universal" title="Permanent link">&para;</a></h2>
 <p>Antes de empezar a usar el valor de medida en todas partes, es mejor definirlo como una custom property. De esa manera, cualquier cambio en el valor se propagará por todo el diseño.</p>
 <p>Observa que no todas las custom properties tienen que ser globales, pero en este caso queremos que nuestros elementos, props y clases de utilidad estén de acuerdo. Por lo tanto, colocamos la custom property en el elemento <code>:root</code>.</p>
-<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
-<span class="normal"><a href="#__codelineno-4-2">2</a></span>
-<span class="normal"><a href="#__codelineno-4-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="p">:</span><span class="nd">root</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">  </span><span class="nv">--measure</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="kt">ch</span><span class="p">;</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="p">}</span>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-76-1">1</a></span>
+<span class="normal"><a href="#__codelineno-76-2">2</a></span>
+<span class="normal"><a href="#__codelineno-76-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-76-1"><a id="__codelineno-76-1" name="__codelineno-76-1"></a><span class="p">:</span><span class="nd">root</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-76-2"><a id="__codelineno-76-2" name="__codelineno-76-2"></a><span class="w">  </span><span class="nv">--measure</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="kt">ch</span><span class="p">;</span>
+</span><span id="__span-76-3"><a id="__codelineno-76-3" name="__codelineno-76-3"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <p>Esto se pasa a nuestro bloque universal…</p>
-<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-5-10">10</a></span>
-<span class="normal"><a href="#__codelineno-5-11">11</a></span>
-<span class="normal"><a href="#__codelineno-5-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="o">*</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">  </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--measure</span><span class="p">);</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="p">}</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="nt">html</span><span class="o">,</span>
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="nt">body</span><span class="o">,</span>
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="nt">div</span><span class="o">,</span>
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="nt">header</span><span class="o">,</span>
-</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="nt">nav</span><span class="o">,</span>
-</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="nt">main</span><span class="o">,</span>
-</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="nt">footer</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11"></a><span class="w">  </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span>
-</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12"></a><span class="p">}</span>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-77-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-77-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-77-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-77-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-77-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-77-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-77-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-77-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-77-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-77-10">10</a></span>
+<span class="normal"><a href="#__codelineno-77-11">11</a></span>
+<span class="normal"><a href="#__codelineno-77-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-77-1"><a id="__codelineno-77-1" name="__codelineno-77-1"></a><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-77-2"><a id="__codelineno-77-2" name="__codelineno-77-2"></a><span class="w">  </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--measure</span><span class="p">);</span>
+</span><span id="__span-77-3"><a id="__codelineno-77-3" name="__codelineno-77-3"></a><span class="p">}</span>
+</span><span id="__span-77-4"><a id="__codelineno-77-4" name="__codelineno-77-4"></a><span class="nt">html</span><span class="o">,</span>
+</span><span id="__span-77-5"><a id="__codelineno-77-5" name="__codelineno-77-5"></a><span class="nt">body</span><span class="o">,</span>
+</span><span id="__span-77-6"><a id="__codelineno-77-6" name="__codelineno-77-6"></a><span class="nt">div</span><span class="o">,</span>
+</span><span id="__span-77-7"><a id="__codelineno-77-7" name="__codelineno-77-7"></a><span class="nt">header</span><span class="o">,</span>
+</span><span id="__span-77-8"><a id="__codelineno-77-8" name="__codelineno-77-8"></a><span class="nt">nav</span><span class="o">,</span>
+</span><span id="__span-77-9"><a id="__codelineno-77-9" name="__codelineno-77-9"></a><span class="nt">main</span><span class="o">,</span>
+</span><span id="__span-77-10"><a id="__codelineno-77-10" name="__codelineno-77-10"></a><span class="nt">footer</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-77-11"><a id="__codelineno-77-11" name="__codelineno-77-11"></a><span class="w">  </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span>
+</span><span id="__span-77-12"><a id="__codelineno-77-12" name="__codelineno-77-12"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <p>…y a cualquier clase de utilidad que podamos encontrar que necesitemos.</p>
-<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
-<span class="normal"><a href="#__codelineno-6-2">2</a></span>
-<span class="normal"><a href="#__codelineno-6-3">3</a></span>
-<span class="normal"><a href="#__codelineno-6-4">4</a></span>
-<span class="normal"><a href="#__codelineno-6-5">5</a></span>
-<span class="normal"><a href="#__codelineno-6-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="p">.</span><span class="nc">max-width</span><span class="err">\</span><span class="p">:</span><span class="nd">measure</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="w">  </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--measure</span><span class="p">);</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="p">}</span>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="p">.</span><span class="nc">max-width</span><span class="err">\</span><span class="p">:</span><span class="nd">measure</span><span class="err">\</span><span class="o">/</span><span class="nt">2</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="w">  </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--measure</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
-</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="p">}</span>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-78-1">1</a></span>
+<span class="normal"><a href="#__codelineno-78-2">2</a></span>
+<span class="normal"><a href="#__codelineno-78-3">3</a></span>
+<span class="normal"><a href="#__codelineno-78-4">4</a></span>
+<span class="normal"><a href="#__codelineno-78-5">5</a></span>
+<span class="normal"><a href="#__codelineno-78-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-78-1"><a id="__codelineno-78-1" name="__codelineno-78-1"></a><span class="p">.</span><span class="nc">max-width</span><span class="err">\</span><span class="p">:</span><span class="nd">measure</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-78-2"><a id="__codelineno-78-2" name="__codelineno-78-2"></a><span class="w">  </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--measure</span><span class="p">);</span>
+</span><span id="__span-78-3"><a id="__codelineno-78-3" name="__codelineno-78-3"></a><span class="p">}</span>
+</span><span id="__span-78-4"><a id="__codelineno-78-4" name="__codelineno-78-4"></a><span class="p">.</span><span class="nc">max-width</span><span class="err">\</span><span class="p">:</span><span class="nd">measure</span><span class="err">\</span><span class="o">/</span><span class="nt">2</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-78-5"><a id="__codelineno-78-5" name="__codelineno-78-5"></a><span class="w">  </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--measure</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+</span><span id="__span-78-6"><a id="__codelineno-78-6" name="__codelineno-78-6"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <h3 id="escapado">Escapado<a class="headerlink" href="#escapado" title="Permanent link">&para;</a></h3>
 <p>Las barras invertidas son necesarias en el ejemplo anterior para escapar los caracteres especiales de barra diagonal y dos puntos.</p>
 <h2 id="medida-en-layouts-compuestos">Medida en layouts compuestos<a class="headerlink" href="#medida-en-layouts-compuestos" title="Permanent link">&para;</a></h2>
 <p>Ciertas <em>primitivas de layout</em> inevitablemente aceptan props relacionadas con la medida, y algunas establecen valores por defecto para esas props usando <code>var(--measure)</code>. El <em>Switcher</em> tiene una prop <code>threshold</code> que define el ancho del contenedor en el cual el layout cambia entre una configuración horizontal y vertical:</p>
-<div class="language-js highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span>
-<span class="normal"><a href="#__codelineno-7-2">2</a></span>
-<span class="normal"><a href="#__codelineno-7-3">3</a></span>
-<span class="normal"><a href="#__codelineno-7-4">4</a></span>
-<span class="normal"><a href="#__codelineno-7-5">5</a></span>
-<span class="normal"><a href="#__codelineno-7-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="nx">get</span><span class="w"> </span><span class="nx">threshold</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s1">&#39;threshold&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;var(--measure)&#39;</span><span class="p">;</span>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="p">}</span>
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="nx">set</span><span class="w"> </span><span class="nx">threshold</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;threshold&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">val</span><span class="p">);</span>
-</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="p">}</span>
+<div class="language-js highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-79-1">1</a></span>
+<span class="normal"><a href="#__codelineno-79-2">2</a></span>
+<span class="normal"><a href="#__codelineno-79-3">3</a></span>
+<span class="normal"><a href="#__codelineno-79-4">4</a></span>
+<span class="normal"><a href="#__codelineno-79-5">5</a></span>
+<span class="normal"><a href="#__codelineno-79-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-79-1"><a id="__codelineno-79-1" name="__codelineno-79-1"></a><span class="nx">get</span><span class="w"> </span><span class="nx">threshold</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-79-2"><a id="__codelineno-79-2" name="__codelineno-79-2"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s1">&#39;threshold&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;var(--measure)&#39;</span><span class="p">;</span>
+</span><span id="__span-79-3"><a id="__codelineno-79-3" name="__codelineno-79-3"></a><span class="p">}</span>
+</span><span id="__span-79-4"><a id="__codelineno-79-4" name="__codelineno-79-4"></a><span class="nx">set</span><span class="w"> </span><span class="nx">threshold</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-79-5"><a id="__codelineno-79-5" name="__codelineno-79-5"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;threshold&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">val</span><span class="p">);</span>
+</span><span id="__span-79-6"><a id="__codelineno-79-6" name="__codelineno-79-6"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <p>Este es un valor por defecto sensato, pero puede anularse fácilmente con cualquier valor de cadena:</p>
-<div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="p">&lt;</span><span class="nt">switcher-l</span> <span class="na">threshold</span><span class="o">=</span><span class="s">&quot;20rem&quot;</span><span class="p">&gt;</span>...<span class="p">&lt;/</span><span class="nt">switcher-l</span><span class="p">&gt;</span>
+<div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-80-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-80-1"><a id="__codelineno-80-1" name="__codelineno-80-1"></a><span class="p">&lt;</span><span class="nt">switcher-l</span> <span class="na">threshold</span><span class="o">=</span><span class="s">&quot;20rem&quot;</span><span class="p">&gt;</span>...<span class="p">&lt;/</span><span class="nt">switcher-l</span><span class="p">&gt;</span>
 </span></code></pre></div></td></tr></table></div>
 <p>Si pasamos un valor ilegítimo a <code>threshold</code>, la declaración será descartada, y el <em>Switcher</em> aplicará la hoja de estilo de respaldo (<em>fallback stylesheet</em>) con el valor por defecto de todos modos.</p>
 <p>Nuestro enfoque de la medida es uno en el que asumimos el control, pero un tipo de control moderado que es deferente hacia la forma en que los navegadores funcionan y los usuarios los operan. Muchos de los 'axiomas' que gobiernan tu diseño, como <em>"la fuente del cuerpo será la Fuente X"</em> o <em>"los encabezados serán azul oscuro"</em>, no tendrán un impacto en el layout como tal, lo que los hace mucho más simples de aplicar solo con estilos globales. Cuando el layout entra en la ecuación, ten cuidado con las diferentes configuraciones y orientaciones. Elige propiedades, valores y unidades que permitan al navegador calcular el layout más adecuado en tu nombre.</p>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        :root{
+              --ratio: 1.333;
+            --s5:calc(var(--s4) * var(--ratio));
+            --s4:calc(var(--s3) * var(--ratio));
+            --s3:calc(var(--s2) * var(--ratio));
+            --s2:calc(var(--s1) * var(--ratio));
+            --s1:calc(var(--s0) * var(--ratio));
+            --s0: 1rem;
+            --s-1:calc(var(--s0)  / var(--ratio));
+            --s-2:calc(var(--s-1) / var(--ratio));
+            --s-3:calc(var(--s-2) / var(--ratio));
+            --s-4:calc(var(--s-3) / var(--ratio));
+            --s-5:calc(var(--s-4) / var(--ratio));
+        }
+        .contenedor{color: rgb(255, 255, 255);}
+        strong{color: rgb(8, 249, 0);}
+        .title{ 
+            padding: var(--s-1);
+            font-size: var(--s-1); 
+            background-color: rgb(11, 11, 16);}
+        .texto-1  {
+            max-width: 60ch;
+            font-size: var(--s0);
+        }
+        .texto-2 {
+           max-width: 600px;
+           font-size: var(--s1);
+        }
+        .estilos-texto{
+            padding: var(--s-1);
+            background-color: rgb(59, 59, 59);
+            margin: var(--s-1);
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <div class="texto-1 estilos-texto">
+            <div class="title">
+                <p>Aqui estamos usando <strong>max-width: 60ch</strong> y podemos ver como la cantidad de caracteres en una sola linea dentro de la caja se matiene sin importar si el tamaño de la letra es mas grande o pequeño. Tenemos al rededor de unos 61 caracteres sin importar si la letra es mas grande o mas pequeña, el hecho de usar <strong>ch</strong> nos permite mantener esta cantidad. </p>
+                <textarea id="textarea-1" placeholder="Enter more text"></textarea>
+            </div>
+            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Unde repellendus reprehenderit, eligendi provident maiores mollitia sequi eos, nam quasi vel quia laboriosam voluptatum, maxime accusantium? Eligendi magnam praesentium placeat rem!</p>
+        </div>
+        <div class="texto-2 estilos-texto">
+             <div class="title">
+                <p> Aquí estamos usando <strong>max-width: 600px;</strong> y podemos observar cómo la cantidad de caracteres que caben en una misma línea dentro de la caja cambia cuando el tamaño de la fuente aumenta o disminuye. Esto ocurre porque el ancho máximo está definido en píxeles, por lo que permanece constante mientras las letras cambian de tamaño. 
+                A diferencia del ejemplo anterior, donde la cantidad de caracteres por línea se mantenía aproximadamente igual independientemente de si el tamaño de la fuente crecía o no. Esto se debe a que allí se utilizaba la unidad <strong>ch</strong>, cuyo valor depende del tamaño de la fuente. Como consecuencia, cuando las letras se hacen más grandes, también aumenta el ancho máximo de la caja, permitiendo conservar una medida de lectura más consistente.</p>
+                <textarea id="textarea-2" placeholder="Enter more text"></textarea>
+            </div>
+            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Unde repellendus reprehenderit, eligendi provident maiores mollitia sequi eos, nam quasi vel quia laboriosam voluptatum, maxime accusantium? Eligendi magnam praesentium placeat rem!</p>
+        </div>
+    </div>
+</body>
+<script>
+    function getText(e){
+        console.log()
+    }
+
+    const textOne = document.getElementsByClassName('texto-1')
+    const textTwo = document.getElementsByClassName('texto-2')
+    const areaTextO = document.getElementById('textarea-1')
+    const areaTextT = document.getElementById('textarea-2')
+
+    areaTextO.addEventListener('keyup',getText)
+    areaTextT.addEventListener('keyup',getText)
+    
+    
+
+</script>
+</html>
