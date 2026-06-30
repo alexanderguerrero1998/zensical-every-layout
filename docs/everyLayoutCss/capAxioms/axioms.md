@@ -483,6 +483,126 @@ Usar `ch` nos permite imponer el axioma independientemente del `font-size`, perm
 
 ??? Example 
 
+    Aqui se puede revisar el ejemplo [Example ↗](../../examples/axiomas/maxWidth.html)
+
+    ```html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+            :root{
+                --ratio: 1.333;
+                --s5:calc(var(--s4) * var(--ratio));
+                --s4:calc(var(--s3) * var(--ratio));
+                --s3:calc(var(--s2) * var(--ratio));
+                --s2:calc(var(--s1) * var(--ratio));
+                --s1:calc(var(--s0) * var(--ratio));
+                --s0: 1rem;
+                --s-1:calc(var(--s0)  / var(--ratio));
+                --s-2:calc(var(--s-1) / var(--ratio));
+                --s-3:calc(var(--s-2) / var(--ratio));
+                --s-4:calc(var(--s-3) / var(--ratio));
+                --s-5:calc(var(--s-4) / var(--ratio));
+            }
+            .contenedor{color: rgb(255, 255, 255); min-width: 1400px;}
+            strong{color: rgb(8, 249, 0);}
+            .title{ 
+                padding: var(--s-1);
+                font-size: var(--s-1); 
+                background-color: rgb(11, 11, 16);}
+            .texto-1 { max-width: 60ch;}
+            .texto-2 { max-width: 600px; }
+            .measure-ch{ font-size: var(--s0); }
+            .measure-px{ font-size: var(--s1); }
+            .--s-1{font-size: var(--s-1);}
+            .--s0{font-size: var(--s0);}
+            .--s1{font-size: var(--s1);}
+            .--s2{font-size: var(--s2);}
+
+            .estilos-texto{
+                padding: var(--s-1);
+                background-color: rgb(59, 59, 59);
+                margin: var(--s-1);
+                overflow-wrap: break-word;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="contenedor">
+            <div id="sub-1" class="texto-1 estilos-texto measure-ch">
+                <div class="title">
+                    <p>Aqui estamos usando <strong>max-width: 60ch</strong> y podemos ver como la cantidad de caracteres en una sola linea dentro de la caja se matiene sin importar si el tamaño de la letra es mas grande o pequeño. Tenemos al rededor de unos 61 caracteres sin importar si la letra es mas grande o mas pequeña, el hecho de usar <strong>ch</strong> nos permite mantener esta cantidad. </p>
+                    <div> 
+                        <select id="select-1">
+                            <option value="--s-1">--s-1</option>
+                            <option value="--s0">--s0</option>
+                            <option value="--s1">--s1</option>
+                            <option value="--s2">--s2</option>
+                        </select>
+                    </div>
+                    <textarea id="textarea-1" placeholder="Enter more text"></textarea>
+                    
+                </div>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Unde repellendus reprehenderit, eligendi provident maiores mollitia sequi eos, nam quasi vel quia laboriosam voluptatum, maxime accusantium? Eligendi magnam praesentium placeat rem!<span id="oneT"></span></p>
+            </div>
+
+            <div  id="sub-2" class="texto-2 estilos-texto measure-px">
+                <div class="title">
+                    <p> Aquí estamos usando <strong>max-width: 600px;</strong> y podemos observar cómo la cantidad de caracteres que caben en una misma línea dentro de la caja cambia cuando el tamaño de la fuente aumenta o disminuye. Esto ocurre porque el ancho máximo está definido en píxeles, por lo que permanece constante mientras las letras cambian de tamaño. 
+                    A diferencia del ejemplo anterior, donde la cantidad de caracteres por línea se mantenía aproximadamente igual independientemente de si el tamaño de la fuente crecía o no. Esto se debe a que allí se utilizaba la unidad <strong>ch</strong>, cuyo valor depende del tamaño de la fuente. Como consecuencia, cuando las letras se hacen más grandes, también aumenta el ancho máximo de la caja, permitiendo conservar una medida de lectura más consistente.</p>
+                    <div> 
+                        <select id="select-2">
+                            <option value="--s-1">--s-1</option>
+                            <option value="--s0">--s0</option>
+                            <option value="--s1">--s1</option>
+                            <option value="--s2">--s2</option>
+                        </select>
+                    </div>
+                    <textarea id="textarea-2" placeholder="Enter more text"></textarea>
+                </div>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Unde repellendus reprehenderit, eligendi provident maiores mollitia sequi eos, nam quasi vel quia laboriosam voluptatum, maxime accusantium? Eligendi magnam praesentium placeat rem!<span id="twoT"></span></p>
+            </div>
+        </div>
+    </body>
+    <script>
+        function getTextO(e){ one.textContent =  e.target.value }
+        function getTextT(e){ two.textContent =  e.target.value }
+        function selectO(e){
+            subOne.classList.remove('--s-1', '--s0', '--s1', '--s2');
+            subOne.classList.add(e.target.value)
+        }
+        function selectT(e){
+            subTwo.classList.remove('--s-1', '--s0', '--s1', '--s2');
+            subTwo.classList.add(e.target.value)
+        }
+        
+        const textOne = document.getElementsByClassName('texto-1')
+        const textTwo = document.getElementsByClassName('texto-2')
+        
+        const areaTextO = document.getElementById('textarea-1')
+        const areaTextT = document.getElementById('textarea-2')
+        
+        const one = document.getElementById('oneT')
+        const two = document.getElementById('twoT')
+
+        const selectOne = document.getElementById('select-1')
+        const selectTwo = document.getElementById('select-2')
+
+        const subOne =  document.getElementById('sub-1')
+        const subTwo =  document.getElementById('sub-2')
+
+        areaTextO.addEventListener('keyup',getTextO)
+        areaTextT.addEventListener('keyup',getTextT)
+        selectOne.addEventListener('change',selectO)
+        selectTwo.addEventListener('change',selectT)
+
+    </script>
+    </html>
+    ```
+
 ??? info "Explicacion"
 
     Esta sección responde a la pregunta que dejó pendiente la anterior:
@@ -1381,6 +1501,312 @@ El elemento `<div>` particularmente tiende a usarse como contenedor/envoltorio g
 
 Un enfoque basado en excepciones para CSS nos permite hacer _la mayor parte_ de nuestro estilo con _la menor cantidad_ de nuestro código. Si no estás adoptando un enfoque basado en excepciones, puede ser porque hacer excepciones se siente como _corregir errores_. Pero esto está lejos de ser el caso. CSS, con su _cascada y otras características_ ↗, está diseñado para esto. En la tesis _ITCSS (Inverted Triangle CSS)_ ↗ de Harry Roberts, la especificidad (qué tan específicos son los selectores) es inversamente proporcional al alcance (a cuántos elementos deberían afectar).
 
+??? info "Explicacion"
+
+    Esta parte habla de una **filosofía para escribir CSS**, no de una técnica específica. Vamos paso a paso.
+
+    ---
+
+    __El enfoque tradicional__
+
+    Normalmente escribimos CSS así:
+
+    ```css
+    p {
+        max-width: 60ch;
+    }
+
+    article {
+        max-width: 60ch;
+    }
+
+    blockquote {
+        max-width: 60ch;
+    }
+
+    li {
+        max-width: 60ch;
+    }
+    ```
+
+    Es decir, pensamos:
+
+    > "¿A qué elementos quiero aplicar esta regla?"
+
+    Y vamos agregándolos uno por uno.
+
+    El problema es que mañana agregas un `<section>` con texto y se te olvida ponerle `max-width`.
+
+    Entonces la página queda inconsistente.
+
+    ---
+
+    __El enfoque basado en excepciones__
+
+    En lugar de pensar:
+
+    > "¿Quién debe tener esta regla?"
+
+    Piensas:
+
+    > **"Todos la tendrán, excepto quienes no deban tenerla."**
+
+    Entonces escribes:
+
+    ```css
+    * {
+        max-width: 60ch;
+    }
+    ```
+
+    Eso significa:
+
+    > **Todos los elementos del documento tendrán un ancho máximo de 60ch.**
+
+    Después haces excepciones:
+
+    ```css
+    html,
+    body,
+    div,
+    header,
+    nav,
+    main,
+    footer {
+        max-width: none;
+    }
+    ```
+
+    Es decir:
+
+    > "Bueno... todos menos estos."
+
+    ---
+
+    __¿Por qué excluir esos elementos?__
+
+    Porque suelen ser **contenedores**, no contenido.
+
+    Por ejemplo:
+
+    ```html
+    <div>
+        <article>...</article>
+        <aside>...</aside>
+    </div>
+    ```
+
+    Si el `<div>` también tuviera:
+
+    ```css
+    max-width:60ch;
+    ```
+
+    todo el diseño quedaría limitado a 60 caracteres.
+
+    En cambio el autor quiere que el `<div>` pueda ocupar todo el ancho disponible y que sean los elementos internos los que limiten la longitud del texto.
+
+    ---
+
+    __¿Por qué también `html` y `body`?__
+
+    Imagina esto:
+
+    ```css
+    * {
+        max-width:60ch;
+    }
+    ```
+
+    Entonces el `<body>` también mediría solo 60ch.
+
+    Toda la página sería una columna estrecha.
+
+    Por eso escriben:
+
+    ```css
+    body{
+        max-width:none;
+    }
+    ```
+
+    Ahora el body vuelve a ocupar toda la ventana.
+
+    ---
+
+    __¿Y por qué dejan fuera los elementos inline?__
+
+    Dicen esto:
+
+    > Los elementos inline no están incluidos...
+
+    Por ejemplo:
+
+    ```html
+    <p>
+        Hola <strong>Alex</strong>.
+    </p>
+    ```
+
+    `strong` es inline.
+
+    Si recibe
+
+    ```css
+    max-width:60ch;
+    ```
+
+    no pasa absolutamente nada.
+
+    Porque un elemento inline **no intenta ocupar todo el ancho disponible**.
+
+    Su ancho ya es solamente el del texto que contiene.
+
+    Así que la regla es inofensiva.
+
+    ---
+
+    __¿Qué significa esta frase?__
+
+    > CSS está diseñado para trabajar mediante excepciones.
+
+    Significa que CSS tiene una característica llamada **la cascada**.
+
+    Ejemplo:
+
+    ```css
+    *{
+        color:black;
+    }
+    ```
+
+    Después:
+
+    ```css
+    a{
+        color:blue;
+    }
+    ```
+
+    Y luego:
+
+    ```css
+    a.importante{
+        color:red;
+    }
+    ```
+
+    No estás corrigiendo errores.
+
+    Estás diciendo:
+
+    > Regla general.
+
+    Luego:
+
+    > Excepción.
+
+    Luego:
+
+    > Excepción de la excepción.
+
+    Eso es precisamente la cascada.
+
+    ---
+
+    __El concepto de ITCSS__
+
+    Cuando mencionan **ITCSS (Inverted Triangle CSS)** hablan de organizar el CSS desde lo más general hasta lo más específico.
+
+    Visualmente sería algo así:
+
+    ```
+            a.importante
+                button.primary
+            article > h2
+        p
+    section
+    body
+    *
+    ```
+
+    Abajo está lo que afecta a muchísimos elementos.
+
+    Arriba está lo que afecta a muy pocos.
+
+    ---
+
+    Por ejemplo:
+
+    ```css
+    *{
+        box-sizing:border-box;
+    }
+    ```
+
+    Afecta absolutamente todo.
+
+    Después:
+
+    ```css
+    body{
+        font-family:sans-serif;
+    }
+    ```
+
+    Afecta casi todo.
+
+    Después:
+
+    ```css
+    article{
+        max-width:60ch;
+    }
+    ```
+
+    Solo afecta a los artículos.
+
+    Después:
+
+    ```css
+    article > h2{
+        color:blue;
+    }
+    ```
+
+    Solo a los `h2` dentro de un `article`.
+
+    Después:
+
+    ```css
+    #titulo-principal{
+        color:red;
+    }
+    ```
+
+    Solo a un único elemento.
+
+    Mientras más arriba vas, **más específica es la regla y menos elementos afecta**.
+
+    ---
+
+    __Lo que el autor realmente quiere transmitir__
+
+    No está diciendo que **siempre** debas escribir:
+
+    ```css
+    *{
+        max-width:60ch;
+    }
+    ```
+
+    Lo que quiere enseñarte es una forma de pensar:
+
+    * Empieza con una **regla general** que cubra la mayoría de los casos.
+    * Luego crea **excepciones** para los pocos elementos que realmente necesitan un comportamiento distinto.
+
+    Ese enfoque suele producir hojas de estilo más pequeñas, coherentes y fáciles de mantener que ir añadiendo reglas individuales para cada tipo de elemento.
+
 ## Un valor universal
 
 Antes de empezar a usar el valor de medida en todas partes, es mejor definirlo como una custom property. De esa manera, cualquier cambio en el valor se propagará por todo el diseño.
@@ -1421,9 +1847,669 @@ footer {
 }
 ```
 
-### Escapado
+??? info "Explicacion"
+
+    Esta sección introduce una idea muy importante: **no escribir valores "quemados" (hardcoded) en varios lugares**, sino definirlos una sola vez y reutilizarlos mediante una **custom property**.
+
+    Vamos por partes.
+
+    ---
+
+    __1. El problema de repetir el mismo valor__
+
+    Imagina que escribes esto:
+
+    ```css
+    p {
+        max-width: 60ch;
+    }
+
+    article {
+        max-width: 60ch;
+    }
+
+    blockquote {
+        max-width: 60ch;
+    }
+
+    .card {
+        max-width: 60ch;
+    }
+    ```
+
+    Todo funciona.
+
+    Pero un día decides que **60ch es muy ancho** y prefieres **65ch**.
+
+    Ahora debes buscar todos los `60ch` y cambiarlos.
+
+    Si olvidas uno, tendrás un diseño inconsistente.
+
+    ---
+
+    __2. La solución: una custom property__
+
+    En lugar de escribir `60ch` muchas veces, lo guardas en una variable.
+
+    ```css
+    :root {
+        --measure: 60ch;
+    }
+    ```
+
+    Aquí ocurre algo importante.
+
+    `--measure` es una variable CSS.
+
+    Y `:root` es el elemento raíz del documento.
+
+    En HTML, `:root` equivale al `<html>`.
+
+    Es decir:
+
+    ```css
+    :root {
+        --measure:60ch;
+    }
+    ```
+
+    es prácticamente como escribir
+
+    ```css
+    html {
+        --measure:60ch;
+    }
+    ```
+
+    aunque por convención se usa `:root`.
+
+    ---
+
+    __3. ¿Por qué en `:root`?__
+
+    Porque todas las variables CSS **se heredan**.
+
+    Si la declaras aquí:
+
+    ```css
+    :root{
+        --measure:60ch;
+    }
+    ```
+
+    entonces cualquier elemento puede usarla.
+
+    Por ejemplo:
+
+    ```css
+    article{
+        max-width:var(--measure);
+    }
+    ```
+
+    o
+
+    ```css
+    .card{
+        max-width:var(--measure);
+    }
+    ```
+
+    o
+
+    ```css
+    aside{
+        width:calc(var(--measure)/2);
+    }
+    ```
+
+    Todos leen la misma variable.
+
+    ---
+
+    __4. ¿Qué significa `var()`?__
+
+    `var()` simplemente significa:
+
+    > "Dame el valor de esta variable."
+
+    Por ejemplo
+
+    ```css
+    :root{
+        --measure:60ch;
+    }
+
+    p{
+        max-width:var(--measure);
+    }
+    ```
+
+    El navegador lo interpreta como si dijera
+
+    ```css
+    p{
+        max-width:60ch;
+    }
+    ```
+
+    ---
+
+    __5. ¿Por qué dicen que "cualquier cambio se propagará"?__
+
+    Supongamos que meses después decides:
+
+    ```css
+    :root{
+        --measure:70ch;
+    }
+    ```
+
+    No tienes que tocar nada más.
+
+    Automáticamente cambia:
+
+    ```css
+    *{
+        max-width:var(--measure);
+    }
+    ```
+
+    También cambia
+
+    ```css
+    .card{
+        max-width:var(--measure);
+    }
+    ```
+
+    También cambia
+
+    ```css
+    .article{
+        max-width:var(--measure);
+    }
+    ```
+
+    Todo usa el nuevo valor.
+
+    Eso es lo que significa **"se propagará por todo el diseño"**.
+
+    ---
+
+    __6. Luego usan la variable aquí__
+
+    ```css
+    * {
+        max-width: var(--measure);
+    }
+    ```
+
+    En vez de escribir
+
+    ```css
+    *{
+        max-width:60ch;
+    }
+    ```
+
+    escriben
+
+    ```css
+    *{
+        max-width:var(--measure);
+    }
+    ```
+
+    Así el valor depende de una única variable.
+
+    ---
+
+    __7. ¿Y esto?__
+
+    ```css
+    .max-width\:measure {
+        max-width: var(--measure);
+    }
+    ```
+
+    Esta es una **clase de utilidad**.
+
+    El nombre parece raro porque contiene `:`.
+
+    En CSS el carácter `:` debe escaparse con `\`.
+
+    La clase realmente se llama:
+
+    ```text
+    max-width:measure
+    ```
+
+    y en HTML se usaría como:
+
+    ```html
+    <div class="max-width:measure">
+    ```
+
+    (En HTML no hace falta escribir la barra invertida; solo es necesaria en el selector CSS).
+
+    Lo que hace es simplemente:
+
+    ```css
+    max-width:var(--measure);
+    ```
+
+    ---
+
+    __8. ¿Y esta otra?__
+
+    ```css
+    .max-width\:measure\/2 {
+        max-width: calc(var(--measure) / 2);
+    }
+    ```
+
+    Aquí utilizan otra función de CSS:
+
+    ```css
+    calc()
+    ```
+
+    `calc()` sirve para realizar operaciones matemáticas.
+
+    Como:
+
+    ```css
+    width:calc(100% - 2rem);
+    ```
+
+    o
+
+    ```css
+    font-size:calc(1rem * 1.2);
+    ```
+
+    En este caso:
+
+    ```css
+    calc(var(--measure)/2)
+    ```
+
+    significa:
+
+    > "Toma el valor de `--measure` y divídelo por dos."
+
+    Si
+
+    ```css
+    --measure:60ch;
+    ```
+
+    entonces
+
+    ```css
+    calc(var(--measure)/2)
+    ```
+
+    vale
+
+    ```text
+    30ch
+    ```
+
+    ---
+
+    __9. ¿Por qué es una buena idea?__
+
+    Porque ahora tienes una única fuente de verdad.
+
+    Imagina este diseño:
+
+    ```css
+    :root{
+        --measure:60ch;
+    }
+    ```
+
+    Luego:
+
+    ```css
+    .article{
+        max-width:var(--measure);
+    }
+
+    .card{
+        max-width:calc(var(--measure)/2);
+    }
+
+    .sidebar{
+        width:calc(var(--measure)/3);
+    }
+
+    .popup{
+        max-width:calc(var(--measure)*1.5);
+    }
+    ```
+
+    Si un día cambias:
+
+    ```css
+    --measure:65ch;
+    ```
+
+    Todo el sistema se ajusta automáticamente, manteniendo las mismas proporciones.
+
+    ---
+
+    __La idea principal__
+
+    El autor no está diciendo únicamente "usa variables". Lo que propone es construir un **sistema de diseño**.
+
+    En lugar de pensar:
+
+    * Este elemento mide `60ch`.
+    * Aquel mide `30ch`.
+    * Ese otro mide `90ch`.
+
+    Piensas:
+
+    * Existe una **medida base de lectura** (`--measure`).
+    * Todo lo relacionado con el ancho de lectura se deriva de esa medida.
+
+    Así, si alguna vez decides que la medida ideal ya no es `60ch`, solo modificas una línea y todo el diseño conserva su coherencia.
+
+## Escapado
 
 Las barras invertidas son necesarias en el ejemplo anterior para escapar los caracteres especiales de barra diagonal y dos puntos.
+
+??? info "Explicacion"
+
+    Este es un tema que al principio suele confundir, porque mezcla **CSS** con la sintaxis de los **selectores**. Vamos paso a paso.
+
+    ---
+
+    __¿Qué significa "escapar"?__
+
+    **Escapar** significa decirle al navegador:
+
+    > "El siguiente carácter no forma parte de la sintaxis de CSS. Quiero que lo interpretes como un carácter normal."
+
+    Para eso se utiliza la barra invertida (`\`).
+
+    ---
+
+    __Un ejemplo sencillo__
+
+    Imagina que tienes esta clase en HTML:
+
+    ```html
+    <div class="precio$"></div>
+    ```
+
+    Si intentaras escribir:
+
+    ```css
+    .precio$ {
+        color: red;
+    }
+    ```
+
+    CSS podría interpretar el `$` como un carácter especial o inválido.
+
+    Entonces lo escapas:
+
+    ```css
+    .precio\$ {
+        color: red;
+    }
+    ```
+
+    La barra invertida le dice:
+
+    > "No interpretes `$` como parte de la sintaxis; forma parte del nombre."
+
+    ---
+
+    __En tu libro aparece esto__
+
+    ```css
+    .max-width\:measure {
+        max-width: var(--measure);
+    }
+    ```
+
+    Quizá te preguntes:
+
+    > **¿Por qué ese `\` antes de `:`?**
+
+    Porque en CSS los dos puntos (`:`) **ya tienen un significado**.
+
+    Por ejemplo:
+
+    ```css
+    a:hover
+    ```
+
+    Aquí `:` significa un **pseudoestado**.
+
+    ```css
+    input:focus
+    ```
+
+    ```css
+    li:first-child
+    ```
+
+    ```css
+    button:active
+    ```
+
+    Todos usan `:` como parte de la sintaxis de CSS.
+
+    Entonces si escribes:
+
+    ```css
+    .max-width:measure
+    ```
+
+    el navegador intenta interpretar:
+
+    * `.max-width` → una clase.
+    * `:measure` → un pseudoselector llamado `measure`.
+
+    Y eso no existe.
+
+    ---
+
+    _Entonces hacemos esto_
+
+    ```css
+    .max-width\:measure
+    ```
+
+    Ahora el navegador entiende:
+
+    > Toda esa cadena (`max-width:measure`) es el nombre de una única clase.
+
+    ---
+
+    __Lo mismo pasa con `/`__
+
+    En el ejemplo aparece:
+
+    ```css
+    .max-width\:measure\/2
+    ```
+
+    ¿Por qué?
+
+    Porque `/` también tiene significado en CSS.
+
+    Por ejemplo:
+
+    ```css
+    font: 16px/1.5 sans-serif;
+    ```
+
+    La barra separa el tamaño de fuente del `line-height`.
+
+    Entonces, si quieres que `/` forme parte del nombre de la clase, debes escribir:
+
+    ```css
+    \/
+    ```
+
+    ---
+
+    __El HTML NO necesita escapar__
+
+    Esto es algo muy importante.
+
+    En HTML escribes:
+
+    ```html
+    <div class="max-width:measure"></div>
+    ```
+
+    o
+
+    ```html
+    <div class="max-width:measure/2"></div>
+    ```
+
+    Sin barras invertidas.
+
+    Las barras solo aparecen cuando escribes el **selector CSS**.
+
+    Por eso:
+
+    HTML
+
+    ```html
+    <div class="max-width:measure"></div>
+    ```
+
+    CSS
+
+    ```css
+    .max-width\:measure {
+        ...
+    }
+    ```
+
+    ---
+
+    __¿Por qué ocurre esto?__
+
+    Porque CSS usa ciertos caracteres como parte de su lenguaje.
+
+    Por ejemplo:
+
+    ```css
+    #id
+    ```
+
+    `#` significa "id".
+
+    ```css
+    .clase
+    ```
+
+    `.` significa "clase".
+
+    ```css
+    :hover
+    ```
+
+    `:` significa "pseudoestado".
+
+    ```css
+    [attr=value]
+    ```
+
+    `[]` significan "selector de atributo".
+
+    Como esos caracteres tienen un significado especial, si quieres usarlos **como parte del nombre**, debes escaparlos.
+
+    ---
+
+    # Un ejemplo visual
+
+    Supongamos que tienes esta clase:
+
+    ```html
+    <div class="mi:clase"></div>
+    ```
+
+    Si escribes:
+
+    ```css
+    .mi:clase
+    ```
+
+    CSS lo interpreta como:
+
+    ```
+    .mi
+    :clase
+    ```
+
+    Es decir:
+
+    * clase llamada `mi`
+    * pseudoestado `clase`
+
+    ❌ Eso no es lo que quieres.
+
+    En cambio:
+
+    ```css
+    .mi\:clase
+    ```
+
+    se interpreta como:
+
+    ```
+    mi:clase
+    ```
+
+    ✔️ Una única clase.
+
+    ---
+
+    __Entonces, ¿por qué alguien pondría `:` o `/` en el nombre de una clase?__
+
+    Porque algunos frameworks, como **Tailwind CSS**, utilizan esos caracteres para hacer que las clases sean más descriptivas.
+
+    Por ejemplo:
+
+    ```text
+    max-width:measure
+    ```
+
+    Se lee casi como una instrucción:
+
+    > "max-width = measure"
+
+    o
+
+    ```text
+    padding:x/2
+    ```
+
+    > "padding horizontal dividido entre 2"
+
+    Es una forma de nombrar clases que resulta muy legible, aunque obliga a escapar esos caracteres al escribir los selectores CSS.
+
+    ---
+
+    __Resumen__
+
+    * **Escapar** significa indicar que un carácter especial debe tratarse como texto normal.
+    * En CSS se usa la barra invertida (`\`) para escapar caracteres especiales.
+    * `:` debe escaparse porque CSS lo usa para pseudoestados (`:hover`, `:focus`, etc.).
+    * `/` debe escaparse porque también tiene significado en algunas propiedades CSS.
+    * En el **HTML no se escapan** esos caracteres; solo es necesario hacerlo en los **selectores CSS**.
 
 ## Medida en layouts compuestos
 
@@ -1448,3 +2534,476 @@ Si pasamos un valor ilegítimo a `threshold`, la declaración será descartada, 
 
 Nuestro enfoque de la medida es uno en el que asumimos el control, pero un tipo de control moderado que es deferente hacia la forma en que los navegadores funcionan y los usuarios los operan. Muchos de los 'axiomas' que gobiernan tu diseño, como _"la fuente del cuerpo será la Fuente X"_ o _"los encabezados serán azul oscuro"_, no tendrán un impacto en el layout como tal, lo que los hace mucho más simples de aplicar solo con estilos globales. Cuando el layout entra en la ecuación, ten cuidado con las diferentes configuraciones y orientaciones. Elige propiedades, valores y unidades que permitan al navegador calcular el layout más adecuado en tu nombre.
 
+??? info "Explicacion"
+
+    Esta parte ya no habla solamente de `60ch`, sino de una **filosofía de diseño**: usar `--measure` como una referencia para que los componentes sean inteligentes y adaptables.
+
+    Vamos por partes.
+
+    ---
+
+    __¿Qué significa "layouts compuestos"?__
+
+    Un **layout compuesto** es un componente que organiza otros elementos.
+
+    Por ejemplo:
+
+    * Un menú de navegación.
+    * Un contenedor con tarjetas.
+    * Un formulario.
+    * Un componente que acomoda elementos horizontal o verticalmente.
+
+    El libro menciona uno llamado **Switcher**.
+
+    ---
+
+    __¿Qué hace el Switcher?__
+
+    Imagina este componente:
+
+    ```html
+    <switcher-l>
+        <div>A</div>
+        <div>B</div>
+    </switcher-l>
+    ```
+
+    Si hay suficiente espacio, muestra:
+
+    ```text
+    A   B
+    ```
+
+    Pero si el espacio es pequeño:
+
+    ```text
+    A
+    B
+    ```
+
+    Es decir, cambia automáticamente entre horizontal y vertical.
+
+    ---
+
+    __¿Cuándo cambia?__
+
+    Ahí entra la propiedad **threshold**.
+
+    Threshold significa:
+
+    > **Umbral**.
+
+    Es el ancho a partir del cual el componente decide cambiar.
+
+    ---
+
+    __Por ejemplo__
+
+    Si el threshold es:
+
+    ```text
+    60ch
+    ```
+
+    Entonces:
+
+    Si el contenedor mide más de 60ch
+
+    ```text
+    A   B
+    ```
+
+    Si mide menos
+
+    ```text
+    A
+    B
+    ```
+
+    ---
+
+    __Ahora mira este código__
+
+    ```javascript
+    get threshold() {
+    return this.getAttribute('threshold') || 'var(--measure)';
+    }
+    ```
+
+    Vamos línea por línea.
+
+    __`this.getAttribute()`__
+
+    Lee el atributo del HTML.
+
+    Por ejemplo:
+
+    ```html
+    <switcher-l threshold="20rem">
+    ```
+
+    Entonces
+
+    ```javascript
+    this.getAttribute("threshold")
+    ```
+
+    devuelve
+
+    ```text
+    20rem
+    ```
+
+    ---
+
+    __¿Y el `||`?__
+
+    El operador `||` significa:
+
+    > "Si el primer valor no existe, usa el segundo."
+
+    Entonces
+
+    ```javascript
+    return this.getAttribute("threshold")
+        || "var(--measure)";
+    ```
+
+    es equivalente a decir:
+
+    ```javascript
+    if (this.getAttribute("threshold")) {
+        return this.getAttribute("threshold");
+    }
+
+    return "var(--measure)";
+    ```
+
+    ---
+
+    __¿Qué consigue esto?__
+
+    Si escribes:
+
+    ```html
+    <switcher-l></switcher-l>
+    ```
+
+    No hay atributo.
+
+    Entonces devuelve
+
+    ```text
+    var(--measure)
+    ```
+
+    ---
+
+    Si escribes
+
+    ```html
+    <switcher-l threshold="20rem"></switcher-l>
+    ```
+
+    Entonces devuelve
+
+    ```text
+    20rem
+    ```
+
+    ---
+
+    __¿Y el setter?__
+
+    ```javascript
+    set threshold(val) {
+        return this.setAttribute('threshold', val);
+    }
+    ```
+
+    Simplemente permite hacer:
+
+    ```javascript
+    switcher.threshold = "40rem";
+    ```
+
+    Y eso termina convirtiéndose en
+
+    ```html
+    <switcher-l threshold="40rem">
+    ```
+
+    ---
+
+    __¿Por qué usan `var(--measure)`?__
+
+    Porque quieren que todo el sistema utilice la misma medida.
+
+    Recuerda que antes definieron
+
+    ```css
+    :root{
+        --measure:60ch;
+    }
+    ```
+
+    Ahora el Switcher también usa esa medida.
+
+    Entonces si algún día haces
+
+    ```css
+    :root{
+        --measure:70ch;
+    }
+    ```
+
+    El ancho de lectura cambia.
+
+    Y también cambia el punto donde el Switcher pasa de horizontal a vertical.
+
+    Todo el sistema permanece coherente.
+
+    ---
+
+    __Luego dicen esto__
+
+    > Este es un valor por defecto sensato.
+
+    Porque normalmente un ancho de lectura cómodo ronda los 60 caracteres.
+
+    Así que también es un buen punto para decir:
+
+    > "A partir de aquí ya no caben cómodamente dos columnas."
+
+    ---
+
+    # ¿Qué significa que puede anularse?
+
+    Puedes escribir
+
+    ```html
+    <switcher-l threshold="20rem">
+    ```
+
+    Y ahora el Switcher ya no usa
+
+    ```text
+    60ch
+    ```
+
+    Sino
+
+    ```text
+    20rem
+    ```
+
+    Solo ese componente cambia.
+
+    Todo lo demás sigue usando `--measure`.
+
+    ---
+
+    __Esta parte es muy interesante__
+
+    > Si pasamos un valor ilegítimo...
+
+    Por ejemplo
+
+    ```html
+    <switcher-l threshold="perro">
+    ```
+
+    o
+
+    ```html
+    <switcher-l threshold="hola">
+    ```
+
+    Eso no es una unidad CSS válida.
+
+    Cuando el navegador vea algo como:
+
+    ```css
+    width: perro;
+    ```
+
+    simplemente dirá:
+
+    > "No entiendo esto."
+
+    Y descartará esa declaración.
+
+    Entonces el componente utilizará el estilo de respaldo (**fallback**), que vuelve a usar el valor por defecto (`var(--measure)`).
+
+    Es una forma elegante de hacer que el componente sea resistente a errores.
+
+    ---
+
+    __La parte filosófica__
+
+    Luego el autor cambia completamente de tema.
+
+    Dice:
+
+    > Nuestro enfoque de la medida es uno en el que asumimos el control, pero moderadamente.
+
+    ¿Qué significa?
+
+    Que **no debes controlar absolutamente todo**.
+
+    No intentes decidir:
+
+    * exactamente cuántos píxeles mide cada caja,
+    * exactamente dónde cae cada salto de línea,
+    * exactamente cuántas palabras hay por línea.
+
+    Deja que el navegador haga parte del trabajo.
+
+    ---
+
+    __Un ejemplo__
+
+    En lugar de escribir
+
+    ```css
+    width:643px;
+    ```
+
+    escribes
+
+    ```css
+    max-width:60ch;
+    ```
+
+    Ahora el navegador adapta el ancho según:
+
+    * la fuente,
+    * el tamaño del texto,
+    * el zoom,
+    * la configuración del usuario.
+
+    ---
+
+    __Otro ejemplo__
+
+    En lugar de decir
+
+    ```css
+    font-size:16px;
+    ```
+
+    usas
+
+    ```css
+    1rem;
+    ```
+
+    Así el navegador respeta las preferencias del usuario.
+
+    ---
+
+    __Luego dice esto__
+
+    > Muchos axiomas no afectan al layout.
+
+    Un axioma aquí significa una regla de diseño.
+
+    Por ejemplo:
+
+    ```css
+    body{
+        font-family:Inter;
+    }
+    ```
+
+    Eso no cambia el layout demasiado.
+
+    O
+
+    ```css
+    h1{
+        color:darkblue;
+    }
+    ```
+
+    Tampoco cambia la estructura de la página.
+
+    Son decisiones sencillas.
+
+    ---
+
+    Pero cuando modificas algo como
+
+    ```css
+    width
+    ```
+
+    ```css
+    display
+    ```
+
+    ```css
+    flex
+    ```
+
+    ```css
+    grid
+    ```
+
+    ahí sí estás alterando el layout.
+
+    Y ahí es donde debes tener más cuidado.
+
+    ---
+
+    __La última frase resume toda la filosofía__
+
+    > Elige propiedades, valores y unidades que permitan al navegador calcular el layout más adecuado en tu nombre.
+
+    Es decir:
+
+    En lugar de decirle al navegador exactamente qué hacer:
+
+    ```css
+    width:615px;
+    ```
+
+    dale información más flexible:
+
+    ```css
+    max-width:60ch;
+    ```
+
+    ```css
+    minmax()
+    ```
+
+    ```css
+    auto-fit
+    ```
+
+    ```css
+    flex-wrap
+    ```
+
+    ```css
+    clamp()
+    ```
+
+    ```css
+    max-content
+    ```
+
+    ```css
+    min-content
+    ```
+
+    Todas estas herramientas le dicen al navegador:
+
+    > "Tú conoces el tamaño de la pantalla, el zoom, la fuente y las preferencias del usuario mejor que yo. Usa esa información para decidir el mejor layout."
+
+    ---
+
+    __La idea principal de todo este apartado__
+
+    El autor propone construir un **sistema de diseño** alrededor de una medida base (`--measure`), pero sin imponer reglas rígidas. En lugar de controlar cada detalle del diseño, define buenas reglas generales y deja que el navegador adapte el resultado según el contexto. Ese equilibrio entre control y flexibilidad es una de las claves del CSS moderno.

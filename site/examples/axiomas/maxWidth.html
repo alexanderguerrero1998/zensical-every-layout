@@ -19,59 +19,100 @@
             --s-4:calc(var(--s-3) / var(--ratio));
             --s-5:calc(var(--s-4) / var(--ratio));
         }
-        .contenedor{color: rgb(255, 255, 255);}
+        .contenedor{color: rgb(255, 255, 255); min-width: 1400px;}
         strong{color: rgb(8, 249, 0);}
         .title{ 
             padding: var(--s-1);
             font-size: var(--s-1); 
             background-color: rgb(11, 11, 16);}
-        .texto-1  {
-            max-width: 60ch;
-            font-size: var(--s0);
-        }
-        .texto-2 {
-           max-width: 600px;
-           font-size: var(--s1);
-        }
+        .texto-1 { max-width: 60ch;}
+        .texto-2 { max-width: 600px; }
+        .measure-ch{ font-size: var(--s0); }
+        .measure-px{ font-size: var(--s1); }
+        .--s-1{font-size: var(--s-1);}
+        .--s0{font-size: var(--s0);}
+        .--s1{font-size: var(--s1);}
+        .--s2{font-size: var(--s2);}
+
         .estilos-texto{
             padding: var(--s-1);
             background-color: rgb(59, 59, 59);
             margin: var(--s-1);
+            overflow-wrap: break-word;
         }
     </style>
 </head>
 <body>
     <div class="contenedor">
-        <div class="texto-1 estilos-texto">
+        <div id="sub-1" class="texto-1 estilos-texto measure-ch">
             <div class="title">
                 <p>Aqui estamos usando <strong>max-width: 60ch</strong> y podemos ver como la cantidad de caracteres en una sola linea dentro de la caja se matiene sin importar si el tamaño de la letra es mas grande o pequeño. Tenemos al rededor de unos 61 caracteres sin importar si la letra es mas grande o mas pequeña, el hecho de usar <strong>ch</strong> nos permite mantener esta cantidad. </p>
+                <div> 
+                    <select id="select-1">
+                        <option value="">select size</option>
+                        <option value="--s-1">--s-1</option>
+                        <option value="--s0">--s0</option>
+                        <option value="--s1">--s1</option>
+                        <option value="--s2">--s2</option>
+                    </select>
+                </div>
                 <textarea id="textarea-1" placeholder="Enter more text"></textarea>
+                
             </div>
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Unde repellendus reprehenderit, eligendi provident maiores mollitia sequi eos, nam quasi vel quia laboriosam voluptatum, maxime accusantium? Eligendi magnam praesentium placeat rem!</p>
+            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Unde repellendus reprehenderit, eligendi provident maiores mollitia sequi eos, nam quasi vel quia laboriosam voluptatum, maxime accusantium? Eligendi magnam praesentium placeat rem!<span id="oneT"></span></p>
         </div>
-        <div class="texto-2 estilos-texto">
+
+        <div  id="sub-2" class="texto-2 estilos-texto measure-px">
              <div class="title">
                 <p> Aquí estamos usando <strong>max-width: 600px;</strong> y podemos observar cómo la cantidad de caracteres que caben en una misma línea dentro de la caja cambia cuando el tamaño de la fuente aumenta o disminuye. Esto ocurre porque el ancho máximo está definido en píxeles, por lo que permanece constante mientras las letras cambian de tamaño. 
                 A diferencia del ejemplo anterior, donde la cantidad de caracteres por línea se mantenía aproximadamente igual independientemente de si el tamaño de la fuente crecía o no. Esto se debe a que allí se utilizaba la unidad <strong>ch</strong>, cuyo valor depende del tamaño de la fuente. Como consecuencia, cuando las letras se hacen más grandes, también aumenta el ancho máximo de la caja, permitiendo conservar una medida de lectura más consistente.</p>
+                <div> 
+                    <select id="select-2">
+                        <option value="">select size</option>
+                        <option value="--s-1">--s-1</option>
+                        <option value="--s0">--s0</option>
+                        <option value="--s1">--s1</option>
+                        <option value="--s2">--s2</option>
+                    </select>
+                </div>
                 <textarea id="textarea-2" placeholder="Enter more text"></textarea>
             </div>
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Unde repellendus reprehenderit, eligendi provident maiores mollitia sequi eos, nam quasi vel quia laboriosam voluptatum, maxime accusantium? Eligendi magnam praesentium placeat rem!</p>
+            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Unde repellendus reprehenderit, eligendi provident maiores mollitia sequi eos, nam quasi vel quia laboriosam voluptatum, maxime accusantium? Eligendi magnam praesentium placeat rem!<span id="twoT"></span></p>
         </div>
     </div>
 </body>
 <script>
-    function getText(e){
-        console.log()
+    function getTextO(e){ one.textContent =  e.target.value }
+    function getTextT(e){ two.textContent =  e.target.value }
+    function selectO(e){
+        subOne.classList.remove('--s-1', '--s0', '--s1', '--s2');
+        subOne.classList.add(e.target.value)
     }
-
+    function selectT(e){
+        subTwo.classList.remove('--s-1', '--s0', '--s1', '--s2');
+        subTwo.classList.add(e.target.value)
+    }
+    
     const textOne = document.getElementsByClassName('texto-1')
     const textTwo = document.getElementsByClassName('texto-2')
+    
     const areaTextO = document.getElementById('textarea-1')
     const areaTextT = document.getElementById('textarea-2')
-
-    areaTextO.addEventListener('keyup',getText)
-    areaTextT.addEventListener('keyup',getText)
     
+    const one = document.getElementById('oneT')
+    const two = document.getElementById('twoT')
+
+    const selectOne = document.getElementById('select-1')
+    const selectTwo = document.getElementById('select-2')
+
+    const subOne =  document.getElementById('sub-1')
+    const subTwo =  document.getElementById('sub-2')
+
+    areaTextO.addEventListener('keyup',getTextO)
+    areaTextT.addEventListener('keyup',getTextT)
+    selectOne.addEventListener('change',selectO)
+    selectTwo.addEventListener('change',selectT)
+
     
 
 </script>
