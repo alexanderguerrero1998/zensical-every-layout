@@ -271,7 +271,69 @@ Dado que la declaración no es sensible al contexto, cualquier aplicación corre
     * ❌ `margin` no debería verse como una propiedad propia de un elemento ("todos los `<p>` tienen margen").
     * ✅ `margin` representa la **separación entre dos elementos vecinos**. Por eso, en sistemas de diseño modernos, suele controlarse desde el **contenedor** (como un `Stack`) o mediante selectores que aplican espacio solo entre hermanos, evitando márgenes redundantes y componentes que se comportan de forma distinta según el contexto.
 
+??? example 
 
+    Aqui puedes revisar el [Ejemplo](../../examples/stack/withOutMargin.html)
+
+    ```html linenums="1"
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+            .contenedor-1{ padding: 10px; background-color: skyblue; }
+            .contenedor-2{ background-color: skyblue;}
+
+            .titulo-1{margin-bottom: 1.5rem; background-color: salmon;}
+            .titulo-2{background-color: salmon;}
+            
+            .parrafo-1{margin-bottom:1.5rem ; background-color: beige;}
+            .parrafo-2{margin-bottom:1.5rem ; background-color: beige;}
+            
+            .trasnparente{ background-color: transparent; }
+
+        </style>
+    </head>
+    <body>
+        <div class="contenedor-1">
+            <h2 class="titulo-1">Title Card</h2>
+            <p class="parrafo-1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam tempora consectetur nisi magnam at nostrum, error quia magni laborum sint, totam accusamus vel quae, autem similique deleniti voluptatibus aliquam libero?</p>
+            <p class="parrafo-1">Al final de este parrafo podemos ver como se agregan(suman) tanto el <strong>margin</strong>  como el <strong>padding</strong>. Por lo tanto, se aprecia un espacio, que es el resultado de la suma de estos dos.</p>
+        </div>
+        <img alt="" src="img/othermagin.PNG">
+        <div class="contenedor-2">
+            <h2 class="titulo-2">Title Card</h2>
+            <p class="parrafo-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam tempora consectetur nisi magnam at nostrum, error quia magni laborum sint, totam accusamus vel quae, autem similique deleniti voluptatibus aliquam libero?</p>
+            <p class="parrafo-2">Al final de este parrafo, aunque no se puede ver, al final de este parrafo tambien tenemos que se agrego un margen. Solo que adiferencia del anterior ejemplo aqui no agregamos un paddig. <br><br> Puedes aplicar la transparencia para ver que aqui no existe padding, tambien te dijiera que si aplicas la trasnparencia pudieras ver el margin pero lamentablemente este efecto nose puede ver ya que margin no tiene color y por eso he puesto una imagen para que veas que ese margin si existe a pesar de que no lo veas, Revisa la imagen de abajo. <button id="btn">Transparente</button> <button id="btn-c">Dar Color</button></p>
+        </div>
+        <img alt="" src="img/margin.PNG">
+
+
+        <script>
+            function trasnparencia(){
+                
+                parrafoOne.classList.add('trasnparente')
+                parrafoTwo.classList.add('trasnparente')
+            }
+            function pintar(){
+                parrafoOne.classList.remove('trasnparente')
+                parrafoTwo.classList.remove('trasnparente')
+            }
+
+            const boton = document.getElementById('btn')
+            const btnColor =  document.getElementById('btn-c')
+
+            const parrafoOne = document.getElementsByClassName('parrafo-2')[0]
+            const parrafoTwo = document.getElementsByClassName('parrafo-2')[1]
+
+            boton.addEventListener('click',trasnparencia)
+            btnColor.addEventListener('click', pintar)
+        </script>
+    </body>
+    </html>
+    ```
 ## La solución
 
 El truco está en estilizar el _contexto_, no el(los) elemento(s) individual(es). La primitiva de layout _Stack_ inyecta margen entre elementos a través de su padre común:
@@ -652,6 +714,81 @@ Usando el combinador de hermano adyacente (`+`), `margin-top` solo se aplica don
 
     Ese cambio de mentalidad es fundamental. En lugar de asignar el espaciado a un elemento específico, se asigna a la **relación entre elementos hermanos**, logrando componentes más reutilizables, predecibles y sin márgenes sobrantes.
 
+??? example 
+
+    Aqui puedes revisar este [Ejemplo](../../examples/stack/stacksolution.html)
+
+    ```html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+            *{ margin: 0; }
+            .stack > * + * { margin-top: 1.5rem; }
+            .parrafo{ margin-top: 1.5rem;}
+        </style>
+    </head>
+    
+    <body>
+        <div class="stack">
+            <h2>Title</h2>
+            <p>Aqui el margin se aplica unicamente al elemento que tiene un hermano adyacente, osea un elemento que esta precedido de otro elemento. Por lo tanto no hay margen sobrante. <br><br> Tambien se puede ver que Title no recibe margen porque es el primer elemento y entonces no esta precedido de otro elemento, en consecuencia no recibe margen.</p>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea numquam sapiente repellat dignissimos, fuga quos ratione optio. Suscipit tempore, obcaecati earum recusandae aut dolor, iste perferendis facilis nostrum, hic odit.</p>
+            <img alt="" src="img/majormargin.PNG">
+        </div> 
+        
+        <div class="stack-2">
+            <h2>Title</h2>
+            <p class="parrafo">En este segundo ejemplo (que al igual que en el anterior de arriba) podemos ver que cuando usamos la propiedad <strong>margin-top</strong> evitamos el "margen sobrante". <i>Revisar el seguiente ejemplo de esta misma seccion.</i></p>
+            <p class="parrafo">Tambien podemos ver en el codigo de este ejemplo, que a diferencia de la seccion de arriba donde se usa la clase <strong>stack</strong>, donde cada vez que agregamos un nuevo elemento dentro del stack se agregaba automaticamente el margen en dicho elemento. Bueno aqui(en stack-2) resulta un poco diferente porque tenemos que agregar el margen uno por uno de forma manual. </p>
+            <p class="parrafo"> Estas son las dos principales diferencias que descubri.</p>
+        </div> 
+                
+    </body>
+    </html>
+    ```
+??? example 
+
+    Aqui puedes revisar el [Ejemplo](../../examples/stack/stacksolution2.html)
+
+    ```html linenums="1"
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+            *{ margin: 0; }
+            .stack > * + * { margin-top: 1.5rem; }
+            .stack-2 > * + * { margin-bottom: 1.5rem; }
+
+
+        </style>
+    </head>
+    
+    <body>
+        <div class="stack">
+            <h2>Title</h2>
+            <p>Aqui cuando usamos <strong>margin-top</strong> evitamos el margen sobrante.</p>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea numquam sapiente repellat dignissimos, fuga quos ratione optio. Suscipit tempore, obcaecati earum recusandae aut dolor, iste perferendis facilis nostrum, hic odit.</p>
+            <img alt="" src="img/differenceOne.PNG">
+        </div> 
+
+        <div class="stack-2">
+            <h2>Title</h2>
+            <p>Aqui cuando usamos <strong>margin-button</strong> no podemos evitar el margen sobrante, osea que aqui si existe</p>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea numquam sapiente repellat dignissimos, fuga quos ratione optio. Suscipit tempore, obcaecati earum recusandae aut dolor, iste perferendis facilis nostrum, hic odit.</p>
+            <img alt="" src="img/differenceTwo.PNG">
+        </div> 
+        
+    </body>
+    </html>
+    ```
+
 ## Altura de línea y escala modular
 
 En el ejemplo anterior, usamos un valor `margin-top` de `1.5rem`. Estamos en la costumbre de usar este valor porque refleja nuestra altura de línea (`line-height`) del texto del cuerpo (generalmente preferida) de `1.5`.
@@ -961,6 +1098,47 @@ Si el texto del cuerpo tiene un `line-height` de `1.5` (es decir, `1.5` × el `f
     * En lugar de elegir márgenes y tamaños de forma arbitraria, utiliza una **escala modular**, donde todos los valores mantienen una misma proporción.
     * Centraliza esos valores mediante **CSS Custom Properties**, para conseguir un diseño consistente, fácil de mantener y de ajustar en el futuro.
 
+??? example
+
+    Este ejemplo es bastante simple solo trata de demostrar lo que se explica, nada mas. Lo puedes ver aqui en [Example](../../examples/stack/heigthLinear.html)
+
+    ```html linenums="1"
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    <style>
+        :root{
+            --ratio: 1.5;
+            --s3: calc(var(--s2) * var(--ratio));
+            --s2: calc(var(--s1) * var(--ratio));
+            --s1: calc(var(--s0) * var(--ratio));
+            --s0: 1rem ;
+            --s-1: calc(var(--s0) / var(--ratio));
+            --s-2: calc(var(--s-1) / var(--ratio));
+        }
+
+
+    .stack > * + * {
+
+    margin-top: var(--s1);
+    line-height:1.5;
+
+    }
+    </style>
+    </head>
+    <body>
+        <div class="stack">
+            <h2>Title Page</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi vitae soluta provident quae et ducimus eaque ex vero. Repellat fuga distinctio, repudiandae sit sint esse eius amet. Quod, ad mollitia?</p>
+            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat sapiente id quia? Aspernatur, deleniti autem, libero nihil cumque laboriosam delectus aliquid molestias eos dolor vel nulla fugit excepturi aliquam ea!</p>
+        </div>
+    </body>
+    </html>
+    ```
+
 ## Recursión
 
 En el ejemplo anterior, el combinador de hijo (`>`) asegura que los márgenes solo se apliquen a los hijos del elemento `.stack`. Sin embargo, es posible inyectar márgenes recursivamente eliminando este combinador del selector.
@@ -981,7 +1159,8 @@ En la siguiente demostración (usando el componente _Stack_ para seguir) hay un 
 
     [This interactive demo is only available on the Every Layout site ↗.](https://every-layout.dev/demos/stack-recursion/)
 
-    Es probable que encuentres que el modo recursivo afecta elementos no deseados. Por ejemplo, los elementos de lista genéricos que típicamente no están separados por márgenes se dispersarán inesperadamente.
+
+Es probable que encuentres que el modo recursivo afecta elementos no deseados. Por ejemplo, los elementos de lista genéricos que típicamente no están separados por márgenes se dispersarán inesperadamente.
 
 
 ??? info "Explicacion"
@@ -1302,6 +1481,92 @@ En la siguiente demostración (usando el componente _Stack_ para seguir) hay un 
 
     La versión recursiva consigue un espaciado uniforme en todo el árbol del DOM, pero puede introducir márgenes en elementos que normalmente no deberían tenerlos, como los elementos de una lista (`<li>`). Por eso debe usarse con cuidado.
 
+??? example
+
+    Aqui puedes revisar el [Example](../../examples/stack/recursion.html)
+
+    ```html linenums="1"
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+            :root{
+                --rate:1.5;
+                --s1:calc(var(var(--s0)) * var(--rate));
+                --s0:1rem;
+                --s-1:calc(var(--s0)/ var(--rate));
+            }
+            .stack-1 * + * {
+            line-height: 1.5;
+            margin-top: var(--s0); 
+            
+            }
+            .stack-2 > * + *{
+                line-height: 1.5;
+                margin-top: var(--s0); 
+            
+            }
+            .caja-1{background-color: skyblue;}
+            .caja-2{background-color: skyblue;}
+            .caja-3{background-color: skyblue;}
+            .caja-1-1{ background-color:beige}
+            .caja-1-2{  background-color:beige}
+
+            .caja-4{background-color: skyblue;}
+            .caja-5{background-color: skyblue;}
+            .caja-6{background-color: skyblue;}
+            .caja-4-1{ background-color:beige}
+            .caja-4-2{  background-color:beige}
+
+            .note{
+                background-color: gray;
+                font-size: var(--s-1);
+                margin-bottom: 1rem;
+                margin-top: 1rem;
+            }
+            .style-stack{
+                background-color: orange;
+                padding: 1rem;
+            }
+
+
+        </style>
+    </head>
+    <body>
+        <div class="note">Aqui usamos recursion y podemos ver como todas las cajas se afectan por el margen sin importar la profundidad del anidamientos, esto se aplica a todas las cajas dentro del stack sin execpcion. Aqui usamos la esta notacion <strong>* + *</strong> sin el <strong>></strong>. Por eso se aplican a todas los elementos son importar el nivel de profundidad de anidamiento. <br><br> Tambien podemosver que al igual que en los anteriores ejemplo el primer elemento no se afecta ya que al usar el * + * <i></i> siempre afectara a los elementos que tenga un hermano anterior</div>
+        
+        <div class="stack-1 style-stack">
+            <div class="caja-1">
+                [CAJA 1] Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi quidem tenetur eligendi suscipit quod quis architecto a labore dolor? Sequi ut nemo dicta natus sit exercitationem totam qui nam sed.
+                <div class="caja-1-1">
+                    [CAJA 1-1] Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt maxime, laboriosam neque quia nam adipisci veritatis ab enim labore! Sunt, quae molestias minima deserunt dolor corporis vitae quod repudiandae maxime.
+                </div>
+                <div class="caja-1-2">
+                    [CAJA 1 - 2] Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus natus placeat qui est minima nihil commodi, aspernatur quibusdam odio delectus a consequatur voluptas repellendus nobis consectetur, quae perferendis exercitationem debitis.
+                </div>
+            </div>
+            <div class="caja-2"> [CAJA 2]Lorem ipsum dolor, sit amet consectetur adipisicing elit. Reiciendis, porro deleniti dolores dignissimos minima ea dolor tempore dolorem nisi obcaecati aspernatur ipsam odio laboriosam, corrupti, repudiandae iste. Tempora, quos repudiandae!</div>
+            <div class="caja-3"> [CAJA 3] Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa a, temporibus voluptate sit laudantium magnam, cum quas distinctio, aperiam facilis quidem repudiandae minima fugiat quos sapiente error possimus eveniet sed!</div>
+        </div>
+        <div class="note">
+            Mientras tanto que aqui solo aplican para las cajas hijas dentro del stack, aqui usamos  > * + *. Aqui los elemetos dentro de la primera caja no tiene margin como en el anterior ejemplo.
+        </div>
+        
+        <div class="stack-2  style-stack">
+            <div class="caja-4">
+                [CAJA 4] Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem blanditiis ab corrupti ea maxime voluptate consectetur ut voluptas sapiente ad nobis modi, explicabo nam perspiciatis praesentium dolor animi soluta at!
+                <div class="caja-4-1">[CAJA 4-1] Lorem ipsum dolor sit, amet consectetur adipisicing elit. Beatae numquam quae dicta nulla nisi dignissimos consectetur repellendus aut, praesentium, dolorem molestiae est iusto eaque provident. Eos veritatis assumenda quas corrupti?</div>
+                <div class="caja-4-2">[CAJA 4-2]Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati adipisci aut delectus temporibus quam, eius veritatis laboriosam assumenda provident vel odio quas officiis, aliquid architecto nostrum cumque illo. Omnis, officia?</div>
+            </div>
+            <div class="caja-5">[CAJA 5]Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusantium velit porro atque eos odit, officia voluptatibus, ut animi natus praesentium delectus doloremque earum vero veniam itaque excepturi amet aliquid aspernatur.</div>
+            <div class="caja-6">[CAJA 6]Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque dicta ab totam, aliquam ullam alias ad sed provident dolores architecto quasi adipisci quis nisi neque voluptatum facilis fugiat facere delectus!</div>
+        </div>
+    </body>
+    </html>
+    ```
 ## Variantes anidadas
 
 La recursión aplica el mismo margen sin importar la profundidad de anidamiento. Un enfoque más deliberado sería configurar `Stacks` no recursivos alternativos con diferentes valores de margen, y anidarlos donde sea adecuado. Considera lo siguiente:

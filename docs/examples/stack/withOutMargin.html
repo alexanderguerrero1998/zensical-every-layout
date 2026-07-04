@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .contenedor-1{ padding: 10px; background-color: skyblue; }
+        .contenedor-2{ background-color: skyblue;}
+
+        .titulo-1{margin-bottom: 1.5rem; background-color: salmon;}
+        .titulo-2{background-color: salmon;}
+        
+        .parrafo-1{margin-bottom:1.5rem ; background-color: beige;}
+        .parrafo-2{margin-bottom:1.5rem ; background-color: beige;}
+        
+        .trasnparente{ background-color: transparent; }
+
+    </style>
+</head>
+<body>
+    <div class="contenedor-1">
+        <h2 class="titulo-1">Title Card</h2>
+        <p class="parrafo-1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam tempora consectetur nisi magnam at nostrum, error quia magni laborum sint, totam accusamus vel quae, autem similique deleniti voluptatibus aliquam libero?</p>
+        <p class="parrafo-1">Al final de este parrafo podemos ver como se agregan(suman) tanto el <strong>margin</strong>  como el <strong>padding</strong>. Por lo tanto, se aprecia un espacio, que es el resultado de la suma de estos dos. Para ver mejor este efecto revisa la imagen de abajo.</p>
+    </div>
+    <img alt="" src="img/othermagin.PNG">
+    <div class="contenedor-2">
+        <h2 class="titulo-2">Title Card</h2>
+        <p class="parrafo-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam tempora consectetur nisi magnam at nostrum, error quia magni laborum sint, totam accusamus vel quae, autem similique deleniti voluptatibus aliquam libero?</p>
+        <p class="parrafo-2">Al final de este parrafo, aunque no se puede ver, al final de este parrafo tambien tenemos que se agrego un margen. Solo que adiferencia del anterior ejemplo aqui no agregamos un paddig. <br><br> Puedes aplicar la transparencia para ver que aqui no existe padding, tambien te dijiera que si aplicas la trasnparencia pudieras ver el margin pero lamentablemente este efecto nose puede ver ya que margin no tiene color y por eso he puesto una imagen para que veas que ese margin si existe a pesar de que no lo veas, Revisa la imagen de abajo. <button id="btn">Transparente</button> <button id="btn-c">Dar Color</button></p>
+    </div>
+     <img alt="" src="img/margin.PNG">
+
+
+    <script>
+        function trasnparencia(){
+            
+            parrafoOne.classList.add('trasnparente')
+            parrafoTwo.classList.add('trasnparente')
+        }
+        function pintar(){
+            parrafoOne.classList.remove('trasnparente')
+            parrafoTwo.classList.remove('trasnparente')
+        }
+
+        const boton = document.getElementById('btn')
+        const btnColor =  document.getElementById('btn-c')
+
+        const parrafoOne = document.getElementsByClassName('parrafo-2')[0]
+        const parrafoTwo = document.getElementsByClassName('parrafo-2')[1]
+
+        boton.addEventListener('click',trasnparencia)
+        btnColor.addEventListener('click', pintar)
+    </script>
+</body>
+</html>

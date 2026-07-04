@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        :root{
+            --rate:1.5;
+            --s1:calc(var(var(--s0)) * var(--rate));
+            --s0:1rem;
+            --s-1:calc(var(--s0)/ var(--rate));
+        }
+        .stack-1 * + * {
+          line-height: 1.5;
+          margin-top: var(--s0); 
+          
+        }
+        .stack-2 > * + *{
+            line-height: 1.5;
+            margin-top: var(--s0); 
+          
+        }
+        .caja-1{background-color: skyblue;}
+        .caja-2{background-color: skyblue;}
+        .caja-3{background-color: skyblue;}
+        .caja-1-1{ background-color:beige}
+        .caja-1-2{  background-color:beige}
+
+        .caja-4{background-color: skyblue;}
+        .caja-5{background-color: skyblue;}
+        .caja-6{background-color: skyblue;}
+        .caja-4-1{ background-color:beige}
+        .caja-4-2{  background-color:beige}
+
+        .note{
+            background-color: gray;
+            font-size: var(--s-1);
+            margin-bottom: 1rem;
+            margin-top: 1rem;
+        }
+        .style-stack{
+            background-color: orange;
+            padding: 1rem;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="note">Aqui usamos recursion y podemos ver como todas las cajas se afectan por el margen sin importar la profundidad del anidamientos, esto se aplica a todas las cajas dentro del stack sin execpcion. Aqui usamos la esta notacion <strong>* + *</strong> sin el <strong>></strong>. Por eso se aplican a todas los elementos son importar el nivel de profundidad de anidamiento. <br><br> Tambien podemosver que al igual que en los anteriores ejemplo el primer elemento no se afecta ya que al usar el * + * <i></i> siempre afectara a los elementos que tenga un hermano anterior</div>
+    
+    <div class="stack-1 style-stack">
+        <div class="caja-1">
+            [CAJA 1] Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi quidem tenetur eligendi suscipit quod quis architecto a labore dolor? Sequi ut nemo dicta natus sit exercitationem totam qui nam sed.
+            <div class="caja-1-1">
+                [CAJA 1-1] Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt maxime, laboriosam neque quia nam adipisci veritatis ab enim labore! Sunt, quae molestias minima deserunt dolor corporis vitae quod repudiandae maxime.
+            </div>
+            <div class="caja-1-2">
+                [CAJA 1 - 2] Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus natus placeat qui est minima nihil commodi, aspernatur quibusdam odio delectus a consequatur voluptas repellendus nobis consectetur, quae perferendis exercitationem debitis.
+            </div>
+        </div>
+        <div class="caja-2"> [CAJA 2]Lorem ipsum dolor, sit amet consectetur adipisicing elit. Reiciendis, porro deleniti dolores dignissimos minima ea dolor tempore dolorem nisi obcaecati aspernatur ipsam odio laboriosam, corrupti, repudiandae iste. Tempora, quos repudiandae!</div>
+        <div class="caja-3"> [CAJA 3] Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa a, temporibus voluptate sit laudantium magnam, cum quas distinctio, aperiam facilis quidem repudiandae minima fugiat quos sapiente error possimus eveniet sed!</div>
+    </div>
+    <div class="note">
+        Mientras tanto que aqui solo aplican para las cajas hijas dentro del stack, aqui usamos  > * + *. Aqui los elemetos dentro de la primera caja no tiene margin como en el anterior ejemplo.
+    </div>
+    
+    <div class="stack-2  style-stack">
+        <div class="caja-4">
+            [CAJA 4] Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem blanditiis ab corrupti ea maxime voluptate consectetur ut voluptas sapiente ad nobis modi, explicabo nam perspiciatis praesentium dolor animi soluta at!
+            <div class="caja-4-1">[CAJA 4-1] Lorem ipsum dolor sit, amet consectetur adipisicing elit. Beatae numquam quae dicta nulla nisi dignissimos consectetur repellendus aut, praesentium, dolorem molestiae est iusto eaque provident. Eos veritatis assumenda quas corrupti?</div>
+            <div class="caja-4-2">[CAJA 4-2]Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati adipisci aut delectus temporibus quam, eius veritatis laboriosam assumenda provident vel odio quas officiis, aliquid architecto nostrum cumque illo. Omnis, officia?</div>
+        </div>
+        <div class="caja-5">[CAJA 5]Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusantium velit porro atque eos odit, officia voluptatibus, ut animi natus praesentium delectus doloremque earum vero veniam itaque excepturi amet aliquid aspernatur.</div>
+        <div class="caja-6">[CAJA 6]Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque dicta ab totam, aliquam ullam alias ad sed provident dolores architecto quasi adipisci quis nisi neque voluptatum facilis fugiat facere delectus!</div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<style>
+    :root{
+        --ratio: 1.5;
+        --s3: calc(var(--s2) * var(--ratio));
+        --s2: calc(var(--s1) * var(--ratio));
+        --s1: calc(var(--s0) * var(--ratio));
+        --s0: 1rem ;
+        --s-1: calc(var(--s0) / var(--ratio));
+        --s-2: calc(var(--s-1) / var(--ratio));
+    }
+
+
+.stack > * + * {
+  margin-top: var(--s1);
+  line-height:1.5;
+
+}
+.estilos{
+ background-color: rgb(41, 37, 55);
+ color: white;
+}
+.nota{
+    font-size: var(--s0);
+    background-color: rgb(128, 128, 128);
+    font-size: var(--s-1);
+}
+
+</style>
+</head>
+<body>
+    <div class="stack estilos" >
+        <h2>Title Page</h2>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi vitae soluta provident quae et ducimus eaque ex vero. Repellat fuga distinctio, repudiandae sit sint esse eius amet. Quod, ad mollitia?</p>
+        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat sapiente id quia? Aspernatur, deleniti autem, libero nihil cumque laboriosam delectus aliquid molestias eos dolor vel nulla fugit excepturi aliquam ea!</p>
+    </div>
+    <div class="nota">
+        <p>Aqui estamos probando primero podemos definir el <strong> line-height:1.5</strong> para luego utilizarlo como relacion en la escala modular. Por otro lado como podemos ver al usar 1.5 logramos separar las distacias entre cada linea del texto a  1.5 que es loque buscabamos, que  tambien la usamos en la escala modular, ose que la utilizamos para dos cosas. Adamas haya que notar que no utilzamos una unidad para la propiedad, peusto que estamos buscando una relacion, establecer una unidad a la propiedad siginificaria que estae valor este fijo y cuento la lietra ccambiara a mas grande las letras se apacgurariasn y no mantendria una relacion adecuada entre cada linea por eso no se pone unidad en  line-height. </p>
+    </div>
+</body>
+</html>

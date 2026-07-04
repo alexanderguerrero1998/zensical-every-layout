@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{ margin: 0; }
+        .stack > * + * { margin-top: 1.5rem; }
+        .parrafo{ margin-top: 1.5rem;}
+    </style>
+</head>
+   
+<body>
+    <div class="stack">
+        <h2>Title</h2>
+        <p>Aqui el margin se aplica unicamente al elemento que tiene un hermano adyacente, osea un elemento que esta precedido de otro elemento. Por lo tanto no hay margen sobrante. <br><br> Tambien se puede ver que Title no recibe margen porque es el primer elemento y entonces no esta precedido de otro elemento, en consecuencia no recibe margen.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea numquam sapiente repellat dignissimos, fuga quos ratione optio. Suscipit tempore, obcaecati earum recusandae aut dolor, iste perferendis facilis nostrum, hic odit.</p>
+        <img alt="" src="img/majormargin.PNG">
+    </div> 
+    
+    <div class="stack-2">
+        <h2>Title</h2>
+        <p class="parrafo">En este segundo ejemplo (que al igual que en el anterior de arriba) podemos ver que cuando usamos la propiedad <strong>margin-top</strong> evitamos el "margen sobrante". <i>Revisar el seguiente ejemplo de esta misma seccion.</i></p>
+        <p class="parrafo">Tambien podemos ver en el codigo de este ejemplo, que a diferencia de la seccion de arriba donde se usa la clase <strong>stack</strong>, donde cada vez que agregamos un nuevo elemento dentro del stack se agregaba automaticamente el margen en dicho elemento. Bueno aqui(en stack-2) resulta un poco diferente porque tenemos que agregar el margen uno por uno de forma manual. </p>
+        <p class="parrafo"> Estas son las dos principales diferencias que descubri.</p>
+    </div> 
+    
+    
+</body>
+</html>
