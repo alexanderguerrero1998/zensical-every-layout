@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        :root{
+            --rate:1.2;
+            --s2:calc(var(--s1) var(--rate));
+            --s1:calc(var(--s0) * var(--rate));
+            --s0: 1rem;
+            --s-1: calc(var(--s0) / var(--rate))
+        }
+
+        [class^='stack'] > * {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        .stack-large > * + * { margin-top: var(--space, var(--s0) ); }
+        .exeption-1{ --space:3em; }
+        .exeption-2,
+        .exeption-2 +*{ --space:5em; }
+    </style>
+</head>
+<body>
+    <div class="stack-large">
+        <h2>Titulo</h2>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi veniam quae debitis cum reiciendis cupiditate ipsa exercitationem unde velit. Voluptatem ad minus nulla rem architecto amet labore porro, voluptas minima.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis saepe ipsam dignissimos esse vero doloremque nostrum, alias, quaerat accusamus tenetur ratione iusto sunt quia error quod dolorum? Excepturi, mollitia possimus?</p>
+       <hr class="exeption-1">
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corporis, illo harum animi ipsum cumque dignissimos ipsa. Facilis, sit minus libero eaque eligendi doloribus non unde, laudantium illo at ad repellat.</p>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Maiores quam fugit vero dolorem delectus, nesciunt deserunt ullam distinctio et ipsa nihil nobis officia, animi, iste ratione dolores perspiciatis harum quae!</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe minima earum officiis voluptatum sit magnam. Facilis eveniet maxime in, voluptatibus facere fuga optio tempora nihil ex consequatur excepturi amet cum.</p>
+        <hr class="exeption-2">
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Maiores quam fugit vero dolorem delectus, nesciunt deserunt ullam distinctio et ipsa nihil nobis officia, animi, iste ratione dolores perspiciatis harum quae!</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe minima earum officiis voluptatum sit magnam. Facilis eveniet maxime in, voluptatibus facere fuga optio tempora nihil ex consequatur excepturi amet cum.</p>
+    </div>
+</body>
+</html>

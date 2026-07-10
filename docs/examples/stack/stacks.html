@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+        <style>
+        :root{
+            --rate:1.5;
+            --s2:calc( var(--s1) * var(--rate) );
+            --s1:calc( var(--s0) * var(--rate) );
+            --s1: 1rem;
+            --s-1:calc(var(--s1) / var(--rate));
+        }
+        
+
+        label { display: block; }
+
+   
+        [class^='stack']> *{
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+        .stack-large > * + * {
+            margin-top: var(--s2) ;
+        }
+        .stack-small > * + * {
+           margin-top: var(--s0);
+        }
+
+        #formulario{
+            color: rgb(198, 198, 198);
+            background-color: rgb(7, 6, 13);
+            max-width: 21.5ch;
+            padding: var(--s1);
+            border-radius: 2%;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div id="formulario">
+        <form class="stack-large">
+            <div class="stack-small">
+                <label for="nameuser">Name:</label>
+                <input name="nameuser"/>
+            </div>
+            <div class="stack-small">
+                <label for="email">Email:</label>
+                <input name="email"/>
+
+            </div>
+            <div>
+                <button>Enviar</button>
+            </div>
+        </form>
+    </div>
+    
+
+</body>
+</html>
