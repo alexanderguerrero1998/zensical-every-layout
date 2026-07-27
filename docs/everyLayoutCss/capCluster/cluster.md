@@ -725,7 +725,7 @@ Sin embargo, esto solo resuelve el caso de alineación a la izquierda — ademá
 
 Para crear un sistema de diseño eficiente y manejable, necesitamos idear soluciones robustas y generales para nuestros problemas de layout.
 
-Primero, hacemos del padre un contexto Flexbox. Esto nos permite configurar los elementos en grupos (*clusters*), sin tener que lidiar con espacios de palabras no deseados. También tiene varias ventajas sobre el uso de floats: no necesitamos proporcionar un *clear fix* ↗, y la alineación vertical (usando `align-items`) es posible.
+Primero, hacemos del padre un contexto Flexbox. Esto nos permite configurar los elementos en grupos (*clusters*), sin tener que lidiar con espacios de palabras no deseados. También tiene varias ventajas sobre el uso de floats: no necesitamos proporcionar un [*clear fix* ↗](https://getbootstrap.com/docs/4.3/utilities/clearfix/), y la alineación vertical (usando `align-items`) es posible.
 
 ```css linenums="1"
 .cluster {
@@ -2142,7 +2142,7 @@ Podemos hacer que la creación de espacio en el componente sea más fácil usand
 
 Creo que estarás de acuerdo en que la técnica anterior es un poco engorrosa. También puede causar la aparición de la barra de desplazamiento horizontal, bajo algunas circunstancias.
 
-Afortunadamente, desde mediados de 2021, *todos los navegadores principales ahora soportan la propiedad `gap` con Flexbox* ↗. La propiedad `gap` inyecta espaciado *entre* los elementos hijos, eliminando la necesidad de márgenes negativos y del elemento envoltorio adicional. Incluso el `calc()` se puede jubilar, ya que el valor de `gap` es ¡solo ese!
+Afortunadamente, desde mediados de 2021, [*todos los navegadores principales ahora soportan la propiedad `gap` con Flexbox* ↗](https://caniuse.com/flexbox-gap). La propiedad `gap` inyecta espaciado *entre* los elementos hijos, eliminando la necesidad de márgenes negativos y del elemento envoltorio adicional. Incluso el `calc()` se puede jubilar, ya que el valor de `gap` es ¡solo ese!
 
 ```css linenums="1"
 .cluster {
@@ -2740,7 +2740,7 @@ Afortunadamente, desde mediados de 2021, *todos los navegadores principales ahor
         
 ## Valores de respaldo (fallback)
 
-Observa cómo estamos definiendo y declarando el valor `gap` todo en una línea. El segundo argumento de la función `var()` es el *valor de respaldo* para cuando la variable no está definida ↗.
+Observa cómo estamos definiendo y declarando el valor `gap` todo en una línea. El segundo argumento de la función `var()` es el[ *valor de respaldo* para cuando la variable no está definida ↗.](https://piccalil.li/blog/getting-started-with-css-custom-properties/)
 
 ??? info "Explicacion"
 
@@ -3172,7 +3172,380 @@ Los grupos o *clusters* de elementos pueden tomar cualquier valor de `justify-co
 
 En la demostración a seguir, un `Cluster` contiene una lista de palabras clave enlazadas. Esto se coloca dentro de un `Box` con un valor de `padding` igual al del espacio del `Cluster`.
 
-*Esta demostración interactiva solo está disponible en el sitio de Every Layout* ↗.
+!!! info 
+    
+    Esta demostración interactiva solo está disponible en el sitio de [*Every Layout* ↗](https://every-layout.dev/demos/cluster-ctas/).
+
+??? info "Explicacion"
+
+    Claro. Vamos a desarmarlo porque aquí se mezclan varias ideas de **Every Layout**, `Cluster`, `justify-content`, `gap` y `Box`.
+
+    ---
+
+    __1. "Los grupos o clusters pueden tomar cualquier valor de `justify-content`"__
+
+    Un `Cluster` normalmente utiliza **Flexbox** para colocar sus elementos en una fila y permitir que estos salten a otra línea cuando ya no caben.
+
+    Por ejemplo:
+
+    ```css
+    .cluster {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    ```
+
+    Ahora podemos decidir **cómo se distribuyen los elementos horizontalmente** usando `justify-content`.
+
+    __A la izquierda__
+
+    ```css
+    justify-content: flex-start;
+    ```
+
+    Resultado conceptual:
+
+    ```text
+    [HTML] [CSS] [JavaScript]
+    ```
+
+    __Al centro__
+
+    ```css
+    justify-content: center;
+    ```
+
+    ```text
+          [HTML] [CSS] [JavaScript]
+    ```
+
+    __A la derecha__
+
+    ```css
+    justify-content: flex-end;
+    ```
+
+    ```text
+                [HTML] [CSS] [JavaScript]
+    ```
+
+    Por eso el texto dice:
+
+    > "Alinear el `Cluster` a la derecha sería un caso para `justify-content: flex-end`."
+
+    Simplemente significa que si quieres que los elementos del `Cluster` se agrupen hacia el lado derecho, utilizas:
+
+    ```css
+    justify-content: flex-end;
+    ```
+
+    ---
+
+    __2. ¿Qué significa que "el espacio/gap se respetará independientemente del wrapping"?__
+
+    Esta es una parte importante.
+
+    Imagina que tienes:
+
+    ```html
+    <div class="cluster">
+      <a>HTML</a>
+      <a>CSS</a>
+      <a>JavaScript</a>
+      <a>React</a>
+      <a>Vue</a>
+    </div>
+    ```
+
+    Y:
+
+    ```css
+    .cluster {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    ```
+
+    En una pantalla grande podría verse:
+
+    ```text
+    [HTML]    [CSS]    [JavaScript]    [React]    [Vue]
+    ```
+
+    Pero si la pantalla se hace pequeña, los elementos pueden saltar a otra línea:
+
+    ```text
+    [HTML]    [CSS]    [JavaScript]
+
+    [React]    [Vue]
+    ```
+
+    Eso es el **wrapping**.
+
+    Lo importante es que el `gap` sigue funcionando:
+
+    ```text
+    [HTML]    [CSS]    [JavaScript]
+                  ↕
+                gap
+                  ↕
+    [React]    [Vue]
+    ```
+
+    El `Cluster` no necesita que tú escribas media docena de `margin` diferentes para cada situación.
+
+    El espacio entre los elementos se mantiene de manera consistente.
+
+    ---
+
+    __3. ¿Qué ocurre con `justify-content` cuando hay wrapping?__
+
+    Supongamos:
+
+    ```css
+    .cluster {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: flex-end;
+    }
+    ```
+
+    En una pantalla grande:
+
+    ```text
+                        [HTML] [CSS] [JS]
+    ```
+
+    Y cuando los elementos saltan de línea:
+
+    ```text
+                        [HTML] [CSS] [JS]
+                              [React] [Vue]
+    ```
+
+    Las dos líneas siguen respetando:
+
+    ```css
+    justify-content: flex-end;
+    ```
+
+    Y el `gap` sigue siendo:
+
+    ```css
+    gap: 1rem;
+    ```
+
+    Por eso la combinación es tan útil:
+
+    ```css
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: flex-end;
+    ```
+
+    El `Cluster` se encarga de:
+
+    * colocar los elementos;
+    * permitir que salten de línea;
+    * mantener el espacio entre ellos;
+    * controlar su alineación horizontal.
+
+    ---
+
+    __4. Ahora viene el ejemplo de `Box`__
+
+    El texto dice:
+
+    > "En la demostración a seguir, un `Cluster` contiene una lista de palabras clave enlazadas."
+
+    Imagina algo como:
+
+    ```html
+    <div class="cluster">
+      <a>HTML</a>
+      <a>CSS</a>
+      <a>JavaScript</a>
+      <a>React</a>
+      <a>Vue</a>
+    </div>
+    ```
+
+    Estas serían las **palabras clave enlazadas**.
+
+    Por ejemplo:
+
+    ```text
+    [HTML] [CSS] [JavaScript] [React] [Vue]
+    ```
+
+    Cada palabra podría ser un enlace:
+
+    ```html
+    <a href="/html">HTML</a>
+    <a href="/css">CSS</a>
+    <a href="/javascript">JavaScript</a>
+    ```
+
+    ---
+
+    __5. El `Cluster` está dentro de un `Box`__
+
+    Ahora tenemos una estructura como esta:
+
+    ```text
+    ┌──────────────────────────────────────┐
+    │                                      │
+    │     [HTML] [CSS] [JavaScript]        │
+    │                                      │
+    └──────────────────────────────────────┘
+                ↑
+                Box
+    ```
+
+    El `Box` es el contenedor exterior.
+
+    El `Cluster` es el que organiza los enlaces.
+
+    Conceptualmente:
+
+    ```html
+    <Box>
+        <Cluster>
+            <a>HTML</a>
+            <a>CSS</a>
+            <a>JavaScript</a>
+        </Cluster>
+    </Box>
+    ```
+
+    ---
+
+    __6. ¿Qué significa que el `padding` del `Box` sea igual al `gap` del `Cluster`?__
+
+    Aquí está la idea más interesante.
+
+    Supongamos que:
+
+    ```css
+    .cluster {
+      gap: 1rem;
+    }
+    ```
+
+    Y:
+
+    ```css
+    .box {
+      padding: 1rem;
+    }
+    ```
+
+    Es decir:
+
+    ```text
+    gap = 1rem
+    padding = 1rem
+    ```
+
+    Visualmente:
+
+    ```text
+    ┌─────────────────────────────────────┐
+    │  ← 1rem                              │
+    │    [HTML]  ←1rem→  [CSS]            │
+    │                                     │
+    └─────────────────────────────────────┘
+    ```
+
+    El espacio **entre los elementos** es `1rem`.
+
+    Y el espacio **entre los elementos y el borde del `Box`** también es `1rem`.
+
+    Esto crea una especie de **ritmo espacial uniforme**.
+
+    ```text
+    Borde
+      ↓
+      1rem
+      ↓
+    [HTML]
+      ↕
+      1rem
+      ↕
+    [CSS]
+      ↕
+      1rem
+      ↕
+    [JavaScript]
+      ↑
+      1rem
+      ↑
+    Borde
+    ```
+
+    La idea es que el espacio interior del contenedor y el espacio entre los elementos tengan la misma escala.
+
+    ---
+
+    __En resumen__
+
+    La estructura sería:
+
+    ```text
+    ┌──────────────────────────────────────────┐
+    │                                          │
+    │  ← padding = 1rem →                      │
+    │                                          │
+    │       [HTML] ← gap = 1rem → [CSS]       │
+    │                                          │
+    │              [JavaScript]                │
+    │                                          │
+    └──────────────────────────────────────────┘
+    ```
+
+    Y podríamos tener:
+
+    ```css
+    .box {
+      padding: 1rem;
+    }
+
+    .cluster {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: flex-end;
+    }
+    ```
+
+    __La idea central de Every Layout__
+
+    No estás diseñando cada caso concreto:
+
+    > "En escritorio pongo estos márgenes, en tablet cambio esto y en móvil cambio aquello."
+
+    Estás creando **reglas de composición que se adaptan solas**.
+
+    El `Cluster` dice:
+
+    > "Organizo estos elementos, dejo `1rem` entre ellos y, si no caben, los paso a la siguiente línea."
+
+    El `Box` dice:
+
+    > "Dejo `1rem` de espacio alrededor de mi contenido."
+
+    Y `justify-content` dice:
+
+    > "Cuando haya espacio disponible, coloca el grupo hacia la izquierda, centro o derecha."
+
+    Así, tres reglas sencillas producen un diseño que se adapta sin necesidad de estar persiguiendo cada tamaño de pantalla. Ese es precisamente el espíritu de **Every Layout**: **componer con reglas generales, no parchear con excepciones**.
+
+
+
 
 ## Casos de uso
 
@@ -3186,13 +3559,685 @@ Aplicando `justify-content: space-between` y `align-items: center` puedes inclus
 
 A continuación hay una demostración del layout de encabezado mencionado, usando una estructura anidada. El `Cluster` exterior usa `justify-content: space-between` y `align-items: center`. El `Cluster` para los enlaces de navegación usa `justify-content: flex-start` para alinear sus elementos a la izquierda después del wrapping.
 
-*Esta demostración interactiva solo está disponible en el sitio de Every Layout* ↗.
+!!! info 
+
+    Esta demostración interactiva solo está disponible en el sitio de[*Every Layout* ↗](https://every-layout.dev/demos/cluster-header/).
+
+??? info "Explicacion"
+
+    Sí. Este texto está explicando **cuándo conviene usar `Cluster`** y luego muestra un caso muy interesante: construir un **header responsive sin usar `@media`**.
+
+    Vamos por partes.
+
+    ---
+
+    __1. ¿Cuándo usar `Cluster`?__
+
+    El texto dice:
+
+    > "Los componentes `Cluster` son adecuados para cualquier grupo de elementos que difieran en longitud y sean propensos a hacer wrap."
+
+    La idea es que `Cluster` es especialmente útil cuando tienes elementos que:
+
+    * están uno al lado del otro;
+    * tienen diferentes tamaños;
+    * pueden no caber todos en una sola línea;
+    * y necesitas que automáticamente pasen a otra línea.
+
+    Por ejemplo:
+
+    ```text
+    [Guardar] [Cancelar] [Guardar como borrador]
+    ```
+
+    Los botones no tienen necesariamente el mismo ancho.
+
+    En una pantalla grande:
+
+    ```text
+    [Guardar] [Cancelar] [Guardar como borrador]
+    ```
+
+    En una pantalla pequeña:
+
+    ```text
+    [Guardar] [Cancelar]
+    [Guardar como borrador]
+    ```
+
+    Ahí `Cluster` encaja perfectamente.
+
+    ---
+
+    __2. Caso de uso: botones de un formulario__
+
+    Imagina un formulario:
+
+    ```text
+    Nombre:  [________________]
+
+    Email:   [________________]
+
+            [Cancelar] [Guardar]
+    ```
+
+    Podrías construir los botones con un `Cluster`:
+
+    ```html
+    <div class="cluster">
+      <button>Cancelar</button>
+      <button>Guardar</button>
+    </div>
+    ```
+
+    Y:
+
+    ```css
+    .cluster {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    ```
+
+    En un espacio amplio:
+
+    ```text
+    [Cancelar]    [Guardar]
+    ```
+
+    Si el espacio se vuelve insuficiente:
+
+    ```text
+    [Cancelar]
+    [Guardar]
+    ```
+
+    No necesitas decir:
+
+    ```css
+    @media (...) {
+      ...
+    }
+    ```
+
+    El propio `Cluster` responde al espacio disponible.
+
+    ---
+
+    __3. Otro caso: etiquetas o palabras clave__
+
+    Por ejemplo, una publicación puede tener:
+
+    ```text
+    HTML  CSS  JavaScript  Frontend  Web Development
+    ```
+
+    Podrías representarlo así:
+
+    ```html
+    <div class="cluster">
+      <a>HTML</a>
+      <a>CSS</a>
+      <a>JavaScript</a>
+      <a>Frontend</a>
+      <a>Web Development</a>
+    </div>
+    ```
+
+    Si hay espacio:
+
+    ```text
+    [HTML] [CSS] [JavaScript] [Frontend] [Web Development]
+    ```
+
+    Si no hay espacio:
+
+    ```text
+    [HTML] [CSS] [JavaScript]
+    [Frontend] [Web Development]
+    ```
+
+    El `Cluster` es ideal porque los elementos tienen **longitudes diferentes**.
+
+    `HTML` es corto.
+
+    `JavaScript` es más largo.
+
+    `Web Development` es todavía más largo.
+
+    Y el layout se adapta.
+
+    ---
+
+    __4. El `Cluster` también sirve para alinear elementos__
+
+    El texto dice:
+
+    > "Usa el `Cluster` para alinear cualquier grupo de elementos distribuidos horizontalmente a la izquierda o derecha, o en el centro."
+
+    Esto se refiere a `justify-content`.
+
+    Por ejemplo:
+
+    __Izquierda__
+
+    ```css
+    justify-content: flex-start;
+    ```
+
+    ```text
+    [Uno] [Dos] [Tres]
+    ```
+
+    __Centro__
+
+    ```css
+    justify-content: center;
+    ```
+
+    ```text
+            [Uno] [Dos] [Tres]
+    ```
+
+    __Derecha__
+
+    ```css
+    justify-content: flex-end;
+    ```
+
+    ```text
+                        [Uno] [Dos] [Tres]
+    ```
+
+    Por tanto, `Cluster` no solo significa:
+
+    > "Pongo elementos en fila."
+
+    También puedes decir:
+
+    > "Pongo elementos en fila, permito que hagan wrap y decido dónde quiero que se agrupen."
+
+    ---
+
+    __5. Ahora viene la parte interesante: construir un Header__
+
+    El texto dice:
+
+    > "Aplicando `justify-content: space-between` y `align-items: center` puedes incluso diseñar el encabezado de tu página con logo y navegación."
+
+    Imagina un header así:
+
+    ```text
+    ┌──────────────────────────────────────────────┐
+    │ LOGO                     Inicio  Blog  Sobre │
+    └──────────────────────────────────────────────┘
+    ```
+
+    Tenemos dos grupos:
+
+    ```text
+    LOGO                  NAVEGACIÓN
+    ```
+
+    El logo está a la izquierda.
+
+    La navegación está a la derecha.
+
+    Aquí usamos:
+
+    ```css
+    justify-content: space-between;
+    ```
+
+    El resultado es:
+
+    ```text
+    [LOGO]                         [Inicio] [Blog] [Sobre]
+    ```
+
+    `space-between` coloca el **máximo espacio posible entre los elementos**.
+
+    Si tenemos:
+
+    ```text
+    A                         B
+    ```
+
+    El espacio sobrante se coloca entre `A` y `B`.
+
+    ---
+
+    __6. ¿Qué hace `align-items: center`?__
+
+    Ahora imagina que el logo mide 50px de alto y los enlaces solo 20px.
+
+    Sin `align-items: center`:
+
+    ```text
+    [LOGO]                    Inicio Blog Sobre
+    ```
+
+    Podrían quedar alineados según el comportamiento predeterminado del flex container.
+
+    Con:
+
+    ```css
+    align-items: center;
+    ```
+
+    se alinean verticalmente en el centro:
+
+    ```text
+          [LOGO]
+              ↕
+        Inicio Blog Sobre
+    ```
+
+    Conceptualmente:
+
+    ```text
+    ┌───────────────────────────────────────┐
+    │                                       │
+    │    [LOGO]             Inicio Blog     │
+    │                                       │
+    └───────────────────────────────────────┘
+    ```
+
+    Por tanto:
+
+    ```css
+    justify-content: space-between;
+    align-items: center;
+    ```
+
+    significa aproximadamente:
+
+    > "Pon el logo y la navegación lo más separados posible horizontalmente y alinea ambos verticalmente por el centro."
+
+    ---
+
+    __7. Lo revolucionario: no necesitamos `@media`__
+
+    Normalmente, para hacer un header responsive, podrías pensar:
+
+    ```css
+    .header {
+      display: flex;
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        ...
+      }
+    }
+    ```
+
+    Y luego cambiarías el diseño cuando la pantalla llegue a cierto ancho.
+
+    Every Layout propone otra forma de pensar.
+
+    En lugar de preguntar:
+
+    > "¿La pantalla mide 768px?"
+
+    preguntamos:
+
+    > "¿Hay suficiente espacio para que los elementos quepan?"
+
+    Eso es mucho más flexible.
+
+    ---
+
+    __8. ¿Qué ocurre cuando la pantalla se hace pequeña?__
+
+    Tenemos:
+
+    ```text
+    [LOGO]                  [Inicio] [Blog] [Sobre]
+    ```
+
+    Reducimos el espacio:
+
+    ```text
+    [LOGO]          [Inicio] [Blog] [Sobre]
+    ```
+
+    Seguimos reduciendo:
+
+    ```text
+    [LOGO]
+    [Inicio] [Blog] [Sobre]
+    ```
+
+    Pero aquí hay algo importante.
+
+    La navegación completa baja **como grupo**:
+
+    ```text
+    [LOGO]
+
+    [Inicio] [Blog] [Sobre]
+    ```
+
+    No ocurre esto:
+
+    ```text
+    [LOGO] [Inicio] [Blog]
+    [SOBRE]
+    ```
+
+    La navegación no se parte arbitrariamente mientras todavía está al lado del logo.
+
+    Ese es precisamente el problema que el texto quiere evitar.
+
+    ---
+
+    __9. ¿Por qué ocurre esto?__
+
+    Aquí está la clave.
+
+    Tenemos un `Cluster` exterior:
+
+    ```text
+    Cluster exterior
+    │
+    ├── Logo
+    │
+    └── Cluster navegación
+        ├── Inicio
+        ├── Blog
+        └── Sobre
+    ```
+
+    Visualmente:
+
+    ```text
+    ┌──────────────────────────────────────────────┐
+    │ [LOGO]                  [Inicio] [Blog] [Sobre] │
+    └──────────────────────────────────────────────┘
+    ```
+
+    El `Cluster` exterior contiene **dos elementos**:
+
+    ```text
+    1. Logo
+    2. Cluster de navegación
+    ```
+
+    El `Cluster` exterior hace wrapping.
+
+    Por tanto, cuando ya no puede mantener ambos grupos juntos:
+
+    ```text
+    [LOGO]    [Cluster navegación]
+    ```
+
+    los dos elementos se colocan en líneas diferentes:
+
+    ```text
+    [LOGO]
+
+    [Cluster navegación]
+    ```
+
+    Pero el `Cluster` interior sigue siendo un grupo.
+
+    Por eso la navegación permanece junta:
+
+    ```text
+    [Inicio] [Blog] [Sobre]
+    ```
+
+    ---
+
+    __10. La estructura anidada__
+
+    Esto es lo que significa:
+
+    > "usando una estructura anidada"
+
+    Tenemos un `Cluster` dentro de otro `Cluster`.
+
+    ```text
+    Cluster exterior
+    │
+    ├── Logo
+    │
+    └── Cluster interior
+        │
+        ├── Inicio
+        ├── Blog
+        └── Sobre
+    ```
+
+    Podríamos imaginar el HTML así:
+
+    ```html
+    <header class="cluster header">
+      <a href="/" class="logo">
+        Mi sitio
+      </a>
+
+      <nav class="cluster navigation">
+        <a href="/">Inicio</a>
+        <a href="/blog">Blog</a>
+        <a href="/about">Sobre nosotros</a>
+      </nav>
+    </header>
+    ```
+
+    Y conceptualmente:
+
+    ```css
+    .header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .navigation {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 1rem;
+    }
+    ```
+
+    Tenemos **dos Clusters**, y cada uno tiene una responsabilidad diferente.
+
+    ---
+
+    __11. ¿Qué hace el `Cluster` exterior?__
+
+    El exterior controla la relación:
+
+    ```text
+    LOGO  ←──────────────→  NAVEGACIÓN
+    ```
+
+    Tiene:
+
+    ```css
+    justify-content: space-between;
+    ```
+
+    Por eso:
+
+    ```text
+    [LOGO]                         [Inicio] [Blog] [Sobre]
+    ```
+
+    Y:
+
+    ```css
+    align-items: center;
+    ```
+
+    Por eso el logo y la navegación quedan centrados verticalmente.
+
+    Además:
+
+    ```css
+    flex-wrap: wrap;
+    ```
+
+    Permite que el logo y la navegación se separen en diferentes líneas cuando no caben.
+
+    ---
+
+    __12. ¿Qué hace el `Cluster` interior?__
+
+    El interior controla únicamente los enlaces:
+
+    ```text
+    [Inicio] [Blog] [Sobre]
+    ```
+
+    Tiene:
+
+    ```css
+    justify-content: flex-start;
+    ```
+
+    Esto es importante después del wrapping.
+
+    Cuando la navegación baja:
+
+    ```text
+    [LOGO]
+
+    [Inicio] [Blog] [Sobre]
+    ```
+
+    los enlaces comienzan desde la izquierda.
+
+    No ocurre:
+
+    ```text
+    [LOGO]
+
+              [Inicio] [Blog] [Sobre]
+    ```
+
+    Porque el `Cluster` interior utiliza:
+
+    ```css
+    justify-content: flex-start;
+    ```
+
+    ---
+
+    __13. La idea completa__
+
+    Podemos visualizarlo así:
+
+    ### Pantalla grande
+
+    ```text
+    ┌─────────────────────────────────────────────┐
+    │ [LOGO]              [Inicio] [Blog] [Sobre] │
+    └─────────────────────────────────────────────┘
+    ```
+
+    __Pantalla mediana__
+
+    ```text
+    ┌─────────────────────────────────────────────┐
+    │ [LOGO]             [Inicio] [Blog]          │
+    │                     [Sobre]                 │
+    └─────────────────────────────────────────────┘
+    ```
+
+    Aquí puede ocurrir que el `Cluster` de navegación haga su propio wrapping.
+
+    __Pantalla más pequeña__
+
+    ```text
+    ┌─────────────────────────────────────────────┐
+    │ [LOGO]                                      │
+    │                                             │
+    │ [Inicio] [Blog] [Sobre]                     │
+    └─────────────────────────────────────────────┘
+    ```
+
+    Aquí el `Cluster` exterior hace wrapping.
+
+    Lo importante es que **cada Cluster responde a su propio problema**.
+
+    El exterior organiza:
+
+    ```text
+    Logo ↔ Navegación
+    ```
+
+    El interior organiza:
+
+    ```text
+    Inicio ↔ Blog ↔ Sobre
+    ```
+
+    ---
+
+    __La idea que debes llevarte__
+
+    Este ejemplo es muy importante para entender **Every Layout**.
+
+    No estás diciendo:
+
+    > "Cuando la pantalla tenga menos de 768px, cambia el header."
+
+    Estás diciendo:
+
+    > "Mientras haya espacio, logo y navegación permanecen juntos. Cuando ya no haya espacio, la navegación baja como un grupo."
+
+    Es decir:
+
+    ```text
+    ESPACIO DISPONIBLE
+          ↓
+    ¿Caben logo + navegación?
+          ↓
+      SÍ → una línea
+          ↓
+      NO → wrapping
+    ```
+
+    Y dentro de la navegación:
+
+    ```text
+    ¿Caben todos los enlaces?
+          ↓
+      SÍ → una línea
+          ↓
+      NO → los enlaces hacen wrap
+    ```
+
+    Por eso la estructura es tan poderosa:
+
+    ```text
+          CLUSTER EXTERIOR
+          ┌───────────────┐
+          │               │
+        LOGO         CLUSTER INTERIOR
+                    ┌──────────────┐
+                    │ Inicio Blog  │
+                    │ Sobre Contact│
+                    └──────────────┘
+    ```
+
+    **Un `Cluster` gestiona la relación entre bloques. El otro gestiona la relación entre elementos internos.**
+
+    Y ahí está una de las grandes ideas de Every Layout: **en lugar de crear breakpoints para adivinar cuándo un diseño dejará de funcionar, haces que los componentes sepan reorganizarse cuando realmente lo necesitan**.
+
 
 ## El generador
 
 Usa esta herramienta para generar CSS y HTML básicos de Cluster.
 
-La herramienta generadora de código solo está disponible en el *sitio de documentación adjunto* ↗. Aquí está la solución básica, con comentarios:
+La herramienta generadora de código solo está disponible en el [*sitio de documentación adjunto* ↗](https://every-layout.dev/layouts/cluster/#the-generator). Aquí está la solución básica, con comentarios:
 
 **CSS**
 
@@ -3252,6 +4297,242 @@ Usando los valores por defecto.
 </cluster-l>
 ```
 
+??? info "Explicacion"
+
+    Perfecto. Aquí el texto está mostrando el **uso más básico del componente `Cluster`**.
+
+    ---
+
+    __1. ¿Qué significa "Usando los valores por defecto"?__
+
+    Quiere decir que utilizamos `<cluster-l>` **sin configurar ninguna propiedad adicional**.
+
+    ```html
+    <cluster-l>
+      <!-- elemento hijo aquí -->
+      <!-- otro elemento hijo -->
+      <!-- etc -->
+    </cluster-l>
+    ```
+
+    Es decir, no estamos diciendo:
+
+    ```html
+    <cluster-l justify-content="center">
+    ```
+
+    ni:
+
+    ```html
+    <cluster-l justify-content="flex-end">
+    ```
+
+    Simplemente usamos:
+
+    ```html
+    <cluster-l>
+    ```
+
+    y dejamos que el componente utilice su configuración predeterminada.
+
+    ---
+
+    __2. ¿Qué son los "elementos hijos"?__
+
+    Dentro de:
+
+    ```html
+    <cluster-l>
+    ```
+
+    ponemos los elementos que queremos organizar.
+
+    Por ejemplo:
+
+    ```html
+    <cluster-l>
+      <a href="#">HTML</a>
+      <a href="#">CSS</a>
+      <a href="#">JavaScript</a>
+    </cluster-l>
+    ```
+
+    Aquí tenemos:
+
+    ```text
+    cluster-l
+    │
+    ├── <a>HTML</a>
+    ├── <a>CSS</a>
+    └── <a>JavaScript</a>
+    ```
+
+    Los `<a>` son los **elementos hijos** del `cluster-l`.
+
+    ---
+
+    __3. ¿Qué hace el `Cluster`?__
+
+    El `Cluster` organiza esos elementos horizontalmente utilizando Flexbox.
+
+    Conceptualmente, el resultado sería:
+
+    ```text
+    [HTML]   [CSS]   [JavaScript]
+    ```
+
+    En lugar de que los elementos aparezcan uno debajo de otro:
+
+    ```text
+    [HTML]
+
+    [CSS]
+
+    [JavaScript]
+    ```
+
+    El `Cluster` intenta colocarlos en una misma línea.
+
+    ---
+
+    __4. ¿Qué pasa si no caben?__
+
+    Aquí aparece una de las características fundamentales del `Cluster`: el **wrapping**.
+
+    Supongamos que tenemos muchos elementos:
+
+    ```html
+    <cluster-l>
+      <a>HTML</a>
+      <a>CSS</a>
+      <a>JavaScript</a>
+      <a>React</a>
+      <a>Vue</a>
+      <a>Angular</a>
+    </cluster-l>
+    ```
+
+    En una pantalla grande:
+
+    ```text
+    [HTML] [CSS] [JavaScript] [React] [Vue] [Angular]
+    ```
+
+    Pero si el espacio disponible disminuye:
+
+    ```text
+    [HTML] [CSS] [JavaScript] [React]
+    [Vue]  [Angular]
+    ```
+
+    El `Cluster` permite que los elementos **salten automáticamente a la siguiente línea**.
+
+    ---
+
+    __5. ¿Y qué significa "valores por defecto" en la práctica?__
+
+    En el contexto de `Cluster` de Every Layout, normalmente se parte de una configuración conceptual similar a:
+
+    ```css
+    .cluster {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    ```
+
+    Por tanto, sin configurar nada adicional, el `Cluster` se encarga de:
+
+    1. Colocar los hijos usando Flexbox.
+    2. Permitir que hagan `wrap`.
+    3. Mantener un espacio (`gap`) entre ellos.
+
+    Visualmente:
+
+    ```text
+    ┌──────────────────────────────────────┐
+    │                                      │
+    │ [HTML]  [CSS]  [JavaScript]          │
+    │                                      │
+    │ [React] [Vue]  [Angular]             │
+    │                                      │
+    └──────────────────────────────────────┘
+    ```
+
+    ---
+
+    __6. Lo importante: el `Cluster` no conoce el contenido__
+
+    Fíjate en algo interesante.
+
+    Tú no necesitas decir:
+
+    ```css
+    Si hay 3 elementos → haz esto.
+    Si hay 5 elementos → haz esto.
+    Si la pantalla mide 500px → haz esto.
+    Si mide 300px → haz esto.
+    ```
+
+    Simplemente dices:
+
+    ```html
+    <cluster-l>
+      <!-- elementos -->
+    </cluster-l>
+    ```
+
+    Y el componente responde al espacio disponible.
+
+    Por eso el `Cluster` es un **patrón de layout**, no un diseño específico.
+
+    Puedes usarlo para:
+
+    ```text
+    Botones
+    [Cancelar] [Guardar]
+    ```
+
+    O:
+
+    ```text
+    Etiquetas
+    [HTML] [CSS] [JS] [React]
+    ```
+
+    O:
+
+    ```text
+    Navegación
+    [Inicio] [Blog] [Proyectos] [Contacto]
+    ```
+
+    O:
+
+    ```text
+    Metadatos
+    👤 Alex   📅 27 Julio   🏷️ CSS
+    ```
+
+    La lógica es siempre la misma:
+
+    > **Tengo varios elementos relacionados que quiero distribuir horizontalmente y permitir que hagan wrap cuando no haya suficiente espacio.**
+
+    Entonces:
+
+    ```html
+    <cluster-l>
+      elementos relacionados
+    </cluster-l>
+    ```
+
+    es una solución muy natural.
+
+    __En una frase:__
+
+    **El ejemplo básico simplemente muestra que puedes envolver un conjunto de elementos en `<cluster-l>` y dejar que el componente se encargue automáticamente de distribuirlos, mantener el espacio entre ellos y hacer wrapping cuando sea necesario.**
+
+
 ### Lista
 
 Dado que los `Clusters` típicamente representan grupos de elementos similares, se benefician de ser marcados como una lista. Los elementos de lista presentan información no visual, para el software lector de pantalla. Es importante que los usuarios de lectores de pantalla sean conscientes de que *hay* una lista presente, y cuántos elementos contiene.
@@ -3266,3 +4547,428 @@ Dado que nuestro elemento personalizado `<cluster-l>` no es un `<ul>` (y los ele
   <div role="listitem"><!-- etc --></div>
 </cluster-l>
 ```
+
+??? info "Explicacion"
+
+    Claro. Aquí el texto introduce un tema diferente pero muy importante: **accesibilidad y semántica HTML**. El `Cluster` se encarga del **layout**, pero también debemos preocuparnos de que un lector de pantalla entienda qué estamos mostrando.
+
+    ---
+
+    __1. ¿Por qué un `Cluster` puede ser una lista?__
+
+    Imagina que tienes:
+
+    ```html
+    <cluster-l>
+      <div>HTML</div>
+      <div>CSS</div>
+      <div>JavaScript</div>
+    </cluster-l>
+    ```
+
+    Visualmente podrías tener:
+
+    ```text
+    [HTML] [CSS] [JavaScript]
+    ```
+
+    Los tres elementos son similares y forman un grupo.
+
+    Podríamos decir que conceptualmente tenemos una **lista de tecnologías**:
+
+    ```text
+    Lista:
+    1. HTML
+    2. CSS
+    3. JavaScript
+    ```
+
+    Pero para un usuario que ve la pantalla, simplemente aparecen:
+
+    ```text
+    [HTML] [CSS] [JavaScript]
+    ```
+
+    Un usuario de lector de pantalla no necesariamente sabe que esos elementos forman una lista.
+
+    Ahí entra la **semántica**.
+
+    ---
+
+    __2. ¿Qué es la semántica?__
+
+    La semántica consiste en darle significado a la estructura del HTML.
+
+    Por ejemplo:
+
+    ```html
+    <p>Hola</p>
+    ```
+
+    Le dice al navegador:
+
+    > Esto es un párrafo.
+
+    ```html
+    <button>Guardar</button>
+    ```
+
+    Le dice:
+
+    > Esto es un botón.
+
+    ```html
+    <ul>
+      <li>HTML</li>
+      <li>CSS</li>
+    </ul>
+    ```
+
+    Le dice:
+
+    > Esto es una lista con dos elementos.
+
+    El usuario que ve la pantalla puede deducirlo visualmente, pero un lector de pantalla necesita que la estructura sea correctamente identificable.
+
+    ---
+
+    __3. ¿Por qué importa para un lector de pantalla?__
+
+    Un lector de pantalla puede comunicar algo como:
+
+    > "Lista, 3 elementos."
+
+    Y después:
+
+    > "HTML."
+
+    > "CSS."
+
+    > "JavaScript."
+
+    Esto es útil porque el usuario sabe:
+
+    * que está entrando en una lista;
+    * cuántos elementos tiene;
+    * dónde empieza;
+    * dónde termina.
+
+    Sin esa información, podría escuchar simplemente:
+
+    > "HTML. CSS. JavaScript."
+
+    Pero no necesariamente sabría que esos elementos forman una lista relacionada.
+
+    ---
+
+    __4. Lo ideal sería usar `<ul>` y `<li>`__
+
+    En HTML tradicional, una lista no ordenada se representa así:
+
+    ```html
+    <ul>
+      <li>HTML</li>
+      <li>CSS</li>
+      <li>JavaScript</li>
+    </ul>
+    ```
+
+    Tenemos:
+
+    ```text
+    <ul>
+    │
+    ├── <li>HTML</li>
+    ├── <li>CSS</li>
+    └── <li>JavaScript</li>
+    ```
+
+    El navegador y las tecnologías de asistencia entienden automáticamente que:
+
+    * `<ul>` es una lista;
+    * `<li>` es un elemento de esa lista.
+
+    ---
+
+    __5. Pero aquí tenemos `<cluster-l>`__
+
+    El problema que plantea Every Layout es que el componente no es:
+
+    ```html
+    <ul>
+    ```
+
+    sino:
+
+    ```html
+    <cluster-l>
+    ```
+
+    `<cluster-l>` es un **elemento personalizado (Custom Element)**.
+
+    Por tanto, esto:
+
+    ```html
+    <cluster-l>
+      <li>HTML</li>
+      <li>CSS</li>
+    </cluster-l>
+    ```
+
+    no es necesariamente una estructura semántica correcta, porque `<li>` está pensado para estar dentro de elementos como:
+
+    ```html
+    <ul>
+    <ol>
+    <menu>
+    ```
+
+    No deberías pensar:
+
+    ```text
+    cluster-l
+    └── li
+    ```
+
+    como equivalente semántico automático de:
+
+    ```text
+    ul
+    └── li
+    ```
+
+    El navegador no interpreta automáticamente que `<cluster-l>` sea una lista.
+
+    Para el navegador:
+
+    ```html
+    <cluster-l>
+    ```
+
+    es simplemente un elemento personalizado.
+
+    ---
+
+    __6. Entonces usamos ARIA__
+
+    Aquí aparece:
+
+    > `role="list"`
+
+    y:
+
+    > `role="listitem"`
+
+    ARIA significa **Accessible Rich Internet Applications**.
+
+    En este caso utilizamos `role` para comunicar la semántica a las tecnologías de asistencia.
+
+    Tenemos:
+
+    ```html
+    <cluster-l role="list">
+    ```
+
+    Esto significa:
+
+    > "Trata este elemento como una lista."
+
+    Y:
+
+    ```html
+    <div role="listitem">
+    ```
+
+    significa:
+
+    > "Trata este elemento como un elemento de esa lista."
+
+    Entonces:
+
+    ```html
+    <cluster-l role="list">
+      <div role="listitem">HTML</div>
+      <div role="listitem">CSS</div>
+      <div role="listitem">JavaScript</div>
+    </cluster-l>
+    ```
+
+    Semánticamente estamos diciendo:
+
+    ```text
+    LISTA
+    │
+    ├── ELEMENTO DE LISTA → HTML
+    ├── ELEMENTO DE LISTA → CSS
+    └── ELEMENTO DE LISTA → JavaScript
+    ```
+
+    ---
+
+    __7. Visualmente y semánticamente__
+
+    Visualmente:
+
+    ```text
+    [HTML] [CSS] [JavaScript]
+    ```
+
+    Pero para el lector de pantalla:
+
+    ```text
+    Lista, 3 elementos.
+
+    Elemento de lista:
+    HTML
+
+    Elemento de lista:
+    CSS
+
+    Elemento de lista:
+    JavaScript
+    ```
+
+    Esa es la diferencia fundamental.
+
+    El **CSS/layout** determina cómo se ve.
+
+    La **semántica/ARIA** determina cómo se interpreta la estructura.
+
+    Podemos pensar:
+
+    ```text
+                    CLUSTER
+                        │
+              ┌─────────┴─────────┐
+              │                   │
+          Presentación         Semántica
+              │                   │
+          Flexbox              ARIA
+              │                   │
+      ¿Cómo se organiza?   ¿Qué significa?
+    ```
+
+    ---
+
+    __8. ¿Por qué no usamos simplemente `<ul>`?__
+
+    En muchos casos, **sí sería mejor usar HTML semántico nativo si puedes**.
+
+    Por ejemplo:
+
+    ```html
+    <ul class="cluster">
+      <li>HTML</li>
+      <li>CSS</li>
+      <li>JavaScript</li>
+    </ul>
+    ```
+
+    Y CSS:
+
+    ```css
+    .cluster {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    ```
+
+    Aquí tienes lo mejor de ambos mundos:
+
+    ```text
+    <ul>
+      → Semántica de lista
+      → Accesibilidad nativa
+
+    CSS
+      → Layout Cluster
+      → Flexbox
+      → Wrap
+      → Gap
+    ```
+
+    Pero en Every Layout se está hablando de un componente específico:
+
+    ```html
+    <cluster-l>
+    ```
+
+    que encapsula el comportamiento del `Cluster`.
+
+    Por eso se necesita proporcionar explícitamente la semántica mediante ARIA:
+
+    ```html
+    <cluster-l role="list">
+    ```
+
+    ---
+
+    __9. ¿Qué está intentando enseñarte este ejemplo?__
+
+    La lección importante es esta:
+
+    > **El layout y la semántica son cosas diferentes.**
+
+    Puedes tener un layout perfecto:
+
+    ```text
+    [HTML] [CSS] [JS]
+    ```
+
+    Pero eso no significa que la estructura sea accesible.
+
+    El `Cluster` resuelve:
+
+    > "¿Cómo distribuyo estos elementos?"
+
+    ARIA resuelve:
+
+    > "¿Cómo comunico a las tecnologías de asistencia qué representan estos elementos?"
+
+    Por eso:
+
+    ```html
+    <cluster-l role="list">
+      <div role="listitem">...</div>
+      <div role="listitem">...</div>
+    </cluster-l>
+    ```
+
+    combina ambas cosas:
+
+    ```text
+    <cluster-l>
+        │
+        ├── Layout → Cluster
+        │
+        └── Semántica → role="list"
+                            │
+                            └── role="listitem"
+    ```
+
+    __En resumen__
+
+    Si tienes un `Cluster` que representa visual y conceptualmente una colección de elementos relacionados, puedes darle semántica de lista.
+
+    ```html
+    <cluster-l role="list">
+      <div role="listitem">Elemento 1</div>
+      <div role="listitem">Elemento 2</div>
+      <div role="listitem">Elemento 3</div>
+    </cluster-l>
+    ```
+
+    El usuario visual ve:
+
+    ```text
+    [Elemento 1] [Elemento 2] [Elemento 3]
+    ```
+
+    El lector de pantalla entiende:
+
+    ```text
+    Lista de 3 elementos
+    ```
+
+    **El punto clave:** `Cluster` organiza; `ARIA` describe la naturaleza de la estructura para quienes no pueden percibirla visualmente.
