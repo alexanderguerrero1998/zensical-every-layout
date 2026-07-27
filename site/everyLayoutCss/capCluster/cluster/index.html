@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="zensical-0.0.46">
+      <meta name="generator" content="zensical-0.0.51">
     
     
       
@@ -34,7 +34,7 @@
       
         
       
-      <link rel="stylesheet" href="../../../assets/stylesheets/modern/main.19d3147f.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/modern/main.62c9b9cc.min.css">
       
         
           
@@ -1455,16 +1455,441 @@
 <p><img alt="" src="../morboxes.png" /></p>
 <p>Sin embargo, esto solo resuelve el caso de alineación a la izquierda — además, se produce espacio duplicado donde el margen sobrante interactúa con el <code>padding</code> de un elemento padre.</p>
 <p><img alt="" src="../xelements.png" /></p>
+<details class="info">
+<summary>Explicacion</summary>
+<p>Claro. Este texto de <strong>Every Layout</strong> está preparando el terreno para explicar el componente <strong>Cluster</strong>. La idea central es bastante sencilla:</p>
+<blockquote>
+<p><strong>Cluster sirve para colocar elementos en una fila flexible que puede saltar a varias líneas, manteniendo un espaciado uniforme.</strong></p>
+</blockquote>
+<p>Vamos paso a paso.</p>
+<hr />
+<p><strong>1. ¿Cuál es el problema que quiere resolver?</strong></p>
+<p>Imagina que tienes varios elementos:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;parent&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  <span class="p">&lt;</span><span class="nt">a</span><span class="p">&gt;</span>Inicio<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  <span class="p">&lt;</span><span class="nt">a</span><span class="p">&gt;</span>Productos<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  <span class="p">&lt;</span><span class="nt">a</span><span class="p">&gt;</span>Servicios<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  <span class="p">&lt;</span><span class="nt">a</span><span class="p">&gt;</span>Contacto<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>Podrías usar <strong>CSS Grid</strong>:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">.</span><span class="nc">parent</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="k">grid</span><span class="p">;</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Pero Grid funciona muy bien cuando quieres que los elementos respeten una estructura rígida de <strong>filas y columnas</strong>.</p>
+<p>Por ejemplo:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>┌──────────┬──────────┬──────────┐
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>│ Producto │ Producto │ Producto │
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>├──────────┼──────────┼──────────┤
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>│ Producto │ Producto │ Producto │
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>└──────────┴──────────┴──────────┘
+</span></code></pre></div>
+<p>Cada elemento se coloca dentro de una celda.</p>
+<p>El problema es que hay situaciones donde <strong>no quieres esa rigidez</strong>.</p>
+<hr />
+<p><strong>2. El texto es un buen ejemplo</strong></p>
+<p>Mira este párrafo:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Hola, mi nombre es Alex y estoy aprendiendo
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>CSS y diseño de interfaces web.
+</span></code></pre></div>
+<p>El navegador no dice:</p>
+<blockquote>
+<p>"Cada línea debe tener exactamente 20 caracteres".</p>
+</blockquote>
+<p>No.</p>
+<p>El navegador intenta aprovechar el espacio disponible:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Hola, mi nombre es Alex y estoy aprendiendo
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>CSS y diseño de interfaces web.
+</span></code></pre></div>
+<p>Si reduces la pantalla:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Hola, mi nombre es Alex y estoy
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>aprendiendo CSS y diseño de
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>interfaces web.
+</span></code></pre></div>
+<p>El texto se adapta automáticamente.</p>
+<p>Esto es importante:</p>
+<blockquote>
+<p><strong>El contenido determina cómo se distribuye.</strong></p>
+</blockquote>
+<p>No estás imponiendo una cuadrícula rígida.</p>
+<hr />
+<p><strong>3. El concepto de tamaño intrínseco</strong></p>
+<p>Esto conecta directamente con lo que veníamos hablando sobre <strong>intrinsic</strong>.</p>
+<p>Supongamos:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">&lt;</span><span class="nt">a</span><span class="p">&gt;</span>Inicio<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="p">&lt;</span><span class="nt">a</span><span class="p">&gt;</span>Productos<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="p">&lt;</span><span class="nt">a</span><span class="p">&gt;</span>Contacto<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>Cada elemento tiene un tamaño diferente porque su contenido tiene una longitud diferente:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>┌────────┐
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>│ Inicio │
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>└────────┘
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>┌─────────────┐
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>│  Productos  │
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>└─────────────┘
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>┌────────────┐
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>│  Contacto  │
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>└────────────┘
+</span></code></pre></div>
+<p>El tamaño se adapta al contenido.</p>
+<p>Eso es comportamiento <strong>intrínseco</strong>.</p>
+<p>No dices:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nt">width</span><span class="o">:</span><span class="w"> </span><span class="nt">150px</span><span class="o">;</span>
+</span></code></pre></div>
+<p>para todos.</p>
+<p>Cada elemento dice, básicamente:</p>
+<blockquote>
+<p>"Yo necesito el espacio que necesito".</p>
+</blockquote>
+<hr />
+<p><strong>4. Una primera solución: <code>inline-block</code></strong></p>
+<p>El texto menciona:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">.</span><span class="nc">parent</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">inline-block</span><span class="p">;</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Esto permite que los elementos se comporten un poco como palabras.</p>
+<p>Por ejemplo:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;parent&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>  <span class="p">&lt;</span><span class="nt">button</span><span class="p">&gt;</span>Inicio<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>  <span class="p">&lt;</span><span class="nt">button</span><span class="p">&gt;</span>Productos<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>  <span class="p">&lt;</span><span class="nt">button</span><span class="p">&gt;</span>Servicios<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>  <span class="p">&lt;</span><span class="nt">button</span><span class="p">&gt;</span>Contacto<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>Visualmente:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>[Inicio] [Productos] [Servicios] [Contacto]
+</span></code></pre></div>
+<p>Y si no hay espacio:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>[Inicio] [Productos] [Servicios]
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>[Contacto]
+</span></code></pre></div>
+<p>Esto parece exactamente lo que queremos.</p>
+<p>Pero aparece un problema.</p>
+<hr />
+<p><strong>5. El problema del espacio entre <code>inline-block</code></strong></p>
+<p>Mira este HTML:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;parent&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>  <span class="p">&lt;</span><span class="nt">button</span><span class="p">&gt;</span>Uno<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>  <span class="p">&lt;</span><span class="nt">button</span><span class="p">&gt;</span>Dos<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>Entre los elementos existe un espacio en el código HTML:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="p">&lt;</span><span class="nt">button</span><span class="p">&gt;</span>Uno<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span> [ESPACIO]
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="p">&lt;</span><span class="nt">button</span><span class="p">&gt;</span>Dos<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>El navegador interpreta ese espacio como un espacio real.</p>
+<p>Por eso:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>[Uno] [Dos]
+</span></code></pre></div>
+<p>Ya existe una separación.</p>
+<p>Si además haces:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nt">button</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">  </span><span class="k">margin</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>terminas con:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>[Uno]    [Dos]
+</span></code></pre></div>
+<p>Porque tienes:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>margin + espacio HTML + margin
+</span></code></pre></div>
+<p>Es decir, el espacio natural del HTML se suma a tus márgenes.</p>
+<hr />
+<p><strong>6. La solución extraña: <code>font-size: 0</code></strong></p>
+<p>El texto propone:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="p">.</span><span class="nc">parent</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="p">}</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="p">.</span><span class="nc">parent</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="w">  </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-20-7"><a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>¿Por qué funciona?</p>
+<p>Porque los espacios entre elementos <code>inline-block</code> son tratados como caracteres de texto.</p>
+<p>Y si el padre tiene:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nt">font-size</span><span class="o">:</span><span class="w"> </span><span class="nt">0</span><span class="o">;</span>
+</span></code></pre></div>
+<p>ese espacio tiene un ancho de:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>0
+</span></code></pre></div>
+<p>Por tanto:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>[Uno][Dos][Tres]
+</span></code></pre></div>
+<p>Pero ahora aparece otro problema.</p>
+<p>Si el hijo usa:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nt">font-size</span><span class="o">:</span><span class="w"> </span><span class="nt">1em</span><span class="o">;</span>
+</span></code></pre></div>
+<p>¿De dónde toma el <code>em</code>?</p>
+<p>Del tamaño de fuente del padre.</p>
+<p>El padre tiene:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="nt">font-size</span><span class="o">:</span><span class="w"> </span><span class="nt">0</span><span class="o">;</span>
+</span></code></pre></div>
+<p>Entonces:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="nt">1em</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nt">0</span>
+</span></code></pre></div>
+<p>Por eso tendrías que usar:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="nt">font-size</span><span class="o">:</span><span class="w"> </span><span class="nt">1rem</span><span class="o">;</span>
+</span></code></pre></div>
+<p>Porque <code>rem</code> se calcula respecto al tamaño de fuente del elemento raíz (<code>:root</code> / normalmente <code>&lt;html&gt;</code>), no respecto al padre.</p>
+<p>Pero esto es bastante incómodo.</p>
+<hr />
+<p><strong>7. El problema de los márgenes cuando los elementos hacen <code>wrap</code></strong></p>
+<p>Ahora viene el problema más importante.</p>
+<p>Imagina:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="p">.</span><span class="nc">item</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">inline-block</span><span class="p">;</span>
+</span><span id="__span-28-3"><a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="w">  </span><span class="k">margin</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-28-4"><a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Y tienes:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>[Uno] [Dos] [Tres] [Cuatro]
+</span></code></pre></div>
+<p>Todo cabe en una línea.</p>
+<p>Perfecto.</p>
+<p>Pero reduces el ancho:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>[Uno] [Dos] [Tres]
+</span><span id="__span-30-2"><a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>[Cuatro]
+</span></code></pre></div>
+<p>Ahora aparece el <strong>wrapping</strong>.</p>
+<p><code>wrap</code> significa simplemente:</p>
+<blockquote>
+<p>Cuando ya no cabe más contenido en una línea, pasa a la siguiente.</p>
+</blockquote>
+<p>El problema es que los márgenes no saben que visualmente estás creando una nueva fila.</p>
+<p>Por ejemplo:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>┌──────────────────────────────┐
+</span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>│ [Uno] [Dos] [Tres]           │
+</span><span id="__span-31-3"><a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>│                              │
+</span><span id="__span-31-4"><a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a>│     [Cuatro]                 │
+</span><span id="__span-31-5"><a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a>└──────────────────────────────┘
+</span></code></pre></div>
+<p>Puede quedar un margen extraño en el lado izquierdo.</p>
+<p>¿Por qué?</p>
+<p>Porque <code>margin</code> pertenece al elemento individual.</p>
+<p>No está pensando:</p>
+<blockquote>
+<p>"Ah, ahora soy el primer elemento de una nueva fila".</p>
+</blockquote>
+<p>Simplemente aplica:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="nt">margin</span><span class="o">:</span><span class="w"> </span><span class="nt">1rem</span><span class="o">;</span>
+</span></code></pre></div>
+<p>a todos.</p>
+<hr />
+<p><strong>8. ¿Y si usamos <code>margin-right</code> y <code>margin-bottom</code>?</strong></p>
+<p>El libro propone como solución parcial:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="p">.</span><span class="nc">item</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-33-2"><a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="w">  </span><span class="k">margin-right</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-33-3"><a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="w">  </span><span class="k">margin-bottom</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-33-4"><a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Entonces:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>[Uno] [Dos] [Tres]
+</span><span id="__span-34-2"><a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a>[Cuatro] [Cinco]
+</span></code></pre></div>
+<p>Puedes obtener algo parecido a:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-35-1"><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a>[Uno] → [Dos] → [Tres] →
+</span><span id="__span-35-2"><a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a>↓
+</span><span id="__span-35-3"><a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a>[Cuatro] → [Cinco] →
+</span><span id="__span-35-4"><a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a>↓
+</span></code></pre></div>
+<p>Cada elemento tiene:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-36-1"><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a>margen derecho
+</span><span id="__span-36-2"><a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a>+
+</span><span id="__span-36-3"><a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a>margen inferior
+</span></code></pre></div>
+<p>Eso genera separación horizontal y vertical.</p>
+<p>Pero tampoco es perfecto.</p>
+<hr />
+<p><strong>9. ¿Cuál es el problema de esta solución?</strong></p>
+<p>Supongamos que tienes:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-37-1"><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a>[Uno] [Dos] [Tres]
+</span><span id="__span-37-2"><a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a>[Cuatro] [Cinco]
+</span></code></pre></div>
+<p>Si todos tienen:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-38-1"><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="nt">margin-right</span><span class="o">:</span><span class="w"> </span><span class="nt">1rem</span><span class="o">;</span>
+</span></code></pre></div>
+<p>el último elemento de cada fila también tiene margen derecho.</p>
+<p>Entonces:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-39-1"><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a>[Uno] [Dos] [Tres]→
+</span><span id="__span-39-2"><a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a>                  ↑
+</span><span id="__span-39-3"><a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a>            margen sobrante
+</span></code></pre></div>
+<p>Y si el contenedor tiene <code>padding</code>, puedes terminar con algo como:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-40-1"><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a>┌──────────────────────────────┐
+</span><span id="__span-40-2"><a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a>│ [Uno] [Dos] [Tres]    ←      │
+</span><span id="__span-40-3"><a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a>│                              │
+</span><span id="__span-40-4"><a id="__codelineno-40-4" name="__codelineno-40-4" href="#__codelineno-40-4"></a>│ [Cuatro] [Cinco]      ←      │
+</span><span id="__span-40-5"><a id="__codelineno-40-5" name="__codelineno-40-5" href="#__codelineno-40-5"></a>└──────────────────────────────┘
+</span></code></pre></div>
+<p>Ese margen sobrante se suma al espacio interno del contenedor.</p>
+<p>Y si intentas resolverlo con trucos como:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-41-1"><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="p">.</span><span class="nc">item</span><span class="p">:</span><span class="nd">last-child</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-41-2"><a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a><span class="w">  </span><span class="k">margin-right</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-41-3"><a id="__codelineno-41-3" name="__codelineno-41-3" href="#__codelineno-41-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>no funciona correctamente cuando hay wrapping.</p>
+<p>Porque <code>:last-child</code> solamente identifica el último elemento del <strong>contenedor completo</strong>, no el último elemento de <strong>cada fila visual</strong>.</p>
+<p>CSS no sabe fácilmente cuál es:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-42-1"><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a>último de la primera fila
+</span><span id="__span-42-2"><a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a>último de la segunda fila
+</span><span id="__span-42-3"><a id="__codelineno-42-3" name="__codelineno-42-3" href="#__codelineno-42-3"></a>último de la tercera fila
+</span></code></pre></div>
+<hr />
+<p><strong>10. Entonces, ¿qué problema está resolviendo <code>Cluster</code>?</strong></p>
+<p>Aquí está la idea clave:</p>
+<p>El libro está diciendo:</p>
+<blockquote>
+<p>Tenemos elementos de tamaño intrínseco. Queremos colocarlos uno al lado del otro. Queremos que se ajusten automáticamente cuando no haya espacio. Y queremos que la separación entre ellos sea uniforme, tanto horizontal como verticalmente.</p>
+</blockquote>
+<p>Es decir:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-43-1"><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a>Pantalla grande
+</span><span id="__span-43-2"><a id="__codelineno-43-2" name="__codelineno-43-2" href="#__codelineno-43-2"></a>
+</span><span id="__span-43-3"><a id="__codelineno-43-3" name="__codelineno-43-3" href="#__codelineno-43-3"></a>[ A ] [ B ] [ C ] [ D ] [ E ]
+</span></code></pre></div>
+<p>Pantalla más pequeña:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-44-1"><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a>[ A ] [ B ] [ C ]
+</span><span id="__span-44-2"><a id="__codelineno-44-2" name="__codelineno-44-2" href="#__codelineno-44-2"></a>[ D ] [ E ]
+</span></code></pre></div>
+<p>Pantalla aún más pequeña:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-45-1"><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a>[ A ] [ B ]
+</span><span id="__span-45-2"><a id="__codelineno-45-2" name="__codelineno-45-2" href="#__codelineno-45-2"></a>[ C ] [ D ]
+</span><span id="__span-45-3"><a id="__codelineno-45-3" name="__codelineno-45-3" href="#__codelineno-45-3"></a>[ E ]
+</span></code></pre></div>
+<p>Y queremos que <strong>todo siga teniendo un espacio consistente</strong>, sin tener que calcular manualmente:</p>
+<ul>
+<li>cuál es el último elemento de cada fila;</li>
+<li>dónde quitar márgenes;</li>
+<li>cuánto espacio queda al borde;</li>
+<li>cómo eliminar espacios del HTML;</li>
+<li>cómo gestionar el wrapping.</li>
+</ul>
+<hr />
+<p><strong>11. La solución moderna: Flexbox + <code>gap</code></strong></p>
+<p>Aquí es donde entra <strong>Cluster</strong>.</p>
+<p>Conceptualmente, un Cluster suele hacer algo parecido a:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-46-1"><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a><span class="p">.</span><span class="nc">cluster</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-46-2"><a id="__codelineno-46-2" name="__codelineno-46-2" href="#__codelineno-46-2"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
+</span><span id="__span-46-3"><a id="__codelineno-46-3" name="__codelineno-46-3" href="#__codelineno-46-3"></a><span class="w">  </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
+</span><span id="__span-46-4"><a id="__codelineno-46-4" name="__codelineno-46-4" href="#__codelineno-46-4"></a><span class="w">  </span><span class="k">gap</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-46-5"><a id="__codelineno-46-5" name="__codelineno-46-5" href="#__codelineno-46-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Ahora tenemos:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-47-1"><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a>[ A ] [ B ] [ C ]
+</span></code></pre></div>
+<p>Si falta espacio:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-48-1"><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a>[ A ] [ B ]
+</span><span id="__span-48-2"><a id="__codelineno-48-2" name="__codelineno-48-2" href="#__codelineno-48-2"></a>[ C ] [ D ]
+</span></code></pre></div>
+<p>Y <code>gap</code> controla la separación:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-49-1"><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a>[ A ] ← 1rem → [ B ] ← 1rem → [ C ]
+</span></code></pre></div>
+<p>y también:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-50-1"><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a>[ A ]
+</span><span id="__span-50-2"><a id="__codelineno-50-2" name="__codelineno-50-2" href="#__codelineno-50-2"></a>  ↕
+</span><span id="__span-50-3"><a id="__codelineno-50-3" name="__codelineno-50-3" href="#__codelineno-50-3"></a>1rem
+</span><span id="__span-50-4"><a id="__codelineno-50-4" name="__codelineno-50-4" href="#__codelineno-50-4"></a>  ↕
+</span><span id="__span-50-5"><a id="__codelineno-50-5" name="__codelineno-50-5" href="#__codelineno-50-5"></a>[ D ]
+</span></code></pre></div>
+<p>La gran ventaja es que <strong><code>gap</code> pertenece al contenedor</strong>, no a los elementos individuales.</p>
+<p>Por eso no necesitas decir:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-51-1"><a id="__codelineno-51-1" name="__codelineno-51-1" href="#__codelineno-51-1"></a><span class="p">.</span><span class="nc">item</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-51-2"><a id="__codelineno-51-2" name="__codelineno-51-2" href="#__codelineno-51-2"></a><span class="w">  </span><span class="k">margin-right</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-51-3"><a id="__codelineno-51-3" name="__codelineno-51-3" href="#__codelineno-51-3"></a><span class="w">  </span><span class="k">margin-bottom</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-51-4"><a id="__codelineno-51-4" name="__codelineno-51-4" href="#__codelineno-51-4"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Ni preocuparte por quitar el margen del último.</p>
+<p>El contenedor dice:</p>
+<blockquote>
+<p>"Entre mis hijos debe existir <code>1rem</code> de separación".</p>
+</blockquote>
+<p>Y listo.</p>
+<hr />
+<p><strong>La diferencia fundamental</strong></p>
+<p><strong>Con márgenes</strong></p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-52-1"><a id="__codelineno-52-1" name="__codelineno-52-1" href="#__codelineno-52-1"></a><span class="p">.</span><span class="nc">item</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-52-2"><a id="__codelineno-52-2" name="__codelineno-52-2" href="#__codelineno-52-2"></a><span class="w">  </span><span class="k">margin-right</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-52-3"><a id="__codelineno-52-3" name="__codelineno-52-3" href="#__codelineno-52-3"></a><span class="w">  </span><span class="k">margin-bottom</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-52-4"><a id="__codelineno-52-4" name="__codelineno-52-4" href="#__codelineno-52-4"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Piensas desde el elemento:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-53-1"><a id="__codelineno-53-1" name="__codelineno-53-1" href="#__codelineno-53-1"></a>Elemento → tengo margen
+</span><span id="__span-53-2"><a id="__codelineno-53-2" name="__codelineno-53-2" href="#__codelineno-53-2"></a>Elemento → tengo margen
+</span><span id="__span-53-3"><a id="__codelineno-53-3" name="__codelineno-53-3" href="#__codelineno-53-3"></a>Elemento → tengo margen
+</span></code></pre></div>
+<p>Esto genera problemas en los bordes y al hacer wrapping.</p>
+<hr />
+<p><strong>Con <code>gap</code></strong></p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-54-1"><a id="__codelineno-54-1" name="__codelineno-54-1" href="#__codelineno-54-1"></a><span class="p">.</span><span class="nc">cluster</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-54-2"><a id="__codelineno-54-2" name="__codelineno-54-2" href="#__codelineno-54-2"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
+</span><span id="__span-54-3"><a id="__codelineno-54-3" name="__codelineno-54-3" href="#__codelineno-54-3"></a><span class="w">  </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
+</span><span id="__span-54-4"><a id="__codelineno-54-4" name="__codelineno-54-4" href="#__codelineno-54-4"></a><span class="w">  </span><span class="k">gap</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-54-5"><a id="__codelineno-54-5" name="__codelineno-54-5" href="#__codelineno-54-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Piensas desde el grupo:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-55-1"><a id="__codelineno-55-1" name="__codelineno-55-1" href="#__codelineno-55-1"></a>Contenedor → quiero 1rem entre mis elementos
+</span></code></pre></div>
+<p>Y el navegador se encarga de la distribución.</p>
+<hr />
+<p><strong>12. La filosofía de Every Layout</strong></p>
+<p>Esto conecta con todo lo que hemos estado viendo de <strong>Every Layout</strong>.</p>
+<p>El objetivo no es crear:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-56-1"><a id="__codelineno-56-1" name="__codelineno-56-1" href="#__codelineno-56-1"></a><span class="p">.</span><span class="nc">card</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-56-2"><a id="__codelineno-56-2" name="__codelineno-56-2" href="#__codelineno-56-2"></a><span class="w">  </span><span class="k">width</span><span class="p">:</span><span class="w"> </span><span class="mi">300</span><span class="kt">px</span><span class="p">;</span>
+</span><span id="__span-56-3"><a id="__codelineno-56-3" name="__codelineno-56-3" href="#__codelineno-56-3"></a><span class="w">  </span><span class="k">margin-left</span><span class="p">:</span><span class="w"> </span><span class="mi">17</span><span class="kt">px</span><span class="p">;</span>
+</span><span id="__span-56-4"><a id="__codelineno-56-4" name="__codelineno-56-4" href="#__codelineno-56-4"></a><span class="w">  </span><span class="k">margin-right</span><span class="p">:</span><span class="w"> </span><span class="mi">23</span><span class="kt">px</span><span class="p">;</span>
+</span><span id="__span-56-5"><a id="__codelineno-56-5" name="__codelineno-56-5" href="#__codelineno-56-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>y luego crear 15 media queries para arreglar cada situación.</p>
+<p>La idea es construir componentes que respondan naturalmente al espacio disponible.</p>
+<p>El <strong>Cluster</strong> dice:</p>
+<blockquote>
+<p>"Tengo un grupo de elementos de tamaño intrínseco. Los voy a colocar juntos y, si no caben, los voy a envolver automáticamente manteniendo un espacio consistente."</p>
+</blockquote>
+<p>Por eso se usa mucho para:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-57-1"><a id="__codelineno-57-1" name="__codelineno-57-1" href="#__codelineno-57-1"></a>Menús
+</span><span id="__span-57-2"><a id="__codelineno-57-2" name="__codelineno-57-2" href="#__codelineno-57-2"></a>
+</span><span id="__span-57-3"><a id="__codelineno-57-3" name="__codelineno-57-3" href="#__codelineno-57-3"></a>[Inicio] [Productos] [Servicios] [Contacto]
+</span></code></pre></div>
+<p>Etiquetas:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-58-1"><a id="__codelineno-58-1" name="__codelineno-58-1" href="#__codelineno-58-1"></a>[CSS] [HTML] [JavaScript] [Vue] [React]
+</span></code></pre></div>
+<p>Botones:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-59-1"><a id="__codelineno-59-1" name="__codelineno-59-1" href="#__codelineno-59-1"></a>[Guardar] [Cancelar] [Eliminar]
+</span></code></pre></div>
+<p>Enlaces:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-60-1"><a id="__codelineno-60-1" name="__codelineno-60-1" href="#__codelineno-60-1"></a>GitHub · LinkedIn · Twitter
+</span></code></pre></div>
+<p>Listas de elementos pequeños:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-61-1"><a id="__codelineno-61-1" name="__codelineno-61-1" href="#__codelineno-61-1"></a>[Item] [Item] [Item]
+</span><span id="__span-61-2"><a id="__codelineno-61-2" name="__codelineno-61-2" href="#__codelineno-61-2"></a>[Item] [Item]
+</span></code></pre></div>
+<hr />
+<p><strong>En una frase</strong></p>
+<p><strong>Grid</strong> piensa:</p>
+<blockquote>
+<p>"Voy a organizar los elementos dentro de una estructura de filas y columnas."</p>
+</blockquote>
+<p><strong>Cluster</strong> piensa:</p>
+<blockquote>
+<p>"Voy a agrupar elementos de tamaño intrínseco y dejar que fluyan, salten de línea cuando sea necesario y mantengan un espacio uniforme."</p>
+</blockquote>
+<p>Y esta es precisamente la razón por la que el capítulo empieza hablando de <strong>Grid → texto → <code>inline-block</code> → márgenes → wrapping</strong>: está mostrando por qué esas soluciones no son suficientemente robustas y por qué <strong>Flexbox con <code>flex-wrap</code> + <code>gap</code></strong> es una solución más natural para este patrón.</p>
+</details>
 <h2 id="la-solucion">La solución<a class="headerlink" href="#la-solucion" title="Permanent link">&para;</a></h2>
 <p>Para crear un sistema de diseño eficiente y manejable, necesitamos idear soluciones robustas y generales para nuestros problemas de layout.</p>
 <p>Primero, hacemos del padre un contexto Flexbox. Esto nos permite configurar los elementos en grupos (<em>clusters</em>), sin tener que lidiar con espacios de palabras no deseados. También tiene varias ventajas sobre el uso de floats: no necesitamos proporcionar un <em>clear fix</em> ↗, y la alineación vertical (usando <code>align-items</code>) es posible.</p>
-<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
-<span class="normal"><a href="#__codelineno-1-2">2</a></span>
-<span class="normal"><a href="#__codelineno-1-3">3</a></span>
-<span class="normal"><a href="#__codelineno-1-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="p">.</span><span class="nc">cluster</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">  </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="p">}</span>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-62-1">1</a></span>
+<span class="normal"><a href="#__codelineno-62-2">2</a></span>
+<span class="normal"><a href="#__codelineno-62-3">3</a></span>
+<span class="normal"><a href="#__codelineno-62-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-62-1"><a id="__codelineno-62-1" name="__codelineno-62-1"></a><span class="p">.</span><span class="nc">cluster</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-62-2"><a id="__codelineno-62-2" name="__codelineno-62-2"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
+</span><span id="__span-62-3"><a id="__codelineno-62-3" name="__codelineno-62-3"></a><span class="w">  </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
+</span><span id="__span-62-4"><a id="__codelineno-62-4" name="__codelineno-62-4"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <h2 id="agregando-y-oscureciendo-el-margen">Agregando y oscureciendo el margen<a class="headerlink" href="#agregando-y-oscureciendo-el-margen" title="Permanent link">&para;</a></h2>
 <p>La única forma en que actualmente podemos agregar márgenes que respeten el comportamiento de wrapping, independientemente de la alineación elegida, es agregarlos <em>simétricamente</em>; a todos los lados. Desafortunadamente, esto separa los elementos de cualquier borde con el que entren en contacto.</p>
@@ -1472,77 +1897,77 @@
 <p>Nota que el valor del espacio entre un elemento hijo y el borde de un elemento padre es siempre la <em>mitad</em> del espacio entre dos elementos hijos (ya que sus márgenes se combinan). La solución es usar un margen negativo en el padre para <em>atraer</em> a los hijos hacia sus propios bordes.</p>
 <p><img alt="" src="../Edges.png" /></p>
 <p>Podemos hacer que la creación de espacio en el componente sea más fácil usando propiedades personalizadas. La variable <code>--space</code> define el espaciado deseado entre elementos, y <code>calc()</code> adapta este valor en consecuencia. Nota que se incluye un elemento envoltorio adicional para <em>aislar</em> el contenido adyacente del margen negativo. Aún queremos que el componente respete el espacio en blanco aplicado por un componente padre <code>Stack</code>.</p>
-<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-2-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-2-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-2-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-2-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-2-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-2-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-2-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-2-10">10</a></span>
-<span class="normal"><a href="#__codelineno-2-11">11</a></span>
-<span class="normal"><a href="#__codelineno-2-12">12</a></span>
-<span class="normal"><a href="#__codelineno-2-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="p">.</span><span class="nc">cluster</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">  </span><span class="nv">--space</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="p">}</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="p">.</span><span class="nc">cluster</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="w">  </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="w">  </span><span class="c">/* ↓ multiplicar por -1 para negar el valor dividido */</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="w">  </span><span class="k">margin</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--space</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">-1</span><span class="p">);</span>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="p">}</span>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="p">.</span><span class="nc">cluster</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11"></a><span class="w">  </span><span class="c">/* ↓ la mitad del valor, por la &#39;duplicación&#39; */</span>
-</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12"></a><span class="w">  </span><span class="k">margin</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--space</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
-</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13"></a><span class="p">}</span>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-63-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-63-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-63-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-63-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-63-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-63-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-63-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-63-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-63-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-63-10">10</a></span>
+<span class="normal"><a href="#__codelineno-63-11">11</a></span>
+<span class="normal"><a href="#__codelineno-63-12">12</a></span>
+<span class="normal"><a href="#__codelineno-63-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-63-1"><a id="__codelineno-63-1" name="__codelineno-63-1"></a><span class="p">.</span><span class="nc">cluster</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-63-2"><a id="__codelineno-63-2" name="__codelineno-63-2"></a><span class="w">  </span><span class="nv">--space</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-63-3"><a id="__codelineno-63-3" name="__codelineno-63-3"></a><span class="p">}</span>
+</span><span id="__span-63-4"><a id="__codelineno-63-4" name="__codelineno-63-4"></a><span class="p">.</span><span class="nc">cluster</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-63-5"><a id="__codelineno-63-5" name="__codelineno-63-5"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
+</span><span id="__span-63-6"><a id="__codelineno-63-6" name="__codelineno-63-6"></a><span class="w">  </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
+</span><span id="__span-63-7"><a id="__codelineno-63-7" name="__codelineno-63-7"></a><span class="w">  </span><span class="c">/* ↓ multiplicar por -1 para negar el valor dividido */</span>
+</span><span id="__span-63-8"><a id="__codelineno-63-8" name="__codelineno-63-8"></a><span class="w">  </span><span class="k">margin</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--space</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">-1</span><span class="p">);</span>
+</span><span id="__span-63-9"><a id="__codelineno-63-9" name="__codelineno-63-9"></a><span class="p">}</span>
+</span><span id="__span-63-10"><a id="__codelineno-63-10" name="__codelineno-63-10"></a><span class="p">.</span><span class="nc">cluster</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-63-11"><a id="__codelineno-63-11" name="__codelineno-63-11"></a><span class="w">  </span><span class="c">/* ↓ la mitad del valor, por la &#39;duplicación&#39; */</span>
+</span><span id="__span-63-12"><a id="__codelineno-63-12" name="__codelineno-63-12"></a><span class="w">  </span><span class="k">margin</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--space</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+</span><span id="__span-63-13"><a id="__codelineno-63-13" name="__codelineno-63-13"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <h2 id="la-propiedad-gap">La propiedad gap<a class="headerlink" href="#la-propiedad-gap" title="Permanent link">&para;</a></h2>
 <p>Creo que estarás de acuerdo en que la técnica anterior es un poco engorrosa. También puede causar la aparición de la barra de desplazamiento horizontal, bajo algunas circunstancias.</p>
 <p>Afortunadamente, desde mediados de 2021, <em>todos los navegadores principales ahora soportan la propiedad <code>gap</code> con Flexbox</em> ↗. La propiedad <code>gap</code> inyecta espaciado <em>entre</em> los elementos hijos, eliminando la necesidad de márgenes negativos y del elemento envoltorio adicional. Incluso el <code>calc()</code> se puede jubilar, ya que el valor de <code>gap</code> es ¡solo ese!</p>
-<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
-<span class="normal"><a href="#__codelineno-3-2">2</a></span>
-<span class="normal"><a href="#__codelineno-3-3">3</a></span>
-<span class="normal"><a href="#__codelineno-3-4">4</a></span>
-<span class="normal"><a href="#__codelineno-3-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="p">.</span><span class="nc">cluster</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">  </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">  </span><span class="k">gap</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--space</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">);</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="p">}</span>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-64-1">1</a></span>
+<span class="normal"><a href="#__codelineno-64-2">2</a></span>
+<span class="normal"><a href="#__codelineno-64-3">3</a></span>
+<span class="normal"><a href="#__codelineno-64-4">4</a></span>
+<span class="normal"><a href="#__codelineno-64-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-64-1"><a id="__codelineno-64-1" name="__codelineno-64-1"></a><span class="p">.</span><span class="nc">cluster</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-64-2"><a id="__codelineno-64-2" name="__codelineno-64-2"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
+</span><span id="__span-64-3"><a id="__codelineno-64-3" name="__codelineno-64-3"></a><span class="w">  </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
+</span><span id="__span-64-4"><a id="__codelineno-64-4" name="__codelineno-64-4"></a><span class="w">  </span><span class="k">gap</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--space</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">);</span>
+</span><span id="__span-64-5"><a id="__codelineno-64-5" name="__codelineno-64-5"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <h2 id="valores-de-respaldo-fallback">Valores de respaldo (fallback)<a class="headerlink" href="#valores-de-respaldo-fallback" title="Permanent link">&para;</a></h2>
 <p>Observa cómo estamos definiendo y declarando el valor <code>gap</code> todo en una línea. El segundo argumento de la función <code>var()</code> es el <em>valor de respaldo</em> para cuando la variable no está definida ↗.</p>
 <h2 id="degradacion-elegante">Degradación elegante<a class="headerlink" href="#degradacion-elegante" title="Permanent link">&para;</a></h2>
 <p>A pesar de la tranquilizadora imagen de soporte para <code>gap</code>, debemos ser conscientes del layout en navegadores donde no es compatible. Problemáticamente, <code>gap</code> puede ser compatible con el módulo Grid layout (ver <em>Grid</em>) pero no con Flexbox, por lo que usar <code>gap</code> en un bloque <code>@supports</code> puede dar un falso positivo.</p>
 <p>En navegadores donde <code>gap</code> solo es compatible con el módulo Grid, lo siguiente resultaría en que no se aplique ningún margen.</p>
-<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-4-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-4-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-4-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-4-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-4-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-4-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-4-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-4-10">10</a></span>
-<span class="normal"><a href="#__codelineno-4-11">11</a></span>
-<span class="normal"><a href="#__codelineno-4-12">12</a></span>
-<span class="normal"><a href="#__codelineno-4-13">13</a></span>
-<span class="normal"><a href="#__codelineno-4-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="c">/* Esto no funcionará */</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="p">.</span><span class="nc">cluster</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">  </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">  </span><span class="k">margin</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="p">}</span>
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="p">@</span><span class="k">supports</span><span class="w"> </span><span class="o">(</span><span class="nt">gap</span><span class="o">:</span><span class="w"> </span><span class="nt">1rem</span><span class="o">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="w">  </span><span class="p">.</span><span class="nc">cluster</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="w">    </span><span class="k">margin</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="w">  </span><span class="p">}</span>
-</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="w">  </span><span class="p">.</span><span class="nc">cluster</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="w">    </span><span class="k">gap</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--space</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">);</span>
-</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13"></a><span class="w">  </span><span class="p">}</span>
-</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14"></a><span class="p">}</span>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-65-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-65-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-65-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-65-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-65-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-65-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-65-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-65-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-65-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-65-10">10</a></span>
+<span class="normal"><a href="#__codelineno-65-11">11</a></span>
+<span class="normal"><a href="#__codelineno-65-12">12</a></span>
+<span class="normal"><a href="#__codelineno-65-13">13</a></span>
+<span class="normal"><a href="#__codelineno-65-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-65-1"><a id="__codelineno-65-1" name="__codelineno-65-1"></a><span class="c">/* Esto no funcionará */</span>
+</span><span id="__span-65-2"><a id="__codelineno-65-2" name="__codelineno-65-2"></a><span class="p">.</span><span class="nc">cluster</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-65-3"><a id="__codelineno-65-3" name="__codelineno-65-3"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
+</span><span id="__span-65-4"><a id="__codelineno-65-4" name="__codelineno-65-4"></a><span class="w">  </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
+</span><span id="__span-65-5"><a id="__codelineno-65-5" name="__codelineno-65-5"></a><span class="w">  </span><span class="k">margin</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-65-6"><a id="__codelineno-65-6" name="__codelineno-65-6"></a><span class="p">}</span>
+</span><span id="__span-65-7"><a id="__codelineno-65-7" name="__codelineno-65-7"></a><span class="p">@</span><span class="k">supports</span><span class="w"> </span><span class="o">(</span><span class="nt">gap</span><span class="o">:</span><span class="w"> </span><span class="nt">1rem</span><span class="o">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-65-8"><a id="__codelineno-65-8" name="__codelineno-65-8"></a><span class="w">  </span><span class="p">.</span><span class="nc">cluster</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-65-9"><a id="__codelineno-65-9" name="__codelineno-65-9"></a><span class="w">    </span><span class="k">margin</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-65-10"><a id="__codelineno-65-10" name="__codelineno-65-10"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-65-11"><a id="__codelineno-65-11" name="__codelineno-65-11"></a><span class="w">  </span><span class="p">.</span><span class="nc">cluster</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-65-12"><a id="__codelineno-65-12" name="__codelineno-65-12"></a><span class="w">    </span><span class="k">gap</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--space</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">);</span>
+</span><span id="__span-65-13"><a id="__codelineno-65-13" name="__codelineno-65-13"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-65-14"><a id="__codelineno-65-14" name="__codelineno-65-14"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <p>Hoy en día, recomendamos usar <code>gap</code> sin detección de características, aceptando que los layouts se volverán <em>flush</em> (pegados) en navegadores más antiguos. Incluimos la técnica de margen negativo arriba si esa es tu preferencia.</p>
 <h2 id="justificacion">Justificación<a class="headerlink" href="#justificacion" title="Permanent link">&para;</a></h2>
@@ -1562,40 +1987,40 @@
 <p>Usa esta herramienta para generar CSS y HTML básicos de Cluster.</p>
 <p>La herramienta generadora de código solo está disponible en el <em>sitio de documentación adjunto</em> ↗. Aquí está la solución básica, con comentarios:</p>
 <p><strong>CSS</strong></p>
-<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-5-10">10</a></span>
-<span class="normal"><a href="#__codelineno-5-11">11</a></span>
-<span class="normal"><a href="#__codelineno-5-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="p">.</span><span class="nc">cluster</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">  </span><span class="c">/* ↓ Establece el contexto Flexbox */</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">  </span><span class="c">/* ↓ Habilita el wrapping */</span>
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="w">  </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="w">  </span><span class="c">/* ↓ Establece el espacio/gap */</span>
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="w">  </span><span class="k">gap</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--space</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">);</span>
-</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="w">  </span><span class="c">/* ↓ Elige tu justificación (flex-start es el defecto) */</span>
-</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="w">  </span><span class="k">justify-content</span><span class="p">:</span><span class="w"> </span><span class="kc">center</span><span class="p">;</span>
-</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="w">  </span><span class="c">/* ↓ Elige tu alineación (flex-start es el defecto) */</span>
-</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11"></a><span class="w">  </span><span class="k">align-items</span><span class="p">:</span><span class="w"> </span><span class="kc">center</span><span class="p">;</span>
-</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12"></a><span class="p">}</span>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-66-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-66-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-66-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-66-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-66-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-66-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-66-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-66-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-66-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-66-10">10</a></span>
+<span class="normal"><a href="#__codelineno-66-11">11</a></span>
+<span class="normal"><a href="#__codelineno-66-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-66-1"><a id="__codelineno-66-1" name="__codelineno-66-1"></a><span class="p">.</span><span class="nc">cluster</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-66-2"><a id="__codelineno-66-2" name="__codelineno-66-2"></a><span class="w">  </span><span class="c">/* ↓ Establece el contexto Flexbox */</span>
+</span><span id="__span-66-3"><a id="__codelineno-66-3" name="__codelineno-66-3"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
+</span><span id="__span-66-4"><a id="__codelineno-66-4" name="__codelineno-66-4"></a><span class="w">  </span><span class="c">/* ↓ Habilita el wrapping */</span>
+</span><span id="__span-66-5"><a id="__codelineno-66-5" name="__codelineno-66-5"></a><span class="w">  </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
+</span><span id="__span-66-6"><a id="__codelineno-66-6" name="__codelineno-66-6"></a><span class="w">  </span><span class="c">/* ↓ Establece el espacio/gap */</span>
+</span><span id="__span-66-7"><a id="__codelineno-66-7" name="__codelineno-66-7"></a><span class="w">  </span><span class="k">gap</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--space</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">);</span>
+</span><span id="__span-66-8"><a id="__codelineno-66-8" name="__codelineno-66-8"></a><span class="w">  </span><span class="c">/* ↓ Elige tu justificación (flex-start es el defecto) */</span>
+</span><span id="__span-66-9"><a id="__codelineno-66-9" name="__codelineno-66-9"></a><span class="w">  </span><span class="k">justify-content</span><span class="p">:</span><span class="w"> </span><span class="kc">center</span><span class="p">;</span>
+</span><span id="__span-66-10"><a id="__codelineno-66-10" name="__codelineno-66-10"></a><span class="w">  </span><span class="c">/* ↓ Elige tu alineación (flex-start es el defecto) */</span>
+</span><span id="__span-66-11"><a id="__codelineno-66-11" name="__codelineno-66-11"></a><span class="w">  </span><span class="k">align-items</span><span class="p">:</span><span class="w"> </span><span class="kc">center</span><span class="p">;</span>
+</span><span id="__span-66-12"><a id="__codelineno-66-12" name="__codelineno-66-12"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <p><strong>HTML</strong></p>
-<div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
-<span class="normal"><a href="#__codelineno-6-2">2</a></span>
-<span class="normal"><a href="#__codelineno-6-3">3</a></span>
-<span class="normal"><a href="#__codelineno-6-4">4</a></span>
-<span class="normal"><a href="#__codelineno-6-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="p">&lt;</span><span class="nt">ul</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;cluster&quot;</span><span class="p">&gt;</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2"></a>  <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span><span class="cm">&lt;!-- hijo --&gt;</span><span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3"></a>  <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span><span class="cm">&lt;!-- hijo --&gt;</span><span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4"></a>  <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span><span class="cm">&lt;!-- etc --&gt;</span><span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+<div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-67-1">1</a></span>
+<span class="normal"><a href="#__codelineno-67-2">2</a></span>
+<span class="normal"><a href="#__codelineno-67-3">3</a></span>
+<span class="normal"><a href="#__codelineno-67-4">4</a></span>
+<span class="normal"><a href="#__codelineno-67-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-67-1"><a id="__codelineno-67-1" name="__codelineno-67-1"></a><span class="p">&lt;</span><span class="nt">ul</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;cluster&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-67-2"><a id="__codelineno-67-2" name="__codelineno-67-2"></a>  <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span><span class="cm">&lt;!-- hijo --&gt;</span><span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+</span><span id="__span-67-3"><a id="__codelineno-67-3" name="__codelineno-67-3"></a>  <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span><span class="cm">&lt;!-- hijo --&gt;</span><span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+</span><span id="__span-67-4"><a id="__codelineno-67-4" name="__codelineno-67-4"></a>  <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span><span class="cm">&lt;!-- etc --&gt;</span><span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+</span><span id="__span-67-5"><a id="__codelineno-67-5" name="__codelineno-67-5"></a><span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
 </span></code></pre></div></td></tr></table></div>
 <h2 id="el-componente">El componente<a class="headerlink" href="#el-componente" title="Permanent link">&para;</a></h2>
 <p>Una implementación de elemento personalizado del <code>Cluster</code> está disponible para descargar ↗.</p>
@@ -1634,36 +2059,36 @@
 <h2 id="ejemplos">Ejemplos<a class="headerlink" href="#ejemplos" title="Permanent link">&para;</a></h2>
 <h3 id="basico">Básico<a class="headerlink" href="#basico" title="Permanent link">&para;</a></h3>
 <p>Usando los valores por defecto.</p>
-<div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span>
-<span class="normal"><a href="#__codelineno-7-2">2</a></span>
-<span class="normal"><a href="#__codelineno-7-3">3</a></span>
-<span class="normal"><a href="#__codelineno-7-4">4</a></span>
-<span class="normal"><a href="#__codelineno-7-5">5</a></span>
-<span class="normal"><a href="#__codelineno-7-6">6</a></span>
-<span class="normal"><a href="#__codelineno-7-7">7</a></span>
-<span class="normal"><a href="#__codelineno-7-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="p">&lt;</span><span class="nt">cluster-l</span><span class="p">&gt;</span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2"></a>  <span class="cm">&lt;!-- elemento hijo aquí --&gt;</span>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3"></a>  <span class="cm">&lt;!-- otro elemento hijo --&gt;</span>
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4"></a>  <span class="cm">&lt;!-- etc --&gt;</span>
-</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5"></a>  <span class="cm">&lt;!-- etc --&gt;</span>
-</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6"></a>  <span class="cm">&lt;!-- etc --&gt;</span>
-</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7"></a>  <span class="cm">&lt;!-- etc --&gt;</span>
-</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="p">&lt;/</span><span class="nt">cluster-l</span><span class="p">&gt;</span>
+<div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-68-1">1</a></span>
+<span class="normal"><a href="#__codelineno-68-2">2</a></span>
+<span class="normal"><a href="#__codelineno-68-3">3</a></span>
+<span class="normal"><a href="#__codelineno-68-4">4</a></span>
+<span class="normal"><a href="#__codelineno-68-5">5</a></span>
+<span class="normal"><a href="#__codelineno-68-6">6</a></span>
+<span class="normal"><a href="#__codelineno-68-7">7</a></span>
+<span class="normal"><a href="#__codelineno-68-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-68-1"><a id="__codelineno-68-1" name="__codelineno-68-1"></a><span class="p">&lt;</span><span class="nt">cluster-l</span><span class="p">&gt;</span>
+</span><span id="__span-68-2"><a id="__codelineno-68-2" name="__codelineno-68-2"></a>  <span class="cm">&lt;!-- elemento hijo aquí --&gt;</span>
+</span><span id="__span-68-3"><a id="__codelineno-68-3" name="__codelineno-68-3"></a>  <span class="cm">&lt;!-- otro elemento hijo --&gt;</span>
+</span><span id="__span-68-4"><a id="__codelineno-68-4" name="__codelineno-68-4"></a>  <span class="cm">&lt;!-- etc --&gt;</span>
+</span><span id="__span-68-5"><a id="__codelineno-68-5" name="__codelineno-68-5"></a>  <span class="cm">&lt;!-- etc --&gt;</span>
+</span><span id="__span-68-6"><a id="__codelineno-68-6" name="__codelineno-68-6"></a>  <span class="cm">&lt;!-- etc --&gt;</span>
+</span><span id="__span-68-7"><a id="__codelineno-68-7" name="__codelineno-68-7"></a>  <span class="cm">&lt;!-- etc --&gt;</span>
+</span><span id="__span-68-8"><a id="__codelineno-68-8" name="__codelineno-68-8"></a><span class="p">&lt;/</span><span class="nt">cluster-l</span><span class="p">&gt;</span>
 </span></code></pre></div></td></tr></table></div>
 <h3 id="lista">Lista<a class="headerlink" href="#lista" title="Permanent link">&para;</a></h3>
 <p>Dado que los <code>Clusters</code> típicamente representan grupos de elementos similares, se benefician de ser marcados como una lista. Los elementos de lista presentan información no visual, para el software lector de pantalla. Es importante que los usuarios de lectores de pantalla sean conscientes de que <em>hay</em> una lista presente, y cuántos elementos contiene.</p>
 <p>Dado que nuestro elemento personalizado <code>&lt;cluster-l&gt;</code> no es un <code>&lt;ul&gt;</code> (y los elementos <code>&lt;li&gt;</code> no pueden existir sin un padre <code>&lt;ul&gt;</code>), podemos proporcionar la semántica de lista usando ARIA en su lugar: <code>role="list"</code> y <code>role="listitem"</code>:</p>
-<div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
-<span class="normal"><a href="#__codelineno-8-2">2</a></span>
-<span class="normal"><a href="#__codelineno-8-3">3</a></span>
-<span class="normal"><a href="#__codelineno-8-4">4</a></span>
-<span class="normal"><a href="#__codelineno-8-5">5</a></span>
-<span class="normal"><a href="#__codelineno-8-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="p">&lt;</span><span class="nt">cluster-l</span> <span class="na">role</span><span class="o">=</span><span class="s">&quot;list&quot;</span><span class="p">&gt;</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">role</span><span class="o">=</span><span class="s">&quot;listitem&quot;</span><span class="p">&gt;</span><span class="cm">&lt;!-- contenido del primer elemento de la lista --&gt;</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">role</span><span class="o">=</span><span class="s">&quot;listitem&quot;</span><span class="p">&gt;</span><span class="cm">&lt;!-- contenido del segundo elemento de la lista --&gt;</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">role</span><span class="o">=</span><span class="s">&quot;listitem&quot;</span><span class="p">&gt;</span><span class="cm">&lt;!-- etc --&gt;</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">role</span><span class="o">=</span><span class="s">&quot;listitem&quot;</span><span class="p">&gt;</span><span class="cm">&lt;!-- etc --&gt;</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="p">&lt;/</span><span class="nt">cluster-l</span><span class="p">&gt;</span>
+<div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-69-1">1</a></span>
+<span class="normal"><a href="#__codelineno-69-2">2</a></span>
+<span class="normal"><a href="#__codelineno-69-3">3</a></span>
+<span class="normal"><a href="#__codelineno-69-4">4</a></span>
+<span class="normal"><a href="#__codelineno-69-5">5</a></span>
+<span class="normal"><a href="#__codelineno-69-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-69-1"><a id="__codelineno-69-1" name="__codelineno-69-1"></a><span class="p">&lt;</span><span class="nt">cluster-l</span> <span class="na">role</span><span class="o">=</span><span class="s">&quot;list&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-69-2"><a id="__codelineno-69-2" name="__codelineno-69-2"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">role</span><span class="o">=</span><span class="s">&quot;listitem&quot;</span><span class="p">&gt;</span><span class="cm">&lt;!-- contenido del primer elemento de la lista --&gt;</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-69-3"><a id="__codelineno-69-3" name="__codelineno-69-3"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">role</span><span class="o">=</span><span class="s">&quot;listitem&quot;</span><span class="p">&gt;</span><span class="cm">&lt;!-- contenido del segundo elemento de la lista --&gt;</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-69-4"><a id="__codelineno-69-4" name="__codelineno-69-4"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">role</span><span class="o">=</span><span class="s">&quot;listitem&quot;</span><span class="p">&gt;</span><span class="cm">&lt;!-- etc --&gt;</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-69-5"><a id="__codelineno-69-5" name="__codelineno-69-5"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">role</span><span class="o">=</span><span class="s">&quot;listitem&quot;</span><span class="p">&gt;</span><span class="cm">&lt;!-- etc --&gt;</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-69-6"><a id="__codelineno-69-6" name="__codelineno-69-6"></a><span class="p">&lt;/</span><span class="nt">cluster-l</span><span class="p">&gt;</span>
 </span></code></pre></div></td></tr></table></div>
 
 
@@ -1772,7 +2197,7 @@
       <script id="__config" type="application/json">{"annotate":null,"base":"../../..","features":["announce.dismiss","content.code.annotate","content.code.copy","content.code.select","content.footnote.tooltips","content.tabs.link","content.tooltips","navigation.footer","navigation.indexes","navigation.instant","navigation.instant.prefetch","navigation.path","navigation.sections","navigation.top","navigation.tracking","search.highlight"],"search":"../../../assets/javascripts/workers/search.b6b7e04f.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.ee611ef6.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7f30b55.min.js"></script>
       
     
   </body>
