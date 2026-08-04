@@ -5310,7 +5310,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Tenemos:
 
-    ```html id="w8a2w9"
+    ```html 
     <sidebar-l space="var(--s2)" side="right" sideWidth="30ch">
       <div>
         <img src="path/to/image" alt="Description of image">
@@ -5321,7 +5321,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Visualmente:
 
-    ```text id="jv4y9w"
+    ```text 
     ┌───────────────────────────────────┬─────────────────────┐
     │                                   │                     │
     │             IMAGEN                │       TEXTO         │
@@ -5333,14 +5333,14 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Aquí:
 
-    ```text id="1x0d29"
+    ```text 
     <div> + <img>  → elemento principal
     <p>             → Sidebar
     ```
 
     La diferencia fundamental está en:
 
-    ```html id="bihc6f"
+    ```html 
     side="right"
     ```
 
@@ -5352,7 +5352,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Mira el HTML:
 
-    ```html id="5v7km7"
+    ```html 
     <div>
       <img>
     </div>
@@ -5364,7 +5364,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Tenemos dos hijos directos:
 
-    ```text id="krb9a2"
+    ```text 
     sidebar-l
     │
     ├── DIV  ← contenido principal
@@ -5375,7 +5375,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Como tenemos:
 
-    ```html id="3qk1p2"
+    ```html 
     side="right"
     ```
 
@@ -5383,7 +5383,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Por eso:
 
-    ```text id="gk3bcb"
+    ```text 
     ┌───────────────────────────────┬───────────────────┐
     │                               │                   │
     │            IMAGEN             │       TEXTO       │
@@ -5401,7 +5401,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Tenemos:
 
-    ```html id="empr8y"
+    ```html 
     sideWidth="30ch"
     ```
 
@@ -5409,7 +5409,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Como la sidebar ahora es el `<p>`:
 
-    ```text id="1i9xg2"
+    ```text 
     Sidebar
       ↓
     ┌───────────────────┐
@@ -5426,7 +5426,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Por eso:
 
-    ```text id="l9p4o0"
+    ```text 
     30ch ≈ 30 caracteres
     ```
 
@@ -5436,7 +5436,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Por ejemplo:
 
-    ```text id="w4yq5m"
+    ```text 
     Texto demasiado ancho:
 
     Este texto ocupa demasiado espacio y se vuelve
@@ -5446,7 +5446,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Con `30ch`:
 
-    ```text id="f6ub2x"
+    ```text 
     Este texto tiene una medida
     más controlada y resulta más
     cómodo para la lectura.
@@ -5462,39 +5462,39 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Antes teníamos:
 
-    ```text id="x9p5k4"
+    ```text 
     IMAGEN → Sidebar
     TEXTO  → Main
     ```
 
     La imagen tenía:
 
-    ```text id="4y9a2j"
+    ```text 
     sideWidth="15rem"
     ```
 
     Por lo tanto:
 
-    ```text id="q6v6xi"
+    ```text 
     Imagen → aproximadamente 15rem
     ```
 
     Ahora tenemos:
 
-    ```text id="ww9pde"
+    ```text 
     IMAGEN → Main
     TEXTO  → Sidebar
     ```
 
     Y:
 
-    ```text id="1u5j9s"
+    ```text 
     sideWidth="30ch"
     ```
 
     Por lo tanto:
 
-    ```text id="qzv5b4"
+    ```text 
     Texto → aproximadamente 30ch
     ```
 
@@ -5502,7 +5502,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Por ejemplo:
 
-    ```text id="h8m4qf"
+    ```text 
     ┌──────────────────────────────────────┬───────────────┐
     │                                      │               │
     │                IMAGEN                │     TEXTO     │
@@ -5515,7 +5515,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     La imagen puede crecer:
 
-    ```text id="75y8xy"
+    ```text 
     Pantalla mediana:
 
     ┌────────────────────────┐ ┌───────────┐
@@ -5542,7 +5542,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Tenemos:
 
-    ```html id="2r5v70"
+    ```html 
     <div>
       <img src="path/to/image" alt="Description of image">
     </div>
@@ -5550,7 +5550,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Esto significa que los hijos directos del `sidebar-l` son:
 
-    ```text id="w5c0by"
+    ```text 
     sidebar-l
     │
     ├── DIV
@@ -5561,14 +5561,14 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     El Flexbox trabaja directamente con:
 
-    ```text id="8az7eq"
+    ```text 
     DIV
     P
     ```
 
     No directamente con:
 
-    ```text id="f5ub9a"
+    ```text 
     IMG
     ```
 
@@ -5576,7 +5576,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Esto permite que no necesitemos:
 
-    ```html id="1x2yl7"
+    ```html 
     noStretch
     ```
 
@@ -5592,7 +5592,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Para conseguirlo, normalmente tenemos una regla global como:
 
-    ```css id="e5k9fu"
+    ```css 
     img {
       width: 100%;
     }
@@ -5600,7 +5600,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Entonces ocurre esto:
 
-    ```text id="p7lqmc"
+    ```text 
     DIV
     ┌───────────────────────────────────┐
     │                                   │
@@ -5613,25 +5613,25 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Si el `div` mide:
 
-    ```text id="0p2c7y"
+    ```text 
     600px
     ```
 
     la imagen mide:
 
-    ```text id="2xex1e"
+    ```text 
     100% → 600px
     ```
 
     Si el `div` mide:
 
-    ```text id="7h5m9s"
+    ```text 
     800px
     ```
 
     la imagen mide:
 
-    ```text id="e9g2tp"
+    ```text 
     100% → 800px
     ```
 
@@ -5643,7 +5643,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Normalmente:
 
-    ```css id="6a8svu"
+    ```css 
     img {
       width: 100%;
     }
@@ -5660,7 +5660,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Por ejemplo, una imagen original:
 
-    ```text id="65xxod"
+    ```text 
     800 × 600
     ```
 
@@ -5672,7 +5672,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     su altura proporcional será:
 
-    ```text id="x9t1n3"
+    ```text 
     300px
     ```
 
@@ -5684,7 +5684,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Al principio:
 
-    ```text id="l7i5qk"
+    ```text 
     ┌──────────────────────────────────────────────┬──────────────┐
     │                                              │              │
     │                    IMAGEN                    │    TEXTO     │
@@ -5697,7 +5697,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Pero llega un momento en que ya no caben cómodamente:
 
-    ```text id="3j7m0x"
+    ```text 
     Imagen + 30ch + gap
     ```
 
@@ -5705,7 +5705,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Resultado:
 
-    ```text id="4v8u3p"
+    ```text 
     ┌────────────────────────────────────┐
     │                                    │
     │              IMAGEN                │
@@ -5721,7 +5721,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Y la imagen puede aprovechar todo el ancho disponible:
 
-    ```text id="y2c8y8"
+    ```text 
     ┌────────────────────────────────────┐
     │                                    │
     │               IMG                  │
@@ -5748,7 +5748,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Visualmente:
 
-    ```text id="khm14m"
+    ```text 
     EJEMPLO ANTERIOR
 
     ┌──────────────┬───────────────────────────────┐
@@ -5777,13 +5777,13 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Si quieres que la imagen tenga un tamaño relativamente estable:
 
-    ```text id="xjp4pc"
+    ```text 
     IMAGEN = Sidebar
     ```
 
     Si quieres que el texto tenga una medida legible y que la imagen aproveche todo el espacio sobrante:
 
-    ```text id="n7x8ga"
+    ```text 
     TEXTO = Sidebar
     ```
 
