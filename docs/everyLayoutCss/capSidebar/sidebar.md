@@ -14,7 +14,7 @@ Pero incluso esta estrategia tiene una falla fundamental: las consultas `@media`
 
 ![](desing.png)
 
-Los sistemas de diseño tienden a catalogar componentes que pueden aparecer entre diferentes contextos y espacios, por lo que esto es un problema real. Solo con una capacidad como las *container queries* ↗ (consultas de contenedor) propuestas podríamos enseñar a nuestros componentes de layout a ser completamente *context aware* (conscientes del contexto).
+Los sistemas de diseño tienden a catalogar componentes que pueden aparecer entre diferentes contextos y espacios, por lo que esto es un problema real. Solo con una capacidad como las [*container queries* ↗ (consultas de contenedor)](https://css-tricks.com/container-query-discussion/) propuestas podríamos enseñar a nuestros componentes de layout a ser completamente *context aware* (conscientes del contexto).
 
 En algunos aspectos, el módulo CSS Flexbox, con su provisión de `flex-basis`, ya puede gobernar su propio layout, por contexto, bastante bien. Considera el siguiente código:
 
@@ -2345,7 +2345,9 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 }
 ```
 
-*Esta demostración interactiva solo está disponible en el sitio de Every Layout* ↗.
+!!! info "Demo"
+
+    [*Esta demostración interactiva solo está disponible en el sitio de Every Layout* ↗](https://every-layout.dev/demos/sidebar-media-object/).
 
 ??? info "Explicacion"
 
@@ -2868,14 +2870,748 @@ Hasta ahora, hemos estado prescribiendo el ancho de nuestro elemento sidebar (`f
 
 Si establecemos el ancho de una imagen dentro de nuestra sidebar a `15rem`, ese será el ancho de la sidebar en la configuración horizontal. Crecerá al `100%` en la configuración vertical.
 
+??? info "Explicacion"
 
-### Intrinsic Web Design
+    Claro, Alex. La idea principal de este texto es **dejar de decirle a la sidebar cuánto debe medir y permitir que su contenido decida su tamaño**.
 
-El término *Intrinsic Web Design* ↗ fue acuñado por Jen Simmons, y se refiere a un movimiento reciente hacia herramientas y mecanismos en CSS que son más adecuados para el medio. El tipo de layouts *algorithmicos* y autónomos establecidos en esta serie podrían considerarse métodos de diseño intrínseco.
+    Vamos paso a paso.
+
+    __1. Antes: nosotros fijábamos el ancho__
+
+    Probablemente tenías algo parecido a esto:
+
+    ```css
+    .sidebar {
+      flex-basis: 20rem;
+    }
+    ```
+
+    Esto significa:
+
+    > "Quiero que la sidebar tenga inicialmente un tamaño de `20rem`."
+
+    Por ejemplo:
+
+    ```text
+    ┌───────────────────────────┬──────────────┐
+    │                           │              │
+    │      CONTENIDO PRINCIPAL  │   SIDEBAR    │
+    │                           │              │
+    │                           │    20rem     │
+    │                           │              │
+    └───────────────────────────┴──────────────┘
+    ```
+
+    Aquí **el CSS decide el tamaño** de la sidebar.
+
+    ---
+
+    __2. Ahora: el contenido decide el ancho__
+
+    El texto dice:
+
+    > "Cuando no proporcionamos un valor `flex-basis` en absoluto, el ancho de la sidebar es igual al ancho de sus contenidos."
+
+    Entonces quitamos:
+
+    ```css
+    flex-basis: 20rem;
+    ```
+
+    Y dejamos algo así:
+
+    ```css
+    .sidebar {
+      /* No flex-basis */
+    }
+    ```
+
+    Ahora imagina que dentro de la sidebar tienes una imagen:
+
+    ```html
+    <aside class="sidebar">
+      <img src="imagen.jpg">
+    </aside>
+    ```
+
+    Y la imagen tiene:
+
+    ```css
+    .sidebar img {
+      width: 15rem;
+    }
+    ```
+
+    La idea es que la imagen necesita **15rem de espacio**, por lo que la sidebar se adapta a ese contenido.
+
+    ```text
+    ┌───────────────────────────┬────────────────┐
+    │                           │                │
+    │      CONTENIDO PRINCIPAL  │    IMAGEN      │
+    │                           │                │
+    │                           │     15rem      │
+    │                           │                │
+    └───────────────────────────┴────────────────┘
+                                  ↑
+                            Sidebar ≈ 15rem
+    ```
+
+    Es decir:
+
+    ```text
+    Ancho de la sidebar
+            ↓
+    depende de
+            ↓
+    ancho de su contenido
+    ```
+
+    Eso es lo que significa **ancho intrínseco** en este contexto.
+
+    ---
+
+    __3. ¿Por qué dice que "el comportamiento de wrapping sigue siendo el mismo"?__
+
+    Esto es importante.
+
+    La sidebar probablemente está dentro de un layout que permite que los elementos se coloquen horizontalmente cuando hay espacio y verticalmente cuando no lo hay.
+
+    Por ejemplo:
+
+    ```text
+    PANTALLA GRANDE
+
+    ┌───────────────────────────┬──────────────┐
+    │                           │              │
+    │       MAIN                │   SIDEBAR    │
+    │                           │              │
+    └───────────────────────────┴──────────────┘
+    ```
+
+    Pero cuando la pantalla se hace pequeña:
+
+    ```text
+    PANTALLA PEQUEÑA
+
+    ┌───────────────────────────┐
+    │                           │
+    │          MAIN             │
+    │                           │
+    ├───────────────────────────┤
+    │                           │
+    │         SIDEBAR           │
+    │                           │
+    └───────────────────────────┘
+    ```
+
+    Esto es el **wrapping**.
+
+    Los elementos estaban uno al lado del otro:
+
+    ```text
+    MAIN | SIDEBAR
+    ```
+
+    Pero ya no caben:
+
+    ```text
+    MAIN
+    SIDEBAR
+    ```
+
+    La diferencia es que ahora la sidebar **no necesita que tú le digas `20rem`**.
+
+    ---
+
+    __4. ¿Qué significa "crecerá al 100% en la configuración vertical"?__
+
+    Aquí está la parte que puede confundir.
+
+    Cuando los elementos están en horizontal:
+
+    ```text
+    MAIN              SIDEBAR
+    ██████████████    ███████
+                      ↑
+                    15rem
+    ```
+
+    La sidebar tiene aproximadamente el ancho de su contenido:
+
+    ```css
+    img {
+      width: 15rem;
+    }
+    ```
+
+    Entonces:
+
+    ```text
+    Sidebar → 15rem
+    ```
+
+    Pero cuando se produce el wrapping y la sidebar pasa abajo:
+
+    ```text
+    ┌──────────────────────────┐
+    │          MAIN            │
+    └──────────────────────────┘
+    ┌──────────────────────────┐
+    │         SIDEBAR          │
+    └──────────────────────────┘
+    ```
+
+    Ahora la sidebar ocupa todo el ancho disponible:
+
+    ```text
+    Sidebar → 100%
+    ```
+
+    Visualmente:
+
+    ```text
+    Horizontal:
+
+    ┌──────────────────────┬─────────────┐
+    │        MAIN          │   SIDEBAR   │
+    │                      │    15rem    │
+    └──────────────────────┴─────────────┘
+
+
+    Vertical:
+
+    ┌─────────────────────────────────────┐
+    │                MAIN                 │
+    └─────────────────────────────────────┘
+
+    ┌─────────────────────────────────────┐
+    │               SIDEBAR               │
+    │                100%                 │
+    └─────────────────────────────────────┘
+    ```
+
+    __La idea clave__
+
+    La diferencia entre ambas técnicas es esta:
+
+    **Antes:**
+
+    ```css
+    .sidebar {
+      flex-basis: 20rem;
+    }
+    ```
+
+    Le dices al navegador:
+
+    > "La sidebar debe empezar midiendo 20rem."
+
+    **Ahora:**
+
+    ```css
+    /* Sin flex-basis */
+    ```
+
+    Le dices al navegador:
+
+    > "No voy a fijar el tamaño. Deja que el contenido determine cuánto espacio necesita."
+
+    Por eso, si la imagen mide `15rem`:
+
+    ```text
+    Imagen = 15rem
+          ↓
+    Sidebar ≈ 15rem
+    ```
+
+    Y cuando el layout cambia a vertical:
+
+    ```text
+    Sidebar → ocupa todo el ancho disponible
+    ```
+
+    En resumen, **"intrínseco" significa que el tamaño viene determinado por las necesidades naturales del contenido, en lugar de imponerle un tamaño fijo desde afuera**.
+
+    Es una idea muy importante en el enfoque de *Every Layout*: **en vez de diseñar pensando "quiero que esta columna mida exactamente 20rem", intentas crear reglas que permitan que el contenido y el espacio disponible determinen el resultado**.
+
+
+## Intrinsic Web Design
+
+El término [*Intrinsic Web Design* ↗](https://noti.st/jensimmons/h0XWcf) fue acuñado por Jen Simmons, y se refiere a un movimiento reciente hacia herramientas y mecanismos en CSS que son más adecuados para el medio. El tipo de layouts *algorithmicos* y autónomos establecidos en esta serie podrían considerarse métodos de diseño intrínseco.
 
 El término *intrínseco* connota procesos introspectivos; cálculos realizados por el patrón de layout sobre sí mismo. Mi uso de 'intrínseco' en esta sección se refiere específicamente al ancho inevitable de un elemento determinado por sus contenidos. El ancho de un botón, a menos que se establezca explícitamente, es el ancho de lo que hay dentro de él.
 
 El CSS Box Sizing Module anteriormente se llamaba Intrinsic & Extrinsic Sizing Module, porque establecía cómo los elementos pueden dimensionarse tanto intrínseca como extrínsecamente. Generalmente, deberíamos inclinarnos hacia el lado del dimensionamiento intrínseco. Como se cubrió en *Axioms*, es mejor permitir que el navegador dimensione los elementos según su contenido, y solo proporcionar *sugerencias*, en lugar de *prescripciones*, para el layout. Somos *outsiders*.
+
+??? info "Explicacion"
+
+    Sí. Este texto conecta directamente con lo que acabamos de ver sobre la **sidebar intrínseca**. La idea central es bastante filosófica, pero también muy práctica: **en CSS, intenta darle libertad al navegador para calcular el layout en lugar de imponerle medidas exactas para todo**.
+
+    Vamos por partes.
+
+    ---
+
+    __1. ¿Qué es "Intrinsic Web Design"?__
+
+    El término fue popularizado por Jen Simmons.
+
+    La idea de **Intrinsic Web Design** es diseñar páginas aprovechando las capacidades propias del navegador y de CSS moderno.
+
+    En lugar de pensar:
+
+    > "La pantalla tiene 1200px, entonces mi contenido debe medir 800px y la sidebar 300px."
+
+    Piensas:
+
+    > "Tengo estos elementos y este contenido. Veamos cómo puede distribuirlos el navegador de forma flexible."
+
+    Por ejemplo, un diseño tradicional podría ser:
+
+    ```css
+    .sidebar {
+      width: 300px;
+    }
+
+    .main {
+      width: 800px;
+    }
+    ```
+
+    Estás **prescribiendo** el layout.
+
+    Es decir:
+
+    ```text
+    TÚ → "Hazlo exactamente así"
+    ```
+
+    En cambio, un enfoque intrínseco busca algo más parecido a:
+
+    ```css
+    .sidebar {
+      /* El contenido influye en su tamaño */
+    }
+
+    .main {
+      flex: 1;
+    }
+    ```
+
+    Ahora le das al navegador más margen para decidir:
+
+    ```text
+    TÚ → "Estas son mis reglas y preferencias"
+              ↓
+    NAVEGADOR → "Yo calculo cómo encajan"
+    ```
+
+    ---
+
+    __2. ¿Qué significa "intrínseco"?__
+
+    Aquí el texto utiliza la palabra **intrínseco** en un sentido específico.
+
+    Dice:
+
+    > "El ancho inevitable de un elemento determinado por sus contenidos."
+
+    Imagina un botón:
+
+    ```html
+    <button>
+      Comprar
+    </button>
+    ```
+
+    Si no le das un ancho explícito, el navegador calcula un tamaño basándose en:
+
+    * el texto `"Comprar"`
+    * el tamaño de la fuente
+    * el `padding`
+    * otros factores del modelo de caja
+
+    Visualmente:
+
+    ```text
+    ┌─────────────────┐
+    │    Comprar      │
+    └─────────────────┘
+    ```
+
+    El botón no tiene:
+
+    ```css
+    width: 200px;
+    ```
+
+    Su tamaño nace de su contenido.
+
+    Ahora cambia el texto:
+
+    ```html
+    <button>
+      Comprar ahora mismo
+    </button>
+    ```
+
+    El botón naturalmente se hace más ancho:
+
+    ```text
+    ┌────────────────────────────┐
+    │    Comprar ahora mismo     │
+    └────────────────────────────┘
+    ```
+
+    Eso es **intrínseco**.
+
+    El contenido influye en el tamaño.
+
+    ---
+
+    __3. Intrínseco vs. extrínseco__
+
+    Esta es probablemente la distinción más importante.
+
+    __Dimensionamiento extrínseco__
+
+    Tú impones el tamaño:
+
+    ```css
+    button {
+      width: 200px;
+    }
+    ```
+
+    Le estás diciendo:
+
+    > "Mide 200px, independientemente de lo que haya dentro."
+
+    ```text
+    ┌──────────────────────────────┐
+    │         Comprar              │
+    └──────────────────────────────┘
+                200px
+    ```
+
+    El tamaño viene **desde afuera**.
+
+    ---
+
+    __Dimensionamiento intrínseco__
+
+    Dejas que el contenido participe en la determinación del tamaño:
+
+    ```css
+    button {
+      padding: 1rem 2rem;
+    }
+    ```
+
+    No dices:
+
+    ```css
+    width: 200px;
+    ```
+
+    El navegador calcula algo como:
+
+    ```text
+    ancho del texto
+          +
+    padding
+          =
+    ancho final
+    ```
+
+    Por eso:
+
+    ```text
+    "OK"
+          ↓
+    ┌──────────┐
+    │    OK    │
+    └──────────┘
+
+
+    "Comprar ahora"
+          ↓
+    ┌────────────────────┐
+    │   Comprar ahora    │
+    └────────────────────┘
+    ```
+
+    El tamaño se adapta al contenido.
+
+    ---
+
+    __4. ¿Qué quiere decir "layouts algorítmicos"?__
+
+    Esta parte es muy importante para entender **Every Layout**.
+
+    Un layout tradicional podría decir:
+
+    ```css
+    .container {
+      width: 1200px;
+    }
+
+    .sidebar {
+      width: 300px;
+    }
+
+    .main {
+      width: 900px;
+    }
+    ```
+
+    Tú decides todas las dimensiones.
+
+    Es un enfoque bastante rígido.
+
+    Un layout algorítmico, en cambio, utiliza reglas:
+
+    ```css
+    .container {
+      display: flex;
+    }
+
+    .main {
+      flex: 1;
+    }
+
+    .sidebar {
+      /* tamaño influenciado por su contenido */
+    }
+    ```
+
+    Ahora el navegador ejecuta su algoritmo:
+
+    ```text
+    ¿Hay suficiente espacio?
+            │
+            ├── SÍ → elementos en horizontal
+            │
+            └── NO → elementos hacen wrap
+    ```
+
+    No necesitas escribir:
+
+    ```css
+    @media (max-width: 768px) {
+      ...
+    }
+    ```
+
+    necesariamente.
+
+    El layout puede adaptarse por sí mismo.
+
+    Eso es lo que el texto llama:
+
+    > **layouts algorítmicos y autónomos**
+
+    Son layouts que **responden a las condiciones disponibles**, en lugar de depender de una larga lista de instrucciones específicas para cada tamaño de pantalla.
+
+    ---
+
+    __5. "Sugerencias" vs. "prescripciones"__
+
+    Esta es probablemente la frase más importante de todo el texto.
+
+    > "Es mejor permitir que el navegador dimensione los elementos según su contenido, y solo proporcionar sugerencias, en lugar de prescripciones."
+
+    Vamos a traducirlo a CSS.
+
+    __Prescripción__
+
+    ```css
+    .sidebar {
+      width: 300px;
+    }
+    ```
+
+    Le estás diciendo:
+
+    > "Sidebar, tienes que medir exactamente 300px."
+
+    Es una **orden**.
+
+    ---
+
+    __Sugerencia__
+
+    ```css
+    .sidebar {
+      flex-basis: 20rem;
+    }
+    ```
+
+    En muchos contextos de Flexbox, `flex-basis` funciona más como un **tamaño inicial preferido** dentro del algoritmo de flexibilidad, no necesariamente como una dimensión absolutamente rígida.
+
+    La idea conceptual es:
+
+    > "Me gustaría que la sidebar rondara este tamaño, pero si las condiciones cambian, puedes ajustar."
+
+    Y todavía más flexible sería dejar que su contenido determine su tamaño:
+
+    ```css
+    .sidebar {
+      /* sin flex-basis explícito */
+    }
+    ```
+
+    Entonces:
+
+    ```text
+    Contenido
+        ↓
+    determina
+        ↓
+    tamaño intrínseco
+        ↓
+    el algoritmo de Flexbox
+        ↓
+    ajusta el layout
+    ```
+
+    ---
+
+    __6. ¿Qué significa "Somos outsiders"?__
+
+    Esta frase es poética.
+
+    El texto dice:
+
+    > **"Somos outsiders."**
+
+    En el contexto de *Every Layout*, significa que **nosotros, como desarrolladores, no deberíamos intentar controlar absolutamente todo**.
+
+    El navegador tiene un motor de layout extremadamente sofisticado.
+
+    Nosotros ponemos las reglas generales:
+
+    ```text
+    "Quiero que estos elementos estén juntos."
+    "Quiero un espacio entre ellos."
+    "Quiero que puedan envolverse."
+    "Preferiría que esta sidebar sea aproximadamente de este tamaño."
+    ```
+
+    Y luego dejamos que el navegador haga su trabajo.
+
+    Es como decir:
+
+    ```text
+    Diseñador
+      ↓
+    Define las reglas
+      ↓
+    CSS
+      ↓
+    Navegador calcula
+      ↓
+    Resultado
+    ```
+
+    No intentamos controlar cada píxel.
+
+    ---
+
+    __7. Aplicándolo a tu ejemplo de la sidebar__
+
+    Antes:
+
+    ```css
+    .sidebar {
+      flex-basis: 20rem;
+    }
+    ```
+
+    Estás diciendo:
+
+    > "Quiero que esta sidebar tenga como tamaño base 20rem."
+
+    Es una **sugerencia de tamaño**.
+
+    Después:
+
+    ```css
+    .sidebar img {
+      width: 15rem;
+    }
+    ```
+
+    Y eliminas el `flex-basis`.
+
+    Ahora el contenido tiene una influencia mayor sobre el tamaño:
+
+    ```text
+    IMAGEN
+    15rem
+      ↓
+    SIDEBAR
+    ≈ 15rem
+    ```
+
+    Cuando el espacio se acaba:
+
+    ```text
+    MAIN | SIDEBAR
+    ```
+
+    puede convertirse en:
+
+    ```text
+    MAIN
+    ──────
+    SIDEBAR
+    ```
+
+    Y la sidebar puede aprovechar el ancho disponible.
+
+    No has escrito:
+
+    ```css
+    @media (...) {
+      .sidebar {
+        width: 100%;
+      }
+    }
+    ```
+
+    El sistema de layout resuelve la situación.
+
+    ---
+
+    __La idea que debes quedarte__
+
+    Piensa en estas tres palabras:
+
+    ```text
+    PRESCRIBIR
+        ↓
+    "Quiero exactamente 300px"
+
+
+    SUGERIR
+        ↓
+    "Preferiría aproximadamente 20rem"
+
+
+    INTRÍNSECO
+        ↓
+    "Deja que el contenido y el navegador
+    determinen lo que tenga sentido"
+    ```
+
+    Y la filosofía de **Intrinsic Web Design** sería algo así:
+
+    > **No diseñes contra el navegador. Diseña con el navegador.**
+
+    En vez de intentar adivinar todas las pantallas posibles y decirle al navegador exactamente qué hacer en cada una, construyes **reglas simples, flexibles y basadas en el contenido**.
+
+    Esa es, en esencia, la filosofía que estás viendo en *Every Layout*: **menos control manual, más confianza en los algoritmos de CSS**.
+
 
 ## Casos de uso
 
@@ -2892,7 +3628,502 @@ El siguiente ejemplo usa la versión de componente, definida como un elemento pe
 </form>
 ```
 
-*Esta demostración interactiva solo está disponible en el sitio de Every Layout* ↗.
+!!! info "Demo"
+
+    [*Esta demostración interactiva solo está disponible en el sitio de Every Layout* ↗](https://every-layout.dev/demos/sidebar-input-with-button/).
+
+??? info "Explicacion"
+
+    Sí. Aquí el texto está mostrando **un caso práctico muy bueno del layout `Sidebar`**: usarlo para colocar un **campo de texto y un botón juntos**, dejando que el botón tenga un ancho determinado por su propio contenido.
+
+    Vamos paso a paso.
+
+    ---
+
+    __1. ¿Qué es un "media object"?__
+
+    El texto empieza diciendo:
+
+    > "El omnipresente media object..."
+
+    Un **media object** es un patrón muy común donde tienes:
+
+    ```text
+    ┌──────────┬─────────────────────────────┐
+    │          │                             │
+    │  IMAGEN  │  Título                     │
+    │          │  Descripción                │
+    │          │                             │
+    └──────────┴─────────────────────────────┘
+    ```
+
+    Por ejemplo:
+
+    ```text
+    [ FOTO ]  Juan Pérez
+              Ingeniero de Software
+    ```
+
+    La imagen sería la **sidebar**:
+
+    ```text
+    SIDEBAR       CONTENIDO PRINCIPAL
+      ↓                  ↓
+    [ FOTO ]     Juan Pérez
+                Ingeniero de Software
+    ```
+
+    El patrón `Sidebar` es perfecto para esto porque tienes dos elementos:
+
+    ```text
+    MEDIO | DESCRIPCIÓN
+    ```
+
+    Y cuando no hay espacio suficiente:
+
+    ```text
+    MEDIO
+    ─────
+    DESCRIPCIÓN
+    ```
+
+    El layout se adapta.
+
+    ---
+
+    __2. Pero también podemos usarlo con un formulario__
+
+    Aquí está el ejemplo interesante.
+
+    Tenemos:
+
+    ```html
+    <form>
+      <sidebar-l side="right" space="0" contentMin="66.666%">
+        <input type="text">
+        <button>Search</button>
+      </sidebar-l>
+    </form>
+    ```
+
+    Visualmente queremos conseguir esto:
+
+    ```text
+    ┌─────────────────────────────────────┬──────────┐
+    │                                     │          │
+    │          INPUT                      │  Search  │
+    │                                     │          │
+    └─────────────────────────────────────┴──────────┘
+    ```
+
+    Tenemos dos elementos:
+
+    ```text
+    ┌───────────────────────────────┐
+    │ <input>       │ <button>      │
+    └───────────────────────────────┘
+        contenido       sidebar
+        principal       derecha
+    ```
+
+    En este caso, el botón es la **sidebar**.
+
+    El campo `input` es el **contenido principal**.
+
+    ---
+
+    __3. ¿Por qué el botón es la sidebar?__
+
+    Mira:
+
+    ```html
+    <input type="text">
+    <button>Search</button>
+    ```
+
+    El botón tiene un ancho natural.
+
+    El texto es:
+
+    ```text
+    Search
+    ```
+
+    Por lo tanto, el navegador necesita suficiente espacio para mostrar:
+
+    ```text
+    ┌───────────┐
+    │  Search   │
+    └───────────┘
+    ```
+
+    No necesitamos decir:
+
+    ```css
+    button {
+      width: 100px;
+    }
+    ```
+
+    Ni:
+
+    ```css
+    button {
+      width: 200px;
+    }
+    ```
+
+    Dejamos que el contenido determine el ancho.
+
+    Eso es exactamente lo que el texto llama:
+
+    > **ancho intrínseco basado en el contenido**
+
+    El botón mide lo que necesita para mostrar:
+
+    ```text
+    Search
+    ```
+
+    más su `padding`.
+
+    Por ejemplo:
+
+    ```text
+    Texto:       Search
+    Padding:     2rem
+                  ↓
+    ┌─────────────────┐
+    │     Search      │
+    └─────────────────┘
+          ↑
+      ancho natural
+    ```
+
+    ---
+
+    __4. ¿Qué significa `side="right"`?__
+
+    Tenemos:
+
+    ```html
+    <sidebar-l side="right">
+    ```
+
+    Esto significa:
+
+    > La sidebar debe colocarse a la derecha.
+
+    Entonces:
+
+    ```text
+    ┌───────────────────────────────┬──────────┐
+    │                               │          │
+    │           INPUT              │  Search  │
+    │                               │          │
+    └───────────────────────────────┴──────────┘
+                                    ↑
+                                  right
+    ```
+
+    La sidebar es:
+
+    ```text
+    <button>Search</button>
+    ```
+
+    Y está a la derecha.
+
+    Si fuera:
+
+    ```html
+    <sidebar-l side="left">
+    ```
+
+    Tendríamos:
+
+    ```text
+    ┌──────────┬───────────────────────────────┐
+    │          │                               │
+    │  Search  │           INPUT               │
+    │          │                               │
+    └──────────┴───────────────────────────────┘
+        ↑
+      left
+    ```
+
+    ---
+
+    __5. ¿Qué significa `space="0"`?__
+
+    Tenemos:
+
+    ```html
+    space="0"
+    ```
+
+    Esto controla el espacio entre el contenido principal y la sidebar.
+
+    Con:
+
+    ```text
+    space="0"
+    ```
+
+    tenemos:
+
+    ```text
+    INPUT│Search
+    ```
+
+    No hay espacio entre ambos.
+
+    Visualmente:
+
+    ```text
+    ┌─────────────────────────────┬─────────┐
+    │                             │         │
+    │            INPUT            │ Search  │
+    └─────────────────────────────┴─────────┘
+    ```
+
+    Si hubiera un espacio, sería algo como:
+
+    ```text
+    ┌─────────────────────────────┐  ┌───────┐
+    │            INPUT            │  │ Search│
+    └─────────────────────────────┘  └───────┘
+                ↑
+                gap
+    ```
+
+    El valor `0` significa:
+
+    > "No quiero espacio entre los dos elementos."
+
+    ---
+
+    __6. La parte más importante: `contentMin="66.666%"`__
+
+    Esta propiedad es muy interesante:
+
+    ```html
+    contentMin="66.666%"
+    ```
+
+    La idea es decirle al componente:
+
+    > "El contenido principal necesita como mínimo el 66.666% del ancho disponible."
+
+    Tenemos:
+
+    ```text
+    ┌─────────────────────────────────────────────┐
+    │                                             │
+    │                  CONTENIDO                  │
+    │                 mínimo 66.6%                │
+    │                                             │
+    └─────────────────────────────────────────────┘
+    ```
+
+    El botón ocupa el resto:
+
+    ```text
+    ┌──────────────────────────────┬──────────────┐
+    │                              │              │
+    │          INPUT               │    Search    │
+    │         ≥ 66.6%              │              │
+    │                              │              │
+    └──────────────────────────────┴──────────────┘
+                  ↑                       ↑
+              Content                 Sidebar
+    ```
+
+    En términos sencillos:
+
+    ```text
+    INPUT  → necesita al menos 2/3 del espacio
+    BOTÓN  → ocupa su ancho intrínseco
+    ```
+
+    Esto evita que el campo de texto se vuelva demasiado pequeño.
+
+    ---
+
+    __7. ¿Qué pasa cuando la pantalla se hace pequeña?__
+
+    Aquí es donde el `Sidebar` demuestra su valor.
+
+    En una pantalla grande:
+
+    ```text
+    ┌──────────────────────────────────────────┐
+    │                                          │
+    │  Escribe aquí tu búsqueda...   [Search]  │
+    │                                          │
+    └──────────────────────────────────────────┘
+    ```
+
+    Pero imagina que reducimos mucho el espacio:
+
+    ```text
+    ┌──────────────────┐
+    │                  │
+    │ Escribe aquí...  │
+    │                  │
+    ├──────────────────┤
+    │                  │
+    │     [Search]     │
+    │                  │
+    └──────────────────┘
+    ```
+
+    Los elementos pueden **envolverse**.
+
+    Es decir, pasan de:
+
+    ```text
+    INPUT | BUTTON
+    ```
+
+    a:
+
+    ```text
+    INPUT
+    BUTTON
+    ```
+
+    El patrón sigue siendo útil porque el botón conserva su tamaño intrínseco.
+
+    ---
+
+    __8. ¿Por qué es mejor que poner `width: 100%`?__
+
+    Podrías hacer algo como:
+
+    ```css
+    input {
+      width: 80%;
+    }
+
+    button {
+      width: 20%;
+    }
+    ```
+
+    Pero esto sería una solución bastante rígida.
+
+    ¿Qué pasa si cambias el texto del botón?
+
+    ```html
+    <button>Search</button>
+    ```
+
+    a:
+
+    ```html
+    <button>Buscar ahora</button>
+    ```
+
+    Ahora necesitas más espacio.
+
+    Con porcentajes rígidos:
+
+    ```text
+    INPUT 80% | BUTTON 20%
+    ```
+
+    podrías terminar con un botón demasiado pequeño.
+
+    Con el enfoque intrínseco:
+
+    ```text
+    INPUT → ocupa el espacio disponible
+    BUTTON → ocupa lo que necesita
+    ```
+
+    El navegador puede calcular mejor la distribución.
+
+    ```text
+    ┌─────────────────────────────────────────┐
+    │                                         │
+    │   INPUT                         Search   │
+    │   ←──── espacio flexible ────→  ←auto→  │
+    │                                         │
+    └─────────────────────────────────────────┘
+    ```
+
+    ---
+
+    __La idea central del ejemplo__
+
+    Este ejemplo es una aplicación directa de todo lo que acabamos de estudiar:
+
+    ```text
+                    SIDEBAR
+                      │
+                      ▼
+              ┌─────────────────┐
+              │     BUTTON      │
+              │     Search      │
+              └─────────────────┘
+                      │
+                ancho intrínseco
+                      │
+                      ▼
+              "Mide lo que necesitas"
+    ```
+
+    Mientras tanto:
+
+    ```text
+    ┌───────────────────────────────────────┐
+    │              INPUT                    │
+    │                                       │
+    │       ocupa el espacio restante       │
+    └───────────────────────────────────────┘
+    ```
+
+    Por eso el `Sidebar` no significa necesariamente **"una barra lateral de una página"**.
+
+    Eso es lo importante.
+
+    En *Every Layout*, `Sidebar` es más bien un **patrón de distribución**:
+
+    > **Un elemento principal acompañado por otro elemento secundario que puede tener un ancho intrínseco y que puede cambiar de posición o envolverse cuando el espacio disponible no es suficiente.**
+
+    Puede ser:
+
+    ```text
+    [ IMAGEN ] + [ TEXTO ]
+    ```
+
+    o:
+
+    ```text
+    [ TEXTO ] + [ BOTÓN ]
+    ```
+
+    o:
+
+    ```text
+    [ PRECIO ] + [ BOTÓN COMPRAR ]
+    ```
+
+    o:
+
+    ```text
+    [ PRODUCTO ] + [ ACCIONES ]
+    ```
+
+    o incluso:
+
+    ```text
+    [ CONTENIDO ] + [ MENÚ ]
+    ```
+
+    La verdadera genialidad del patrón es que **no estás diseñando una página específica; estás creando una regla de comportamiento reutilizable**. Le dices al navegador: *"estos dos elementos trabajan juntos; este es el principal, este es el secundario, y cuando el espacio se acabe, reorganízalos"*. El navegador hace el resto.
+    
 
 ## El generador
 
@@ -2934,6 +4165,595 @@ La herramienta generadora de código solo está disponible en el *sitio de docum
 </div>
 ```
 
+??? info "Explicacion"
+
+    Perfecto. Este código es **la implementación manual del patrón `Sidebar`** que has estado estudiando. Aquí ya no usamos `<sidebar-l>`, sino que construimos el comportamiento directamente con **Flexbox**.
+
+    La idea es que entiendas qué hace **cada propiedad** y, sobre todo, por qué funciona.
+
+    ---
+
+    __1. La estructura general__
+
+    Tenemos:
+
+    ```html
+    <div class="with-sidebar">
+      <div><!-- sidebar --></div>
+      <div><!-- no-sidebar --></div>
+    </div>
+    ```
+
+    Visualmente:
+
+    ```text
+    .with-sidebar
+    │
+    ├── first-child  → Sidebar
+    │
+    └── last-child   → No-sidebar
+    ```
+
+    Es decir:
+
+    ```text
+    ┌───────────────────────────┬──────────────┐
+    │                           │              │
+    │      SIDEBAR              │  NO-SIDEBAR  │
+    │                           │              │
+    └───────────────────────────┴──────────────┘
+    ```
+
+    En este ejemplo, la sidebar es **el primer elemento**.
+
+    El contenido principal es **el último elemento**.
+
+    Por eso CSS usa:
+
+    ```css
+    .with-sidebar > :first-child
+    ```
+
+    y:
+
+    ```css
+    .with-sidebar > :last-child
+    ```
+
+    ---
+
+    __2. El contenedor: `display: flex`__
+
+    Primero:
+
+    ```css
+    .with-sidebar {
+      display: flex;
+    }
+    ```
+
+    Esto convierte al elemento `.with-sidebar` en un **contenedor Flexbox**.
+
+    Sus hijos:
+
+    ```html
+    <div><!-- sidebar --></div>
+    <div><!-- no-sidebar --></div>
+    ```
+
+    se colocan inicialmente en una fila:
+
+    ```text
+    ┌───────────────────────────┬──────────────┐
+    │        SIDEBAR            │    MAIN      │
+    └───────────────────────────┴──────────────┘
+    ```
+
+    Sin `display: flex`, los elementos `div` normalmente se colocarían uno debajo del otro.
+
+    ---
+
+    __3. `flex-wrap: wrap`__
+
+    Después tenemos:
+
+    ```css
+    flex-wrap: wrap;
+    ```
+
+    Esta propiedad es **fundamental**.
+
+    Significa:
+
+    > "Si los elementos ya no caben en una sola línea, permite que se envuelvan y pasen a otra línea."
+
+    Por ejemplo, si tenemos espacio:
+
+    ```text
+    ┌──────────────────────────────────────────┐
+    │  SIDEBAR             │       MAIN        │
+    └──────────────────────────────────────────┘
+    ```
+
+    Pero reducimos el ancho:
+
+    ```text
+    ┌──────────────────────┐
+    │      SIDEBAR         │
+    ├──────────────────────┤
+    │        MAIN          │
+    └──────────────────────┘
+    ```
+
+    Esto es el **wrapping**.
+
+    La gran ventaja es que no necesitas necesariamente un breakpoint:
+
+    ```css
+    @media (max-width: 768px) {
+      ...
+    }
+    ```
+
+    El layout reacciona según el **espacio real disponible**.
+
+    ---
+
+    __4. `gap`__
+
+    Tenemos:
+
+    ```css
+    gap: var(--gutter, var(--s1));
+    ```
+
+    Esto crea un espacio entre los dos elementos.
+
+    Por ejemplo:
+
+    ```text
+    SIDEBAR        MAIN
+    ███████   ←    █████████
+              gap
+    ```
+
+    En lugar de usar:
+
+    ```css
+    margin-right: 1rem;
+    ```
+
+    se utiliza `gap`, porque el espacio se crea **entre los elementos**, no en los bordes exteriores.
+
+    La parte:
+
+    ```css
+    var(--gutter, var(--s1))
+    ```
+
+    significa:
+
+    > "Usa la variable `--gutter`; si no existe, usa `--s1`."
+
+    Es decir:
+
+    ```text
+    --gutter existe
+          ↓
+    usar --gutter
+
+    --gutter no existe
+          ↓
+    usar --s1
+    ```
+
+    Esto es un **fallback**.
+
+    ---
+
+    __5. Ahora viene la parte importante: la Sidebar__
+
+    Tenemos:
+
+    ```css
+    .with-sidebar > :first-child {
+      flex-basis: 20rem;
+      flex-grow: 1;
+    }
+    ```
+
+    Este es nuestro primer elemento:
+
+    ```html
+    <div><!-- sidebar --></div>
+    ```
+
+    ---
+
+    __`flex-basis: 20rem`__
+
+    Esto establece el tamaño base:
+
+    ```css
+    flex-basis: 20rem;
+    ```
+
+    La idea es:
+
+    > "Cuando este elemento funcione como sidebar, me gustaría que partiera de unos `20rem`."
+
+    Visualmente:
+
+    ```text
+    ┌──────────────────────┬────────────────────────────┐
+    │                      │                            │
+    │       SIDEBAR        │           MAIN             │
+    │       20rem          │                            │
+    │                      │                            │
+    └──────────────────────┴────────────────────────────┘
+    ```
+
+    Pero recuerda algo importante de lo que aprendiste anteriormente:
+
+    **`flex-basis` no necesariamente significa "exactamente 20rem".**
+
+    Es el tamaño base que entra en el algoritmo de Flexbox.
+
+    Por eso puede cambiar dependiendo de las otras reglas.
+
+    ---
+
+    __6. `flex-grow: 1`__
+
+    Tenemos:
+
+    ```css
+    flex-grow: 1;
+    ```
+
+    Esto significa:
+
+    > "Si sobra espacio, esta sidebar puede crecer."
+
+    Imaginemos:
+
+    ```text
+    Sidebar → flex-grow: 1
+    Main    → flex-grow: 999
+    ```
+
+    Los dos pueden crecer, pero el segundo tiene una capacidad de crecimiento muchísimo mayor.
+
+    Más adelante veremos por qué.
+
+    ---
+
+    __7. Ahora el `no-sidebar`__
+
+    El último elemento:
+
+    ```css
+    .with-sidebar > :last-child {
+      flex-basis: 0;
+      flex-grow: 999;
+      min-width: 50%;
+    }
+    ```
+
+    Este es el contenido principal:
+
+    ```html
+    <div><!-- no-sidebar --></div>
+    ```
+
+    Vamos propiedad por propiedad.
+
+    ---
+
+    __8. `flex-basis: 0`__
+
+    Tenemos:
+
+    ```css
+    flex-basis: 0;
+    ```
+
+    Esto es muy interesante.
+
+    Estamos diciendo:
+
+    > "No partas de un ancho base propio."
+
+    Visualmente, conceptualmente:
+
+    ```text
+    SIDEBAR
+    20rem
+
+    MAIN
+    0
+    ```
+
+    Pero ojo: **eso no significa que el contenido principal desaparezca**.
+
+    Simplemente estamos estableciendo su tamaño base en `0` dentro del algoritmo flexible.
+
+    Luego entra:
+
+    ```css
+    flex-grow: 999;
+    ```
+
+    ---
+
+    __9. `flex-grow: 999`__
+
+    Esta es la clave del patrón.
+
+    Tenemos:
+
+    ```css
+    .sidebar {
+      flex-grow: 1;
+    }
+
+    .main {
+      flex-grow: 999;
+    }
+    ```
+
+    Entonces:
+
+    ```text
+    Sidebar → 1
+    Main    → 999
+    ```
+
+    Esto significa que el `main` tiene una capacidad de crecimiento muchísimo mayor.
+
+    Por lo tanto, cuando hay espacio disponible:
+
+    ```text
+    ┌──────────────────────┬─────────────────────────────────────┐
+    │                      │                                     │
+    │       SIDEBAR        │               MAIN                  │
+    │       ~20rem         │          ocupa el resto              │
+    │                      │                                     │
+    └──────────────────────┴─────────────────────────────────────┘
+    ```
+
+    La sidebar conserva aproximadamente su tamaño base.
+
+    El contenido principal absorbe la mayor parte del espacio restante.
+
+    Podríamos pensar:
+
+    ```text
+    SIDEBAR
+    flex-grow: 1
+          ↓
+    crece poco
+
+    MAIN
+    flex-grow: 999
+          ↓
+    crece mucho
+    ```
+
+    No es que `999` sea un número mágico. Podría ser otro número suficientemente grande.
+
+    La intención es expresar:
+
+    > **"El contenido principal tiene mucha más prioridad para crecer que la sidebar."**
+
+    ---
+
+    __10. Pero entonces, ¿cuándo se envuelven?__
+
+    Aquí entra:
+
+    ```css
+    min-width: 50%;
+    ```
+
+    Esta propiedad pertenece al `no-sidebar`:
+
+    ```css
+    .with-sidebar > :last-child {
+      min-width: 50%;
+    }
+    ```
+
+    Esto significa:
+
+    > "El contenido principal no debería ser menor que el 50% del ancho disponible."
+
+    Imagina una pantalla suficientemente grande:
+
+    ```text
+    ┌──────────────────────────────────────────────┐
+    │ SIDEBAR              │ MAIN                   │
+    │                      │                        │
+    └──────────────────────────────────────────────┘
+    ```
+
+    Pero cuando el espacio empieza a reducirse, Flexbox intenta mantenerlos juntos.
+
+    Llega un momento en que el `main` ya no puede reducirse por debajo de:
+
+    ```text
+    50%
+    ```
+
+    Entonces el layout hace wrap.
+
+    ```text
+    ┌─────────────────────────────┐
+    │          SIDEBAR            │
+    ├─────────────────────────────┤
+    │            MAIN             │
+    │            ≥ 50%            │
+    └─────────────────────────────┘
+    ```
+
+    La idea del comentario:
+
+    ```css
+    /* ↓ Envolver cuando los elementos tienen el mismo ancho */
+    min-width: 50%;
+    ```
+
+    es que cuando ambos elementos necesitan aproximadamente la mitad del espacio, el navegador permite que uno pase a la siguiente línea.
+
+    ---
+
+    __11. El comportamiento completo__
+
+    Ahora podemos juntar todo.
+
+    Tenemos:
+
+    ```css
+    .with-sidebar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--gutter, var(--s1));
+    }
+    ```
+
+    Esto significa:
+
+    ```text
+    Flexbox
+      +
+    Permitir wrap
+      +
+    Separación
+    ```
+
+    Luego:
+
+    ```css
+    .with-sidebar > :first-child {
+      flex-basis: 20rem;
+      flex-grow: 1;
+    }
+    ```
+
+    La sidebar:
+
+    ```text
+    Tamaño base ≈ 20rem
+    Puede crecer
+    ```
+
+    Y:
+
+    ```css
+    .with-sidebar > :last-child {
+      flex-basis: 0;
+      flex-grow: 999;
+      min-width: 50%;
+    }
+    ```
+
+    El contenido principal:
+
+    ```text
+    Parte desde 0
+    Crece muchísimo
+    No baja de 50%
+    ```
+
+    El resultado es:
+
+    __Pantalla amplia__
+
+    ```text
+    ┌──────────────────────┬─────────────────────────────────────┐
+    │                      │                                     │
+    │       SIDEBAR        │                MAIN                 │
+    │       ~20rem         │              flexible               │
+    │                      │                                     │
+    └──────────────────────┴─────────────────────────────────────┘
+    ```
+
+    __Pantalla más pequeña__
+
+    ```text
+    ┌──────────────────────┬──────────────────────────────┐
+    │       SIDEBAR        │             MAIN             │
+    │                      │          ≥ 50%                │
+    └──────────────────────┴──────────────────────────────┘
+    ```
+
+    __Pantalla demasiado pequeña__
+
+    ```text
+    ┌──────────────────────────────────────┐
+    │               SIDEBAR                │
+    └──────────────────────────────────────┘
+    ┌──────────────────────────────────────┐
+    │                 MAIN                 │
+    └──────────────────────────────────────┘
+    ```
+
+    Y todo esto ocurre **sin escribir un breakpoint específico**.
+
+    ---
+
+    __12. La clave conceptual de todo el código__
+
+    Este patrón combina varias ideas que has ido aprendiendo:
+
+    ```text
+                    .with-sidebar
+                          │
+                          ▼
+                  display: flex
+                          │
+                          ▼
+                  flex-wrap: wrap
+                          │
+                ┌─────────┴─────────┐
+                │                   │
+                ▼                   ▼
+            SIDEBAR              MAIN
+                │                   │
+                │                   │
+      flex-basis: 20rem      flex-basis: 0
+      flex-grow: 1           flex-grow: 999
+                                min-width: 50%
+                │                   │
+                └─────────┬─────────┘
+                          ▼
+                Algoritmo Flexbox
+                          │
+                ┌─────────┴─────────┐
+                ▼                   ▼
+          Hay espacio          No hay espacio
+                │                   │
+                ▼                   ▼
+        lado a lado              wrap
+    ```
+
+    La filosofía de *Every Layout* aquí es muy clara:
+
+    > **No le decimos al navegador: "a 768px cambia a columna".**
+
+    Le decimos:
+
+    > **"Estos elementos pueden estar juntos, pero el contenido principal necesita al menos la mitad del espacio. Si ya no caben correctamente, envuélvelos."**
+
+    Eso es mucho más **intrínseco y algorítmico**.
+
+    Y hay una frase que resume todo este patrón:
+
+    > **No estamos diseñando para un tamaño de pantalla; estamos diseñando para las condiciones del layout.**
+
+    Esa es una de las ideas más potentes que estás aprendiendo con `Every Layout`.
+
+
 ## El componente
 
 Una implementación de elemento personalizado del `Sidebar` está disponible para descargar ↗.
@@ -2965,6 +4785,498 @@ Debido a que la imagen es un hijo flex, se debe suministrar `noStretch` para evi
 </sidebar-l>
 ```
 
+??? info "Explicacion"
+
+    Claro. Este ejemplo es una aplicación del patrón `Sidebar` para construir el famoso **media object**: una imagen junto a un texto.
+
+    La estructura visual que queremos conseguir es esta:
+
+    ```text
+    ┌──────────────────┬────────────────────────────────────┐
+    │                  │                                    │
+    │                  │   Este es el texto que acompaña    │
+    │     IMAGEN       │   a la imagen. Puede contener      │
+    │                  │   varias líneas de contenido.      │
+    │                  │                                    │
+    └──────────────────┴────────────────────────────────────┘
+    ```
+
+    Vamos a entender cada parte.
+
+    ---
+
+    __1. El HTML__
+
+    Tenemos:
+
+    ```html
+    <sidebar-l space="var(--s2)" sideWidth="15rem" noStretch>
+      <img src="path/to/image" alt="Description of image" />
+      <p><!-- el texto que acompaña la imagen --></p>
+    </sidebar-l>
+    ```
+
+    Aquí tenemos dos hijos directos de `<sidebar-l>`:
+
+    ```text
+    <sidebar-l>
+    │
+    ├── <img>  ← Sidebar
+    │
+    └── <p>    ← No-sidebar / contenido principal
+    ```
+
+    Por lo tanto:
+
+    ```text
+    ┌───────────────┬─────────────────────────────┐
+    │               │                             │
+    │     IMG       │          P               │
+    │               │                             │
+    └───────────────┴─────────────────────────────┘
+    ```
+
+    La imagen es la **sidebar** y el párrafo es el **contenido principal**.
+
+    ---
+
+    __2. `space="var(--s2)"`__
+
+    Tenemos:
+
+    ```html
+    space="var(--s2)"
+    ```
+
+    Esto define el espacio entre la imagen y el texto.
+
+    Visualmente:
+
+    ```text
+    ┌──────────────┐       ┌──────────────────────┐
+    │              │       │                      │
+    │    IMAGEN    │ ←gap→ │       TEXTO          │
+    │              │       │                      │
+    └──────────────┘       └──────────────────────┘
+    ```
+
+    Aquí el espacio viene de:
+
+    ```css
+    var(--s2)
+    ```
+
+    Recuerda que `--s2` pertenece a una **escala modular** de variables CSS.
+
+    Por ejemplo, conceptualmente podríamos tener:
+
+    ```css
+    --s1: 0.75rem;
+    --s2: 1.125rem;
+    --s3: 1.6875rem;
+    ```
+
+    No necesariamente esos valores exactos, pero la idea es que tienes una escala coherente:
+
+    ```text
+    --s1 → pequeño
+    --s2 → mediano
+    --s3 → grande
+    ```
+
+    Entonces:
+
+    ```html
+    space="var(--s2)"
+    ```
+
+    significa:
+
+    > "Usa el segundo tamaño de espacio definido en mi sistema de diseño."
+
+    Esto es mejor que escribir directamente:
+
+    ```html
+    space="18px"
+    ```
+
+    porque si cambias tu escala modular, todos los layouts pueden adaptarse de forma coherente.
+
+    ---
+
+    __3. `sideWidth="15rem"`__
+
+    Esta es la propiedad que determina el ancho de la sidebar.
+
+    ```html
+    sideWidth="15rem"
+    ```
+
+    Como la imagen es la sidebar:
+
+    ```text
+    Sidebar
+      ↓
+    ┌───────────────┐
+    │               │
+    │    IMAGEN     │  ← 15rem
+    │               │
+    └───────────────┘
+    ```
+
+    Por lo tanto, en la configuración horizontal:
+
+    ```text
+    ┌────────────────┐   ┌──────────────────────────────┐
+    │                │   │                              │
+    │     IMAGEN     │   │            TEXTO             │
+    │     15rem      │   │                              │
+    │                │   │                              │
+    └────────────────┘   └──────────────────────────────┘
+          ↑                       ↑
+        Sidebar                 Main
+    ```
+
+    La imagen tiene un ancho base de `15rem`.
+
+    ---
+
+    __4. ¿Qué significa "breakpoint 50%"?__
+
+    El texto dice:
+
+    > "Usa el breakpoint `50%` por defecto."
+
+    Esto se refiere al momento en el que el layout deja de funcionar bien horizontalmente.
+
+    Imaginemos:
+
+    ```text
+    IMAGEN  |  TEXTO
+    ```
+
+    La imagen necesita aproximadamente:
+
+    ```text
+    15rem
+    ```
+
+    Y el texto necesita suficiente espacio para poder leerse cómodamente.
+
+    Cuando la pantalla se vuelve demasiado estrecha:
+
+    ```text
+    ┌──────────────┬───────────┐
+    │              │           │
+    │    IMAGEN    │   TEXTO   │
+    │              │           │
+    └──────────────┴───────────┘
+    ```
+
+    Llega un momento en el que mantenerlos juntos ya no tiene sentido.
+
+    Entonces el patrón hace wrap:
+
+    ```text
+    ┌───────────────────────────────┐
+    │                               │
+    │            IMAGEN             │
+    │                               │
+    └───────────────────────────────┘
+
+    ┌───────────────────────────────┐
+    │                               │
+    │            TEXTO              │
+    │                               │
+    └───────────────────────────────┘
+    ```
+
+    El `50%` funciona como el punto de referencia para decidir cuándo ambos elementos ya no deberían permanecer en la misma fila.
+
+    En otras palabras:
+
+    > Si cada elemento necesita aproximadamente la mitad del espacio disponible, el layout puede pasar a una disposición vertical.
+
+    ---
+
+    __5. La parte más importante: `noStretch`__
+
+    Ahora viene la parte que puede resultar confusa.
+
+    Tenemos:
+
+    ```html
+    noStretch
+    ```
+
+    Esto evita que la imagen se estire.
+
+    ¿Por qué?
+
+    Porque recuerda que la imagen es un **hijo directo de Flexbox**:
+
+    ```text
+    sidebar-l
+      │
+      ├── img  ← hijo flex
+      │
+      └── p    ← hijo flex
+    ```
+
+    Por defecto, Flexbox puede utilizar un comportamiento de `align-items: stretch`.
+
+    Conceptualmente:
+
+    ```text
+    ┌──────────────────┬──────────────────────────────┐
+    │                  │                              │
+    │                  │                              │
+    │      IMAGEN      │           TEXTO              │
+    │                  │                              │
+    │                  │                              │
+    └──────────────────┴──────────────────────────────┘
+    ```
+
+    La imagen podría terminar adaptándose a la altura del elemento más alto.
+
+    Por ejemplo:
+
+    ```text
+    Imagen original:
+
+    ┌───────────┐
+    │           │
+    │           │
+    │           │
+    └───────────┘
+
+    Proporción:
+    1:1
+    ```
+
+    Pero si Flexbox la estira:
+
+    ```text
+    ┌───────────┐
+    │           │
+    │           │
+    │           │
+    │           │
+    │           │
+    │           │
+    └───────────┘
+
+    ¡La proporción cambia!
+    ```
+
+    La imagen puede verse deformada.
+
+    Por eso se utiliza:
+
+    ```html
+    noStretch
+    ```
+
+    La idea es:
+
+    > **"No estires este elemento para igualar la altura del otro."**
+
+    Así la imagen conserva sus proporciones.
+
+    ```text
+    ┌───────────────┬──────────────────────────────┐
+    │               │                              │
+    │   ┌───────┐   │   Texto de varias líneas     │
+    │   │       │   │                              │
+    │   │ IMAGEN│   │   Más contenido...           │
+    │   │       │   │                              │
+    │   └───────┘   │                              │
+    │               │                              │
+    └───────────────┴──────────────────────────────┘
+    ```
+
+    La imagen mantiene su relación de aspecto.
+
+    ---
+
+    __6. ¿Por qué dice que no sería necesario dentro de un `<div>`?__
+
+    El texto dice:
+
+    > "Si la imagen se colocara dentro de un `<div>` (haciendo del `<div>` el hijo flex) esto no sería necesario."
+
+    Esta parte es muy importante.
+
+    Ahora tenemos:
+
+    ```html
+    <sidebar-l>
+      <img>
+      <p>
+    </sidebar-l>
+    ```
+
+    Los hijos directos son:
+
+    ```text
+    sidebar-l
+    │
+    ├── img  ← hijo flex
+    └── p    ← hijo flex
+    ```
+
+    Pero podríamos hacer:
+
+    ```html
+    <sidebar-l>
+      <div>
+        <img>
+      </div>
+
+      <p>
+        ...
+      </p>
+    </sidebar-l>
+    ```
+
+    Ahora la estructura es:
+
+    ```text
+    sidebar-l
+    │
+    ├── div  ← hijo flex
+    │    └── img
+    │
+    └── p    ← hijo flex
+    ```
+
+    La diferencia está aquí:
+
+    __Antes__
+
+    ```text
+    Flexbox
+    │
+    ├── IMG
+    └── P
+    ```
+
+    La imagen directamente participa en el comportamiento Flexbox.
+
+    __Ahora__
+
+    ```text
+    Flexbox
+    │
+    ├── DIV
+    │    └── IMG
+    │
+    └── P
+    ```
+
+    Ahora quien participa directamente en Flexbox es el `<div>`.
+
+    La imagen está dentro del `<div>` y ya no es un **flex item directo**.
+
+    Por eso el estiramiento de Flexbox afecta al `<div>`, no directamente a la imagen.
+
+    ```text
+    ┌──────────────────────────────────────────┐
+    │              Flex container              │
+    │                                          │
+    │  ┌───────────┐       ┌───────────────┐  │
+    │  │    DIV    │       │       P       │  │
+    │  │  ┌─────┐  │       │               │  │
+    │  │  │ IMG │  │       │     TEXTO     │  │
+    │  │  └─────┘  │       │               │  │
+    │  └───────────┘       └───────────────┘  │
+    └──────────────────────────────────────────┘
+    ```
+
+    Por eso puedes evitar `noStretch` en algunos casos.
+
+    ---
+
+    __7. Todo el ejemplo junto__
+
+    El componente:
+
+    ```html
+    <sidebar-l
+      space="var(--s2)"
+      sideWidth="15rem"
+      noStretch
+    >
+      <img
+        src="path/to/image"
+        alt="Description of image"
+      />
+
+      <p>
+        Texto que acompaña a la imagen.
+      </p>
+    </sidebar-l>
+    ```
+
+    Se comporta conceptualmente así:
+
+    ```text
+                        PANTALLA GRANDE
+
+    ┌───────────────────────────────────────────────────┐
+    │                                                   │
+    │  ┌───────────────┐    ┌────────────────────────┐ │
+    │  │               │    │                        │ │
+    │  │               │    │      TEXTO             │ │
+    │  │    IMAGEN     │    │                        │ │
+    │  │    15rem      │    │      TEXTO             │ │
+    │  │               │    │                        │ │
+    │  │               │    │                        │ │
+    │  └───────────────┘    └────────────────────────┘ │
+    │                     ↑                             │
+    │                   --s2                            │
+    └───────────────────────────────────────────────────┘
+    ```
+
+    Cuando no hay suficiente espacio:
+
+    ```text
+                        PANTALLA PEQUEÑA
+
+    ┌───────────────────────────────┐
+    │                               │
+    │          IMAGEN               │
+    │                               │
+    └───────────────────────────────┘
+
+    ┌───────────────────────────────┐
+    │                               │
+    │          TEXTO                │
+    │                               │
+    └───────────────────────────────┘
+    ```
+
+    ---
+
+    __En resumen__
+
+    Este código:
+
+    ```html
+    <sidebar-l space="var(--s2)" sideWidth="15rem" noStretch>
+    ```
+
+    se puede leer mentalmente como:
+
+    > **"Coloca estos dos elementos juntos. Dale a la sidebar (la imagen) un ancho de 15rem, deja un espacio `--s2` entre ambos, y no estires la imagen para igualar la altura del contenido."**
+
+    Y cuando ya no haya suficiente espacio:
+
+    > **"Deja de intentar mantenerlos lado a lado y reorganízalos verticalmente."**
+
+    La idea fundamental aquí vuelve a ser la misma que en todo `Every Layout`: **no estamos diciendo "en 768px haz esto y en 480px haz aquello"**. Estamos definiendo **las reglas del comportamiento** y dejamos que el navegador determine cuándo esas reglas ya no pueden cumplirse cómodamente.
+
+
 ### Switched media object (Media object intercambiado)
 
 Igual que el ejemplo anterior, excepto que el texto que *acompaña* la imagen es la sidebar (`side="right"`), permitiendo que la imagen crezca cuando el layout está en la configuración horizontal. La sidebar tiene un ancho (*measure*) de `30ch` (aproximadamente 30 caracteres) en la configuración horizontal.
@@ -2980,3 +5292,503 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 </sidebar-l>
 ```
 
+??? info "Explicacion"
+
+    Sí. Este ejemplo es prácticamente el **mismo patrón anterior**, pero ahora se intercambia cuál de los dos elementos es la `sidebar`. Esto cambia bastante el comportamiento.
+
+    La clave es esta:
+
+    > **Antes:** la imagen era la `sidebar` → la imagen tenía un ancho controlado (`15rem`).
+
+    > **Ahora:** el texto es la `sidebar` → el texto tiene un ancho controlado (`30ch`) y **la imagen puede crecer para ocupar el espacio restante**.
+
+    Vamos paso a paso.
+
+    ---
+
+    __1. La estructura__
+
+    Tenemos:
+
+    ```html id="w8a2w9"
+    <sidebar-l space="var(--s2)" side="right" sideWidth="30ch">
+      <div>
+        <img src="path/to/image" alt="Description of image">
+      </div>
+      <p><!-- el texto que acompaña la imagen --></p>
+    </sidebar-l>
+    ```
+
+    Visualmente:
+
+    ```text id="jv4y9w"
+    ┌───────────────────────────────────┬─────────────────────┐
+    │                                   │                     │
+    │             IMAGEN                │       TEXTO         │
+    │                                   │                     │
+    └───────────────────────────────────┴─────────────────────┘
+                                        ↑
+                                      Sidebar
+    ```
+
+    Aquí:
+
+    ```text id="1x0d29"
+    <div> + <img>  → elemento principal
+    <p>             → Sidebar
+    ```
+
+    La diferencia fundamental está en:
+
+    ```html id="bihc6f"
+    side="right"
+    ```
+
+    La `sidebar` se coloca a la derecha.
+
+    ---
+
+    __2. ¿Por qué ahora el texto es la sidebar?__
+
+    Mira el HTML:
+
+    ```html id="5v7km7"
+    <div>
+      <img>
+    </div>
+
+    <p>
+      Texto...
+    </p>
+    ```
+
+    Tenemos dos hijos directos:
+
+    ```text id="krb9a2"
+    sidebar-l
+    │
+    ├── DIV  ← contenido principal
+    │    └── IMG
+    │
+    └── P    ← sidebar
+    ```
+
+    Como tenemos:
+
+    ```html id="3qk1p2"
+    side="right"
+    ```
+
+    el segundo elemento, el `<p>`, se coloca a la derecha.
+
+    Por eso:
+
+    ```text id="gk3bcb"
+    ┌───────────────────────────────┬───────────────────┐
+    │                               │                   │
+    │            IMAGEN             │       TEXTO       │
+    │                               │                   │
+    └───────────────────────────────┴───────────────────┘
+                                    ↑
+                                  Sidebar
+    ```
+
+    El texto es ahora la sidebar.
+
+    ---
+
+    __3. `sideWidth="30ch"`__
+
+    Tenemos:
+
+    ```html id="empr8y"
+    sideWidth="30ch"
+    ```
+
+    Esto define el ancho de la sidebar.
+
+    Como la sidebar ahora es el `<p>`:
+
+    ```text id="1i9xg2"
+    Sidebar
+      ↓
+    ┌───────────────────┐
+    │                   │
+    │       TEXTO       │
+    │                   │
+    └───────────────────┘
+          30ch
+    ```
+
+    La unidad `ch` es muy interesante aquí.
+
+    `1ch` representa aproximadamente el ancho del carácter `0` de la fuente utilizada.
+
+    Por eso:
+
+    ```text id="l9p4o0"
+    30ch ≈ 30 caracteres
+    ```
+
+    No significa que siempre puedas poner exactamente 30 letras. Depende de la tipografía, pero sirve como una referencia relacionada con la **cantidad de texto que cabe en una línea**.
+
+    Esto es muy útil para textos porque evita que las líneas sean demasiado largas.
+
+    Por ejemplo:
+
+    ```text id="w4yq5m"
+    Texto demasiado ancho:
+
+    Este texto ocupa demasiado espacio y se vuelve
+    difícil de leer porque los ojos tienen que recorrer
+    una distancia demasiado larga de izquierda a derecha.
+    ```
+
+    Con `30ch`:
+
+    ```text id="f6ub2x"
+    Este texto tiene una medida
+    más controlada y resulta más
+    cómodo para la lectura.
+    ```
+
+    La idea es que la sidebar textual tenga una **medida legible**.
+
+    ---
+
+    __4. La imagen ahora puede crecer__
+
+    Esta es la diferencia más importante respecto al ejemplo anterior.
+
+    Antes teníamos:
+
+    ```text id="x9p5k4"
+    IMAGEN → Sidebar
+    TEXTO  → Main
+    ```
+
+    La imagen tenía:
+
+    ```text id="4y9a2j"
+    sideWidth="15rem"
+    ```
+
+    Por lo tanto:
+
+    ```text id="q6v6xi"
+    Imagen → aproximadamente 15rem
+    ```
+
+    Ahora tenemos:
+
+    ```text id="ww9pde"
+    IMAGEN → Main
+    TEXTO  → Sidebar
+    ```
+
+    Y:
+
+    ```text id="1u5j9s"
+    sideWidth="30ch"
+    ```
+
+    Por lo tanto:
+
+    ```text id="qzv5b4"
+    Texto → aproximadamente 30ch
+    ```
+
+    La imagen queda con el espacio restante.
+
+    Por ejemplo:
+
+    ```text id="h8m4qf"
+    ┌──────────────────────────────────────┬───────────────┐
+    │                                      │               │
+    │                IMAGEN                │     TEXTO     │
+    │                                      │     30ch      │
+    │                                      │               │
+    └──────────────────────────────────────┴───────────────┘
+          ↑                                      ↑
+    espacio restante                         ancho fijo
+    ```
+
+    La imagen puede crecer:
+
+    ```text id="75y8xy"
+    Pantalla mediana:
+
+    ┌────────────────────────┐ ┌───────────┐
+    │                        │ │           │
+    │         IMAGEN         │ │  TEXTO    │
+    │                        │ │  30ch     │
+    └────────────────────────┘ └───────────┘
+
+
+    Pantalla grande:
+
+    ┌──────────────────────────────────────────┐ ┌───────────┐
+    │                                          │ │           │
+    │                 IMAGEN                   │ │  TEXTO    │
+    │                                          │ │  30ch     │
+    └──────────────────────────────────────────┘ └───────────┘
+    ```
+
+    La imagen aprovecha el espacio disponible.
+
+    ---
+
+    __5. ¿Por qué la imagen está dentro de un `<div>`?__
+
+    Tenemos:
+
+    ```html id="2r5v70"
+    <div>
+      <img src="path/to/image" alt="Description of image">
+    </div>
+    ```
+
+    Esto significa que los hijos directos del `sidebar-l` son:
+
+    ```text id="w5c0by"
+    sidebar-l
+    │
+    ├── DIV
+    │    └── IMG
+    │
+    └── P
+    ```
+
+    El Flexbox trabaja directamente con:
+
+    ```text id="8az7eq"
+    DIV
+    P
+    ```
+
+    No directamente con:
+
+    ```text id="f5ub9a"
+    IMG
+    ```
+
+    Por eso la imagen no recibe directamente el comportamiento de `stretch` de Flexbox.
+
+    Esto permite que no necesitemos:
+
+    ```html id="1x2yl7"
+    noStretch
+    ```
+
+    El `<div>` es el flex item, mientras que la imagen está dentro del `<div>`.
+
+    ---
+
+    __6. ¿Por qué `img { width: 100% }`?__
+
+    El texto dice:
+
+    > "La imagen debería crecer para usar el espacio disponible."
+
+    Para conseguirlo, normalmente tenemos una regla global como:
+
+    ```css id="e5k9fu"
+    img {
+      width: 100%;
+    }
+    ```
+
+    Entonces ocurre esto:
+
+    ```text id="p7lqmc"
+    DIV
+    ┌───────────────────────────────────┐
+    │                                   │
+    │              IMG                  │
+    │                                   │
+    └───────────────────────────────────┘
+    ```
+
+    La imagen ocupa todo el ancho de su contenedor.
+
+    Si el `div` mide:
+
+    ```text id="0p2c7y"
+    600px
+    ```
+
+    la imagen mide:
+
+    ```text id="2xex1e"
+    100% → 600px
+    ```
+
+    Si el `div` mide:
+
+    ```text id="7h5m9s"
+    800px
+    ```
+
+    la imagen mide:
+
+    ```text id="e9g2tp"
+    100% → 800px
+    ```
+
+    Así la imagen es **responsiva**.
+
+    ---
+
+    __7. Pero ¿no se puede deformar la imagen?__
+
+    Normalmente:
+
+    ```css id="6a8svu"
+    img {
+      width: 100%;
+    }
+    ```
+
+    hace que la imagen se adapte al ancho, pero mantiene su proporción si la altura es `auto` (que es el comportamiento habitual):
+
+    ```css id="y7q8tz"
+    img {
+      width: 100%;
+      height: auto;
+    }
+    ```
+
+    Por ejemplo, una imagen original:
+
+    ```text id="65xxod"
+    800 × 600
+    ```
+
+    Si ocupa:
+
+    ```text id="2d6l4t"
+    400px de ancho
+    ```
+
+    su altura proporcional será:
+
+    ```text id="x9t1n3"
+    300px
+    ```
+
+    No se deforma.
+
+    ---
+
+    __8. ¿Qué ocurre cuando la pantalla se hace pequeña?__
+
+    Al principio:
+
+    ```text id="l7i5qk"
+    ┌──────────────────────────────────────────────┬──────────────┐
+    │                                              │              │
+    │                    IMAGEN                    │    TEXTO     │
+    │                                              │    30ch      │
+    │                                              │              │
+    └──────────────────────────────────────────────┴──────────────┘
+    ```
+
+    La imagen crece para ocupar el espacio restante.
+
+    Pero llega un momento en que ya no caben cómodamente:
+
+    ```text id="3j7m0x"
+    Imagen + 30ch + gap
+    ```
+
+    Entonces el `Sidebar` hace wrapping.
+
+    Resultado:
+
+    ```text id="4v8u3p"
+    ┌────────────────────────────────────┐
+    │                                    │
+    │              IMAGEN                │
+    │                                    │
+    └────────────────────────────────────┘
+
+    ┌────────────────────────────────────┐
+    │                                    │
+    │              TEXTO                 │
+    │                                    │
+    └────────────────────────────────────┘
+    ```
+
+    Y la imagen puede aprovechar todo el ancho disponible:
+
+    ```text id="y2c8y8"
+    ┌────────────────────────────────────┐
+    │                                    │
+    │               IMG                  │
+    │             width: 100%            │
+    │                                    │
+    └────────────────────────────────────┘
+    ```
+
+    ---
+
+    __9. Comparación con el ejemplo anterior__
+
+    Aquí está la diferencia más importante entre ambos ejemplos:
+
+    | Ejemplo anterior                               | Ejemplo actual                   |
+    | ---------------------------------------------- | -------------------------------- |
+    | Imagen = Sidebar                               | Texto = Sidebar                  |
+    | `sideWidth="15rem"`                            | `sideWidth="30ch"`               |
+    | Imagen tiene ancho controlado                  | Texto tiene ancho controlado     |
+    | Imagen no debería estirarse                    | Imagen puede crecer              |
+    | Necesita `noStretch`                           | No necesita `noStretch`          |
+    | Imagen está directamente dentro del componente | Imagen está dentro de `<div>`    |
+    | Texto ocupa el espacio restante                | Imagen ocupa el espacio restante |
+
+    Visualmente:
+
+    ```text id="khm14m"
+    EJEMPLO ANTERIOR
+
+    ┌──────────────┬───────────────────────────────┐
+    │    IMAGEN    │             TEXTO             │
+    │    15rem     │          flexible             │
+    └──────────────┴───────────────────────────────┘
+          ↑
+      Sidebar
+
+
+    EJEMPLO ACTUAL
+
+    ┌───────────────────────────────┬──────────────┐
+    │             IMAGEN            │    TEXTO     │
+    │           flexible            │    30ch      │
+    └───────────────────────────────┴──────────────┘
+                                    ↑
+                                  Sidebar
+    ```
+
+    __La idea clave__
+
+    El patrón `Sidebar` es **simétrico**. No significa que siempre tengas que poner la imagen como sidebar.
+
+    Puedes decidir qué elemento quieres controlar.
+
+    Si quieres que la imagen tenga un tamaño relativamente estable:
+
+    ```text id="xjp4pc"
+    IMAGEN = Sidebar
+    ```
+
+    Si quieres que el texto tenga una medida legible y que la imagen aproveche todo el espacio sobrante:
+
+    ```text id="n7x8ga"
+    TEXTO = Sidebar
+    ```
+
+    Y ahí aparece una idea muy poderosa del diseño intrínseco:
+
+    > **En lugar de decirle a la imagen cuánto debe medir, controlas la medida del texto —que sí tiene una necesidad de legibilidad— y dejas que la imagen se adapte al espacio que queda.**
+
+    Es una decisión de diseño mucho más inteligente que simplemente decir `width: 50%` a ambos elementos. El texto tiene una restricción basada en la lectura (`30ch`), mientras que la imagen tiene libertad para aprovechar el espacio disponible.
