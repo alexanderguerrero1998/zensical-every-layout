@@ -986,7 +986,7 @@ Donde hay suficiente espacio, los dos elementos aparecen lado a lado. Críticame
 
     Puede estar aquí:
 
-    ```text id="8npp8p"
+    ```text 
     ┌─────────────────────────────────────────────┐
     │                                             │
     │ Sidebar │ Contenido                         │
@@ -996,7 +996,7 @@ Donde hay suficiente espacio, los dos elementos aparecen lado a lado. Críticame
 
     O aquí:
 
-    ```text id="j2gq0t"
+    ```text 
     ┌───────────────────────┐
     │ Sidebar               │
     ├───────────────────────┤
@@ -2359,7 +2359,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     Hasta ahora teníamos:
 
-    ```text id="j0k1ne"
+    ```text 
     ┌──────────────┬─────────────────────────────┐
     │   Sidebar    │           Main              │
     │              │                             │
@@ -2370,7 +2370,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     Pero visualmente quizá queremos:
 
-    ```text id="70rc4v"
+    ```text 
     ┌──────────────┐    ┌────────────────────────┐
     │              │    │                        │
     │   Sidebar    │    │         Main           │
@@ -2382,7 +2382,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     En CSS moderno, lo hacemos con:
 
-    ```css id="4q4yk7"
+    ```css 
     gap: 1rem;
     ```
 
@@ -2394,13 +2394,13 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     Por ejemplo:
 
-    ```text id="r5w2qm"
+    ```text 
     Sidebar    ← 1rem →    Main
     ```
 
     Visualmente:
 
-    ```text id="9n0e5d"
+    ```text 
     ┌──────────┐    1rem    ┌───────────────────┐
     │ Sidebar  │   espacio  │ Main              │
     └──────────┘            └───────────────────┘
@@ -2414,7 +2414,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     Podríamos hacer algo como:
 
-    ```css id="xav5j3"
+    ```css 
     .sidebar {
       margin-right: 1rem;
     }
@@ -2424,7 +2424,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     Cuando los elementos cambien de orientación:
 
-    ```text id="xqz9hd"
+    ```text 
     Sidebar
     Main
     ```
@@ -2433,7 +2433,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     Podríamos terminar necesitando:
 
-    ```css id="i6wx2x"
+    ```css 
     margin-right: 1rem;
     margin-bottom: 1rem;
     ```
@@ -2442,7 +2442,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     Con `gap`:
 
-    ```css id="m18m7v"
+    ```css
     .with-sidebar {
       display: flex;
       gap: 1rem;
@@ -2457,7 +2457,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     Horizontal:
 
-    ```text id="u3zz7u"
+    ```text 
     ┌──────────┐  gap  ┌───────────────┐
     │ Sidebar  │       │ Main          │
     └──────────┘       └───────────────┘
@@ -2465,7 +2465,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     Vertical:
 
-    ```text id="q6m4tq"
+    ```text 
     ┌─────────────────┐
     │ Sidebar         │
     └─────────────────┘
@@ -2485,7 +2485,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     Con:
 
-    ```css id="muj8gq"
+    ```css 
     gap: 1rem;
     ```
 
@@ -2493,7 +2493,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     Por ejemplo:
 
-    ```text id="9p7w6b"
+    ```text 
     ┌──────────────────────────────────────────┐
     │┌──────────┐    gap    ┌────────────────┐│
     ││ Sidebar  │            │ Main           ││
@@ -2503,7 +2503,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     No tenemos:
 
-    ```text id="6ihzjz"
+    ```text 
     ┌──────────────────────────────────────────┐
     │  ┌──────────┐      ┌────────────────┐   │
     │  │ Sidebar  │      │ Main           │   │
@@ -2527,7 +2527,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     Ahora tenemos:
 
-    ```css id="n0f0hi"
+    ```css 
     .with-sidebar {
       display: flex;
       flex-wrap: wrap;
@@ -2552,7 +2552,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     __`.with-sidebar`__
 
-    ```css id="oxv9jq"
+    ```css 
     .with-sidebar {
       display: flex;
       flex-wrap: wrap;
@@ -2564,7 +2564,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     Activa Flexbox:
 
-    ```text id="exd31b"
+    ```text 
     Sidebar | Main
     ```
 
@@ -2572,7 +2572,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     Permite que se separen en filas:
 
-    ```text id="xj8lqr"
+    ```text 
     Sidebar
     Main
     ```
@@ -2583,13 +2583,13 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     Horizontal:
 
-    ```text id="44bs96"
+    ```text 
     Sidebar  ← 1rem →  Main
     ```
 
     Vertical:
 
-    ```text id="5y1cwo"
+    ```text 
     Sidebar
       ↕
     1rem
@@ -2601,7 +2601,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     __6. La Sidebar__
 
-    ```css id="l7x31k"
+    ```css 
     .sidebar {
       flex-basis: 20rem;
       flex-grow: 1;
@@ -2610,7 +2610,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     Su tamaño ideal es:
 
-    ```text id="1pn3x6"
+    ```text 
     20rem
     ```
 
@@ -2618,7 +2618,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     Conceptualmente:
 
-    ```text id="zv2w1j"
+    ```text 
     Sidebar
         ↓
     "Me gustaría medir unos 20rem"
@@ -2630,7 +2630,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     __7. El Main__
 
-    ```css id="f4ml7m"
+    ```css 
     .not-sidebar {
       flex-basis: 0;
       flex-grow: 999;
@@ -2642,19 +2642,19 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     __`flex-basis: 0`__
 
-    ```text id="9y6hce"
+    ```text 
     "Parto de 0 para calcular el espacio flexible"
     ```
 
     __`flex-grow: 999`__
 
-    ```text id="n6kz4v"
+    ```text 
     "Si sobra espacio, dame prácticamente todo"
     ```
 
     __`min-width: 50%`__
 
-    ```text id="8h78yn"
+    ```text 
     "No quiero ser menor que la mitad del contenedor"
     ```
 
@@ -2668,37 +2668,37 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     Supongamos que tienes:
 
-    ```text id="up8j90"
+    ```text 
     Contenedor = 1000px
     ```
 
     Y:
 
-    ```text id="b85k50"
+    ```text 
     gap = 1rem
     ```
 
     Si `1rem` equivale a `16px`, tenemos:
 
-    ```text id="b2h67c"
+    ```text 
     1000px de contenedor
     ```
 
     Pero entre los dos elementos necesitamos:
 
-    ```text id="1wj7tr"
+    ```text 
     16px de gap
     ```
 
     Por lo tanto, el espacio que realmente pueden ocupar los elementos es:
 
-    ```text id="r5y6as"
+    ```text 
     1000px - 16px = 984px
     ```
 
     Visualmente:
 
-    ```text id="6h8vfp"
+    ```text 
     ┌──────────────────────────────────────────────┐
     │                                              │
     │  Sidebar      16px gap       Main            │
@@ -2715,7 +2715,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     Cuando ya no caben horizontalmente:
 
-    ```text id="8g9n5p"
+    ```text 
     ┌───────────────────────────┐
     │ Sidebar                   │
     ├───────────────────────────┤
@@ -2728,7 +2728,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     Ahora el espacio aparece verticalmente:
 
-    ```text id="l2xw4y"
+    ```text 
     ┌───────────────────────────┐
     │ Sidebar                   │
     └───────────────────────────┘
@@ -2742,19 +2742,19 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     No necesitas cambiar:
 
-    ```css id="93pcr4"
+    ```css 
     margin-right
     ```
 
     por:
 
-    ```css id="w83l1h"
+    ```css 
     margin-bottom
     ```
 
     El mismo:
 
-    ```css id="g2j4mw"
+    ```css 
     gap: 1rem;
     ```
 
@@ -2768,7 +2768,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     __Configuración horizontal__
 
-    ```text id="0m5e9m"
+    ```text 
     ┌──────────────┐   gap   ┌───────────────────────┐
     │              │         │                       │
     │   Sidebar    │         │         Main          │
@@ -2778,7 +2778,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     __Configuración vertical__
 
-    ```text id="x1s2d3"
+    ```text 
     ┌───────────────────────────────┐
     │ Sidebar                       │
     └───────────────────────────────┘
@@ -2794,7 +2794,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     Por eso:
 
-    ```css id="y2a0c5"
+    ```css 
     gap: 1rem;
     ```
 
@@ -2806,7 +2806,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     La implementación final del `Sidebar` se puede entender como un pequeño sistema:
 
-    ```text id="l7q8s9"
+    ```text 
     .with-sidebar
     │
     ├── display: flex
@@ -2824,7 +2824,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     Y luego:
 
-    ```text id="3e4f5g"
+    ```text 
     .sidebar
     │
     ├── flex-basis: 20rem
@@ -2838,7 +2838,7 @@ Para un gutter de `1rem`, el CSS ahora se ve así:
 
     Mientras:
 
-    ```text id="6h7i8j"
+    ```text 
     .not-sidebar
     │
     ├── flex-basis: 0
@@ -5651,7 +5651,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     hace que la imagen se adapte al ancho, pero mantiene su proporción si la altura es `auto` (que es el comportamiento habitual):
 
-    ```css id="y7q8tz"
+    ```css 
     img {
       width: 100%;
       height: auto;
@@ -5666,7 +5666,7 @@ La imagen está contenida en un `<div>`, por lo que `noStretch` no es necesario 
 
     Si ocupa:
 
-    ```text id="2d6l4t"
+    ```text 
     400px de ancho
     ```
 
