@@ -211,7 +211,7 @@ Por ejemplo, podríamos querer crear un layout clásico de sidebar, donde uno de
 
     Por ejemplo:
 
-    ### Caso A
+    __Caso A__
 
     ```text
     Viewport: 1200px
@@ -616,7 +616,7 @@ Por ejemplo, podríamos querer crear un layout clásico de sidebar, donde uno de
 
     Hay dos formas de pensar:
 
-    ### Enfoque tradicional
+    __Enfoque tradicional__
 
     ```text
     Viewport
@@ -630,7 +630,7 @@ Por ejemplo, podríamos querer crear un layout clásico de sidebar, donde uno de
 
     > "Yo decido cuándo cambia el layout."
 
-    ### Enfoque intrínseco
+    __Enfoque intrínseco__
 
     ```text
     Contenido
@@ -967,7 +967,7 @@ Donde hay suficiente espacio, los dos elementos aparecen lado a lado. Críticame
 
     ---
 
-    # 5. El componente no conoce su configuración al crearse
+    __5. El componente no conoce su configuración al crearse__
 
     Esta frase es importante:
 

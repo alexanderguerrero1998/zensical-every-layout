@@ -1383,8 +1383,350 @@
 </span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">  </span><span class="k">flex</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">20</span><span class="kt">rem</span><span class="p">;</span>
 </span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
-<p>Ahora estoy pensando <em>intrínsecamente</em> — en términos de las dimensiones propias de los elementos sujetos. Eso se traduce a la <em>propiedad shorthand <code>flex</code></em> ↗: "deja que cada elemento crezca y se contraiga para llenar el espacio, pero intenta que tenga aproximadamente <code>20rem</code> de ancho". En lugar de emparejar manualmente el conteo de columnas con el ancho del viewport, le estoy diciendo al navegador que <em>genere</em> las columnas basándose en mi ancho de columna deseado. He automatizado mi layout.</p>
-<p>Como ha señalado <em>Zoe Mickley Gillenwater</em> ↗, <code>flex-basis</code>, en combinación con <code>flex-grow</code> y <code>flex-shrink</code>, logra algo similar a una <em>element/container query</em> ↗ en la que los "cortes" ocurren, implícitamente, según el espacio disponible en lugar del ancho del viewport. Por lo tanto: layout cuántico.</p>
+<p>Ahora estoy pensando <em>intrínsecamente</em> — en términos de las dimensiones propias de los elementos sujetos. Eso se traduce a la <a href="https://css-tricks.com/almanac/properties/f/flex/"><em>propiedad shorthand <code>flex</code></em> ↗:</a> "deja que cada elemento crezca y se contraiga para llenar el espacio, pero intenta que tenga aproximadamente <code>20rem</code> de ancho". En lugar de emparejar manualmente el conteo de columnas con el ancho del viewport, le estoy diciendo al navegador que <em>genere</em> las columnas basándose en mi ancho de columna deseado. He automatizado mi layout.</p>
+<p>Como ha señalado <a href="https://zomigi.com/"><em>Zoe Mickley Gillenwater</em> ↗</a>, <code>flex-basis</code>, en combinación con <code>flex-grow</code> y <code>flex-shrink</code>, logra algo similar a una <a href="https://www.smashingmagazine.com/2016/07/how-i-ended-up-with-element-queries-and-how-you-can-use-them-today/"><em>element/container query</em> ↗</a> en la que los "cortes" ocurren, implícitamente, según el espacio disponible en lugar del ancho del viewport. Por lo tanto: layout cuántico.</p>
+<details class="info">
+<summary>Explicacion</summary>
+<p>Este capítulo es una de las ideas más importantes de <strong>Every Layout</strong>. No está enseñando un componente nuevo todavía; primero está cambiando la forma de pensar sobre los layouts responsivos.</p>
+<p>Voy por partes.</p>
+<hr />
+<p><strong>La idea principal</strong></p>
+<p>Tradicionalmente hacemos esto:</p>
+<blockquote>
+<p>"Si la pantalla mide X, usa 3 columnas."</p>
+<p>"Si mide Y, usa 2 columnas."</p>
+<p>"Si mide Z, usa 1 columna."</p>
+</blockquote>
+<p>Es decir, pensamos en el <strong>viewport</strong> (el tamaño de la ventana).</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">@</span><span class="k">media</span><span class="w"> </span><span class="o">(</span><span class="nt">max-width</span><span class="o">:</span><span class="w"> </span><span class="nt">60rem</span><span class="o">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="c">/* 2 columnas */</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="p">}</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="p">@</span><span class="k">media</span><span class="w"> </span><span class="o">(</span><span class="nt">max-width</span><span class="o">:</span><span class="w"> </span><span class="nt">30rem</span><span class="o">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="c">/* 1 columna */</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>La filosofía de Every Layout dice:</p>
+<blockquote>
+<p><strong>No pienses en el tamaño de la pantalla. Piensa en el tamaño que necesitan los elementos.</strong></p>
+</blockquote>
+<p>Ese pequeño cambio hace una enorme diferencia.</p>
+<hr />
+<p><strong>¿Qué significa "sugerencias" en lugar de "dictados"?</strong></p>
+<p>Supongamos que tienes una persona ayudándote a acomodar cajas.</p>
+<p><strong>Dictado</strong></p>
+<p>Le dices:</p>
+<blockquote>
+<p>"Pon exactamente tres cajas por fila."</p>
+</blockquote>
+<p>No importa si las cajas quedan apretadas.</p>
+<p>No importa si sobra espacio.</p>
+<p>Debe obedecer.</p>
+<p>Eso hace:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">width</span><span class="o">:</span><span class="w"> </span><span class="nt">33</span><span class="p">.</span><span class="nc">333</span><span class="o">%;</span>
+</span></code></pre></div>
+<p>Estás imponiendo una regla.</p>
+<hr />
+<p><strong>Sugerencia</strong></p>
+<p>Ahora le dices:</p>
+<blockquote>
+<p>"Sería ideal que cada caja mida unos 20 cm. Si caben más, pon más. Si no caben, baja algunas a la siguiente fila."</p>
+</blockquote>
+<p>Ya no le dices exactamente cómo hacerlo.</p>
+<p>Le das un objetivo.</p>
+<p>Eso hace:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">flex-basis</span><span class="o">:</span><span class="w"> </span><span class="nt">20rem</span><span class="o">;</span>
+</span></code></pre></div>
+<hr />
+<p><strong>¿Qué significa realmente <code>flex-basis</code>?</strong></p>
+<p>No significa:</p>
+<blockquote>
+<p>"Hazlo de 20rem."</p>
+</blockquote>
+<p>Significa:</p>
+<blockquote>
+<p>"Intenta que mida 20rem."</p>
+</blockquote>
+<p>Es un tamaño <strong>preferido</strong>, no obligatorio.</p>
+<p>Por eso dicen que es más "matizado".</p>
+<hr />
+<p><strong>width</strong></p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">width</span><span class="o">:</span><span class="w"> </span><span class="nt">20rem</span><span class="o">;</span>
+</span></code></pre></div>
+<p>Es una orden.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Elemento
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>████████████████
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>20rem
+</span></code></pre></div>
+<hr />
+<p><strong>flex-basis</strong></p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">flex-basis</span><span class="o">:</span><span class="w"> </span><span class="nt">20rem</span><span class="o">;</span>
+</span></code></pre></div>
+<p>Es una sugerencia.</p>
+<p>Si hay espacio:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>20rem
+</span></code></pre></div>
+<p>Si sobra espacio:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>23rem
+</span></code></pre></div>
+<p>Si falta:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>18rem
+</span></code></pre></div>
+<p>El navegador decide.</p>
+<hr />
+<p><strong>¿Por qué eso es mejor?</strong></p>
+<p>Porque Flexbox conoce cosas que tú no sabes.</p>
+<p>Por ejemplo:</p>
+<ul>
+<li>cuánto mide realmente el texto</li>
+<li>cuánto mide la pantalla</li>
+<li>cuánto mide el padre</li>
+<li>cuántos elementos hay</li>
+<li>cuánto espacio queda libre</li>
+</ul>
+<p>Entonces dejas que él haga el cálculo.</p>
+<hr />
+<p><strong>Analicemos el primer ejemplo</strong></p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">.</span><span class="nc">grid</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Hasta aquí:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>□□□□□□□□□□
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>□□□□□□□□□□
+</span></code></pre></div>
+<p>Los elementos pueden saltar de línea.</p>
+<hr />
+<p>Luego:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="p">.</span><span class="nc">grid</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="k">width</span><span class="p">:</span><span class="w"> </span><span class="mf">33.333</span><span class="kt">%</span><span class="p">;</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Cada elemento ocupa exactamente un tercio.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>|----33%----|
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>|----33%----|
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>|----33%----|
+</span></code></pre></div>
+<p>Siempre.</p>
+<hr />
+<p>Después:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="p">@</span><span class="k">media</span><span class="w"> </span><span class="o">(</span><span class="nt">max-width</span><span class="p">:</span><span class="nd">60rem</span><span class="o">)</span><span class="p">{</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span><span class="nt">width</span><span class="p">:</span><span class="nd">50</span><span class="o">%;</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Ahora cambias la regla.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>|------50%------|
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>|------50%------|
+</span></code></pre></div>
+<hr />
+<p>Después:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="p">@</span><span class="k">media</span><span class="w"> </span><span class="o">(</span><span class="nt">max-width</span><span class="p">:</span><span class="nd">30rem</span><span class="o">)</span><span class="p">{</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">    </span><span class="nt">width</span><span class="p">:</span><span class="nd">100</span><span class="o">%;</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Ahora otra regla.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>|------100%------|
+</span></code></pre></div>
+<hr />
+<p><strong>¿Cuál es el problema?</strong></p>
+<p>Que eres tú quien decide cuándo cambiar.</p>
+<p>Debes adivinar:</p>
+<blockquote>
+<p>"Creo que a los 960px ya no caben."</p>
+</blockquote>
+<p>Pero...</p>
+<p>¿Y si el texto es muy largo?</p>
+<p>¿Y si el usuario hizo zoom?</p>
+<p>¿Y si cambió el tamaño de la fuente?</p>
+<p>¿Y si el contenedor no ocupa toda la pantalla?</p>
+<p>Tus <em>breakpoints</em> dejan de ser ideales.</p>
+<hr />
+<p><strong>¿Qué propone Every Layout?</strong></p>
+<p>Esto:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="p">.</span><span class="nc">grid</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">    </span><span class="k">display</span><span class="p">:</span><span class="kc">flex</span><span class="p">;</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">    </span><span class="k">flex-wrap</span><span class="p">:</span><span class="kc">wrap</span><span class="p">;</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="p">}</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="p">.</span><span class="nc">grid</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="p">{</span>
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="w">    </span><span class="k">flex</span><span class="p">:</span><span class="mi">1</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">20</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Veámoslo.</p>
+<hr />
+<p><strong>flex-grow</strong></p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="nt">1</span>
+</span></code></pre></div>
+<p>Puede crecer.</p>
+<hr />
+<p><strong>flex-shrink</strong></p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nt">1</span>
+</span></code></pre></div>
+<p>Puede encogerse.</p>
+<hr />
+<p><strong>flex-basis</strong></p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="nt">20rem</span>
+</span></code></pre></div>
+<p>Quisiera medir aproximadamente eso.</p>
+<p>Todo junto:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="nt">flex</span><span class="p">:</span><span class="nd">1</span><span class="w"> </span><span class="nt">1</span><span class="w"> </span><span class="nt">20rem</span><span class="o">;</span>
+</span></code></pre></div>
+<p>Significa:</p>
+<blockquote>
+<p>"Intenta medir unos 20rem, pero adapta el tamaño según el espacio disponible."</p>
+</blockquote>
+<hr />
+<p><strong>¿Qué hace el navegador?</strong></p>
+<p>Supongamos un contenedor de:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>80rem
+</span></code></pre></div>
+<p>Cada elemento quiere:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>20rem
+</span></code></pre></div>
+<p>Entonces el navegador piensa:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>80 / 20 = 4
+</span></code></pre></div>
+<p>Caben cuatro.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>□ □ □ □
+</span></code></pre></div>
+<hr />
+<p>Si el contenedor mide:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>60rem
+</span></code></pre></div>
+<p>Ahora calcula:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>60 / 20 = 3
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>□ □ □
+</span></code></pre></div>
+<hr />
+<p>Si mide:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>40rem
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>40 / 20 = 2
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>□ □
+</span></code></pre></div>
+<hr />
+<p>Si mide:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>18rem
+</span></code></pre></div>
+<p>Ya no caben dos.</p>
+<p>Entonces:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-35-1"><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a>□
+</span></code></pre></div>
+<p>Una sola columna.</p>
+<p>Todo eso ocurrió sin escribir:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-36-1"><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="p">@</span><span class="k">media</span><span class="o">(...)</span>
+</span></code></pre></div>
+<hr />
+<p><strong>¿Por qué lo llaman enfoque "intrínseco"?</strong></p>
+<p>Porque el diseño nace de las necesidades del contenido.</p>
+<p>No dices:</p>
+<blockquote>
+<p>"Cuando la pantalla mida tanto..."</p>
+</blockquote>
+<p>Dices:</p>
+<blockquote>
+<p>"Cada tarjeta funciona bien alrededor de 20rem."</p>
+</blockquote>
+<p>La propia tarjeta determina cuándo cambiar de fila.</p>
+<hr />
+<p><strong>¿Qué significa "extrínseco"?</strong></p>
+<p>Extrínseco = depende de algo externo.</p>
+<p>En este caso:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-37-1"><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a>Viewport
+</span></code></pre></div>
+<p>Si cambia el viewport:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-38-1"><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>@media(...)
+</span></code></pre></div>
+<p>Cambias el layout.</p>
+<hr />
+<p><strong>¿Qué significa "intrínseco"?</strong></p>
+<p>Intrínseco = depende del propio elemento.</p>
+<p>No importa si el contenedor mide:</p>
+<ul>
+<li>500px</li>
+<li>700px</li>
+<li>1300px</li>
+</ul>
+<p>Cada elemento intenta mantenerse cerca de:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-39-1"><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a>20rem
+</span></code></pre></div>
+<p>El navegador reorganiza automáticamente las filas.</p>
+<hr />
+<p><strong>¿Qué quiere decir con "layout cuántico"?</strong></p>
+<p>No tiene relación con la física cuántica; es una metáfora.</p>
+<p>Los autores quieren decir que el layout no tiene estados rígidos como:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-40-1"><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a>Estado A
+</span><span id="__span-40-2"><a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a>
+</span><span id="__span-40-3"><a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a>↓
+</span><span id="__span-40-4"><a id="__codelineno-40-4" name="__codelineno-40-4" href="#__codelineno-40-4"></a>
+</span><span id="__span-40-5"><a id="__codelineno-40-5" name="__codelineno-40-5" href="#__codelineno-40-5"></a>Estado B
+</span><span id="__span-40-6"><a id="__codelineno-40-6" name="__codelineno-40-6" href="#__codelineno-40-6"></a>
+</span><span id="__span-40-7"><a id="__codelineno-40-7" name="__codelineno-40-7" href="#__codelineno-40-7"></a>↓
+</span><span id="__span-40-8"><a id="__codelineno-40-8" name="__codelineno-40-8" href="#__codelineno-40-8"></a>
+</span><span id="__span-40-9"><a id="__codelineno-40-9" name="__codelineno-40-9" href="#__codelineno-40-9"></a>Estado C
+</span></code></pre></div>
+<p>Sino que está "preparado" para todos los estados posibles y el navegador elige el adecuado según el espacio disponible.</p>
+<p>Es como si el diseño existiera simultáneamente en muchas configuraciones y solo "colapsara" a una cuando conoce el tamaño del contenedor.</p>
+<p>Por ejemplo, el mismo CSS puede producir:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-41-1"><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a>□□□□
+</span></code></pre></div>
+<p>o</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-42-1"><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a>□□□
+</span></code></pre></div>
+<p>o</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-43-1"><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a>□□
+</span></code></pre></div>
+<p>o</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-44-1"><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a>□
+</span></code></pre></div>
+<p>Sin que hayas escrito cuatro reglas diferentes.</p>
+<hr />
+<p><strong>¿Qué significa que es parecido a una "container query"?</strong></p>
+<p>Antes de existir las <em>container queries</em>, Flexbox ya permitía algo parecido.</p>
+<p>Con:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-45-1"><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a><span class="nt">flex</span><span class="o">:</span><span class="w"> </span><span class="nt">1</span><span class="w"> </span><span class="nt">1</span><span class="w"> </span><span class="nt">20rem</span><span class="o">;</span>
+</span></code></pre></div>
+<p>el cambio de columnas depende del <strong>espacio disponible en el contenedor</strong>, no necesariamente del ancho de toda la ventana.</p>
+<p>Imagina una tarjeta dentro de un panel lateral estrecho y la misma tarjeta en una sección principal amplia. Aunque la ventana del navegador no cambie de tamaño, cada contenedor puede terminar mostrando un número distinto de columnas porque Flexbox calcula cuánto espacio tiene realmente cada uno.</p>
+<hr />
+<p><strong>Resumen</strong></p>
+<p>La diferencia de filosofía es:</p>
+<table>
+<thead>
+<tr>
+<th>Enfoque tradicional</th>
+<th>Enfoque Every Layout</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pienso en el viewport.</td>
+<td>Pienso en el tamaño ideal del contenido.</td>
+</tr>
+<tr>
+<td>Escribo varios <code>@media</code>.</td>
+<td>Dejo que Flexbox calcule.</td>
+</tr>
+<tr>
+<td>Impongo un número de columnas.</td>
+<td>Sugiero un ancho ideal para cada elemento.</td>
+</tr>
+<tr>
+<td>Uso <code>width</code>.</td>
+<td>Uso <code>flex-basis</code> (dentro de <code>flex</code>).</td>
+</tr>
+<tr>
+<td>Yo decido cuándo cambia el diseño.</td>
+<td>El navegador decide según el espacio disponible.</td>
+</tr>
+</tbody>
+</table>
+<p>Ese cambio de mentalidad es precisamente el que da origen al componente <strong>Switcher</strong> que verás a continuación: un layout que cambia automáticamente entre disposición horizontal y vertical cuando el espacio deja de ser suficiente, sin necesidad de <em>breakpoints</em> explícitos.</p>
+</details>
 <h2 id="problemas-con-la-simetria-bidimensional">Problemas con la simetría bidimensional<a class="headerlink" href="#problemas-con-la-simetria-bidimensional" title="Permanent link">&para;</a></h2>
 <p>Si bien este es un mecanismo de layout funcional, solo produce dos layouts donde cada elemento tiene el mismo ancho:</p>
 <ul>
@@ -1396,43 +1738,505 @@
 <p>Esto no es necesariamente un problema que deba resolverse, dependiendo del brief. Siempre que el contenido se configure para permanecer en el espacio, sin obstruirse, la batalla más importante se ha ganado. Sin embargo, para números más pequeños de elementos sujetos, puede haber casos donde desees cambiar directamente de un layout horizontal (una fila) a un layout vertical (una columna) y evitar los estados intermedios.</p>
 <p>Cualquier elemento que se haya envuelto y haya crecido para adoptar un ancho diferente podría ser percibido por el usuario como "seleccionado"; hecho para verse deliberadamente diferente, o más importante. Deberíamos querer evitar esta confusión.</p>
 <p><img alt="" src="../ex.png" /></p>
+<details class="info">
+<summary>Explicacion</summary>
+<p>Aquí los autores están explicando <strong>la limitación del enfoque anterior</strong> (<code>flex: 1 1 20rem</code>) y por qué necesitan crear un nuevo layout llamado <strong>Switcher</strong>.</p>
+<p>Vamos paso a paso.</p>
+<hr />
+<p><strong>Lo que teníamos hasta ahora</strong></p>
+<p>Con este código:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-46-1"><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a><span class="p">.</span><span class="nc">grid</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-46-2"><a id="__codelineno-46-2" name="__codelineno-46-2" href="#__codelineno-46-2"></a><span class="w">    </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
+</span><span id="__span-46-3"><a id="__codelineno-46-3" name="__codelineno-46-3" href="#__codelineno-46-3"></a><span class="w">    </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
+</span><span id="__span-46-4"><a id="__codelineno-46-4" name="__codelineno-46-4" href="#__codelineno-46-4"></a><span class="p">}</span>
+</span><span id="__span-46-5"><a id="__codelineno-46-5" name="__codelineno-46-5" href="#__codelineno-46-5"></a>
+</span><span id="__span-46-6"><a id="__codelineno-46-6" name="__codelineno-46-6" href="#__codelineno-46-6"></a><span class="p">.</span><span class="nc">grid</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-46-7"><a id="__codelineno-46-7" name="__codelineno-46-7" href="#__codelineno-46-7"></a><span class="w">    </span><span class="k">flex</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">20</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-46-8"><a id="__codelineno-46-8" name="__codelineno-46-8" href="#__codelineno-46-8"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>el navegador intenta que todos midan aproximadamente <code>20rem</code>.</p>
+<p>Si caben cuatro:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-47-1"><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a>┌────┐ ┌────┐ ┌────┐ ┌────┐
+</span><span id="__span-47-2"><a id="__codelineno-47-2" name="__codelineno-47-2" href="#__codelineno-47-2"></a>│ A  │ │ B  │ │ C  │ │ D  │
+</span><span id="__span-47-3"><a id="__codelineno-47-3" name="__codelineno-47-3" href="#__codelineno-47-3"></a>└────┘ └────┘ └────┘ └────┘
+</span></code></pre></div>
+<p>Todo perfecto.</p>
+<hr />
+<p>Si caben tres:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-48-1"><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a>┌────┐ ┌────┐ ┌────┐
+</span><span id="__span-48-2"><a id="__codelineno-48-2" name="__codelineno-48-2" href="#__codelineno-48-2"></a>│ A  │ │ B  │ │ C  │
+</span><span id="__span-48-3"><a id="__codelineno-48-3" name="__codelineno-48-3" href="#__codelineno-48-3"></a>└────┘ └────┘ └────┘
+</span></code></pre></div>
+<p>También perfecto.</p>
+<hr />
+<p><strong>El problema aparece cuando el número de elementos no llena completamente la última fila</strong></p>
+<p>Supongamos que tienes <strong>5 tarjetas</strong>.</p>
+<p>Hay espacio para tres por fila.</p>
+<p>El resultado será:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-49-1"><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a>┌────┐ ┌────┐ ┌────┐
+</span><span id="__span-49-2"><a id="__codelineno-49-2" name="__codelineno-49-2" href="#__codelineno-49-2"></a>│ A  │ │ B  │ │ C  │
+</span><span id="__span-49-3"><a id="__codelineno-49-3" name="__codelineno-49-3" href="#__codelineno-49-3"></a>└────┘ └────┘ └────┘
+</span><span id="__span-49-4"><a id="__codelineno-49-4" name="__codelineno-49-4" href="#__codelineno-49-4"></a>
+</span><span id="__span-49-5"><a id="__codelineno-49-5" name="__codelineno-49-5" href="#__codelineno-49-5"></a>┌──────────┐ ┌──────────┐
+</span><span id="__span-49-6"><a id="__codelineno-49-6" name="__codelineno-49-6" href="#__codelineno-49-6"></a>│    D     │ │    E     │
+</span><span id="__span-49-7"><a id="__codelineno-49-7" name="__codelineno-49-7" href="#__codelineno-49-7"></a>└──────────┘ └──────────┘
+</span></code></pre></div>
+<p>Observa lo que pasó.</p>
+<p>Las tarjetas <strong>D</strong> y <strong>E</strong> crecieron porque <code>flex-grow: 1</code> les permitió ocupar todo el espacio disponible.</p>
+<p>Ahora ya no tienen el mismo ancho que las de arriba.</p>
+<hr />
+<p><strong>Otro ejemplo</strong></p>
+<p>Supongamos que tienes 7 elementos.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-50-1"><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a>┌────┐ ┌────┐ ┌────┐
+</span><span id="__span-50-2"><a id="__codelineno-50-2" name="__codelineno-50-2" href="#__codelineno-50-2"></a>│ A  │ │ B  │ │ C  │
+</span><span id="__span-50-3"><a id="__codelineno-50-3" name="__codelineno-50-3" href="#__codelineno-50-3"></a>└────┘ └────┘ └────┘
+</span><span id="__span-50-4"><a id="__codelineno-50-4" name="__codelineno-50-4" href="#__codelineno-50-4"></a>
+</span><span id="__span-50-5"><a id="__codelineno-50-5" name="__codelineno-50-5" href="#__codelineno-50-5"></a>┌────┐ ┌────┐ ┌────┐
+</span><span id="__span-50-6"><a id="__codelineno-50-6" name="__codelineno-50-6" href="#__codelineno-50-6"></a>│ D  │ │ E  │ │ F  │
+</span><span id="__span-50-7"><a id="__codelineno-50-7" name="__codelineno-50-7" href="#__codelineno-50-7"></a>└────┘ └────┘ └────┘
+</span><span id="__span-50-8"><a id="__codelineno-50-8" name="__codelineno-50-8" href="#__codelineno-50-8"></a>
+</span><span id="__span-50-9"><a id="__codelineno-50-9" name="__codelineno-50-9" href="#__codelineno-50-9"></a>┌──────────────────┐
+</span><span id="__span-50-10"><a id="__codelineno-50-10" name="__codelineno-50-10" href="#__codelineno-50-10"></a>│        G         │
+</span><span id="__span-50-11"><a id="__codelineno-50-11" name="__codelineno-50-11" href="#__codelineno-50-11"></a>└──────────────────┘
+</span></code></pre></div>
+<p>El último ocupa toda la fila.</p>
+<p>Eso ocurre porque Flexbox piensa:</p>
+<blockquote>
+<p>"Como solo queda un elemento, le daré todo el espacio."</p>
+</blockquote>
+<p>Tiene sentido para el navegador.</p>
+<p>Pero visualmente puede ser raro.</p>
+<hr />
+<p><strong>¿Qué quieren decir con "simetría bidimensional"?</strong></p>
+<p>La palabra <strong>bidimensional</strong> significa que el diseño tiene dos dimensiones:</p>
+<ul>
+<li>horizontal (columnas)</li>
+<li>vertical (filas)</li>
+</ul>
+<p>Cuando todo mide igual obtenemos una cuadrícula muy simétrica.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-51-1"><a id="__codelineno-51-1" name="__codelineno-51-1" href="#__codelineno-51-1"></a>□ □ □
+</span><span id="__span-51-2"><a id="__codelineno-51-2" name="__codelineno-51-2" href="#__codelineno-51-2"></a>□ □ □
+</span><span id="__span-51-3"><a id="__codelineno-51-3" name="__codelineno-51-3" href="#__codelineno-51-3"></a>□ □ □
+</span></code></pre></div>
+<p>Todas las filas y columnas mantienen el mismo aspecto.</p>
+<hr />
+<p>Pero cuando la última fila cambia de tamaño:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-52-1"><a id="__codelineno-52-1" name="__codelineno-52-1" href="#__codelineno-52-1"></a>□ □ □
+</span><span id="__span-52-2"><a id="__codelineno-52-2" name="__codelineno-52-2" href="#__codelineno-52-2"></a>
+</span><span id="__span-52-3"><a id="__codelineno-52-3" name="__codelineno-52-3" href="#__codelineno-52-3"></a>■■
+</span></code></pre></div>
+<p>Ya no existe esa simetría.</p>
+<p>Las cajas inferiores son diferentes.</p>
+<hr />
+<p><strong>¿Por qué puede ser un problema?</strong></p>
+<p>Imagina una página con productos.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-53-1"><a id="__codelineno-53-1" name="__codelineno-53-1" href="#__codelineno-53-1"></a>📱  📱  📱
+</span><span id="__span-53-2"><a id="__codelineno-53-2" name="__codelineno-53-2" href="#__codelineno-53-2"></a>
+</span><span id="__span-53-3"><a id="__codelineno-53-3" name="__codelineno-53-3" href="#__codelineno-53-3"></a>📱      📱
+</span></code></pre></div>
+<p>Los dos últimos aparecen mucho más grandes.</p>
+<p>El usuario puede pensar:</p>
+<ul>
+<li>son destacados</li>
+<li>son promociones</li>
+<li>son recomendados</li>
+<li>tienen mayor importancia</li>
+</ul>
+<p>Cuando en realidad simplemente quedaron solos en la última fila.</p>
+<hr />
+<p>Eso es exactamente lo que dice el texto:</p>
+<blockquote>
+<p>"Podría percibirse como seleccionado."</p>
+</blockquote>
+<p>No porque realmente lo esté.</p>
+<p>Sino porque <strong>nuestro cerebro asocia tamaño con importancia</strong>.</p>
+<hr />
+<p><strong>¿Siempre es un problema?</strong></p>
+<p>No.</p>
+<p>Por eso dicen:</p>
+<blockquote>
+<p>"Esto no es necesariamente un problema."</p>
+</blockquote>
+<p>Hay muchos casos donde está perfectamente bien.</p>
+<p>Por ejemplo:</p>
+<ul>
+<li>galería de fotos</li>
+<li>lista de artículos</li>
+<li>tarjetas de productos</li>
+</ul>
+<p>Si el diseño sigue siendo claro, no hace falta hacer nada.</p>
+<hr />
+<p><strong>Pero hay casos donde sí molesta</strong></p>
+<p>Imagina solo dos tarjetas.</p>
+<p>Cuando hay espacio:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-54-1"><a id="__codelineno-54-1" name="__codelineno-54-1" href="#__codelineno-54-1"></a>┌──────┐ ┌──────┐
+</span><span id="__span-54-2"><a id="__codelineno-54-2" name="__codelineno-54-2" href="#__codelineno-54-2"></a>│ Login│ │Signup│
+</span><span id="__span-54-3"><a id="__codelineno-54-3" name="__codelineno-54-3" href="#__codelineno-54-3"></a>└──────┘ └──────┘
+</span></code></pre></div>
+<p>Todo bien.</p>
+<hr />
+<p>La ventana se hace un poco más pequeña.</p>
+<p>Con <code>flex-wrap</code> ocurre esto:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-55-1"><a id="__codelineno-55-1" name="__codelineno-55-1" href="#__codelineno-55-1"></a>┌──────────────┐
+</span><span id="__span-55-2"><a id="__codelineno-55-2" name="__codelineno-55-2" href="#__codelineno-55-2"></a>│    Login     │
+</span><span id="__span-55-3"><a id="__codelineno-55-3" name="__codelineno-55-3" href="#__codelineno-55-3"></a>└──────────────┘
+</span><span id="__span-55-4"><a id="__codelineno-55-4" name="__codelineno-55-4" href="#__codelineno-55-4"></a>
+</span><span id="__span-55-5"><a id="__codelineno-55-5" name="__codelineno-55-5" href="#__codelineno-55-5"></a>┌──────────────┐
+</span><span id="__span-55-6"><a id="__codelineno-55-6" name="__codelineno-55-6" href="#__codelineno-55-6"></a>│    Signup    │
+</span><span id="__span-55-7"><a id="__codelineno-55-7" name="__codelineno-55-7" href="#__codelineno-55-7"></a>└──────────────┘
+</span></code></pre></div>
+<p>También bien.</p>
+<hr />
+<p>Pero existe una zona intermedia donde todavía caben en dos filas parcialmente.</p>
+<p>Por ejemplo:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-56-1"><a id="__codelineno-56-1" name="__codelineno-56-1" href="#__codelineno-56-1"></a>┌───────────────┐
+</span><span id="__span-56-2"><a id="__codelineno-56-2" name="__codelineno-56-2" href="#__codelineno-56-2"></a>│    Login      │
+</span><span id="__span-56-3"><a id="__codelineno-56-3" name="__codelineno-56-3" href="#__codelineno-56-3"></a>└───────────────┘
+</span><span id="__span-56-4"><a id="__codelineno-56-4" name="__codelineno-56-4" href="#__codelineno-56-4"></a>
+</span><span id="__span-56-5"><a id="__codelineno-56-5" name="__codelineno-56-5" href="#__codelineno-56-5"></a>┌──────────────────────────┐
+</span><span id="__span-56-6"><a id="__codelineno-56-6" name="__codelineno-56-6" href="#__codelineno-56-6"></a>│         Signup           │
+</span><span id="__span-56-7"><a id="__codelineno-56-7" name="__codelineno-56-7" href="#__codelineno-56-7"></a>└──────────────────────────┘
+</span></code></pre></div>
+<p>La segunda termina siendo mucho más ancha.</p>
+<p>Visualmente parece que tiene más importancia.</p>
+<hr />
+<p><strong>¿Qué solución propone Every Layout?</strong></p>
+<p>En lugar de permitir todos los estados posibles, propone un componente llamado <strong>Switcher</strong>.</p>
+<p>Su comportamiento es muy simple:</p>
+<p><strong>Si caben todos en una sola fila:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-57-1"><a id="__codelineno-57-1" name="__codelineno-57-1" href="#__codelineno-57-1"></a>□ □ □
+</span></code></pre></div>
+<p>Perfecto.</p>
+<hr />
+<p><strong>Si dejan de caber:</strong></p>
+<p>En lugar de permitir:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-58-1"><a id="__codelineno-58-1" name="__codelineno-58-1" href="#__codelineno-58-1"></a>□ □
+</span><span id="__span-58-2"><a id="__codelineno-58-2" name="__codelineno-58-2" href="#__codelineno-58-2"></a>
+</span><span id="__span-58-3"><a id="__codelineno-58-3" name="__codelineno-58-3" href="#__codelineno-58-3"></a>□
+</span></code></pre></div>
+<p>o</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-59-1"><a id="__codelineno-59-1" name="__codelineno-59-1" href="#__codelineno-59-1"></a>□ □ □
+</span><span id="__span-59-2"><a id="__codelineno-59-2" name="__codelineno-59-2" href="#__codelineno-59-2"></a>
+</span><span id="__span-59-3"><a id="__codelineno-59-3" name="__codelineno-59-3" href="#__codelineno-59-3"></a>□□
+</span></code></pre></div>
+<p>cambia directamente a:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-60-1"><a id="__codelineno-60-1" name="__codelineno-60-1" href="#__codelineno-60-1"></a>□
+</span><span id="__span-60-2"><a id="__codelineno-60-2" name="__codelineno-60-2" href="#__codelineno-60-2"></a>□
+</span><span id="__span-60-3"><a id="__codelineno-60-3" name="__codelineno-60-3" href="#__codelineno-60-3"></a>□
+</span></code></pre></div>
+<p>Es decir, <strong>salta directamente de una fila a una columna</strong>, evitando los estados intermedios donde unas cajas terminan siendo más anchas que otras.</p>
+<hr />
+<p><strong>En resumen</strong></p>
+<p>El layout basado en <code>flex: 1 1 20rem</code> es excelente para crear <strong>grillas flexibles</strong>, pero cuando la última fila queda incompleta, algunos elementos crecen más que otros y se rompe la uniformidad visual. En muchos casos eso no importa, pero cuando todos los elementos deberían tener exactamente la misma importancia (por ejemplo, botones de acciones, opciones de configuración o tarjetas equivalentes), esos tamaños distintos pueden confundir al usuario.</p>
+<p>El <strong>Switcher</strong> nace precisamente para resolver ese caso: en lugar de permitir filas incompletas con elementos de distinto ancho, cambia automáticamente entre <strong>"todos en una fila"</strong> y <strong>"todos en una columna"</strong>, manteniendo una apariencia más consistente.</p>
+</details>
 <h2 id="la-solucion">La solución<a class="headerlink" href="#la-solucion" title="Permanent link">&para;</a></h2>
-<p>El elemento <code>Switcher</code> (basado en el extrañamente nombrado <em>Flexbox Holy Albatross</em> ↗) cambia un contexto Flexbox entre un layout horizontal y uno vertical en un breakpoint dado basado en <em>contenedor</em>. Esto es, si el breakpoint es <code>30rem</code>, el layout cambiará a una configuración vertical cuando el elemento padre tenga menos de <code>30rem</code> de ancho.</p>
+<p>El elemento <code>Switcher</code> (basado en el extrañamente nombrado <em><a href="https://heydonworks.com/article/the-flexbox-holy-albatross/">Flexbox Holy Albatross* ↗</a> ) cambia un contexto Flexbox entre un layout horizontal y uno vertical en un breakpoint dado basado en *contenedor</em>. Esto es, si el breakpoint es <code>30rem</code>, el layout cambiará a una configuración vertical cuando el elemento padre tenga menos de <code>30rem</code> de ancho.</p>
 <p>Para lograr este cambio, primero se instaura un layout horizontal básico, con wrapping y <code>flex-grow</code> habilitados:</p>
-<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
-<span class="normal"><a href="#__codelineno-2-2">2</a></span>
-<span class="normal"><a href="#__codelineno-2-3">3</a></span>
-<span class="normal"><a href="#__codelineno-2-4">4</a></span>
-<span class="normal"><a href="#__codelineno-2-5">5</a></span>
-<span class="normal"><a href="#__codelineno-2-6">6</a></span>
-<span class="normal"><a href="#__codelineno-2-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">  </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="p">}</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="w">  </span><span class="k">flex-grow</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="p">}</span>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-61-1">1</a></span>
+<span class="normal"><a href="#__codelineno-61-2">2</a></span>
+<span class="normal"><a href="#__codelineno-61-3">3</a></span>
+<span class="normal"><a href="#__codelineno-61-4">4</a></span>
+<span class="normal"><a href="#__codelineno-61-5">5</a></span>
+<span class="normal"><a href="#__codelineno-61-6">6</a></span>
+<span class="normal"><a href="#__codelineno-61-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-61-1"><a id="__codelineno-61-1" name="__codelineno-61-1"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-61-2"><a id="__codelineno-61-2" name="__codelineno-61-2"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
+</span><span id="__span-61-3"><a id="__codelineno-61-3" name="__codelineno-61-3"></a><span class="w">  </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
+</span><span id="__span-61-4"><a id="__codelineno-61-4" name="__codelineno-61-4"></a><span class="p">}</span>
+</span><span id="__span-61-5"><a id="__codelineno-61-5" name="__codelineno-61-5"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-61-6"><a id="__codelineno-61-6" name="__codelineno-61-6"></a><span class="w">  </span><span class="k">flex-grow</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-61-7"><a id="__codelineno-61-7" name="__codelineno-61-7"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <p>El valor <code>flex-basis</code> ingresa el ancho (actual) del contenedor, expresado como <code>100%</code>, en un cálculo con el breakpoint designado de <code>30rem</code>: <code>30rem - 100%</code>.</p>
 <p>Dependiendo del valor analizado de <code>100%</code>, esto devolverá un valor <em>positivo</em> o <em>negativo</em>: positivo si el contenedor es más estrecho que <code>30rem</code>, o negativo si es más ancho. Este número luego se multiplica por <code>999</code> para producir un número positivo <em>muy grande</em> o un número negativo <em>muy grande</em>: <code>(30rem - 100%) * 999</code>.</p>
 <p>Aquí está la declaración <code>flex-basis</code> in situ:</p>
-<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
-<span class="normal"><a href="#__codelineno-3-2">2</a></span>
-<span class="normal"><a href="#__codelineno-3-3">3</a></span>
-<span class="normal"><a href="#__codelineno-3-4">4</a></span>
-<span class="normal"><a href="#__codelineno-3-5">5</a></span>
-<span class="normal"><a href="#__codelineno-3-6">6</a></span>
-<span class="normal"><a href="#__codelineno-3-7">7</a></span>
-<span class="normal"><a href="#__codelineno-3-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">  </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="p">}</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">  </span><span class="k">flex-grow</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="w">  </span><span class="k">flex-basis</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="err">(</span><span class="mi">30</span><span class="kt">rem</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">100</span><span class="kt">%</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">999</span><span class="p">);</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="p">}</span>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-62-1">1</a></span>
+<span class="normal"><a href="#__codelineno-62-2">2</a></span>
+<span class="normal"><a href="#__codelineno-62-3">3</a></span>
+<span class="normal"><a href="#__codelineno-62-4">4</a></span>
+<span class="normal"><a href="#__codelineno-62-5">5</a></span>
+<span class="normal"><a href="#__codelineno-62-6">6</a></span>
+<span class="normal"><a href="#__codelineno-62-7">7</a></span>
+<span class="normal"><a href="#__codelineno-62-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-62-1"><a id="__codelineno-62-1" name="__codelineno-62-1"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-62-2"><a id="__codelineno-62-2" name="__codelineno-62-2"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
+</span><span id="__span-62-3"><a id="__codelineno-62-3" name="__codelineno-62-3"></a><span class="w">  </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
+</span><span id="__span-62-4"><a id="__codelineno-62-4" name="__codelineno-62-4"></a><span class="p">}</span>
+</span><span id="__span-62-5"><a id="__codelineno-62-5" name="__codelineno-62-5"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-62-6"><a id="__codelineno-62-6" name="__codelineno-62-6"></a><span class="w">  </span><span class="k">flex-grow</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-62-7"><a id="__codelineno-62-7" name="__codelineno-62-7"></a><span class="w">  </span><span class="k">flex-basis</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="err">(</span><span class="mi">30</span><span class="kt">rem</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">100</span><span class="kt">%</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">999</span><span class="p">);</span>
+</span><span id="__span-62-8"><a id="__codelineno-62-8" name="__codelineno-62-8"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <p>Un valor <code>flex-basis</code> negativo no es válido y se descarta. Gracias al manejo de errores resiliente de CSS, esto significa que solo la línea <code>flex-basis</code> se ignora, y el resto del CSS aún se aplica. El valor erróneo negativo se corrige a <code>flex-basis: 0</code> y —debido a que <code>flex-grow</code> está presente— cada elemento crece para ocupar una proporción igual del espacio horizontal.</p>
+<details class="info">
+<summary>Explicacion</summary>
+<p>Este es probablemente el fragmento más difícil de entender de <strong>Every Layout</strong>. La primera vez que se lee parece un truco de magia, pero en realidad se basa en cómo <strong>Flexbox trata los valores inválidos de <code>flex-basis</code></strong>.</p>
+<p>Voy a desarmarlo paso a paso.</p>
+<hr />
+<p><strong>¿Qué quiere lograr el Switcher?</strong></p>
+<p>Quiere tener <strong>solo dos estados</strong>.</p>
+<p>Si el contenedor es ancho:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-63-1"><a id="__codelineno-63-1" name="__codelineno-63-1" href="#__codelineno-63-1"></a>┌────┐ ┌────┐ ┌────┐
+</span><span id="__span-63-2"><a id="__codelineno-63-2" name="__codelineno-63-2" href="#__codelineno-63-2"></a>│ A  │ │ B  │ │ C  │
+</span><span id="__span-63-3"><a id="__codelineno-63-3" name="__codelineno-63-3" href="#__codelineno-63-3"></a>└────┘ └────┘ └────┘
+</span></code></pre></div>
+<p>Si el contenedor deja de ser suficientemente ancho:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-64-1"><a id="__codelineno-64-1" name="__codelineno-64-1" href="#__codelineno-64-1"></a>┌────┐
+</span><span id="__span-64-2"><a id="__codelineno-64-2" name="__codelineno-64-2" href="#__codelineno-64-2"></a>│ A  │
+</span><span id="__span-64-3"><a id="__codelineno-64-3" name="__codelineno-64-3" href="#__codelineno-64-3"></a>└────┘
+</span><span id="__span-64-4"><a id="__codelineno-64-4" name="__codelineno-64-4" href="#__codelineno-64-4"></a>
+</span><span id="__span-64-5"><a id="__codelineno-64-5" name="__codelineno-64-5" href="#__codelineno-64-5"></a>┌────┐
+</span><span id="__span-64-6"><a id="__codelineno-64-6" name="__codelineno-64-6" href="#__codelineno-64-6"></a>│ B  │
+</span><span id="__span-64-7"><a id="__codelineno-64-7" name="__codelineno-64-7" href="#__codelineno-64-7"></a>└────┘
+</span><span id="__span-64-8"><a id="__codelineno-64-8" name="__codelineno-64-8" href="#__codelineno-64-8"></a>
+</span><span id="__span-64-9"><a id="__codelineno-64-9" name="__codelineno-64-9" href="#__codelineno-64-9"></a>┌────┐
+</span><span id="__span-64-10"><a id="__codelineno-64-10" name="__codelineno-64-10" href="#__codelineno-64-10"></a>│ C  │
+</span><span id="__span-64-11"><a id="__codelineno-64-11" name="__codelineno-64-11" href="#__codelineno-64-11"></a>└────┘
+</span></code></pre></div>
+<p>No quiere estados intermedios.</p>
+<hr />
+<p><strong>El layout base</strong></p>
+<p>Primero crean un Flexbox normal.</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-65-1"><a id="__codelineno-65-1" name="__codelineno-65-1" href="#__codelineno-65-1"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-65-2"><a id="__codelineno-65-2" name="__codelineno-65-2" href="#__codelineno-65-2"></a><span class="w">    </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
+</span><span id="__span-65-3"><a id="__codelineno-65-3" name="__codelineno-65-3" href="#__codelineno-65-3"></a><span class="w">    </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
+</span><span id="__span-65-4"><a id="__codelineno-65-4" name="__codelineno-65-4" href="#__codelineno-65-4"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Nada nuevo.</p>
+<p>Los elementos pueden envolverse.</p>
+<hr />
+<p>Luego:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-66-1"><a id="__codelineno-66-1" name="__codelineno-66-1" href="#__codelineno-66-1"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-66-2"><a id="__codelineno-66-2" name="__codelineno-66-2" href="#__codelineno-66-2"></a><span class="w">    </span><span class="k">flex-grow</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-66-3"><a id="__codelineno-66-3" name="__codelineno-66-3" href="#__codelineno-66-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Ya sabes qué hace.</p>
+<p>Significa:</p>
+<blockquote>
+<p>Si sobra espacio, repártanlo entre todos.</p>
+</blockquote>
+<p>Todavía no hay nada especial.</p>
+<hr />
+<p><strong>La parte "mágica"</strong></p>
+<p>Luego aparece esto:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-67-1"><a id="__codelineno-67-1" name="__codelineno-67-1" href="#__codelineno-67-1"></a><span class="nt">flex-basis</span><span class="o">:</span><span class="w"> </span><span class="nt">calc</span><span class="o">((</span><span class="nt">30rem</span><span class="w"> </span><span class="nt">-</span><span class="w"> </span><span class="nt">100</span><span class="o">%)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nt">999</span><span class="o">);</span>
+</span></code></pre></div>
+<p>Vamos despacio.</p>
+<hr />
+<p><strong>¿Qué significa <code>100%</code>?</strong></p>
+<p>Aquí <strong>NO es el viewport</strong>.</p>
+<p>Es el ancho del contenedor Flex.</p>
+<p>Imagina un contenedor que mide</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-68-1"><a id="__codelineno-68-1" name="__codelineno-68-1" href="#__codelineno-68-1"></a>40rem
+</span></code></pre></div>
+<p>Entonces:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-69-1"><a id="__codelineno-69-1" name="__codelineno-69-1" href="#__codelineno-69-1"></a><span class="nt">100</span><span class="o">%</span>
+</span></code></pre></div>
+<p>vale</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-70-1"><a id="__codelineno-70-1" name="__codelineno-70-1" href="#__codelineno-70-1"></a>40rem
+</span></code></pre></div>
+<hr />
+<p>Si el contenedor mide</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-71-1"><a id="__codelineno-71-1" name="__codelineno-71-1" href="#__codelineno-71-1"></a>20rem
+</span></code></pre></div>
+<p>entonces</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-72-1"><a id="__codelineno-72-1" name="__codelineno-72-1" href="#__codelineno-72-1"></a><span class="nt">100</span><span class="o">%</span>
+</span></code></pre></div>
+<p>vale</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-73-1"><a id="__codelineno-73-1" name="__codelineno-73-1" href="#__codelineno-73-1"></a>20rem
+</span></code></pre></div>
+<hr />
+<p><strong>Primer caso</strong></p>
+<p>Supongamos que el contenedor mide</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-74-1"><a id="__codelineno-74-1" name="__codelineno-74-1" href="#__codelineno-74-1"></a>40rem
+</span></code></pre></div>
+<p>El cálculo es</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-75-1"><a id="__codelineno-75-1" name="__codelineno-75-1" href="#__codelineno-75-1"></a>30rem - 40rem
+</span></code></pre></div>
+<p>Resultado</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-76-1"><a id="__codelineno-76-1" name="__codelineno-76-1" href="#__codelineno-76-1"></a>-10rem
+</span></code></pre></div>
+<p>Ahora multiplican por 999.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-77-1"><a id="__codelineno-77-1" name="__codelineno-77-1" href="#__codelineno-77-1"></a>-9990rem
+</span></code></pre></div>
+<p>Sigue siendo negativo.</p>
+<hr />
+<p><strong>Segundo caso</strong></p>
+<p>Ahora el contenedor mide</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-78-1"><a id="__codelineno-78-1" name="__codelineno-78-1" href="#__codelineno-78-1"></a>20rem
+</span></code></pre></div>
+<p>El cálculo es</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-79-1"><a id="__codelineno-79-1" name="__codelineno-79-1" href="#__codelineno-79-1"></a>30rem - 20rem
+</span></code></pre></div>
+<p>Resultado</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-80-1"><a id="__codelineno-80-1" name="__codelineno-80-1" href="#__codelineno-80-1"></a>10rem
+</span></code></pre></div>
+<p>Multiplicado por 999:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-81-1"><a id="__codelineno-81-1" name="__codelineno-81-1" href="#__codelineno-81-1"></a>9990rem
+</span></code></pre></div>
+<p>Un número gigantesco.</p>
+<hr />
+<p>Entonces el resultado siempre será una de estas dos cosas:</p>
+<p>Si el contenedor es grande:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-82-1"><a id="__codelineno-82-1" name="__codelineno-82-1" href="#__codelineno-82-1"></a>-9990rem
+</span></code></pre></div>
+<p>Si el contenedor es pequeño:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-83-1"><a id="__codelineno-83-1" name="__codelineno-83-1" href="#__codelineno-83-1"></a>9990rem
+</span></code></pre></div>
+<hr />
+<p><strong>¿Por qué multiplicar por 999?</strong></p>
+<p>Porque quieren exagerar el resultado.</p>
+<p>No importa si da</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-84-1"><a id="__codelineno-84-1" name="__codelineno-84-1" href="#__codelineno-84-1"></a>5rem
+</span></code></pre></div>
+<p>o</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-85-1"><a id="__codelineno-85-1" name="__codelineno-85-1" href="#__codelineno-85-1"></a>10rem
+</span></code></pre></div>
+<p>Lo convierten en algo enorme.</p>
+<p>Es simplemente una forma de asegurarse de que el efecto sea contundente. El valor <strong>999</strong> no tiene nada de especial; podría ser 1000, 10000, etc. Solo necesita ser lo bastante grande.</p>
+<hr />
+<p><strong>Ahora viene el truco</strong></p>
+<p>¿Qué ocurre si escribes esto?</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-86-1"><a id="__codelineno-86-1" name="__codelineno-86-1" href="#__codelineno-86-1"></a><span class="nt">flex-basis</span><span class="o">:</span><span class="w"> </span><span class="nt">-9990rem</span><span class="o">;</span>
+</span></code></pre></div>
+<p>Eso <strong>no existe</strong>.</p>
+<p><code>flex-basis</code> no admite valores negativos.</p>
+<p>Entonces el navegador dice:</p>
+<blockquote>
+<p>Ese valor es inválido.</p>
+</blockquote>
+<p>Y lo ignora.</p>
+<hr />
+<p>Aquí es donde el texto menciona el <strong>manejo resiliente de errores de CSS</strong>.</p>
+<p>CSS funciona así:</p>
+<p>Si una propiedad tiene un valor inválido:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-87-1"><a id="__codelineno-87-1" name="__codelineno-87-1" href="#__codelineno-87-1"></a><span class="nt">color</span><span class="o">:</span><span class="w"> </span><span class="nt">rojoazulverde</span><span class="o">;</span>
+</span></code></pre></div>
+<p>No rompe toda la hoja de estilos.</p>
+<p>Simplemente ignora esa línea.</p>
+<p>Lo mismo ocurre aquí.</p>
+<hr />
+<p><strong>¿Qué pasa cuando ignora <code>flex-basis</code>?</strong></p>
+<p>El navegador actúa como si no existiera esa línea.</p>
+<p>Solo queda</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-88-1"><a id="__codelineno-88-1" name="__codelineno-88-1" href="#__codelineno-88-1"></a><span class="nt">flex-grow</span><span class="o">:</span><span class="w"> </span><span class="nt">1</span><span class="o">;</span>
+</span></code></pre></div>
+<p>Y como todos tienen <code>flex-grow: 1</code>, el espacio horizontal se reparte por igual.</p>
+<p>Con tres elementos:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-89-1"><a id="__codelineno-89-1" name="__codelineno-89-1" href="#__codelineno-89-1"></a>┌────────┐┌────────┐┌────────┐
+</span><span id="__span-89-2"><a id="__codelineno-89-2" name="__codelineno-89-2" href="#__codelineno-89-2"></a>│   A    ││   B    ││   C    │
+</span><span id="__span-89-3"><a id="__codelineno-89-3" name="__codelineno-89-3" href="#__codelineno-89-3"></a>└────────┘└────────┘└────────┘
+</span></code></pre></div>
+<p>Ese es el estado horizontal.</p>
+<hr />
+<p><strong>¿Y cuando el resultado es positivo?</strong></p>
+<p>Ahora imagina que el cálculo produce:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-90-1"><a id="__codelineno-90-1" name="__codelineno-90-1" href="#__codelineno-90-1"></a><span class="nt">flex-basis</span><span class="o">:</span><span class="w"> </span><span class="nt">9990rem</span><span class="o">;</span>
+</span></code></pre></div>
+<p>Ese valor <strong>sí es válido</strong>.</p>
+<p>Cada elemento dice:</p>
+<blockquote>
+<p>Mi tamaño base es 9990rem.</p>
+</blockquote>
+<p>Obviamente ninguno cabe junto a otro.</p>
+<p>Flexbox intenta colocarlos en una fila:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-91-1"><a id="__codelineno-91-1" name="__codelineno-91-1" href="#__codelineno-91-1"></a>[A]
+</span><span id="__span-91-2"><a id="__codelineno-91-2" name="__codelineno-91-2" href="#__codelineno-91-2"></a>[B]
+</span><span id="__span-91-3"><a id="__codelineno-91-3" name="__codelineno-91-3" href="#__codelineno-91-3"></a>[C]
+</span></code></pre></div>
+<p>Pero como cada uno "quiere" medir casi diez mil rem, solo cabe uno por línea.</p>
+<p>Gracias a <code>flex-wrap</code>, el resto baja automáticamente a la siguiente fila.</p>
+<p>Así aparece el estado vertical.</p>
+<hr />
+<p><strong>Entonces el cálculo realmente hace esto</strong></p>
+<p>Si el contenedor es mayor de 30rem:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-92-1"><a id="__codelineno-92-1" name="__codelineno-92-1" href="#__codelineno-92-1"></a>30rem - 40rem
+</span><span id="__span-92-2"><a id="__codelineno-92-2" name="__codelineno-92-2" href="#__codelineno-92-2"></a>
+</span><span id="__span-92-3"><a id="__codelineno-92-3" name="__codelineno-92-3" href="#__codelineno-92-3"></a>↓
+</span><span id="__span-92-4"><a id="__codelineno-92-4" name="__codelineno-92-4" href="#__codelineno-92-4"></a>
+</span><span id="__span-92-5"><a id="__codelineno-92-5" name="__codelineno-92-5" href="#__codelineno-92-5"></a>negativo
+</span><span id="__span-92-6"><a id="__codelineno-92-6" name="__codelineno-92-6" href="#__codelineno-92-6"></a>
+</span><span id="__span-92-7"><a id="__codelineno-92-7" name="__codelineno-92-7" href="#__codelineno-92-7"></a>↓
+</span><span id="__span-92-8"><a id="__codelineno-92-8" name="__codelineno-92-8" href="#__codelineno-92-8"></a>
+</span><span id="__span-92-9"><a id="__codelineno-92-9" name="__codelineno-92-9" href="#__codelineno-92-9"></a>valor inválido
+</span><span id="__span-92-10"><a id="__codelineno-92-10" name="__codelineno-92-10" href="#__codelineno-92-10"></a>
+</span><span id="__span-92-11"><a id="__codelineno-92-11" name="__codelineno-92-11" href="#__codelineno-92-11"></a>↓
+</span><span id="__span-92-12"><a id="__codelineno-92-12" name="__codelineno-92-12" href="#__codelineno-92-12"></a>
+</span><span id="__span-92-13"><a id="__codelineno-92-13" name="__codelineno-92-13" href="#__codelineno-92-13"></a>flex-basis se ignora
+</span><span id="__span-92-14"><a id="__codelineno-92-14" name="__codelineno-92-14" href="#__codelineno-92-14"></a>
+</span><span id="__span-92-15"><a id="__codelineno-92-15" name="__codelineno-92-15" href="#__codelineno-92-15"></a>↓
+</span><span id="__span-92-16"><a id="__codelineno-92-16" name="__codelineno-92-16" href="#__codelineno-92-16"></a>
+</span><span id="__span-92-17"><a id="__codelineno-92-17" name="__codelineno-92-17" href="#__codelineno-92-17"></a>todos comparten la fila
+</span></code></pre></div>
+<hr />
+<p>Si el contenedor es menor de 30rem:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-93-1"><a id="__codelineno-93-1" name="__codelineno-93-1" href="#__codelineno-93-1"></a>30rem - 20rem
+</span><span id="__span-93-2"><a id="__codelineno-93-2" name="__codelineno-93-2" href="#__codelineno-93-2"></a>
+</span><span id="__span-93-3"><a id="__codelineno-93-3" name="__codelineno-93-3" href="#__codelineno-93-3"></a>↓
+</span><span id="__span-93-4"><a id="__codelineno-93-4" name="__codelineno-93-4" href="#__codelineno-93-4"></a>
+</span><span id="__span-93-5"><a id="__codelineno-93-5" name="__codelineno-93-5" href="#__codelineno-93-5"></a>positivo enorme
+</span><span id="__span-93-6"><a id="__codelineno-93-6" name="__codelineno-93-6" href="#__codelineno-93-6"></a>
+</span><span id="__span-93-7"><a id="__codelineno-93-7" name="__codelineno-93-7" href="#__codelineno-93-7"></a>↓
+</span><span id="__span-93-8"><a id="__codelineno-93-8" name="__codelineno-93-8" href="#__codelineno-93-8"></a>
+</span><span id="__span-93-9"><a id="__codelineno-93-9" name="__codelineno-93-9" href="#__codelineno-93-9"></a>cada elemento quiere medir muchísimo
+</span><span id="__span-93-10"><a id="__codelineno-93-10" name="__codelineno-93-10" href="#__codelineno-93-10"></a>
+</span><span id="__span-93-11"><a id="__codelineno-93-11" name="__codelineno-93-11" href="#__codelineno-93-11"></a>↓
+</span><span id="__span-93-12"><a id="__codelineno-93-12" name="__codelineno-93-12" href="#__codelineno-93-12"></a>
+</span><span id="__span-93-13"><a id="__codelineno-93-13" name="__codelineno-93-13" href="#__codelineno-93-13"></a>solo cabe uno por fila
+</span><span id="__span-93-14"><a id="__codelineno-93-14" name="__codelineno-93-14" href="#__codelineno-93-14"></a>
+</span><span id="__span-93-15"><a id="__codelineno-93-15" name="__codelineno-93-15" href="#__codelineno-93-15"></a>↓
+</span><span id="__span-93-16"><a id="__codelineno-93-16" name="__codelineno-93-16" href="#__codelineno-93-16"></a>
+</span><span id="__span-93-17"><a id="__codelineno-93-17" name="__codelineno-93-17" href="#__codelineno-93-17"></a>layout vertical
+</span></code></pre></div>
+<hr />
+<p><strong>¿Por qué dicen que es un breakpoint basado en el contenedor?</strong></p>
+<p>Con <code>@media</code> normalmente preguntas:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-94-1"><a id="__codelineno-94-1" name="__codelineno-94-1" href="#__codelineno-94-1"></a>¿Cuánto mide la ventana?
+</span></code></pre></div>
+<p>Aquí la pregunta es distinta:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-95-1"><a id="__codelineno-95-1" name="__codelineno-95-1" href="#__codelineno-95-1"></a>¿Cuánto mide ESTE contenedor?
+</span></code></pre></div>
+<p>No importa si la pantalla mide 3000 px.</p>
+<p>Si el contenedor específico mide menos de 30rem, el cambio ocurre.</p>
+<p>Por eso este patrón se adelantó varios años a las <strong>container queries</strong> modernas: el comportamiento depende del espacio real disponible para ese componente, no del tamaño global del navegador.</p>
+<hr />
+<p><strong>Resumen visual</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-96-1"><a id="__codelineno-96-1" name="__codelineno-96-1" href="#__codelineno-96-1"></a>                ¿Cuánto mide el contenedor?
+</span><span id="__span-96-2"><a id="__codelineno-96-2" name="__codelineno-96-2" href="#__codelineno-96-2"></a>
+</span><span id="__span-96-3"><a id="__codelineno-96-3" name="__codelineno-96-3" href="#__codelineno-96-3"></a>                    40rem
+</span><span id="__span-96-4"><a id="__codelineno-96-4" name="__codelineno-96-4" href="#__codelineno-96-4"></a>                        │
+</span><span id="__span-96-5"><a id="__codelineno-96-5" name="__codelineno-96-5" href="#__codelineno-96-5"></a>                        ▼
+</span><span id="__span-96-6"><a id="__codelineno-96-6" name="__codelineno-96-6" href="#__codelineno-96-6"></a>                30rem - 40rem
+</span><span id="__span-96-7"><a id="__codelineno-96-7" name="__codelineno-96-7" href="#__codelineno-96-7"></a>                        │
+</span><span id="__span-96-8"><a id="__codelineno-96-8" name="__codelineno-96-8" href="#__codelineno-96-8"></a>                        ▼
+</span><span id="__span-96-9"><a id="__codelineno-96-9" name="__codelineno-96-9" href="#__codelineno-96-9"></a>                  valor negativo
+</span><span id="__span-96-10"><a id="__codelineno-96-10" name="__codelineno-96-10" href="#__codelineno-96-10"></a>                        │
+</span><span id="__span-96-11"><a id="__codelineno-96-11" name="__codelineno-96-11" href="#__codelineno-96-11"></a>                        ▼
+</span><span id="__span-96-12"><a id="__codelineno-96-12" name="__codelineno-96-12" href="#__codelineno-96-12"></a>          flex-basis inválido → se ignora
+</span><span id="__span-96-13"><a id="__codelineno-96-13" name="__codelineno-96-13" href="#__codelineno-96-13"></a>                        │
+</span><span id="__span-96-14"><a id="__codelineno-96-14" name="__codelineno-96-14" href="#__codelineno-96-14"></a>                        ▼
+</span><span id="__span-96-15"><a id="__codelineno-96-15" name="__codelineno-96-15" href="#__codelineno-96-15"></a>            Todos comparten la fila
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-97-1"><a id="__codelineno-97-1" name="__codelineno-97-1" href="#__codelineno-97-1"></a>                ¿Cuánto mide el contenedor?
+</span><span id="__span-97-2"><a id="__codelineno-97-2" name="__codelineno-97-2" href="#__codelineno-97-2"></a>
+</span><span id="__span-97-3"><a id="__codelineno-97-3" name="__codelineno-97-3" href="#__codelineno-97-3"></a>                    20rem
+</span><span id="__span-97-4"><a id="__codelineno-97-4" name="__codelineno-97-4" href="#__codelineno-97-4"></a>                        │
+</span><span id="__span-97-5"><a id="__codelineno-97-5" name="__codelineno-97-5" href="#__codelineno-97-5"></a>                        ▼
+</span><span id="__span-97-6"><a id="__codelineno-97-6" name="__codelineno-97-6" href="#__codelineno-97-6"></a>                30rem - 20rem
+</span><span id="__span-97-7"><a id="__codelineno-97-7" name="__codelineno-97-7" href="#__codelineno-97-7"></a>                        │
+</span><span id="__span-97-8"><a id="__codelineno-97-8" name="__codelineno-97-8" href="#__codelineno-97-8"></a>                        ▼
+</span><span id="__span-97-9"><a id="__codelineno-97-9" name="__codelineno-97-9" href="#__codelineno-97-9"></a>                  valor positivo
+</span><span id="__span-97-10"><a id="__codelineno-97-10" name="__codelineno-97-10" href="#__codelineno-97-10"></a>                        │
+</span><span id="__span-97-11"><a id="__codelineno-97-11" name="__codelineno-97-11" href="#__codelineno-97-11"></a>                        ▼
+</span><span id="__span-97-12"><a id="__codelineno-97-12" name="__codelineno-97-12" href="#__codelineno-97-12"></a>          flex-basis gigantesco (9990rem)
+</span><span id="__span-97-13"><a id="__codelineno-97-13" name="__codelineno-97-13" href="#__codelineno-97-13"></a>                        │
+</span><span id="__span-97-14"><a id="__codelineno-97-14" name="__codelineno-97-14" href="#__codelineno-97-14"></a>                        ▼
+</span><span id="__span-97-15"><a id="__codelineno-97-15" name="__codelineno-97-15" href="#__codelineno-97-15"></a>        Solo cabe un elemento por línea
+</span><span id="__span-97-16"><a id="__codelineno-97-16" name="__codelineno-97-16" href="#__codelineno-97-16"></a>                        │
+</span><span id="__span-97-17"><a id="__codelineno-97-17" name="__codelineno-97-17" href="#__codelineno-97-17"></a>                        ▼
+</span><span id="__span-97-18"><a id="__codelineno-97-18" name="__codelineno-97-18" href="#__codelineno-97-18"></a>                Layout vertical
+</span></code></pre></div>
+<p>En esencia, el "truco" del <strong>Switcher</strong> consiste en usar una expresión matemática para que <code>flex-basis</code> sea <strong>inválido cuando el contenedor es ancho</strong> (de modo que Flexbox distribuya los elementos horizontalmente) y <strong>enorme cuando el contenedor es estrecho</strong> (forzando que solo quepa un elemento por fila). Con una sola línea de CSS consigue un cambio automático entre ambos estados, sin usar <code>@media</code>.</p>
+</details>
 <h2 id="ancho-del-contenido">⚠ Ancho del contenido<a class="headerlink" href="#ancho-del-contenido" title="Permanent link">&para;</a></h2>
 <p>La declaración anterior, "cada elemento crece para ocupar una proporción igual del espacio horizontal", es verdadera donde el <em>contenido</em> de cualquier elemento no exceda esa proporción asignada. Para mantener las cosas en orden, a los elementos anidados se les puede dar un <code>max-width: 100%</code>.</p>
 <p><img alt="" src="../retuened.png" /></p>
@@ -1441,69 +2245,284 @@
 </blockquote>
 <p>Si, por otro lado, el valor calculado de <code>flex-basis</code> es un número positivo grande, cada elemento se <em>expande al máximo</em> para ocupar una fila completa. Esto resulta en la configuración vertical. Los estados intermedios se evitan con éxito.</p>
 <p><img alt="" src="../basis.png" /></p>
+<details class="info">
+<summary>Explicacion</summary>
+<p>Esta sección aclara un detalle importante del comportamiento del <strong>Switcher</strong>. El truco funciona muy bien, <strong>pero depende de que el contenido pueda adaptarse al espacio disponible</strong>.</p>
+<p>Veámoslo.</p>
+<hr />
+<p><strong>Primero recuerdan esta frase</strong></p>
+<p>En la sección anterior dijeron:</p>
+<blockquote>
+<p>"Cada elemento crece para ocupar una proporción igual del espacio horizontal."</p>
+</blockquote>
+<p>Por ejemplo, con tres elementos:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-98-1"><a id="__codelineno-98-1" name="__codelineno-98-1" href="#__codelineno-98-1"></a>┌─────────┐┌─────────┐┌─────────┐
+</span><span id="__span-98-2"><a id="__codelineno-98-2" name="__codelineno-98-2" href="#__codelineno-98-2"></a>│    A    ││    B    ││    C    │
+</span><span id="__span-98-3"><a id="__codelineno-98-3" name="__codelineno-98-3" href="#__codelineno-98-3"></a>└─────────┘└─────────┘└─────────┘
+</span></code></pre></div>
+<p>Cada uno ocupa un tercio.</p>
+<p>Hasta aquí todo bien.</p>
+<hr />
+<p><strong>¿Pero qué pasa si un elemento tiene contenido muy ancho?</strong></p>
+<p>Imagina esto:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-99-1"><a id="__codelineno-99-1" name="__codelineno-99-1" href="#__codelineno-99-1"></a>┌─────────┐┌─────────┐┌─────────┐
+</span><span id="__span-99-2"><a id="__codelineno-99-2" name="__codelineno-99-2" href="#__codelineno-99-2"></a>│  Hola   ││xxxxxxxxxxxxxxxxxxxxxxxx││ Adiós │
+</span><span id="__span-99-3"><a id="__codelineno-99-3" name="__codelineno-99-3" href="#__codelineno-99-3"></a>└─────────┘└─────────┘└─────────┘
+</span></code></pre></div>
+<p>Ese texto enorme no cabe dentro del tercio que le corresponde.</p>
+<p>Entonces ocurren cosas como:</p>
+<ul>
+<li>el contenido se desborda;</li>
+<li>rompe el diseño;</li>
+<li>obliga a ensanchar esa columna;</li>
+<li>empuja a las demás.</li>
+</ul>
+<p>El resultado deja de ser uniforme.</p>
+<hr />
+<p><strong>¿Qué significa "el contenido excede esa proporción"?</strong></p>
+<p>Supongamos un contenedor de <strong>90rem</strong>.</p>
+<p>Tres elementos.</p>
+<p>Cada uno recibe:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-100-1"><a id="__codelineno-100-1" name="__codelineno-100-1" href="#__codelineno-100-1"></a>90rem / 3 = 30rem
+</span></code></pre></div>
+<p>Pero uno contiene una imagen de:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-101-1"><a id="__codelineno-101-1" name="__codelineno-101-1" href="#__codelineno-101-1"></a>50rem
+</span></code></pre></div>
+<p>La imagen dice:</p>
+<blockquote>
+<p>"Yo necesito 50rem."</p>
+</blockquote>
+<p>Mientras Flexbox dice:</p>
+<blockquote>
+<p>"Solo tienes 30rem."</p>
+</blockquote>
+<p>Hay un conflicto.</p>
+<hr />
+<p><strong>¿Cómo evitarlo?</strong></p>
+<p>El libro propone:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-102-1"><a id="__codelineno-102-1" name="__codelineno-102-1" href="#__codelineno-102-1"></a><span class="nt">max-width</span><span class="o">:</span><span class="w"> </span><span class="nt">100</span><span class="o">%;</span>
+</span></code></pre></div>
+<p>Por ejemplo:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-103-1"><a id="__codelineno-103-1" name="__codelineno-103-1" href="#__codelineno-103-1"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="nt">img</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-103-2"><a id="__codelineno-103-2" name="__codelineno-103-2" href="#__codelineno-103-2"></a><span class="w">    </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+</span><span id="__span-103-3"><a id="__codelineno-103-3" name="__codelineno-103-3" href="#__codelineno-103-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>¿Qué significa?</p>
+<p>La imagen puede hacerse más pequeña si hace falta, pero nunca será más ancha que su contenedor.</p>
+<hr />
+<p><strong>Sin <code>max-width</code></strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-104-1"><a id="__codelineno-104-1" name="__codelineno-104-1" href="#__codelineno-104-1"></a>┌─────────────┐
+</span><span id="__span-104-2"><a id="__codelineno-104-2" name="__codelineno-104-2" href="#__codelineno-104-2"></a>│             │
+</span><span id="__span-104-3"><a id="__codelineno-104-3" name="__codelineno-104-3" href="#__codelineno-104-3"></a>│████████████████████████
+</span><span id="__span-104-4"><a id="__codelineno-104-4" name="__codelineno-104-4" href="#__codelineno-104-4"></a>│             │
+</span><span id="__span-104-5"><a id="__codelineno-104-5" name="__codelineno-104-5" href="#__codelineno-104-5"></a>└─────────────┘
+</span></code></pre></div>
+<p>La imagen sobresale.</p>
+<hr />
+<p><strong>Con <code>max-width:100%</code></strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-105-1"><a id="__codelineno-105-1" name="__codelineno-105-1" href="#__codelineno-105-1"></a>┌─────────────┐
+</span><span id="__span-105-2"><a id="__codelineno-105-2" name="__codelineno-105-2" href="#__codelineno-105-2"></a>│███████████  │
+</span><span id="__span-105-3"><a id="__codelineno-105-3" name="__codelineno-105-3" href="#__codelineno-105-3"></a>└─────────────┘
+</span></code></pre></div>
+<p>Ahora la imagen se adapta al ancho disponible.</p>
+<hr />
+<p><strong>¿Por qué dicen que no uses <code>width</code> fijo?</strong></p>
+<p>Porque un ancho fijo vuelve a imponer una orden.</p>
+<p>Por ejemplo:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-106-1"><a id="__codelineno-106-1" name="__codelineno-106-1" href="#__codelineno-106-1"></a><span class="nt">img</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-106-2"><a id="__codelineno-106-2" name="__codelineno-106-2" href="#__codelineno-106-2"></a><span class="w">    </span><span class="k">width</span><span class="p">:</span><span class="w"> </span><span class="mi">600</span><span class="kt">px</span><span class="p">;</span>
+</span><span id="__span-106-3"><a id="__codelineno-106-3" name="__codelineno-106-3" href="#__codelineno-106-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Eso significa:</p>
+<blockquote>
+<p>"Quiero medir 600px siempre."</p>
+</blockquote>
+<p>Aunque el contenedor tenga solo:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-107-1"><a id="__codelineno-107-1" name="__codelineno-107-1" href="#__codelineno-107-1"></a>350px
+</span></code></pre></div>
+<p>La imagen seguirá intentando medir 600px.</p>
+<p>El resultado será un desbordamiento.</p>
+<hr />
+<p><strong>¿Y por qué tampoco recomiendan <code>min-width</code>?</strong></p>
+<p>Porque también impone un límite.</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-108-1"><a id="__codelineno-108-1" name="__codelineno-108-1" href="#__codelineno-108-1"></a><span class="nt">min-width</span><span class="o">:</span><span class="w"> </span><span class="nt">500px</span><span class="o">;</span>
+</span></code></pre></div>
+<p>Eso significa:</p>
+<blockquote>
+<p>"Nunca puedo ser menor de 500px."</p>
+</blockquote>
+<p>Si el contenedor mide:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-109-1"><a id="__codelineno-109-1" name="__codelineno-109-1" href="#__codelineno-109-1"></a>350px
+</span></code></pre></div>
+<p>El elemento seguirá queriendo ocupar:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-110-1"><a id="__codelineno-110-1" name="__codelineno-110-1" href="#__codelineno-110-1"></a>500px
+</span></code></pre></div>
+<p>Otra vez rompe el layout.</p>
+<hr />
+<p><strong>¿Qué quiere decir con "el ancho debería sugerirse"?</strong></p>
+<p>Es la filosofía que ya viste varias veces en Every Layout.</p>
+<p>En lugar de decir:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-111-1"><a id="__codelineno-111-1" name="__codelineno-111-1" href="#__codelineno-111-1"></a><span class="nt">width</span><span class="p">:</span><span class="nd">500px</span><span class="o">;</span>
+</span></code></pre></div>
+<p>Prefieren algo como:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-112-1"><a id="__codelineno-112-1" name="__codelineno-112-1" href="#__codelineno-112-1"></a><span class="nt">flex-basis</span><span class="p">:</span><span class="nd">20rem</span><span class="o">;</span>
+</span></code></pre></div>
+<p>o</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-113-1"><a id="__codelineno-113-1" name="__codelineno-113-1" href="#__codelineno-113-1"></a><span class="nt">max-width</span><span class="p">:</span><span class="nd">100</span><span class="o">%;</span>
+</span></code></pre></div>
+<p>No obligas.</p>
+<p>Sugieres.</p>
+<p>El navegador decide el tamaño final.</p>
+<hr />
+<p><strong>Luego vuelve al truco del Switcher</strong></p>
+<p>Dice:</p>
+<blockquote>
+<p>"Si el valor calculado de <code>flex-basis</code> es positivo..."</p>
+</blockquote>
+<p>Eso significa que el contenedor es más pequeño que el breakpoint.</p>
+<p>Por ejemplo:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-114-1"><a id="__codelineno-114-1" name="__codelineno-114-1" href="#__codelineno-114-1"></a>30rem - 20rem = 10rem
+</span></code></pre></div>
+<p>Después:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-115-1"><a id="__codelineno-115-1" name="__codelineno-115-1" href="#__codelineno-115-1"></a>10rem × 999
+</span></code></pre></div>
+<p>Da un número enorme.</p>
+<p>Entonces:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-116-1"><a id="__codelineno-116-1" name="__codelineno-116-1" href="#__codelineno-116-1"></a><span class="nt">flex-basis</span><span class="p">:</span><span class="nd">9990rem</span><span class="o">;</span>
+</span></code></pre></div>
+<p>Cada elemento piensa:</p>
+<blockquote>
+<p>"Mi tamaño ideal es casi diez mil rem."</p>
+</blockquote>
+<p>Obviamente no caben dos en la misma fila.</p>
+<p>Entonces Flexbox hace:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-117-1"><a id="__codelineno-117-1" name="__codelineno-117-1" href="#__codelineno-117-1"></a>┌──────────────┐
+</span><span id="__span-117-2"><a id="__codelineno-117-2" name="__codelineno-117-2" href="#__codelineno-117-2"></a>│      A       │
+</span><span id="__span-117-3"><a id="__codelineno-117-3" name="__codelineno-117-3" href="#__codelineno-117-3"></a>└──────────────┘
+</span><span id="__span-117-4"><a id="__codelineno-117-4" name="__codelineno-117-4" href="#__codelineno-117-4"></a>
+</span><span id="__span-117-5"><a id="__codelineno-117-5" name="__codelineno-117-5" href="#__codelineno-117-5"></a>┌──────────────┐
+</span><span id="__span-117-6"><a id="__codelineno-117-6" name="__codelineno-117-6" href="#__codelineno-117-6"></a>│      B       │
+</span><span id="__span-117-7"><a id="__codelineno-117-7" name="__codelineno-117-7" href="#__codelineno-117-7"></a>└──────────────┘
+</span><span id="__span-117-8"><a id="__codelineno-117-8" name="__codelineno-117-8" href="#__codelineno-117-8"></a>
+</span><span id="__span-117-9"><a id="__codelineno-117-9" name="__codelineno-117-9" href="#__codelineno-117-9"></a>┌──────────────┐
+</span><span id="__span-117-10"><a id="__codelineno-117-10" name="__codelineno-117-10" href="#__codelineno-117-10"></a>│      C       │
+</span><span id="__span-117-11"><a id="__codelineno-117-11" name="__codelineno-117-11" href="#__codelineno-117-11"></a>└──────────────┘
+</span></code></pre></div>
+<p>Cada uno ocupa toda una fila.</p>
+<hr />
+<p><strong>¿Qué significa "se expanden al máximo"?</strong></p>
+<p>No significa que realmente midan 9990rem.</p>
+<p>Eso sería imposible.</p>
+<p>Significa que <strong>su tamaño base es tan grande</strong> que Flexbox concluye:</p>
+<blockquote>
+<p>"Solo puedo colocar un elemento por línea."</p>
+</blockquote>
+<p>Entonces cada uno termina ocupando el ancho disponible de su fila.</p>
+<hr />
+<p><strong>¿Qué son los "estados intermedios"?</strong></p>
+<p>Sin Switcher podrías tener esto:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-118-1"><a id="__codelineno-118-1" name="__codelineno-118-1" href="#__codelineno-118-1"></a>A   B
+</span><span id="__span-118-2"><a id="__codelineno-118-2" name="__codelineno-118-2" href="#__codelineno-118-2"></a>
+</span><span id="__span-118-3"><a id="__codelineno-118-3" name="__codelineno-118-3" href="#__codelineno-118-3"></a>C
+</span></code></pre></div>
+<p>o</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-119-1"><a id="__codelineno-119-1" name="__codelineno-119-1" href="#__codelineno-119-1"></a>A   B   C
+</span><span id="__span-119-2"><a id="__codelineno-119-2" name="__codelineno-119-2" href="#__codelineno-119-2"></a>
+</span><span id="__span-119-3"><a id="__codelineno-119-3" name="__codelineno-119-3" href="#__codelineno-119-3"></a>D
+</span></code></pre></div>
+<p>o</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-120-1"><a id="__codelineno-120-1" name="__codelineno-120-1" href="#__codelineno-120-1"></a>A   B
+</span><span id="__span-120-2"><a id="__codelineno-120-2" name="__codelineno-120-2" href="#__codelineno-120-2"></a>
+</span><span id="__span-120-3"><a id="__codelineno-120-3" name="__codelineno-120-3" href="#__codelineno-120-3"></a>C   D
+</span><span id="__span-120-4"><a id="__codelineno-120-4" name="__codelineno-120-4" href="#__codelineno-120-4"></a>
+</span><span id="__span-120-5"><a id="__codelineno-120-5" name="__codelineno-120-5" href="#__codelineno-120-5"></a>E
+</span></code></pre></div>
+<p>Esos son los estados intermedios que el libro quiere evitar porque algunas cajas quedan más anchas que otras.</p>
+<p>Con el Switcher solo existen dos configuraciones:</p>
+<p><strong>Horizontal</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-121-1"><a id="__codelineno-121-1" name="__codelineno-121-1" href="#__codelineno-121-1"></a>A   B   C
+</span></code></pre></div>
+<p>o <strong>Vertical</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-122-1"><a id="__codelineno-122-1" name="__codelineno-122-1" href="#__codelineno-122-1"></a>A
+</span><span id="__span-122-2"><a id="__codelineno-122-2" name="__codelineno-122-2" href="#__codelineno-122-2"></a>B
+</span><span id="__span-122-3"><a id="__codelineno-122-3" name="__codelineno-122-3" href="#__codelineno-122-3"></a>C
+</span></code></pre></div>
+<p>Nunca aparecen distribuciones "a medias".</p>
+<hr />
+<p><strong>Idea clave</strong></p>
+<p>Esta sección no introduce un concepto nuevo, sino que añade dos aclaraciones importantes:</p>
+<ol>
+<li>
+<p>El <strong>Switcher</strong> funciona correctamente siempre que el contenido también sea flexible. Si un elemento contiene imágenes, tablas o textos muy anchos, conviene limitar su tamaño con propiedades como <code>max-width: 100%</code> para evitar que rompan el diseño.</p>
+</li>
+<li>
+<p>El objetivo del Switcher es eliminar las configuraciones intermedias. Cuando el contenedor es suficientemente ancho, todos los elementos comparten una sola fila; cuando deja de serlo, el cálculo de <code>flex-basis</code> fuerza automáticamente que cada elemento ocupe una fila completa. Así se mantiene una apariencia consistente y se evita que unas cajas parezcan más importantes que otras solo porque crecieron para llenar el espacio disponible.</p>
+</li>
+</ol>
+</details>
 <h2 id="gutters-espaciado">Gutters (espaciado)<a class="headerlink" href="#gutters-espaciado" title="Permanent link">&para;</a></h2>
 <p>Para soportar márgenes ('gutters'; 'gaps') entre los elementos sujetos, podríamos adaptar la <em>técnica de margen negativo cubierta en la documentación de Cluster</em>. Sin embargo, el cálculo de <code>flex-basis</code> necesitaría ser adaptado para compensar el ancho aumentado producido por el estiramiento del contenedor padre. Esto es, al aplicar márgenes negativos en todos los lados, el padre se vuelve más ancho que su contenedor y sus valores de <code>100%</code> ya no coinciden.</p>
-<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-4-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-4-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-4-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-4-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-4-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-4-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-4-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-4-10">10</a></span>
-<span class="normal"><a href="#__codelineno-4-11">11</a></span>
-<span class="normal"><a href="#__codelineno-4-12">12</a></span>
-<span class="normal"><a href="#__codelineno-4-13">13</a></span>
-<span class="normal"><a href="#__codelineno-4-14">14</a></span>
-<span class="normal"><a href="#__codelineno-4-15">15</a></span>
-<span class="normal"><a href="#__codelineno-4-16">16</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">  </span><span class="nv">--threshold</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="kt">rem</span><span class="p">;</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">  </span><span class="nv">--space</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="p">}</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">  </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="w">  </span><span class="c">/* ↓ Multiplicar por -1 para hacerlo negativo */</span>
-</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="w">  </span><span class="k">margin</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--space</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">-1</span><span class="p">);</span>
-</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="p">}</span>
-</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="w">  </span><span class="k">flex-grow</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13"></a><span class="w">  </span><span class="k">flex-basis</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="err">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--threshold</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="err">(</span><span class="mi">100</span><span class="kt">%</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--space</span><span class="p">)))</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">999</span><span class="p">);</span>
-</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14"></a><span class="w">  </span><span class="c">/* ↓ La mitad del valor para cada elemento, combinándose para formar el total */</span>
-</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15"></a><span class="w">  </span><span class="k">margin</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--space</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
-</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16"></a><span class="p">}</span>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-123-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-123-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-123-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-123-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-123-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-123-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-123-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-123-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-123-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-123-10">10</a></span>
+<span class="normal"><a href="#__codelineno-123-11">11</a></span>
+<span class="normal"><a href="#__codelineno-123-12">12</a></span>
+<span class="normal"><a href="#__codelineno-123-13">13</a></span>
+<span class="normal"><a href="#__codelineno-123-14">14</a></span>
+<span class="normal"><a href="#__codelineno-123-15">15</a></span>
+<span class="normal"><a href="#__codelineno-123-16">16</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-123-1"><a id="__codelineno-123-1" name="__codelineno-123-1"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-123-2"><a id="__codelineno-123-2" name="__codelineno-123-2"></a><span class="w">  </span><span class="nv">--threshold</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-123-3"><a id="__codelineno-123-3" name="__codelineno-123-3"></a><span class="w">  </span><span class="nv">--space</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-123-4"><a id="__codelineno-123-4" name="__codelineno-123-4"></a><span class="p">}</span>
+</span><span id="__span-123-5"><a id="__codelineno-123-5" name="__codelineno-123-5"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-123-6"><a id="__codelineno-123-6" name="__codelineno-123-6"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
+</span><span id="__span-123-7"><a id="__codelineno-123-7" name="__codelineno-123-7"></a><span class="w">  </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
+</span><span id="__span-123-8"><a id="__codelineno-123-8" name="__codelineno-123-8"></a><span class="w">  </span><span class="c">/* ↓ Multiplicar por -1 para hacerlo negativo */</span>
+</span><span id="__span-123-9"><a id="__codelineno-123-9" name="__codelineno-123-9"></a><span class="w">  </span><span class="k">margin</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--space</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">-1</span><span class="p">);</span>
+</span><span id="__span-123-10"><a id="__codelineno-123-10" name="__codelineno-123-10"></a><span class="p">}</span>
+</span><span id="__span-123-11"><a id="__codelineno-123-11" name="__codelineno-123-11"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-123-12"><a id="__codelineno-123-12" name="__codelineno-123-12"></a><span class="w">  </span><span class="k">flex-grow</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-123-13"><a id="__codelineno-123-13" name="__codelineno-123-13"></a><span class="w">  </span><span class="k">flex-basis</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="err">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--threshold</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="err">(</span><span class="mi">100</span><span class="kt">%</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--space</span><span class="p">)))</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">999</span><span class="p">);</span>
+</span><span id="__span-123-14"><a id="__codelineno-123-14" name="__codelineno-123-14"></a><span class="w">  </span><span class="c">/* ↓ La mitad del valor para cada elemento, combinándose para formar el total */</span>
+</span><span id="__span-123-15"><a id="__codelineno-123-15" name="__codelineno-123-15"></a><span class="w">  </span><span class="k">margin</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--space</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+</span><span id="__span-123-16"><a id="__codelineno-123-16" name="__codelineno-123-16"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <p>En su lugar, dado que <code>gap</code> ahora es compatible en todos los navegadores principales, no tenemos que preocuparnos por tales cálculos. La propiedad <code>gap</code> representa que el navegador haga esos cálculos por nosotros. Y nos permite reducir tanto el HTML como el CSS bastantes.</p>
-<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-5-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">  </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">  </span><span class="k">gap</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="w">  </span><span class="nv">--threshold</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="kt">rem</span><span class="p">;</span>
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="p">}</span>
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="w">  </span><span class="k">flex-grow</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="w">  </span><span class="k">flex-basis</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="err">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--threshold</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">100</span><span class="kt">%</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">999</span><span class="p">);</span>
-</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="p">}</span>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-124-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-124-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-124-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-124-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-124-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-124-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-124-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-124-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-124-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-124-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-124-1"><a id="__codelineno-124-1" name="__codelineno-124-1"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-124-2"><a id="__codelineno-124-2" name="__codelineno-124-2"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
+</span><span id="__span-124-3"><a id="__codelineno-124-3" name="__codelineno-124-3"></a><span class="w">  </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
+</span><span id="__span-124-4"><a id="__codelineno-124-4" name="__codelineno-124-4"></a><span class="w">  </span><span class="k">gap</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-124-5"><a id="__codelineno-124-5" name="__codelineno-124-5"></a><span class="w">  </span><span class="nv">--threshold</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-124-6"><a id="__codelineno-124-6" name="__codelineno-124-6"></a><span class="p">}</span>
+</span><span id="__span-124-7"><a id="__codelineno-124-7" name="__codelineno-124-7"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-124-8"><a id="__codelineno-124-8" name="__codelineno-124-8"></a><span class="w">  </span><span class="k">flex-grow</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-124-9"><a id="__codelineno-124-9" name="__codelineno-124-9"></a><span class="w">  </span><span class="k">flex-basis</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="err">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--threshold</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">100</span><span class="kt">%</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">999</span><span class="p">);</span>
+</span><span id="__span-124-10"><a id="__codelineno-124-10" name="__codelineno-124-10"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <p><em>Esta demostración interactiva solo está disponible en el sitio de Every Layout</em> ↗.</p>
 <h2 id="gestion-de-proporciones">Gestión de proporciones<a class="headerlink" href="#gestion-de-proporciones" title="Permanent link">&para;</a></h2>
 <p>No hay razón por la que uno o más de los elementos, cuando están en una configuración horizontal, no puedan recibir más o menos del espacio disponible. Al darle al segundo elemento (<code>:nth-child(2)</code>) un <code>flex-grow: 2</code>, será el doble de ancho que sus hermanos (y los hermanos se encogerán para compensar).</p>
-<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
-<span class="normal"><a href="#__codelineno-6-2">2</a></span>
-<span class="normal"><a href="#__codelineno-6-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="p">:</span><span class="nd">nth-child</span><span class="o">(</span><span class="nt">2</span><span class="o">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="w">  </span><span class="k">flex-grow</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="p">}</span>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-125-1">1</a></span>
+<span class="normal"><a href="#__codelineno-125-2">2</a></span>
+<span class="normal"><a href="#__codelineno-125-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-125-1"><a id="__codelineno-125-1" name="__codelineno-125-1"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="p">:</span><span class="nd">nth-child</span><span class="o">(</span><span class="nt">2</span><span class="o">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-125-2"><a id="__codelineno-125-2" name="__codelineno-125-2"></a><span class="w">  </span><span class="k">flex-grow</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+</span><span id="__span-125-3"><a id="__codelineno-125-3" name="__codelineno-125-3"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <p><img alt="" src="../flexgrow.png" /></p>
 <h2 id="umbral-de-cantidad">Umbral de cantidad<a class="headerlink" href="#umbral-de-cantidad" title="Permanent link">&para;</a></h2>
@@ -1515,13 +2534,13 @@
 <p>Hasta ahora, mi <code>Switcher</code> cambia según el espacio disponible. Pero podemos agregar tantos elementos como queramos, y se distribuirán juntos horizontalmente por encima del breakpoint (o <em>threshold</em>). Cuantos más elementos agreguemos, menos espacio se le asigna a cada uno, y las cosas pueden comenzar a apretarse fácilmente.</p>
 <p>Esto es algo que podría abordarse en la documentación, o proporcionando mensajes de advertencia o error en la consola del desarrollador. Pero eso no es muy eficiente o robusto. Mejor enseñarle al layout a manejar este problema por sí mismo. El objetivo de cada uno de los layouts en este proyecto es hacerlos lo más autónomos posible.</p>
 <p>Es bastante posible estilizar cada uno de un grupo de elementos hermanos basándose en cuántos hermanos hay en total. La técnica se llama <em>quantity query</em> ↗. Considera el siguiente código.</p>
-<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span>
-<span class="normal"><a href="#__codelineno-7-2">2</a></span>
-<span class="normal"><a href="#__codelineno-7-3">3</a></span>
-<span class="normal"><a href="#__codelineno-7-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="p">:</span><span class="nd">nth-last-child</span><span class="o">(</span><span class="nt">n</span><span class="o">+</span><span class="nt">5</span><span class="o">),</span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="p">:</span><span class="nd">nth-last-child</span><span class="o">(</span><span class="nt">n</span><span class="o">+</span><span class="nt">5</span><span class="o">)</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="w">  </span><span class="k">flex-basis</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="p">}</span>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-126-1">1</a></span>
+<span class="normal"><a href="#__codelineno-126-2">2</a></span>
+<span class="normal"><a href="#__codelineno-126-3">3</a></span>
+<span class="normal"><a href="#__codelineno-126-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-126-1"><a id="__codelineno-126-1" name="__codelineno-126-1"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="p">:</span><span class="nd">nth-last-child</span><span class="o">(</span><span class="nt">n</span><span class="o">+</span><span class="nt">5</span><span class="o">),</span>
+</span><span id="__span-126-2"><a id="__codelineno-126-2" name="__codelineno-126-2"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="p">:</span><span class="nd">nth-last-child</span><span class="o">(</span><span class="nt">n</span><span class="o">+</span><span class="nt">5</span><span class="o">)</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-126-3"><a id="__codelineno-126-3" name="__codelineno-126-3"></a><span class="w">  </span><span class="k">flex-basis</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+</span><span id="__span-126-4"><a id="__codelineno-126-4" name="__codelineno-126-4"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <p>Aquí, estamos aplicando un <code>flex-basis: 100%</code> a cada elemento, solo donde hay <em>cinco o más elementos en total</em>. El selector <code>:nth-last-child(n+5)</code> apunta a cualquier elemento que esté a más de 4 del <em>final</em> del conjunto. Luego, el combinador general de hermanos (<code>~</code>) aplica la misma regla al resto de los elementos (coincide con cualquier cosa después de <code>:nth-last-child(n+5)</code>). Si hay menos de 5 elementos, ningún elemento coincide con <code>:nth-last-child(n+5)</code> y el estilo no se aplica.</p>
 <p><img alt="" src="../n5.png" /></p>
@@ -1533,56 +2552,56 @@
 <h2 id="el-generador">El generador<a class="headerlink" href="#el-generador" title="Permanent link">&para;</a></h2>
 <p>La herramienta generadora de código solo está disponible en el <em>sitio de documentación adjunto</em> ↗. Aquí está la solución básica, con comentarios:</p>
 <p><strong>CSS</strong></p>
-<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-8-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-8-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-8-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-8-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-8-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-8-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-8-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-8-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-8-10">10</a></span>
-<span class="normal"><a href="#__codelineno-8-11">11</a></span>
-<span class="normal"><a href="#__codelineno-8-12">12</a></span>
-<span class="normal"><a href="#__codelineno-8-13">13</a></span>
-<span class="normal"><a href="#__codelineno-8-14">14</a></span>
-<span class="normal"><a href="#__codelineno-8-15">15</a></span>
-<span class="normal"><a href="#__codelineno-8-16">16</a></span>
-<span class="normal"><a href="#__codelineno-8-17">17</a></span>
-<span class="normal"><a href="#__codelineno-8-18">18</a></span>
-<span class="normal"><a href="#__codelineno-8-19">19</a></span>
-<span class="normal"><a href="#__codelineno-8-20">20</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="w">  </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="w">  </span><span class="c">/* ↓ El valor por defecto es el primer punto en la escala modular */</span>
-</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="w">  </span><span class="k">gap</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--gutter</span><span class="p">,</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--s1</span><span class="p">));</span>
-</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="w">  </span><span class="c">/* ↓ El ancho en el que el layout &quot;se rompe&quot; */</span>
-</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7"></a><span class="w">  </span><span class="nv">--threshold</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="kt">rem</span><span class="p">;</span>
-</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8"></a><span class="p">}</span>
-</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10"></a><span class="w">  </span><span class="c">/* ↓ Permitir que los hijos crezcan */</span>
-</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11"></a><span class="w">  </span><span class="k">flex-grow</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12"></a><span class="w">  </span><span class="c">/* ↓ Cambiar el layout en el --threshold */</span>
-</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13"></a><span class="w">  </span><span class="k">flex-basis</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="err">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--threshold</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">100</span><span class="kt">%</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">999</span><span class="p">);</span>
-</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14"></a><span class="p">}</span>
-</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="p">:</span><span class="nd">nth-last-child</span><span class="o">(</span><span class="nt">n</span><span class="o">+</span><span class="nt">5</span><span class="o">),</span>
-</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="p">:</span><span class="nd">nth-last-child</span><span class="o">(</span><span class="nt">n</span><span class="o">+</span><span class="nt">5</span><span class="o">)</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17"></a><span class="w">  </span><span class="c">/* ↓ Cambiar a una configuración vertical si</span>
-</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18"></a><span class="c">  hay más de 4 elementos hijos */</span>
-</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19"></a><span class="w">  </span><span class="k">flex-basis</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
-</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20"></a><span class="p">}</span>
+<div class="language-css highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-127-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-127-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-127-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-127-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-127-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-127-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-127-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-127-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-127-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-127-10">10</a></span>
+<span class="normal"><a href="#__codelineno-127-11">11</a></span>
+<span class="normal"><a href="#__codelineno-127-12">12</a></span>
+<span class="normal"><a href="#__codelineno-127-13">13</a></span>
+<span class="normal"><a href="#__codelineno-127-14">14</a></span>
+<span class="normal"><a href="#__codelineno-127-15">15</a></span>
+<span class="normal"><a href="#__codelineno-127-16">16</a></span>
+<span class="normal"><a href="#__codelineno-127-17">17</a></span>
+<span class="normal"><a href="#__codelineno-127-18">18</a></span>
+<span class="normal"><a href="#__codelineno-127-19">19</a></span>
+<span class="normal"><a href="#__codelineno-127-20">20</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-127-1"><a id="__codelineno-127-1" name="__codelineno-127-1"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-127-2"><a id="__codelineno-127-2" name="__codelineno-127-2"></a><span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span>
+</span><span id="__span-127-3"><a id="__codelineno-127-3" name="__codelineno-127-3"></a><span class="w">  </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span>
+</span><span id="__span-127-4"><a id="__codelineno-127-4" name="__codelineno-127-4"></a><span class="w">  </span><span class="c">/* ↓ El valor por defecto es el primer punto en la escala modular */</span>
+</span><span id="__span-127-5"><a id="__codelineno-127-5" name="__codelineno-127-5"></a><span class="w">  </span><span class="k">gap</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--gutter</span><span class="p">,</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--s1</span><span class="p">));</span>
+</span><span id="__span-127-6"><a id="__codelineno-127-6" name="__codelineno-127-6"></a><span class="w">  </span><span class="c">/* ↓ El ancho en el que el layout &quot;se rompe&quot; */</span>
+</span><span id="__span-127-7"><a id="__codelineno-127-7" name="__codelineno-127-7"></a><span class="w">  </span><span class="nv">--threshold</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="kt">rem</span><span class="p">;</span>
+</span><span id="__span-127-8"><a id="__codelineno-127-8" name="__codelineno-127-8"></a><span class="p">}</span>
+</span><span id="__span-127-9"><a id="__codelineno-127-9" name="__codelineno-127-9"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-127-10"><a id="__codelineno-127-10" name="__codelineno-127-10"></a><span class="w">  </span><span class="c">/* ↓ Permitir que los hijos crezcan */</span>
+</span><span id="__span-127-11"><a id="__codelineno-127-11" name="__codelineno-127-11"></a><span class="w">  </span><span class="k">flex-grow</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-127-12"><a id="__codelineno-127-12" name="__codelineno-127-12"></a><span class="w">  </span><span class="c">/* ↓ Cambiar el layout en el --threshold */</span>
+</span><span id="__span-127-13"><a id="__codelineno-127-13" name="__codelineno-127-13"></a><span class="w">  </span><span class="k">flex-basis</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="err">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--threshold</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">100</span><span class="kt">%</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">999</span><span class="p">);</span>
+</span><span id="__span-127-14"><a id="__codelineno-127-14" name="__codelineno-127-14"></a><span class="p">}</span>
+</span><span id="__span-127-15"><a id="__codelineno-127-15" name="__codelineno-127-15"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="p">:</span><span class="nd">nth-last-child</span><span class="o">(</span><span class="nt">n</span><span class="o">+</span><span class="nt">5</span><span class="o">),</span>
+</span><span id="__span-127-16"><a id="__codelineno-127-16" name="__codelineno-127-16"></a><span class="p">.</span><span class="nc">switcher</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="p">:</span><span class="nd">nth-last-child</span><span class="o">(</span><span class="nt">n</span><span class="o">+</span><span class="nt">5</span><span class="o">)</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-127-17"><a id="__codelineno-127-17" name="__codelineno-127-17"></a><span class="w">  </span><span class="c">/* ↓ Cambiar a una configuración vertical si</span>
+</span><span id="__span-127-18"><a id="__codelineno-127-18" name="__codelineno-127-18"></a><span class="c">  hay más de 4 elementos hijos */</span>
+</span><span id="__span-127-19"><a id="__codelineno-127-19" name="__codelineno-127-19"></a><span class="w">  </span><span class="k">flex-basis</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+</span><span id="__span-127-20"><a id="__codelineno-127-20" name="__codelineno-127-20"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <p><strong>HTML</strong></p>
-<div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span>
-<span class="normal"><a href="#__codelineno-9-2">2</a></span>
-<span class="normal"><a href="#__codelineno-9-3">3</a></span>
-<span class="normal"><a href="#__codelineno-9-4">4</a></span>
-<span class="normal"><a href="#__codelineno-9-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;switcher&quot;</span><span class="p">&gt;</span>
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2"></a>  <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="cm">&lt;!-- elemento hijo --&gt;</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3"></a>  <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="cm">&lt;!-- otro elemento hijo --&gt;</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4"></a>  <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="cm">&lt;!-- etc --&gt;</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<div class="language-html highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-128-1">1</a></span>
+<span class="normal"><a href="#__codelineno-128-2">2</a></span>
+<span class="normal"><a href="#__codelineno-128-3">3</a></span>
+<span class="normal"><a href="#__codelineno-128-4">4</a></span>
+<span class="normal"><a href="#__codelineno-128-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-128-1"><a id="__codelineno-128-1" name="__codelineno-128-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;switcher&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-128-2"><a id="__codelineno-128-2" name="__codelineno-128-2"></a>  <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="cm">&lt;!-- elemento hijo --&gt;</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-128-3"><a id="__codelineno-128-3" name="__codelineno-128-3"></a>  <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="cm">&lt;!-- otro elemento hijo --&gt;</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-128-4"><a id="__codelineno-128-4" name="__codelineno-128-4"></a>  <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="cm">&lt;!-- etc --&gt;</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span id="__span-128-5"><a id="__codelineno-128-5" name="__codelineno-128-5"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 </span></code></pre></div></td></tr></table></div>
 <h2 id="el-componente">El componente<a class="headerlink" href="#el-componente" title="Permanent link">&para;</a></h2>
 <p>Una implementación de elemento personalizado del <code>Switcher</code> está disponible para descargar ↗.</p>
