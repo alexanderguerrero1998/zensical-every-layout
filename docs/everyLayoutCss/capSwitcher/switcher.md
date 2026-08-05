@@ -2918,6 +2918,260 @@ Un conjunto de pasos numerados también es más fácil de procesar cognitivament
 
 ![](numbers.png)
 
+??? info "Explicacion"
+
+    Esta última sección ya no habla del funcionamiento técnico del **Switcher**, sino de **cuándo conviene usarlo**.
+
+    La pregunta que responde es:
+
+    > **¿En qué situaciones este layout tiene sentido?**
+
+    ---
+
+    __La idea principal__
+
+    El Switcher es ideal cuando **todos los elementos tienen la misma importancia**.
+
+    No quieres que ninguno parezca especial.
+
+    Todos deben verse como partes de un mismo conjunto.
+
+    ---
+
+    __Ejemplo 1: Tarjetas de productos__
+
+    Imagina una tienda.
+
+    ```text
+    ┌──────────┐ ┌──────────┐ ┌──────────┐
+    │ Laptop   │ │ Tablet   │ │ Monitor  │
+    └──────────┘ └──────────┘ └──────────┘
+    ```
+
+    Las tres tienen exactamente el mismo tamaño.
+
+    Ninguna llama más la atención.
+
+    ---
+
+    Ahora imagina un Flexbox normal donde la última fila queda incompleta.
+
+    ```text
+    ┌──────────┐ ┌──────────┐ ┌──────────┐
+    │ Laptop   │ │ Tablet   │ │ Monitor  │
+    └──────────┘ └──────────┘ └──────────┘
+
+    ┌──────────────────────────────┐
+    │           Mouse              │
+    └──────────────────────────────┘
+    ```
+
+    El **Mouse** ocupa mucho más ancho.
+
+    Aunque no querías destacarlo, visualmente parece:
+
+    * una promoción,
+    * el producto principal,
+    * el recomendado.
+
+    Nuestro cerebro suele asociar **más tamaño = más importancia**.
+
+    ---
+
+    Con el Switcher eso no ocurre.
+
+    Si ya no pueden mantenerse iguales en horizontal:
+
+    ```text
+    ┌──────────┐
+    │ Laptop   │
+    └──────────┘
+
+    ┌──────────┐
+    │ Tablet   │
+    └──────────┘
+
+    ┌──────────┐
+    │ Monitor  │
+    └──────────┘
+
+    ┌──────────┐
+    │ Mouse    │
+    └──────────┘
+    ```
+
+    Todas siguen teniendo el mismo ancho.
+
+    ---
+
+    __¿Qué significa "parte de un continuo"?__
+
+    Quiere decir que los elementos forman una secuencia o conjunto donde **ninguno debería sobresalir**.
+
+    Por ejemplo:
+
+    * pasos de un proceso,
+    * opciones de configuración,
+    * planes de suscripción,
+    * etapas de un formulario,
+    * niveles de un curso.
+
+    Todos pertenecen a la misma "serie".
+
+    ---
+
+    __Ejemplo 2: Pasos de un proceso__
+
+    Supongamos un asistente de registro.
+
+    ```text
+    ① Crear cuenta
+
+    ↓
+
+    ② Verificar correo
+
+    ↓
+
+    ③ Completar perfil
+
+    ↓
+
+    ④ Finalizar
+    ```
+
+    Cada paso tiene la misma importancia.
+
+    ---
+
+    En una pantalla ancha:
+
+    ```text
+    ① ───── ② ───── ③ ───── ④
+    ```
+
+    En una pantalla estrecha:
+
+    ```text
+    ①
+
+    ↓
+
+    ②
+
+    ↓
+
+    ③
+
+    ↓
+
+    ④
+    ```
+
+    Las dos disposiciones son fáciles de seguir.
+
+    ---
+
+    __¿Qué pasaría con estados intermedios?__
+
+    Imagina esto:
+
+    ```text
+    ① ───── ②
+
+    ③ ────────────────────────
+
+    ④
+    ```
+
+    El paso **③** termina siendo mucho más ancho.
+
+    Aunque funcionalmente no cambió, visualmente parece más importante que los demás.
+
+    Eso rompe la sensación de continuidad.
+
+    ---
+
+    __¿Por qué dicen que es más fácil de procesar cognitivamente?__
+
+    Porque el cerebro identifica patrones muy rápido.
+
+    Si todos los pasos tienen el mismo tamaño y están alineados:
+
+    ```text
+    ① → ② → ③ → ④
+    ```
+
+    o
+
+    ```text
+    ①
+    ↓
+    ②
+    ↓
+    ③
+    ↓
+    ④
+    ```
+
+    La lectura es inmediata.
+
+    En cambio, si cada uno tiene un tamaño distinto:
+
+    ```text
+    ① → ②
+
+    ③──────────────
+
+    ④
+    ```
+
+    El usuario necesita un instante extra para interpretar el orden y entender que todos pertenecen al mismo proceso.
+
+    No es un problema enorme, pero añade una pequeña carga mental innecesaria.
+
+    ---
+
+    __¿Cuándo usarías un Grid en lugar del Switcher?__
+
+    Esta es una buena forma de diferenciarlos.
+
+    __Usa una cuadrícula (Grid o `flex-wrap`) cuando:__
+
+    * los elementos son muchos;
+    * no importa que existan varias filas;
+    * una última fila incompleta no afecta la comprensión.
+
+    Ejemplos:
+
+    * galería de fotos,
+    * catálogo de productos con decenas de artículos,
+    * lista de noticias.
+
+    ---
+
+    __Usa un Switcher cuando:__
+
+    * hay pocos elementos;
+    * todos tienen la misma importancia;
+    * quieres que todos mantengan el mismo ancho;
+    * prefieres cambiar directamente entre una fila y una columna.
+
+    Ejemplos:
+
+    * planes de precios (Básico, Pro, Empresa),
+    * pasos de un asistente,
+    * botones de acción principales,
+    * tarjetas comparativas,
+    * opciones de configuración.
+
+    ---
+
+    __La idea clave__
+
+    El **Switcher** no está pensado para reemplazar una cuadrícula tradicional. Está diseñado para conjuntos pequeños de elementos equivalentes, donde la uniformidad visual es importante. Su propósito es evitar que algunos elementos parezcan más relevantes solo porque terminaron ocupando más espacio y mantener una presentación clara, ya sea en una única fila horizontal o en una única columna vertical.
+
+
 ## El generador
 
 La herramienta generadora de código solo está disponible en el *sitio de documentación adjunto* ↗. Aquí está la solución básica, con comentarios:
@@ -2956,6 +3210,411 @@ La herramienta generadora de código solo está disponible en el *sitio de docum
   <div><!-- etc --></div>
 </div>
 ```
+
+??? info "Explicacion"
+
+    Esta ya es la implementación completa del **Switcher**. A estas alturas no introduce conceptos nuevos; simplemente reúne todas las ideas anteriores en un único componente.
+
+    Vamos línea por línea.
+
+    ---
+
+    __HTML__
+
+    ```html
+    <div class="switcher">
+      <div><!-- elemento hijo --></div>
+      <div><!-- otro elemento hijo --></div>
+      <div><!-- etc --></div>
+    </div>
+    ```
+
+    La estructura es muy simple.
+
+    ```text
+    .switcher
+    │
+    ├── hijo
+    ├── hijo
+    ├── hijo
+    └── hijo
+    ```
+
+    Todos los **hijos directos** participan en el layout.
+
+    ---
+
+    __display:flex__
+
+    ```css
+    display:flex;
+    ```
+
+    Convierte al contenedor en un Flexbox.
+
+    ```text
+    A B C D
+    ```
+
+    Los hijos pasan a alinearse horizontalmente.
+
+    ---
+
+    __flex-wrap__
+
+    ```css
+    flex-wrap:wrap;
+    ```
+
+    Permite que bajen a otra línea si no caben.
+
+    Sin esto, Flexbox intentaría mantenerlos todos en una sola fila.
+
+    ---
+
+    __gap__
+
+    ```css
+    gap: var(--gutter, var(--s1));
+    ```
+
+    Aquí aparecen dos variables CSS.
+
+    __Primera__
+
+    ```css
+    --gutter
+    ```
+
+    Es una variable opcional.
+
+    Si existe, se usa.
+
+    Por ejemplo:
+
+    ```css
+    .switcher{
+        --gutter:2rem;
+    }
+    ```
+
+    Entonces el espacio será:
+
+    ```text
+    2rem
+    ```
+
+    ---
+
+    __Si no existe...__
+
+    Entra el segundo argumento de `var()`.
+
+    ```css
+    var(--s1)
+    ```
+
+    Ya sabes que eso es un **fallback**.
+
+    Es decir:
+
+    > "Si `--gutter` no está definida, usa `--s1`."
+
+    ---
+
+    __¿Qué es `--s1`?__
+
+    En Every Layout normalmente existe una escala modular parecida a esta:
+
+    ```css
+    :root{
+        --s-2:.25rem;
+        --s-1:.5rem;
+        --s0:.75rem;
+        --s1:1rem;
+        --s2:1.5rem;
+        --s3:2rem;
+    }
+    ```
+
+    Entonces el `gap` normalmente termina siendo:
+
+    ```text
+    1rem
+    ```
+
+    pero puede cambiarse fácilmente.
+
+    ---
+
+    __threshold__
+
+    ```css
+    --threshold:30rem;
+    ```
+
+    No hace nada por sí solo.
+
+    Simplemente guarda el breakpoint del Switcher.
+
+    Podrías cambiarlo a:
+
+    ```css
+    --threshold:40rem;
+    ```
+
+    y todo seguiría funcionando.
+
+    ---
+
+    __flex-grow__
+
+    ```css
+    flex-grow:1;
+    ```
+
+    Todos los hijos pueden crecer.
+
+    Si sobra espacio:
+
+    ```text
+    □ □ □
+    ```
+
+    Se reparte.
+
+    ---
+
+    __flex-basis__
+
+    ```css
+    flex-basis:
+    calc((var(--threshold)-100%)*999);
+    ```
+
+    Esta es la parte importante.
+
+    Ya la conoces.
+
+    Si el contenedor es mayor que `30rem`:
+
+    ```text
+    30-40
+
+    ↓
+
+    negativo
+
+    ↓
+
+    valor inválido
+
+    ↓
+
+    se ignora
+    ```
+
+    Resultado:
+
+    ```text
+    □ □ □
+    ```
+
+    Horizontal.
+
+    ---
+
+    Si el contenedor es menor:
+
+    ```text
+    30-20
+
+    ↓
+
+    positivo enorme
+
+    ↓
+
+    9990rem
+
+    ↓
+
+    uno por fila
+    ```
+
+    Resultado:
+
+    ```text
+    □
+
+    □
+
+    □
+    ```
+
+    Vertical.
+
+    ---
+
+    __Quantity Query__
+
+    Ahora aparece esta parte.
+
+    ```css
+    .switcher > :nth-last-child(n+5),
+    .switcher > :nth-last-child(n+5) ~ * {
+    ```
+
+    Ya vimos qué hace.
+
+    Significa:
+
+    > Si existen **cinco o más hijos**, selecciona todos.
+
+    ---
+
+    Luego:
+
+    ```css
+    flex-basis:100%;
+    ```
+
+    Cada elemento quiere ocupar todo el ancho.
+
+    Resultado:
+
+    ```text
+    A
+
+    B
+
+    C
+
+    D
+
+    E
+    ```
+
+    Aunque el contenedor mida:
+
+    ```text
+    300rem
+    ```
+
+    ---
+
+    __¿Por qué está al final?__
+
+    Porque CSS se lee de arriba hacia abajo.
+
+    Primero:
+
+    ```css
+    flex-basis:
+    calc(...)
+    ```
+
+    Luego:
+
+    ```css
+    flex-basis:100%;
+    ```
+
+    Si existen cinco o más elementos, esta última regla sobrescribe a la anterior porque:
+
+    * tiene la misma especificidad;
+    * aparece después.
+
+    ---
+
+    __¿Qué comportamientos tiene finalmente el Switcher?__
+
+    Podemos resumirlo como un conjunto de reglas.
+
+    ---
+
+    __Caso 1__
+
+    Hay espacio suficiente.
+
+    ```text
+    Contenedor
+
+    ↓
+
+    Mayor que 30rem
+    ```
+
+    Resultado:
+
+    ```text
+    □ □ □
+    ```
+
+    ---
+
+    __Caso 2__
+
+    No hay espacio suficiente.
+
+    ```text
+    Menor que 30rem
+    ```
+
+    Resultado:
+
+    ```text
+    □
+
+    □
+
+    □
+    ```
+
+    ---
+
+    __Caso 3__
+
+    Hay demasiados elementos.
+
+    ```text
+    5+
+    ```
+
+    Resultado:
+
+    ```text
+    □
+
+    □
+
+    □
+
+    □
+
+    □
+    ```
+
+    Aunque el contenedor sea enorme.
+
+    ---
+
+    __Filosóficamente, ¿qué hace el Switcher?__
+
+    Si recuerdas todos los componentes que has estudiado hasta ahora:
+
+    * **Stack** organiza elementos **verticalmente**.
+    * **Cluster** organiza elementos **horizontalmente** y permite que se envuelvan.
+    * **Sidebar** divide el espacio entre una barra lateral y un contenido principal.
+    * **Switcher** decide automáticamente si mostrar un grupo de elementos **en una sola fila o en una sola columna**, evitando distribuciones intermedias que puedan romper la uniformidad visual.
+
+    Ese último punto es lo que hace único al Switcher. No es simplemente un Flexbox con `flex-wrap`; es un componente que **cambia entre dos estados bien definidos** según el contexto:
+
+    * **Umbral de espacio:** cuando el contenedor es más estrecho que `--threshold`, pasa a una columna.
+    * **Umbral de cantidad:** cuando hay cinco o más elementos, también pasa a una columna.
+
+    En otras palabras, el Switcher encapsula una decisión de diseño: **si todos los elementos pueden mantenerse cómodamente y con la misma importancia en una fila, se muestran horizontalmente; si no, el propio componente cambia a una disposición vertical sin necesidad de escribir `@media` ni intervenir manualmente.** Esa autonomía es precisamente la filosofía central de *Every Layout*.
+
 
 ## El componente
 
