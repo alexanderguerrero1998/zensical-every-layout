@@ -336,20 +336,6 @@ En su lugar, podemos establecer un `min-height`. De esta manera, el elemento se 
 
 ![](padding.png)
 
-## Box sizing
-
-Para asegurar que el elemento padre retenga una altura de `100vh`, a pesar del padding adicional, se debe aplicar un valor de `box-sizing: border-box`. Donde no se aplica, el padding se *agrega* a la altura total.
-
-El `box-sizing: border-box` es tan deseable, que usualmente se aplica a todos los elementos en un bloque de declaración global. El uso del selector universal (`*`) significa que todos los elementos se ven afectados.
-
-```css linenums="1"
-* {
-  box-sizing: border-box;
-  /* otros estilos globales */
-}
-```
-
-Esto es perfectamente funcional donde solo un elemento centrado está en juego. Pero tenemos la costumbre de querer incluir otros elementos, arriba y abajo del centrado. Quizás es un botón de cerrar en la esquina superior derecha, o un indicador de "leer más" en la parte inferior central. En cualquier caso, necesito manejar estos casos de manera modular, y sin producir roturas.
 
 ??? info "Explicacion"
 
@@ -666,6 +652,364 @@ Esto es perfectamente funcional donde solo un elemento centrado está en juego. 
     * ✅ Añade `padding` para mantener un espacio cómodo cuando el contenido haga crecer el contenedor.
 
     Ese enfoque hace que el diseño sea mucho más resistente a cambios en el contenido, distintos tamaños de pantalla y ajustes de accesibilidad como aumentar el tamaño de la fuente.
+
+## Box sizing
+
+Para asegurar que el elemento padre retenga una altura de `100vh`, a pesar del padding adicional, se debe aplicar un valor de `box-sizing: border-box`. Donde no se aplica, el padding se *agrega* a la altura total.
+
+El `box-sizing: border-box` es tan deseable, que usualmente se aplica a todos los elementos en un bloque de declaración global. El uso del selector universal (`*`) significa que todos los elementos se ven afectados.
+
+```css linenums="1"
+* {
+  box-sizing: border-box;
+  /* otros estilos globales */
+}
+```
+
+Esto es perfectamente funcional donde solo un elemento centrado está en juego. Pero tenemos la costumbre de querer incluir otros elementos, arriba y abajo del centrado. Quizás es un botón de cerrar en la esquina superior derecha, o un indicador de "leer más" en la parte inferior central. En cualquier caso, necesito manejar estos casos de manera modular, y sin producir roturas.
+
+??? info "Explicacion"
+    
+    Esta explicación es importante porque conecta dos conceptos: **`box-sizing`** y **`min-height: 100vh`**.
+
+    Hay una frase que puede pasar desapercibida:
+
+    > "Para asegurar que el elemento padre retenga una altura de `100vh`, a pesar del padding adicional..."
+
+    ¿Por qué el `padding` afecta la altura? Veámoslo.
+
+    ---
+
+    __El modelo de caja (Box Model)__
+
+    Todo elemento HTML está formado por cuatro partes:
+
+    ```text
+    ┌─────────────────────────────┐
+    │          Margin             │
+    │ ┌─────────────────────────┐ │
+    │ │        Border           │ │
+    │ │ ┌─────────────────────┐ │ │
+    │ │ │      Padding        │ │ │
+    │ │ │ ┌─────────────────┐ │ │ │
+    │ │ │ │    Content      │ │ │ │
+    │ │ │ └─────────────────┘ │ │ │
+    │ │ └─────────────────────┘ │ │
+    │ └─────────────────────────┘ │
+    └─────────────────────────────┘
+    ```
+
+    El problema está en cómo CSS calcula el tamaño.
+
+    ---
+
+    __Sin `box-sizing`__
+
+    Por defecto, todos los navegadores usan:
+
+    ```css
+    box-sizing: content-box;
+    ```
+
+    Eso significa:
+
+    > **El `width` y el `height` solo corresponden al contenido.**
+
+    Supongamos:
+
+    ```css
+    height: 100vh;
+    padding: 20px;
+    ```
+
+    Imagina que el viewport mide 800 px.
+
+    Entonces ocurre esto.
+
+    Contenido:
+
+    ```text
+    800 px
+    ```
+
+    Padding arriba:
+
+    ```text
+    20 px
+    ```
+
+    Padding abajo:
+
+    ```text
+    20 px
+    ```
+
+    La altura real será:
+
+    ```text
+    800
+    +20
+    +20
+    ----
+    840 px
+    ```
+
+    Visualmente:
+
+    ```text
+    Viewport (800px)
+
+    ┌────────────────────────────┐
+    │ padding 20px               │
+    │                            │
+    │                            │
+    │   contenido (800px)        │
+    │                            │
+    │                            │
+    │ padding 20px               │
+    └────────────────────────────┘
+
+    Altura total = 840px
+    ```
+
+    Ahora el elemento **ya no mide 100vh**, sino más.
+
+    ---
+
+    __¿Qué problema produce?__
+
+    Supongamos que el Cover debe ocupar exactamente la pantalla.
+
+    Pero como mide 840 px, aparece un pequeño scroll.
+
+    ```text
+    ┌────────────────────┐
+    │                    │
+    │     Cover          │
+    │                    │
+    └────────────────────┘
+    ↓↓↓↓↓↓↓↓↓
+
+    20 px extra
+    ```
+
+    Ese scroll no lo querías.
+
+    Fue causado únicamente por el `padding`.
+
+    ---
+
+    __Con `border-box`__
+
+    Ahora escribimos:
+
+    ```css
+    box-sizing: border-box;
+    ```
+
+    La regla cambia completamente.
+
+    Ahora CSS interpreta:
+
+    > "Los 100vh incluyen el padding y el borde."
+
+    Entonces:
+
+    ```css
+    height:100vh;
+    padding:20px;
+    ```
+
+    significa:
+
+    ```text
+    Altura total = 800px
+    ```
+
+    No 840.
+
+    El navegador hace las cuentas por ti.
+
+    Contenido:
+
+    ```text
+    760 px
+    ```
+
+    Padding:
+
+    ```text
+    20 px arriba
+
+    20 px abajo
+    ```
+
+    Total:
+
+    ```text
+    760
+    +20
+    +20
+    ----
+    800 px
+    ```
+
+    Visualmente:
+
+    ```text
+    ┌──────────────────────────┐
+    │ padding                  │
+    │                          │
+    │ contenido                │
+    │                          │
+    │ padding                  │
+    └──────────────────────────┘
+
+    Todo sigue midiendo 100vh.
+    ```
+
+    ---
+
+    __¿Por qué lo ponen globalmente?__
+
+    Muestran esto:
+
+    ```css
+    * {
+        box-sizing:border-box;
+    }
+    ```
+
+    El selector universal
+
+    ```css
+    *
+    ```
+
+    significa:
+
+    > Todos los elementos.
+
+    Es decir,
+
+    ```html
+    <div>
+
+    <section>
+
+    <p>
+
+    <h1>
+
+    <img>
+
+    <button>
+
+    <input>
+    ```
+
+    todos tendrán
+
+    ```css
+    box-sizing:border-box;
+    ```
+
+    ---
+
+    __¿Por qué hacen eso?__
+
+    Porque casi siempre es el comportamiento que realmente queremos.
+
+    Imagina un botón.
+
+    ```css
+    width:200px;
+    padding:20px;
+    ```
+
+    Con `content-box`
+
+    mide
+
+    ```text
+    240px
+    ```
+
+    Con `border-box`
+
+    mide
+
+    ```text
+    200px
+    ```
+
+    Esto hace muchísimo más fáciles los cálculos.
+
+    Por eso hoy en día prácticamente todos los frameworks (Bootstrap, Tailwind, Material UI, etc.) empiezan con algo parecido a:
+
+    ```css
+    *,
+    *::before,
+    *::after {
+        box-sizing:border-box;
+    }
+    ```
+
+    ---
+
+    __¿Y por qué después vuelve a hablar de header y footer?__
+
+    Fíjate que el párrafo cambia de tema.
+
+    Primero explica:
+
+    > "Necesitamos `box-sizing` para que el padding no aumente el tamaño."
+
+    Y enseguida dice:
+
+    > "Pero normalmente queremos añadir elementos arriba y abajo."
+
+    Es decir:
+
+    Primero resolvió el problema del tamaño.
+
+    Ahora empieza otro problema.
+
+    ```text
+    ┌───────────────────────────┐
+    │ Header                    │
+    │                           │
+    │                           │
+    │        Contenido          │
+    │                           │
+    │                           │
+    │ Footer                    │
+    └───────────────────────────┘
+    ```
+
+    Ya no basta con centrar un único elemento.
+
+    Hay que mantener el centrado **aunque aparezcan hermanos**.
+
+    Ese es precisamente el problema que luego resuelve con:
+
+    ```css
+    margin-top:auto;
+    margin-bottom:auto;
+    ```
+
+    ---
+
+    __Un detalle importante__
+
+    En el texto hablan de **`height: 100vh`**, pero el `Cover` realmente utiliza:
+
+    ```css
+    min-height:100vh;
+    ```
+
+    Con `min-height`, `box-sizing: border-box` sigue siendo útil por la misma razón: garantiza que ese **mínimo** incluya el `padding`. Así, cuando el contenido es pequeño, el `Cover` ocupa exactamente el alto de la ventana sin crecer por culpa del `padding`. Y si el contenido necesita más espacio, el contenedor puede expandirse gracias a `min-height`, manteniendo el comportamiento flexible que busca Every Layout.
+
 
 ## La solución
 
