@@ -347,9 +347,992 @@ observeGrid(grid);
     
     En resumen: el patrón usa JavaScript de forma mínima y quirúrgica — no para controlar el layout entero, sino solo para decidir *cuándo* activar una regla CSS que, de otro modo, sería peligrosa de aplicar incondicionalmente. Es progressive enhancement en su forma más pura: la base funciona sin JS, y JS solo mejora la experiencia cuando está disponible.
 
-### La función `min()`
+??? info "Explicacion"
 
-Si bien vale la pena cubrir `ResizeObserver` porque puede servirte bien en otras circunstancias, en realidad ya no es necesario para resolver este problema en particular. Esto se debe a que tenemos la *función CSS `min()` recientemente ampliamente adoptada* ↗. Perdón por la falsa alarma, pero podemos, de hecho, escribir este layout sin JavaScript después de todo.
+    Claro. Esta parte de *Every Layout* está intentando resolver un problema muy concreto: **¿cómo hago que una grilla se adapte según el espacio que realmente tiene, sin usar `@media`?**
+    
+    La idea central es bastante buena:
+    
+    > **No quiero preguntar "¿qué tan ancha es la pantalla?", quiero preguntar "¿qué tan ancho es este componente?"**
+    
+    Vamos paso a paso.
+    
+    ---
+    
+    __1. El problema que quieren resolver__
+    
+    Imagina que tienes:
+    
+    ```html
+    <div class="grid">
+        <article>...</article>
+        <article>...</article>
+        <article>...</article>
+    </div>
+    ```
+    
+    Y quieres que:
+    
+    * si `.grid` es pequeña → 1 columna
+    * si `.grid` tiene suficiente espacio → varias columnas
+    
+    Normalmente podrías hacer:
+    
+    ```css
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+    
+    @media (min-width: 800px) {
+        .grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+    ```
+    
+    Pero hay un problema.
+    
+    __`@media` pregunta por la ventana__
+    
+    El breakpoint de:
+    
+    ```css
+    @media (min-width: 800px)
+    ```
+    
+    significa:
+    
+    > "Si **la ventana del navegador** mide al menos 800px..."
+    
+    Pero el componente podría estar dentro de un sidebar.
+    
+    Por ejemplo:
+    
+    ```text
+    ┌──────────────────────────────────────────┐
+    │                navegador                 │
+    │                                          │
+    │ ┌────────────┐ ┌───────────────────────┐ │
+    │ │  SIDEBAR   │ │       CONTENIDO       │ │
+    │ │            │ │                       │ │
+    │ │  .grid     │ │                       │ │
+    │ │            │ │                       │ │
+    │ └────────────┘ └───────────────────────┘ │
+    │                                          │
+    └──────────────────────────────────────────┘
+    ```
+    
+    La ventana podría tener **1400px**.
+    
+    Pero `.grid` podría estar dentro del sidebar y tener solamente **300px**.
+    
+    Entonces:
+    
+    ```css
+    @media (min-width: 800px)
+    ```
+    
+    diría:
+    
+    > "¡Perfecto! Pantalla grande. Pon la grilla en varias columnas."
+    
+    Pero la grilla respondería:
+    
+    > "¿Varias columnas? ¿Con qué espacio? 😂"
+    
+    Ese es el problema.
+    
+    ---
+    
+    __2. La filosofía de Every Layout__
+    
+    Every Layout intenta evitar:
+    
+    ```css
+    @media (min-width: ...)
+    ```
+    
+    porque los componentes deberían ser **independientes del contexto donde se coloquen**.
+    
+    Por ejemplo, una tarjeta debería funcionar igual si la colocas:
+    
+    ```text
+    página completa
+            ↓
+    ┌─────────────────────────────┐
+    │           GRID              │
+    └─────────────────────────────┘
+    ```
+    
+    o:
+    
+    ```text
+    sidebar
+       ↓
+    ┌──────────────┐
+    │    GRID      │
+    └──────────────┘
+    ```
+    
+    o:
+    
+    ```text
+    modal
+       ↓
+    ┌─────────────────┐
+    │      GRID       │
+    └─────────────────┘
+    ```
+    
+    Por eso quieren algo parecido a:
+    
+    > "Si **YO**, la grilla, tengo suficiente espacio, cambio."
+    
+    No:
+    
+    > "Si la ventana tiene suficiente espacio, cambia."
+    
+    ---
+    
+    __3. Aquí aparece `ResizeObserver`__
+    
+    JavaScript tiene una API llamada:
+    
+    ```javascript
+    ResizeObserver
+    ```
+    
+    Su trabajo es básicamente:
+    
+    > **"Avísame cuando cambie el tamaño de este elemento."**
+    
+    Por ejemplo:
+    
+    ```javascript
+    const observer = new ResizeObserver(entries => {
+        console.log('El elemento cambió de tamaño');
+    });
+    
+    observer.observe(grid);
+    ```
+    
+    Entonces, si `.grid` pasa de:
+    
+    ```text
+    300px
+    ```
+    
+    a:
+    
+    ```text
+    600px
+    ```
+    
+    el `ResizeObserver` lo detecta.
+    
+    Y si luego vuelve a:
+    
+    ```text
+    350px
+    ```
+    
+    también lo detecta.
+    
+    ---
+    
+    __4. ¿Qué hacen con esa información?__
+    
+    Aquí está el truco interesante.
+    
+    El CSS dice:
+    
+    ```css
+    .grid {
+        display: grid;
+        grid-gap: 1rem;
+    }
+    ```
+    
+    Eso es el estado base.
+    
+    Por defecto:
+    
+    ```text
+    ┌───────────────┐
+    │     item 1    │
+    ├───────────────┤
+    │     item 2    │
+    ├───────────────┤
+    │     item 3    │
+    └───────────────┘
+    ```
+    
+    Una columna.
+    
+    Pero después tienen:
+    
+    ```css
+    .grid.aboveMin {
+        grid-template-columns: repeat(
+            auto-fit,
+            minmax(500px, 1fr)
+        );
+    }
+    ```
+    
+    Esta regla **solo existe cuando aparece la clase**:
+    
+    ```html
+    class="grid aboveMin"
+    ```
+    
+    Entonces:
+    
+    ```text
+    .grid
+       ↓
+    1 columna
+    ```
+    
+    y:
+    
+    ```text
+    .grid.aboveMin
+       ↓
+    grid responsiva
+    ```
+    
+    ---
+    
+    __5. ¿Quién agrega `.aboveMin`?__
+    
+    JavaScript.
+    
+    Ese es el corazón de todo.
+    
+    La función observa el ancho:
+    
+    ```javascript
+    const cr = entry.contentRect;
+    ```
+    
+    Aquí:
+    
+    ```javascript
+    cr.width
+    ```
+    
+    es el ancho actual del `.grid`.
+    
+    Por ejemplo:
+    
+    ```text
+    grid = 350px
+    ```
+    
+    Entonces:
+    
+    ```javascript
+    cr.width
+    ```
+    
+    vale aproximadamente:
+    
+    ```text
+    350
+    ```
+    
+    ---
+    
+    __6. ¿Y cuál es el mínimo?__
+    
+    HTML tiene:
+    
+    ```html
+    <div class="grid" data-min="250px">
+    ```
+    
+    Ese:
+    
+    ```html
+    data-min="250px"
+    ```
+    
+    es un **dato personalizado** que HTML le entrega a JavaScript.
+    
+    JavaScript obtiene:
+    
+    ```javascript
+    const min = gridNode.dataset.min;
+    ```
+    
+    Por lo tanto:
+    
+    ```javascript
+    min
+    ```
+    
+    será:
+    
+    ```text
+    "250px"
+    ```
+    
+    Esto es importante porque el mínimo **no está necesariamente escrito directamente en JavaScript**.
+    
+    El HTML configura el componente.
+    
+    ---
+    
+    __7. ¿Por qué crean este `div` extraño?__
+    
+    Esta parte:
+    
+    ```javascript
+    const test = document.createElement('div');
+    
+    test.style.width = min;
+    
+    gridNode.appendChild(test);
+    
+    const minToPixels = test.offsetWidth;
+    
+    gridNode.removeChild(test);
+    ```
+    
+    parece rara al principio.
+    
+    Y sí, tiene un propósito muy específico.
+    
+    Supongamos:
+    
+    ```html
+    data-min="30em"
+    ```
+    
+    JavaScript obtiene:
+    
+    ```javascript
+    min = "30em"
+    ```
+    
+    Pero `ResizeObserver` proporciona:
+    
+    ```javascript
+    cr.width
+    ```
+    
+    en **píxeles**.
+    
+    Entonces necesitan convertir:
+    
+    ```text
+    30em
+    ```
+    
+    a:
+    
+    ```text
+    480px
+    ```
+    
+    por ejemplo.
+    
+    ---
+    
+    __8. ¿Cómo hacen esa conversión?__
+    
+    Crean temporalmente un elemento:
+    
+    ```javascript
+    const test = document.createElement('div');
+    ```
+    
+    Le dicen:
+    
+    ```javascript
+    test.style.width = min;
+    ```
+    
+    Si:
+    
+    ```javascript
+    min = "30em"
+    ```
+    
+    el navegador calcula cuánto representan esos `30em` en píxeles.
+    
+    Después:
+    
+    ```javascript
+    test.offsetWidth
+    ```
+    
+    devuelve el resultado.
+    
+    Por ejemplo:
+    
+    ```text
+    30em → 480px
+    ```
+    
+    Entonces:
+    
+    ```javascript
+    const minToPixels = test.offsetWidth;
+    ```
+    
+    tendría:
+    
+    ```text
+    480
+    ```
+    
+    Finalmente eliminan el elemento:
+    
+    ```javascript
+    gridNode.removeChild(test);
+    ```
+    
+    Es un pequeño elemento "proxy" utilizado únicamente para que **el navegador haga la conversión por ellos**.
+    
+    ---
+    
+    __9. Ahora viene la comparación__
+    
+    Tenemos:
+    
+    ```javascript
+    const isWide = cr.width > minToPixels;
+    ```
+    
+    Supongamos:
+    
+    ```text
+    minToPixels = 500
+    ```
+    
+    Y la grilla mide:
+    
+    ```text
+    700px
+    ```
+    
+    Entonces:
+    
+    ```javascript
+    700 > 500
+    ```
+    
+    es:
+    
+    ```javascript
+    true
+    ```
+    
+    Por lo tanto:
+    
+    ```javascript
+    isWide = true
+    ```
+    
+    ---
+    
+    __10. Y aquí aparece el verdadero truco__
+    
+    Esta línea:
+    
+    ```javascript
+    gridNode.classList.toggle('aboveMin', isWide);
+    ```
+    
+    hace esto:
+    
+    __Si `isWide === true`__
+    
+    agrega:
+    
+    ```html
+    class="grid aboveMin"
+    ```
+    
+    Entonces se activa:
+    
+    ```css
+    .grid.aboveMin {
+        grid-template-columns:
+            repeat(auto-fit, minmax(500px, 1fr));
+    }
+    ```
+    
+    ---
+    
+    __Si `isWide === false`__
+    
+    quita:
+    
+    ```html
+    aboveMin
+    ```
+    
+    y queda:
+    
+    ```html
+    class="grid"
+    ```
+    
+    Por lo tanto vuelve al CSS base.
+    
+    ---
+    
+    __11. Visualmente__
+    
+    Imagina que tenemos:
+    
+    ```html
+    <div class="grid" data-min="500px">
+    ```
+    
+    ### La grilla mide 400px
+    
+    ```text
+    400px < 500px
+    ```
+    
+    JavaScript hace:
+    
+    ```html
+    <div class="grid">
+    ```
+    
+    Resultado:
+    
+    ```text
+    ┌──────────────┐
+    │     A        │
+    ├──────────────┤
+    │     B        │
+    ├──────────────┤
+    │     C        │
+    └──────────────┘
+    ```
+    
+    ---
+    
+    __La grilla crece a 1200px__
+    
+    Ahora:
+    
+    ```text
+    1200px > 500px
+    ```
+    
+    JavaScript hace:
+    
+    ```html
+    <div class="grid aboveMin">
+    ```
+    
+    Y aparece:
+    
+    ```text
+    ┌──────────┬──────────┐
+    │    A     │    B     │
+    ├──────────┼──────────┤
+    │    C     │    D     │
+    └──────────┴──────────┘
+    ```
+    
+    Y lo interesante es que **no importa cuánto mida la ventana**.
+    
+    Importa cuánto mide `.grid`.
+    
+    ---
+    
+    __12. ¿Qué hace exactamente `minmax()`?__
+    
+    Esta parte:
+    
+    ```css
+    minmax(500px, 1fr)
+    ```
+    
+    significa:
+    
+    > Cada columna puede crecer, pero **no quiere ser menor que 500px**.
+    
+    Entonces:
+    
+    ```css
+    grid-template-columns:
+        repeat(auto-fit, minmax(500px, 1fr));
+    ```
+    
+    le dice al navegador:
+    
+    > "Mete tantas columnas como puedas, pero cada una debe tener al menos 500px."
+    
+    Por ejemplo, con aproximadamente 1200px:
+    
+    ```text
+    ┌──────────────┐ ┌──────────────┐
+    │              │ │              │
+    │   columna    │ │   columna    │
+    │              │ │              │
+    └──────────────┘ └──────────────┘
+    ```
+    
+    Dos columnas.
+    
+    Pero con 700px:
+    
+    ```text
+    ┌─────────────────────────┐
+    │        columna          │
+    └─────────────────────────┘
+    ```
+    
+    Una.
+    
+    ---
+    
+    __13. ¿Pero por qué necesitan JavaScript si Grid ya hace esto?__
+    
+    Aquí está la parte sutil.
+    
+    Normalmente podrías escribir:
+    
+    ```css
+    grid-template-columns:
+        repeat(auto-fit, minmax(500px, 1fr));
+    ```
+    
+    directamente.
+    
+    Y Grid ya intentaría adaptarse.
+    
+    Pero Every Layout quiere permitir **un límite mínimo más expresivo**.
+    
+    La lógica es:
+    
+    ```text
+    Si el contenedor NO supera el mínimo
+            ↓
+    usar layout sencillo
+    
+    Si el contenedor SÍ supera el mínimo
+            ↓
+    activar el layout de Grid
+    ```
+    
+    Es una especie de **interruptor de configuración**.
+    
+    JavaScript decide:
+    
+    ```text
+    ¿Este componente tiene suficiente espacio?
+            │
+            ├── NO → layout básico
+            │
+            └── SÍ → layout Grid
+    ```
+    
+    ---
+    
+    __14. ¿Por qué dicen "progressive enhancement"?__
+    
+    Esta frase es fundamental.
+    
+    **Progressive enhancement** significa:
+    
+    > Primero construyes una versión básica que funciona. Después agregas mejoras cuando el entorno lo permite.
+    
+    Aquí:
+    
+    __Nivel básico__
+    
+    ```css
+    .grid {
+        display: grid;
+    }
+    ```
+    
+    Funciona incluso si:
+    
+    ```javascript
+    ResizeObserver
+    ```
+    
+    no existe.
+    
+    Resultado:
+    
+    ```text
+    A
+    B
+    C
+    D
+    ```
+    
+    una columna.
+    
+    __Mejora__
+    
+    Si existe:
+    
+    ```javascript
+    ResizeObserver
+    ```
+    
+    entonces:
+    
+    ```text
+    ResizeObserver
+          ↓
+    mide .grid
+          ↓
+    ¿es suficientemente ancho?
+          ↓
+    sí
+          ↓
+    añade .aboveMin
+          ↓
+    Grid avanzado
+    ```
+    
+    Por eso dicen:
+    
+    > Si `ResizeObserver` no es compatible, el layout de una sola columna de respaldo se aplica perpetuamente.
+    
+    No tienes:
+    
+    ```text
+    JavaScript
+        ↓
+    falló
+        ↓
+    💥 página rota
+    ```
+    
+    Tienes:
+    
+    ```text
+    JavaScript
+        ↓
+    no disponible
+        ↓
+    layout básico
+        ↓
+    ✅ contenido sigue funcionando
+    ```
+    
+    Eso es **progressive enhancement**.
+    
+    ---
+    
+    __15. Lo más importante: no están usando JS para hacer el layout__
+    
+    Esta distinción es muy importante.
+    
+    ❌ No están haciendo esto:
+    
+    ```javascript
+    grid.style.gridTemplateColumns = ...
+    ```
+    
+    Eso sería JavaScript controlando directamente el CSS.
+    
+    En cambio hacen:
+    
+    ```javascript
+    gridNode.classList.toggle('aboveMin', isWide);
+    ```
+    
+    JavaScript solamente dice:
+    
+    > "El componente está en estado `aboveMin`."
+    
+    Y CSS decide:
+    
+    > "Perfecto. Entonces aplico este layout."
+    
+    Es una separación de responsabilidades bastante limpia:
+    
+    ```text
+    JavaScript
+        │
+        │ detecta estado
+        ↓
+    .aboveMin
+        │
+        │ CSS
+        ↓
+    layout
+    ```
+    
+    **JavaScript detecta. CSS presenta.**
+    
+    Esa es probablemente la idea más importante de todo este ejemplo.
+    
+    ---
+    
+    __16. ¿Y por qué esto es mejor que `@media`?__
+    
+    Porque `@media` mira:
+    
+    ```text
+    viewport
+    ```
+    
+    mientras que `ResizeObserver` mira:
+    
+    ```text
+    elemento
+    ```
+    
+    Comparación:
+    
+    ```text
+               @media
+                  ↓
+           ┌──────────────┐
+           │   viewport   │
+           └──────────────┘
+                  │
+                  ↓
+              componente
+    ```
+    
+    versus:
+    
+    ```text
+          ResizeObserver
+                 ↓
+           ┌──────────┐
+           │  .grid   │
+           └──────────┘
+                 │
+                 ↓
+           toma su propia
+           decisión
+    ```
+    
+    Esto hace que el componente sea mucho más **modular**.
+    
+    Puedes moverlo:
+    
+    ```text
+    página completa
+    ```
+    
+    o:
+    
+    ```text
+    sidebar
+    ```
+    
+    o:
+    
+    ```text
+    modal
+    ```
+    
+    o:
+    
+    ```text
+    card
+    ```
+    
+    y seguirá tomando decisiones basándose en **su propio espacio**.
+    
+    ---
+    
+    __17. Y aquí hay una conexión importante con lo que estabas estudiando__
+    
+    Esto encaja perfectamente con la filosofía que has estado viendo en *Every Layout*.
+    
+    Por ejemplo:
+    
+    __`Sidebar`__
+    
+    Busca que dos elementos se acomoden según el espacio disponible.
+    
+    __`Switcher`__
+    
+    Decide cuándo pasar de:
+    
+    ```text
+    A B C
+    ```
+    
+    a:
+    
+    ```text
+    A
+    B
+    C
+    ```
+    
+    basándose en el espacio disponible.
+    
+    __`Grid`__
+    
+    Busca distribuir elementos en una cuadrícula.
+    
+    Y todos intentan evitar:
+    
+    ```css
+    @media (min-width: 768px)
+    @media (min-width: 1024px)
+    @media (min-width: 1440px)
+    ```
+    
+    porque esos valores describen **el dispositivo**, no necesariamente **el espacio real del componente**.
+    
+    ---
+    
+    __La idea en una sola frase__
+    
+    Quédate con esto:
+    
+    > **`ResizeObserver` permite que un componente pregunte cuánto espacio tiene realmente y cambie de comportamiento según ese espacio, sin depender del tamaño de la pantalla.**
+    
+    Y el flujo completo del código es:
+    
+    ```text
+    HTML
+    data-min="250px"
+           │
+           ↓
+    JavaScript lee 250px
+           │
+           ↓
+    ResizeObserver observa .grid
+           │
+           ↓
+    ¿cuánto mide .grid?
+           │
+           ├── 200px
+           │      ↓
+           │   no agrega .aboveMin
+           │      ↓
+           │   layout básico
+           │
+           └── 600px
+                  ↓
+            agrega .aboveMin
+                  ↓
+            minmax(250px, 1fr)
+                  ↓
+            Grid responsivo
+    ```
+    
+    **En esencia, están construyendo una especie de "container query" antes de que las Container Queries de CSS fueran la solución estándar.** De hecho, el propio texto que estás leyendo menciona que eran una alternativa mientras las *Container Queries* estaban llegando. Hoy CSS tiene `@container`, así que para código nuevo normalmente **preferirías Container Queries antes que implementar este patrón con `ResizeObserver`**, salvo que exista una razón concreta para usar JavaScript.
+
+## La función `min()`
+
+Si bien vale la pena cubrir `ResizeObserver` porque puede servirte bien en otras circunstancias, en realidad ya no es necesario para resolver este problema en particular. Esto se debe a que tenemos la [*función CSS `min()` recientemente ampliamente adoptada* ↗](https://caniuse.com/css-math-functions). Perdón por la falsa alarma, pero podemos, de hecho, escribir este layout sin JavaScript después de todo.
 
 Como respaldo, configuramos la grilla en una sola columna. Luego usamos `@supports` para probar `min()` y mejorar desde allí:
 
@@ -367,21 +1350,1683 @@ Como respaldo, configuramos la grilla en una sola columna. Luego usamos `@suppor
 
 La forma en que funciona `min()` es que calcula la *longitud más corta* a partir de un conjunto de valores separados por comas. Esto es: `min(250px, 100%)` devolvería `100%` donde `100%` se evalúa como *más pequeña* que los `250px` evaluados, y viceversa. Este útil algoritmo decide por nosotros dónde el ancho debe tener un tope máximo de `100%`.
 
+??? info "Explicacion"
+
+    Este cierre es un giro elegante en el argumento: la solución JavaScript de la sección anterior, aunque bien construida, resulta ser innecesaria — porque CSS moderno ya trae la herramienta que hacía falta desde el principio.
+    
+    __El truco: `min()` como mínimo "inteligente"__
+    
+    Recordemos el problema original: `minmax(250px, 1fr)` usa `250px` como un **límite duro** — la columna nunca puede ser más angosta que eso, sin importar qué tan angosto sea el contenedor, causando overflow.
+    
+    La función `min()` resuelve esto de forma muy simple: evalúa una lista de valores y **siempre devuelve el más pequeño de todos, en tiempo real**, recalculando cada vez que el contexto cambia.
+    
+    Entonces, en vez de escribir:
+    
+    ```css
+    minmax(250px, 1fr)
+    ```
+    
+    se escribe:
+    
+    ```css
+    minmax(min(250px, 100%), 1fr)
+    ```
+    
+    Aquí `100%` se refiere al 100% del ancho disponible del contenedor. Esto significa:
+    
+    - **Si el contenedor es ancho** (más de `250px`): `250px` es el valor más pequeño de los dos, así que `min()` devuelve `250px`. El comportamiento es idéntico al `minmax(250px, 1fr)` de antes — columnas de `250px` como mínimo, creciendo hasta `1fr`.
+    - **Si el contenedor es angosto** (menos de `250px`): ahora `100%` (que en ese contexto vale, digamos, `180px`) es el valor más pequeño. `min()` devuelve ese `100%`, así que el mínimo de la columna se ajusta automáticamente para nunca exceder el ancho real disponible. **Nunca puede haber overflow**, porque el mínimo jamás pide más espacio del que existe.
+    
+    Es, en esencia, un mínimo *condicional y relativo* calculado por el propio motor CSS, en cada repintado, sin que ninguna línea de JavaScript tenga que medir nada.
+    
+    __Por qué esto vuelve obsoleto todo el capítulo de `ResizeObserver`__
+    
+    El problema fundamental que forzó recurrir a JavaScript era: *"CSS no puede preguntar cuánto espacio tiene disponible el contenedor y ajustar un valor mínimo en consecuencia."* Eso ya no es cierto con `min()` — CSS ahora *sí* puede hacer exactamente esa pregunta, de forma nativa y declarativa, comparando un valor absoluto (`250px`) contra uno relativo al contenedor (`100%`).
+    
+    Esto es coherente con la filosofía de toda la serie: **JavaScript es el último recurso, no el primero**. El autor reconoce honestamente que enseñó una solución más compleja de lo necesario ("perdón por la falsa alarma"), pero la deja documentada porque `ResizeObserver` sigue siendo útil para otros problemas de layout donde no exista un equivalente puro en CSS.
+    
+    __El rol de `@supports`__
+    
+    ```css
+    @supports (width: min(250px, 100%)) {
+      .grid {
+        grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+      }
+    }
+    ```
+    
+    Esto es el mismo espíritu de *progressive enhancement* que se vio con `ResizeObserver`, pero aplicado a nivel de CSS puro: si el navegador no soporta `min()` dentro de `width` (o por extensión, dentro de `minmax()`), la regla dentro de `@supports` simplemente se ignora, y el `.grid` se queda en su definición base — una sola columna, sin `grid-template-columns` — que es segura y nunca produce overflow. Los navegadores que sí soportan `min()` reciben la mejora completa.
+    
+    __El resultado fina__
+    
+    Con esto se cierra el arco completo del artículo: empezó con un problema aparentemente irresoluble solo con CSS (mínimos fijos = overflow inevitable en contenedores angostos), pasó por una solución honesta pero pesada con JavaScript, y termina con la solución más "arquetípica y eficiente" que el primer texto prometía — una sola línea de CSS, sin JavaScript, sin `@media`, completamente independiente del contexto, y verdaderamente responsiva tanto en el sentido de crecer/encogerse como en el de nunca desbordar.
+    
+??? info "Explicacion"
+
+    Sí. Esta sección es justamente la **simplificación** de todo lo anterior. Después de enseñarte `ResizeObserver + JavaScript`, *Every Layout* dice:
+
+    > "Espera... para este problema concreto, CSS ya puede hacerlo solo."
+
+    Y la pieza clave es `min()`.
+
+    ---
+
+    __1. ¿Qué problema tenían antes?__
+
+    Querían esto:
+
+    > Cada columna puede tener como mínimo **250px**, pero **nunca debe provocar overflow si el contenedor es más pequeño que 250px**.
+
+    El problema aparece aquí:
+
+    ```css
+    minmax(250px, 1fr)
+    ```
+
+    Imagina que `.grid` solamente tiene:
+
+    ```text
+    200px
+    ```
+
+    Pero le dices:
+
+    ```css
+    minmax(250px, 1fr)
+    ```
+
+    Estás diciendo:
+
+    > "La columna no puede medir menos de 250px."
+
+    Pero el contenedor solo tiene 200px.
+
+    Resultado potencial:
+
+    ```text
+    contenedor: 200px
+
+    ┌────────────────────┐
+    │                    │
+    │      250px         │
+    │                    │
+    └────────────────────┘
+          ↑
+        overflow
+    ```
+
+    Ahí estaba el problema.
+
+    ---
+
+    __2. La solución es `min()`__
+
+    Ahora aparece:
+
+    ```css
+    min(250px, 100%)
+    ```
+
+    Esto significa:
+
+    > **Escoge el valor más pequeño entre `250px` y `100%`.**
+
+    Por ejemplo, si el contenedor mide:
+
+    ```text
+    200px
+    ```
+
+    entonces:
+
+    ```css
+    min(250px, 100%)
+    ```
+
+    se convierte en:
+
+    ```text
+    min(250px, 200px)
+    ```
+
+    Y gana:
+
+    ```text
+    200px
+    ```
+
+    ---
+
+    Si el contenedor mide:
+
+    ```text
+    500px
+    ```
+
+    entonces:
+
+    ```text
+    min(250px, 500px)
+    ```
+
+    gana:
+
+    ```text
+    250px
+    ```
+
+    Por lo tanto:
+
+    ```text
+    contenedor 200px → mínimo efectivo = 200px
+    contenedor 500px → mínimo efectivo = 250px
+    ```
+
+    Eso es todo el truco.
+
+    ---
+
+    __3. Ahora mira esta línea__
+
+    ```css
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(min(250px, 100%), 1fr)
+        );
+    ```
+
+    Puede parecer una sopa de funciones CSS 😅.
+
+    Vamos a desmontarla desde dentro hacia fuera.
+
+    Tenemos:
+
+    ```css
+    min(250px, 100%)
+    ```
+
+    ↓
+
+    ```css
+    minmax(min(250px, 100%), 1fr)
+    ```
+
+    ↓
+
+    ```css
+    repeat(auto-fit, ...)
+    ```
+
+    ---
+
+    __4. Primero: `min(250px, 100%)`__
+
+    Esta parte establece el **mínimo real de la columna**.
+
+    ```css
+    min(250px, 100%)
+    ```
+
+    La regla es:
+
+    > Nunca uses más de 250px como mínimo, pero si el contenedor es más pequeño, usa el 100% del contenedor.
+
+    Por ejemplo:
+
+    | Ancho del contenedor | `min(250px, 100%)` |
+    | -------------------: | -----------------: |
+    |                150px |              150px |
+    |                200px |              200px |
+    |                250px |              250px |
+    |                300px |              250px |
+    |                500px |              250px |
+    |               1000px |              250px |
+
+    Observa la frontera:
+
+    ```text
+                250px
+                    │
+                    ↓
+    100% ───────────┐
+                    │
+                    └──────────── 250px
+        contenedor
+        pequeño          grande
+    ```
+
+    Mientras el contenedor sea menor que 250px:
+
+    ```text
+    100%
+    ```
+
+    gana.
+
+    Cuando supera 250px:
+
+    ```text
+    250px
+    ```
+
+    gana.
+
+    ---
+
+    __5. Después entra `minmax()`__
+
+    Ahora tenemos:
+
+    ```css
+    minmax(min(250px, 100%), 1fr)
+    ```
+
+    `minmax()` significa:
+
+    > La columna tendrá un mínimo y podrá crecer hasta el máximo indicado.
+
+    Por ejemplo, en un contenedor de 800px:
+
+    ```css
+    min(250px, 100%)
+    ```
+
+    produce:
+
+    ```text
+    250px
+    ```
+
+    Entonces queda conceptualmente:
+
+    ```css
+    minmax(250px, 1fr)
+    ```
+
+    La columna:
+
+    ```text
+    mínimo → 250px
+    máximo → 1fr
+    ```
+
+    ---
+
+    __6. ¿Y qué hace `repeat(auto-fit, ...)`?__
+
+    Esta parte:
+
+    ```css
+    repeat(auto-fit, ...)
+    ```
+
+    le dice al Grid:
+
+    > Mete tantas columnas como puedan caber.
+
+    Por ejemplo, si tienes:
+
+    ```text
+    800px
+    ```
+
+    y cada columna necesita como mínimo:
+
+    ```text
+    250px
+    ```
+
+    pueden entrar aproximadamente:
+
+    ```text
+    250 + 250 + espacio
+    ```
+
+    por lo que tendrás dos columnas.
+
+    Visualmente:
+
+    ```text
+    ┌────────────┬────────────┐
+    │     A      │     B      │
+    │            │            │
+    └────────────┴────────────┘
+    ```
+
+    ---
+
+    Con:
+
+    ```text
+    500px
+    ```
+
+    podría entrar:
+
+    ```text
+    ┌──────────────────────────┐
+    │            A             │
+    ├──────────────────────────┤
+    │            B             │
+    └──────────────────────────┘
+    ```
+
+    Una columna.
+
+    ---
+
+    __7. Pero aquí está la genialidad__
+
+    ¿Qué ocurre si el contenedor mide solamente:
+
+    ```text
+    180px
+    ```
+
+    La fórmula:
+
+    ```css
+    min(250px, 100%)
+    ```
+
+    se convierte conceptualmente en:
+
+    ```css
+    min(250px, 180px)
+    ```
+
+    Resultado:
+
+    ```text
+    180px
+    ```
+
+    Entonces tenemos:
+
+    ```css
+    minmax(180px, 1fr)
+    ```
+
+    La columna cabe perfectamente.
+
+    ```text
+    ┌──────────────────┐
+    │        A         │
+    └──────────────────┘
+          180px
+    ```
+
+    **No necesitas JavaScript.**
+
+    ---
+
+    __8. ¿Qué estaba haciendo `ResizeObserver` antes?__
+
+    Recuerda la solución anterior.
+
+    JavaScript tenía que hacer algo parecido a:
+
+    ```text
+    ¿el contenedor mide más de 250px?
+            │
+            ├── NO → layout básico
+            │
+            └── SÍ → activar Grid
+    ```
+
+    Ahora CSS puede resolverlo directamente:
+
+    ```text
+    ¿el contenedor mide más de 250px?
+            │
+            ├── NO → min() usa 100%
+            │
+            └── SÍ → min() usa 250px
+    ```
+
+    Por eso el texto dice:
+
+    > "podemos, de hecho, escribir este layout sin JavaScript después de todo."
+
+    Y esta es una excelente lección de diseño:
+
+    **Antes de meter JavaScript para resolver un problema de layout, hay que comprobar hasta dónde llega CSS.**
+
+    ---
+
+    __9. ¿Y para qué sirve `@supports`?__
+
+    Tenemos:
+
+    ```css
+    .grid {
+      display: grid;
+      grid-gap: 1rem;
+    }
+
+    @supports (width: min(250px, 100%)) {
+      .grid {
+        grid-template-columns:
+          repeat(
+            auto-fit,
+            minmax(min(250px, 100%), 1fr)
+          );
+      }
+    }
+    ```
+
+    Primero tenemos el **fallback**:
+
+    ```css
+    .grid {
+        display: grid;
+    }
+    ```
+
+    Si el navegador no entiende `min()`:
+
+    ```text
+    ┌───────────────┐
+    │      A        │
+    ├───────────────┤
+    │      B        │
+    ├───────────────┤
+    │      C        │
+    └───────────────┘
+    ```
+
+    Una columna.
+
+    Pero si el navegador entiende:
+
+    ```css
+    min()
+    ```
+
+    entonces entra:
+
+    ```css
+    @supports
+    ```
+
+    y mejora el layout:
+
+    ```text
+    ┌───────────┬───────────┐
+    │     A     │     B     │
+    ├───────────┼───────────┤
+    │     C     │     D     │
+    └───────────┴───────────┘
+    ```
+
+    Eso vuelve a ser **progressive enhancement**:
+
+    ```text
+    CSS básico
+      ↓
+    funciona
+      ↓
+    ¿soporta min()?
+      ↓
+    sí
+      ↓
+    mejora el layout
+    ```
+
+    ---
+
+    __10. La idea que debes guardar__
+
+    La combinación:
+
+    ```css
+    repeat(
+        auto-fit,
+        minmax(
+            min(250px, 100%),
+            1fr
+        )
+    )
+    ```
+
+    puedes leerla en español así:
+
+    > **"Pon tantas columnas como quepan. Cada columna normalmente quiere tener al menos 250px, pero si el contenedor es menor que 250px, permite que ocupe el 100% disponible. Después deja que las columnas crezcan para aprovechar el espacio."**
+
+    Eso es bastante poderoso.
+
+    ---
+
+    __Y conecta directamente con lo que venías estudiando__
+
+    Antes:
+
+    ```text
+    @media
+      ↓
+    pregunta por viewport
+    ```
+
+    Después:
+
+    ```text
+    ResizeObserver
+      ↓
+    JavaScript pregunta por contenedor
+    ```
+
+    Y finalmente:
+
+    ```text
+    min()
+      ↓
+    CSS resuelve el problema
+    ```
+
+    La evolución conceptual es:
+
+    ```text
+    @media
+      ↓
+    "¿Qué tan grande es mi pantalla?"
+
+    ResizeObserver
+      ↓
+    "¿Qué tan grande soy yo?"
+
+    min()
+      ↓
+    "CSS, calcula tú cuánto espacio necesito."
+    ```
+
+    Y esa última es la solución más elegante **cuando el problema puede expresarse completamente con CSS**.
+
+    De hecho, esta parte de *Every Layout* es muy representativa de su filosofía: **primero intenta resolver el comportamiento con las herramientas intrínsecas de CSS; solo cuando CSS realmente no alcanza, introduce JavaScript.**
+
+
 ## `<watched-box>`
 
-Si estás buscando una solución general para *container queries* ↗, he creado `<watched-box>` ↗. Es directo y declarativo, y soporta cualquier unidad de longitud CSS.
+Si estás buscando una solución general para [*container queries* ↗](https://css-tricks.com/tag/container-queries/), he creado `<watched-box>` ↗. Es directo y declarativo, y soporta cualquier unidad de longitud CSS.
 
 Se recomienda que `<watched-box>` se use como una anulación manual de "último recurso". En todos los casos excepto los inusuales, uno de los layouts puramente basados en CSS documentados en *Every Layout* proporcionará un layout sensible al contexto automáticamente.
+
+??? info "Explicacion"
+
+    Sí. Esta sección es básicamente el **último escalón** de lo que acabamos de estudiar.
+
+    La idea de `<watched-box>` es:
+
+    > **Si CSS no puede resolver tu problema de adaptación al contenedor, entonces puedes usar un componente que observe el tamaño del elemento y permita reaccionar a él.**
+
+    ---
+
+    __1. ¿Qué es `<watched-box>`?__
+
+    `<watched-box>` es un **Web Component**.
+
+    Es decir, un elemento HTML personalizado:
+
+    ```html
+    <watched-box>
+        ...
+    </watched-box>
+    ```
+
+    En lugar de tener que escribir tú toda la lógica de:
+
+    ```javascript
+    ResizeObserver
+    ```
+
+    el componente se encarga de observar el tamaño del elemento.
+
+    Conceptualmente:
+
+    ```text
+    ┌───────────────────────────┐
+    │      <watched-box>        │
+    │                           │
+    │       contenido           │
+    │                           │
+    └───────────────────────────┘
+                │
+                ↓
+          observa su tamaño
+                │
+                ↓
+          cambia de estado
+    ```
+
+    Es una forma de encapsular el patrón que viste anteriormente.
+
+    ---
+
+    __2. ¿Por qué dice "container queries"?__
+
+    Porque el problema que quieren resolver es este:
+
+    ```text
+    ┌─────────────────────────────────────────┐
+    │             página                      │
+    │                                         │
+    │ ┌──────────────┐ ┌────────────────────┐ │
+    │ │              │ │                    │ │
+    │ │  componente  │ │    componente      │ │
+    │ │              │ │                    │ │
+    │ └──────────────┘ └────────────────────┘ │
+    │                                         │
+    └─────────────────────────────────────────┘
+    ```
+
+    Supongamos que el primer componente mide:
+
+    ```text
+    300px
+    ```
+
+    y el segundo:
+
+    ```text
+    900px
+    ```
+
+    Aunque ambos están dentro de la **misma ventana**, tienen diferentes cantidades de espacio.
+
+    Una *container query* permite decir:
+
+    > "Si **este contenedor** tiene más de X espacio, cambia mi diseño."
+
+    No:
+
+    > "Si la pantalla tiene más de X píxeles..."
+
+    Esa diferencia es fundamental.
+
+    ---
+
+    __3. `<watched-box>` automatiza lo que viste con `ResizeObserver`__
+
+    Antes tenías que escribir:
+
+    ```javascript
+    const ro = new ResizeObserver(entries => {
+        // medir elemento
+        // comparar
+        // agregar/quitar clase
+    });
+    ```
+
+    Con un componente como:
+
+    ```html
+    <watched-box>
+    ```
+
+    la idea es que esa infraestructura ya esté encapsulada.
+
+    Es decir:
+
+    ```text
+    Tú
+    │
+    │ escribes HTML declarativo
+    ↓
+    <watched-box>
+    │
+    │ internamente
+    ↓
+    ResizeObserver
+    │
+    ↓
+    detecta tamaño
+    │
+    ↓
+    aplica comportamiento
+    ```
+
+    Tú no necesitas estar escribiendo toda esa maquinaria cada vez.
+
+    ---
+
+    __4. ¿Qué significa "directo y declarativo"?__
+
+    Esto es importante.
+
+    __Imperativo__
+
+    Con JavaScript tradicional dices **cómo hacerlo**:
+
+    ```javascript
+    const observer = new ResizeObserver(...);
+    observer.observe(element);
+    ```
+
+    Estás dando instrucciones.
+
+    ---
+
+    __Declarativo__
+
+    Con un componente declarativo dices básicamente:
+
+    ```html
+    <watched-box>
+    ```
+
+    y describes **qué quieres**, dejando que el componente se encargue de la mecánica.
+
+    Es la misma filosofía que existe en muchas herramientas modernas:
+
+    ```text
+    imperativo:
+    "haz A, luego B, luego C"
+
+    declarativo:
+    "quiero que esto tenga este comportamiento"
+    ```
+
+    ---
+
+    __5. ¿Por qué menciona "cualquier unidad de longitud CSS"?__
+
+    Esto también conecta con lo que acabamos de ver.
+
+    En CSS puedes tener:
+
+    ```css
+    250px
+    ```
+
+    pero también:
+
+    ```css
+    20rem
+    30em
+    50vw
+    10ch
+    50%
+    ```
+
+    El problema es que JavaScript normalmente recibe dimensiones físicas en píxeles.
+
+    Por eso, en el ejemplo anterior de `ResizeObserver`, tenían que hacer esta pequeña maniobra:
+
+    ```javascript
+    const test = document.createElement('div');
+    test.style.width = min;
+    ...
+    const minToPixels = test.offsetWidth;
+    ```
+
+    Estaban convirtiendo:
+
+    ```text
+    20rem
+    ↓
+    píxeles
+    ```
+
+    para poder comparar.
+
+    `<watched-box>` pretende encargarse de ese tipo de trabajo.
+
+    ---
+
+    __6. Pero hay una advertencia importante__
+
+    El texto dice:
+
+    > "Se recomienda que `<watched-box>` se use como una anulación manual de 'último recurso'."
+
+    Eso quiere decir:
+
+    **No lo uses automáticamente para todo.**
+
+    No deberías pensar:
+
+    > "Tengo un componente responsive → uso `<watched-box>`."
+
+    Primero deberías preguntarte:
+
+    > "¿CSS puede resolver esto?"
+
+    Y probablemente sí.
+
+    ---
+
+    __7. El orden recomendado por Every Layout__
+
+    Yo lo resumiría así:
+
+    __🥇 Primera opción: CSS normal__
+
+    Usa herramientas como:
+
+    ```css
+    flexbox
+    grid
+    min()
+    max()
+    clamp()
+    minmax()
+    auto-fit
+    auto-fill
+    ```
+
+    Por ejemplo:
+
+    ```css
+    grid-template-columns:
+        repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+    ```
+
+    Si esto resuelve el problema:
+
+    **Perfecto. No necesitas más.**
+
+    ---
+
+    __🥈 Segunda opción: Container Queries__
+
+    Actualmente puedes usar CSS:
+
+    ```css
+    @container
+    ```
+
+    cuando realmente necesitas que un componente responda al tamaño de su contenedor.
+
+    Por ejemplo, conceptualmente:
+
+    ```css
+    @container (min-width: 500px) {
+        .card {
+            /* diseño diferente */
+        }
+    }
+    ```
+
+    Esto es mucho más natural que hacer:
+
+    ```javascript
+    ResizeObserver
+    ```
+
+    manualmente.
+
+    ---
+
+    __🥉 Último recurso: JavaScript / `<watched-box>`__
+
+    Cuando el problema es demasiado complejo para CSS:
+
+    ```text
+    CSS
+    ↓
+    no alcanza
+    ↓
+    container queries
+    ↓
+    no alcanzan
+    ↓
+    watched-box / ResizeObserver
+    ```
+
+    Ahí sí tiene sentido.
+
+    ---
+
+    __8. ¿Por qué insiste tanto en esto?__
+
+    Porque hay una tendencia muy común en frontend:
+
+    ```text
+    "Necesito responsive"
+            ↓
+    @media
+            ↓
+    "Necesito algo más complejo"
+            ↓
+    JavaScript
+            ↓
+    100 líneas de código
+            ↓
+    💀
+    ```
+
+    Every Layout intenta invertir ese pensamiento:
+
+    ```text
+    "Necesito responsive"
+            ↓
+    ¿CSS puede hacerlo?
+            ↓
+    sí → CSS
+            ↓
+    ¿Container Query?
+            ↓
+    sí → @container
+            ↓
+    ¿realmente necesito JS?
+            ↓
+    sí → ResizeObserver / watched-box
+    ```
+
+    Eso produce sistemas más simples y más mantenibles.
+
+    ---
+
+    __9. La conexión con todo lo anterior__
+
+    Fíjate cómo ha evolucionado el capítulo:
+
+    ```text
+                    RESPONSIVE
+                        │
+                        ↓
+                ¿Puede CSS solo?
+                        │
+                ┌──────┴──────┐
+                │             │
+                SÍ            NO
+                │             │
+                ↓             ↓
+          CSS intrínseco   ¿Container Query?
+                              │
+                        ┌─────┴─────┐
+                        │           │
+                        SÍ          NO
+                        │           │
+                        ↓           ↓
+                    @container   JavaScript
+                                    │
+                                    ↓
+                              ResizeObserver
+                                    │
+                                    ↓
+                              <watched-box>
+    ```
+
+    Ese es el verdadero mensaje de esta sección.
+
+    ---
+
+    __Y una precisión importante respecto al texto__
+
+    El libro que estás leyendo refleja una etapa en la que **Container Queries todavía no estaban ampliamente disponibles**. Por eso presenta `ResizeObserver` y `<watched-box>` como soluciones para simular *container queries*.
+
+    Hoy la situación es diferente: **las Container Queries de CSS ya son una herramienta estándar y ampliamente soportada**.
+
+    Así que si estás aprendiendo esto para desarrollar proyectos actuales, yo no copiaría literalmente la arquitectura del libro.
+
+    Aprendería el **principio**:
+
+    > **Un componente debería responder al espacio que tiene, no al tamaño arbitrario de la pantalla.**
+
+    Y para código moderno:
+
+    ```css
+    @container
+    ```
+
+    es normalmente tu primera herramienta cuando necesitas una verdadera consulta basada en el contenedor.
+
+    `ResizeObserver` y soluciones como `<watched-box>` quedan como herramientas más especializadas.
+
+    **Ese es el aprendizaje que realmente vale la pena llevarte del capítulo.**
 
 ## Casos de uso
 
 Las grillas son excelentes para navegar por avances de enlaces permanentes o productos. Puedo componer rápidamente un componente de tarjeta para albergar cada uno de mis avances usando un `Box` y un `Stack`.
 
-*Esta demostración interactiva solo está disponible en el sitio de Every Layout* ↗.
+[*Esta demostración interactiva solo está disponible en el sitio de Every Layout* ↗.](https://every-layout.dev/demos/grid-cards/)
 
-### Altura compartida
+??? info "Explicacion"
+
+    Sí. Este párrafo es corto, pero introduce una idea muy importante: **cómo combinar los layouts de Every Layout para construir componentes reales**.
+
+    La frase:
+
+    > "Las grillas son excelentes para navegar por avances de enlaces permanentes o productos."
+
+    se refiere a interfaces como estas:
+
+    ```text
+    ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
+    │   Producto  │ │   Producto  │ │   Producto  │
+    │             │ │             │ │             │
+    │   imagen    │ │   imagen    │ │   imagen    │
+    │             │ │             │ │             │
+    │   título    │ │   título    │ │   título    │
+    └─────────────┘ └─────────────┘ └─────────────┘
+    ```
+
+    Por ejemplo:
+
+    * productos de una tienda
+    * artículos de un blog
+    * proyectos de un portafolio
+    * películas
+    * noticias
+    * publicaciones
+    * resultados de búsqueda
+
+    La demostración oficial de *Every Layout* justamente muestra una **Grid of cards**. ([Every Layout][1])
+
+    ---
+
+    __1. ¿Qué significa "componer" un componente?__
+
+    Aquí está la palabra importante:
+
+    > **componer**
+
+    Every Layout no pretende darte un componente gigantesco llamado:
+
+    ```text
+    ProductCard
+    ```
+
+    con 300 reglas CSS.
+
+    En cambio, pretende que construyas componentes pequeños combinando layouts simples.
+
+    Por ejemplo:
+
+    ```text
+    Card
+    ├── Box
+    │
+    └── Stack
+    ```
+
+    Es decir:
+
+    ```text
+    ┌─────────────────────┐
+    │                     │
+    │       imagen        │
+    │                     │
+    │─────────────────────│
+    │ título              │
+    │                     │
+    │ descripción         │
+    │                     │
+    │ precio              │
+    └─────────────────────┘
+    ```
+
+    La **Grid** organiza las tarjetas.
+
+    El **Box** controla el contenedor de cada tarjeta.
+
+    El **Stack** organiza verticalmente el contenido dentro de la tarjeta.
+
+    Cada layout tiene una responsabilidad pequeña.
+
+    ---
+
+    __2. Piensa en tres niveles__
+
+    Esta es la forma más sencilla de entenderlo:
+
+    ```text
+    Página
+      │
+      └── Grid
+          │
+          ├── Card
+          │    ├── Box
+          │    └── Stack
+          │
+          ├── Card
+          │    ├── Box
+          │    └── Stack
+          │
+          └── Card
+                ├── Box
+                └── Stack
+    ```
+
+    La **Grid** no necesita saber qué hay dentro de cada tarjeta.
+
+    Solo sabe:
+
+    > "Tengo varios elementos y debo distribuirlos."
+
+    La **Card** tampoco necesita saber dónde está colocada.
+
+    Solo sabe:
+
+    > "Tengo contenido que debo presentar como una unidad."
+
+    Y el **Stack**:
+
+    > "Tengo varios elementos y quiero distribuirlos verticalmente."
+
+    Esto es **composición**.
+
+    ---
+
+    __3. ¿Qué hace Grid?__
+
+    Supongamos que tienes:
+
+    ```html
+    <div class="grid">
+        <article class="card">...</article>
+        <article class="card">...</article>
+        <article class="card">...</article>
+        <article class="card">...</article>
+    </div>
+    ```
+
+    Grid se ocupa de esto:
+
+    ```text
+    ┌──────────┐ ┌──────────┐ ┌──────────┐
+    │ Card 1   │ │ Card 2   │ │ Card 3   │
+    └──────────┘ └──────────┘ └──────────┘
+
+    ┌──────────┐
+    │ Card 4   │
+    └──────────┘
+    ```
+
+    Pero **no debería ocuparse de cómo está construida Card 1**.
+
+    ---
+
+    __4. ¿Qué hace Box?__
+
+    El `Box` es básicamente un contenedor que permite controlar cosas como:
+
+    ```text
+    padding
+    border
+    background
+    ```
+
+    Por ejemplo:
+
+    ```css
+    .card {
+        padding: 1rem;
+        border: 1px solid;
+    }
+    ```
+
+    Visualmente:
+
+    ```text
+    ┌─────────────────────────┐
+    │ ← padding →             │
+    │                         │
+    │      contenido          │
+    │                         │
+    │             ← padding → │
+    └─────────────────────────┘
+    ```
+
+    Por eso Box es útil para crear la "caja" física de la tarjeta.
+
+    ---
+
+    __5. ¿Qué hace Stack?__
+
+    Supongamos que dentro tienes:
+
+    ```html
+    <h2>Producto</h2>
+    <p>Descripción...</p>
+    <span>$20</span>
+    <button>Comprar</button>
+    ```
+
+    Quieres:
+
+    ```text
+    Producto
+
+    Descripción...
+
+    $20
+
+    Comprar
+    ```
+
+    Eso es exactamente un **Stack**:
+
+    ```text
+    ┌────────────────────┐
+    │ Producto           │
+    │                    │
+    │ Descripción        │
+    │                    │
+    │ $20                │
+    │                    │
+    │ Comprar            │
+    └────────────────────┘
+    ```
+
+    El Stack se preocupa de la **relación vertical entre los elementos**.
+
+    ---
+
+    __6. Entonces cada layout tiene una responsabilidad__
+
+    Puedes verlo así:
+
+    | Layout    | Responsabilidad                        |
+    | --------- | -------------------------------------- |
+    | **Grid**  | Distribuir las tarjetas                |
+    | **Box**   | Dar estructura/espaciado al contenedor |
+    | **Stack** | Distribuir contenido verticalmente     |
+
+    Y eso es exactamente lo que *Every Layout* quiere enseñarte.
+
+    No pienses:
+
+    > "¿Cuál es el CSS de una tarjeta?"
+
+    Piensa:
+
+    > "¿Qué relaciones espaciales tiene esta tarjeta?"
+
+    Por ejemplo:
+
+    ```text
+    Muchas tarjetas
+          ↓
+        Grid
+
+    Una tarjeta
+          ↓
+        Box
+
+    Contenido vertical
+          ↓
+        Stack
+    ```
+
+    ---
+
+    __7. Esto es especialmente importante para tu forma de trabajar__
+
+    Como has estado estudiando `Sidebar`, `Cluster`, `Switcher`, `Cover`, `Stack`, etc., probablemente estás empezando a ver que **Every Layout no son componentes aislados**.
+
+    No son:
+
+    ```text
+    Grid
+    Sidebar
+    Stack
+    Cluster
+    Switcher
+    Box
+    ```
+
+    como si fueran piezas completamente independientes.
+
+    Son más bien **primitivas que puedes combinar**.
+
+    Por ejemplo:
+
+    ```text
+                    GRID
+                      │
+            ┌─────────┼─────────┐
+            ↓         ↓         ↓
+          CARD      CARD      CARD
+            │         │         │
+          BOX       BOX       BOX
+            │         │         │
+          STACK     STACK     STACK
+            │         │         │
+          ┌─┴─┐     ┌─┴─┐     ┌─┴─┐
+          ↓   ↓     ↓   ↓     ↓   ↓
+        título img  título img título img
+    ```
+
+    Eso empieza a parecerse muchísimo más a una arquitectura de frontend real.
+
+    ---
+
+    __La idea fundamental__
+
+    No necesitas crear un layout específico llamado:
+
+    ```text
+    "ProductCardGridResponsive"
+    ```
+
+    Puedes construirlo mediante composición:
+
+    ```text
+    Grid
+    └── Card
+          ├── Box
+          └── Stack
+    ```
+
+    Y mañana puedes reutilizar la misma estructura para:
+
+    ```text
+    Grid → artículos
+    Grid → productos
+    Grid → proyectos
+    Grid → películas
+    Grid → usuarios
+    ```
+
+    Cambia el **contenido**, pero las relaciones espaciales siguen siendo las mismas.
+
+    Esa es una de las ideas más potentes de *Every Layout*: **no diseñar componentes pensando primero en su apariencia, sino en las relaciones de espacio que necesitan.**
+
+    [1]: https://every-layout.dev/demos/grid-cards/ "Grid of cards: Every Layout"
+
+## Altura compartida
 
 Cada tarjeta comparte la misma altura, independientemente de su contenido, porque el valor predeterminado para `align-items` es `stretch`. Esto es fortuito ya que pocos esperarían tarjetas de diferentes tamaños, o los huecos antiestéticos que las alturas desiguales crearían.
+
+??? info "Explicacion"
+
+    Exacto. Aquí el texto está explicando **por qué las tarjetas de una Grid terminan teniendo la misma altura**, aunque su contenido sea diferente.
+
+    La clave es:
+
+    ```css
+    align-items: stretch;
+    ```
+
+    y, muy importante, **`stretch` es el valor predeterminado de `align-items` en Grid**.
+
+    ---
+
+    __1. Imagina tres tarjetas__
+
+    Supongamos que tienes:
+
+    ```text
+    ┌──────────┐  ┌──────────┐  ┌──────────┐
+    │ Card A   │  │ Card B   │  │ Card C   │
+    │          │  │          │  │          │
+    │ texto    │  │ mucho     │  │ texto    │
+    │          │  │ más texto │  │          │
+    └──────────┘  │          │  └──────────┘
+                  │          │
+                  └──────────┘
+    ```
+
+    El contenido de cada tarjeta tiene una altura diferente:
+
+    ```text
+    A = 150px
+    B = 250px
+    C = 150px
+    ```
+
+    Uno podría pensar:
+
+    > "Entonces cada tarjeta debería conservar su propia altura."
+
+    Pero Grid hace algo diferente.
+
+    ---
+
+    __2. Grid crea una fila__
+
+    Cuando tienes:
+
+    ```css
+    .grid {
+        display: grid;
+    }
+    ```
+
+    y los elementos están en la misma fila, Grid determina una altura para esa **fila**.
+
+    Por ejemplo:
+
+    ```text
+    Card A       Card B       Card C
+      ↓            ↓            ↓
+    150px        250px        150px
+    ```
+
+    La fila necesita medir:
+
+    ```text
+    250px
+    ```
+
+    porque esa es la tarjeta más alta.
+
+    Entonces la fila termina teniendo:
+
+    ```text
+    250px
+    ```
+
+    ---
+
+    __3. Aquí aparece `align-items: stretch`__
+
+    El valor predeterminado es:
+
+    ```css
+    align-items: stretch;
+    ```
+
+    `stretch` significa:
+
+    > **Si el elemento no tiene una altura explícita, estíralo para ocupar todo el espacio disponible en el eje correspondiente.**
+
+    Por eso:
+
+    ```text
+    altura de la fila = 250px
+
+    ┌──────────┐ ┌──────────┐ ┌──────────┐
+    │          │ │          │ │          │
+    │  Card A  │ │  Card B  │ │  Card C  │
+    │          │ │          │ │          │
+    │          │ │          │ │          │
+    └──────────┘ └──────────┘ └──────────┘
+        250px        250px        250px
+    ```
+
+    Aunque A y C tengan menos contenido.
+
+    ---
+
+    __4. ¿Por qué es útil?__
+
+    Porque imagina lo contrario:
+
+    ```text
+    ┌──────────┐  ┌──────────┐  ┌──────────┐
+    │ Card A   │  │ Card B   │  │ Card C   │
+    │          │  │          │  │          │
+    │ texto    │  │ mucho     │  │ texto    │
+    └──────────┘  │ más texto │  └──────────┘
+                  │          │
+                  └──────────┘
+    ```
+
+    Visualmente aparecen huecos.
+
+    Especialmente en una interfaz de productos:
+
+    ```text
+    ┌────────────┐ ┌────────────┐ ┌────────────┐
+    │ Producto A │ │ Producto B │ │ Producto C │
+    │            │ │            │ │            │
+    │ $20        │ │ $30        │ │ $15        │
+    │            │ │            │ │            │
+    │ Comprar    │ │ Comprar    │ │ Comprar    │
+    └────────────┘ └────────────┘ └────────────┘
+    ```
+
+    Tener las tarjetas alineadas da una sensación mucho más ordenada.
+
+    ---
+
+    __5. Ojo: no significa que Grid esté cambiando el contenido__
+
+    Esto es importante.
+
+    Supongamos:
+
+    ```text
+    Card A → contenido real: 120px
+    Card B → contenido real: 200px
+    ```
+
+    Grid **no hace que el contenido de A mágicamente mida 200px**.
+
+    Lo que ocurre es:
+
+    ```text
+    fila
+    ┌───────────────────────────────┐
+    │                               │
+    │            200px              │
+    │                               │
+    └───────────────────────────────┘
+    ↑              ↑              ↑
+    A              B              C
+    ```
+
+    Los elementos A, B y C se estiran para ocupar la altura disponible de la fila.
+
+    El contenido interno sigue siendo el mismo.
+
+    ---
+
+    __6. `align-items` aquí trabaja en el eje vertical__
+
+    Esto conecta con tu pregunta anterior sobre `align-items: stretch`.
+
+    En Grid:
+
+    ```css
+    align-items
+    ```
+
+    controla cómo se alinean los elementos **dentro de sus celdas en el eje vertical** cuando estás trabajando con el flujo normal de filas.
+
+    Por defecto:
+
+    ```css
+    align-items: stretch;
+    ```
+
+    Por eso las tarjetas se estiran.
+
+    Si hicieras:
+
+    ```css
+    .grid {
+        align-items: start;
+    }
+    ```
+
+    ya no tendrías ese estiramiento.
+
+    Podrías terminar con:
+
+    ```text
+    ┌──────────┐  ┌──────────┐  ┌──────────┐
+    │ Card A   │  │ Card B   │  │ Card C   │
+    │          │  │          │  │          │
+    │ texto    │  │ mucho     │  │ texto    │
+    └──────────┘  │ más texto │  └──────────┘
+                  │          │
+                  └──────────┘
+    ```
+
+    Cada tarjeta conservaría su altura de contenido.
+
+    ---
+
+    __7. Hay otra cosa interesante__
+
+    La frase:
+
+    > "Esto es fortuito..."
+
+    significa que **no tuvieron que hacer nada especial para conseguir tarjetas de igual altura**.
+
+    No necesitaron:
+
+    ```css
+    height: 300px;
+    ```
+
+    ni:
+
+    ```css
+    min-height: 300px;
+    ```
+
+    ni JavaScript.
+
+    Simplemente:
+
+    ```css
+    .grid {
+        display: grid;
+    }
+    ```
+
+    y Grid ya tiene:
+
+    ```css
+    align-items: stretch;
+    ```
+
+    como comportamiento predeterminado.
+
+    Eso es precisamente lo que *Every Layout* intenta aprovechar:
+
+    > **Deja que el algoritmo de layout del navegador haga el trabajo siempre que sea posible.**
+
+    ---
+
+    __Qué debes recordar__
+
+    Cuando veas:
+
+    ```css
+    align-items: stretch;
+    ```
+
+    piensa:
+
+    > **"Los elementos se estiran para ocupar el espacio disponible en su celda."**
+
+    Y en esta Grid de tarjetas:
+
+    ```text
+    contenido diferente
+          ↓
+    fila determina altura
+          ↓
+    align-items: stretch
+          ↓
+    tarjetas ocupan esa altura
+          ↓
+    ┌───────┐ ┌───────┐ ┌───────┐
+    │       │ │       │ │       │
+    │ Card  │ │ Card  │ │ Card  │
+    │       │ │       │ │       │
+    └───────┘ └───────┘ └───────┘
+      misma altura
+    ```
+
+    **No es que Grid obligue a todos los contenidos a tener la misma altura; hace que las cajas de las tarjetas ocupen la misma altura de la fila.** Esa distinción es importante.
 
 ## El generador
 
@@ -423,6 +3068,557 @@ Nota que `grid-template-columns` no se establece excepto en el bloque de mejora 
   <div><!-- etc --></div>
 </div>
 ```
+
+??? info "Explicacion"
+
+    Sí. Esta parte reúne prácticamente todo lo que acabamos de estudiar sobre **Grid + `min()` + progressive enhancement**, pero ahora lo convierte en un patrón reutilizable.
+
+    Vamos a desarmarlo.
+
+    ---
+
+    __1. La configuración básica__
+
+    Tenemos:
+
+    ```css id="w2v7xj"
+    .grid {
+      display: grid;
+      grid-gap: 1rem;
+      --minimum: 20ch;
+    }
+    ```
+
+    Hay tres cosas aquí.
+
+    __`display: grid`__
+
+    ```css id="o2w6c0"
+    display: grid;
+    ```
+
+    Convierte `.grid` en un **contenedor Grid**.
+
+    Sus hijos directos:
+
+    ```html id="5l4q1q"
+    <div class="grid">
+      <div>...</div>
+      <div>...</div>
+      <div>...</div>
+    </div>
+    ```
+
+    se convierten en elementos Grid.
+
+    ---
+
+    __`grid-gap: 1rem`__
+
+    ```css id="t4iwm8"
+    grid-gap: 1rem;
+    ```
+
+    establece separación entre las celdas.
+
+    Visualmente:
+
+    ```text id="1tvl73"
+    ┌──────────┐   ┌──────────┐
+    │ elemento │   │ elemento │
+    └──────────┘   └──────────┘
+          ↑
+        1rem
+    ```
+
+    Hoy también es muy habitual escribir simplemente:
+
+    ```css id="xwq2q5"
+    gap: 1rem;
+    ```
+
+    `gap` es más general porque funciona tanto con Grid como con Flexbox.
+
+    ---
+
+    __2. ¿Qué es `--minimum: 20ch`?__
+
+    Aquí aparece una **custom property**:
+
+    ```css id="6zypfq"
+    --minimum: 20ch;
+    ```
+
+    Esto es una variable CSS.
+
+    Por lo tanto, después puedes escribir:
+
+    ```css id="xv5z8q"
+    min(var(--minimum), 100%)
+    ```
+
+    y el navegador sustituirá:
+
+    ```text id="kz3m0f"
+    var(--minimum)
+          ↓
+        20ch
+    ```
+
+    Así que conceptualmente:
+
+    ```css id="4g3m5r"
+    min(20ch, 100%)
+    ```
+
+    ---
+
+    __3. ¿Por qué `20ch` y no `250px`?__
+
+    Esto es bastante interesante.
+
+    `ch` es una unidad relativa relacionada con el ancho del carácter `0` de la fuente utilizada.
+
+    Por eso:
+
+    ```css id="m7dx5s"
+    20ch
+    ```
+
+    puede entenderse aproximadamente como:
+
+    > "Un ancho equivalente a unos 20 caracteres."
+
+    No es exactamente "20 letras" universales, pero sirve muy bien para establecer **anchos relacionados con la legibilidad del texto**.
+
+    Por ejemplo:
+
+    ```text id="xj76zq"
+    ┌───────────────────────────────┐
+    │ Lorem ipsum dolor sit amet... │
+    │                               │
+    └───────────────────────────────┘
+    ```
+
+    En una grilla de tarjetas, `20ch` puede ser más interesante que decir:
+
+    ```css id="v2n6pl"
+    300px
+    ```
+
+    porque el ancho mínimo está relacionado con el contenido textual.
+
+    ---
+
+    __4. Ahora llega la parte importante__
+
+    Tenemos:
+
+    ```css id="1s0g9g"
+    @supports (width: min(var(--minimum), 100%)) {
+    ```
+
+    Esto pregunta:
+
+    > **"¿Este navegador entiende la función CSS `min()`?"**
+
+    Si la respuesta es **no**, no entra.
+
+    Si la respuesta es **sí**, aplica las reglas que están dentro.
+
+    ---
+
+    __5. ¿Qué pasa si NO soporta `min()`?__
+
+    Entonces solo tenemos:
+
+    ```css id="1b1w4k"
+    .grid {
+        display: grid;
+        gap: 1rem;
+    }
+    ```
+
+    Y como no hemos definido:
+
+    ```css id="22rxgq"
+    grid-template-columns
+    ```
+
+    Grid utiliza su comportamiento implícito.
+
+    El resultado básico es:
+
+    ```text id="22qjj8"
+    ┌──────────────────┐
+    │       A          │
+    ├──────────────────┤
+    │       B          │
+    ├──────────────────┤
+    │       C          │
+    ├──────────────────┤
+    │       D          │
+    └──────────────────┘
+    ```
+
+    **Una columna.**
+
+    Esto es lo que el texto llama:
+
+    > "Layout implícito de una sola columna."
+
+    ---
+
+    __6. ¿Por qué una sola columna?__
+
+    Porque no le has dicho:
+
+    ```css
+    grid-template-columns
+    ```
+
+    Por lo tanto, Grid crea filas implícitas para los elementos.
+
+    Algo conceptualmente parecido a:
+
+    ```css id="j1p8du"
+    grid-template-columns: 1fr;
+    ```
+
+    aunque técnicamente no es que el navegador haya insertado literalmente esa declaración.
+
+    Es el comportamiento automático de Grid.
+
+    ---
+
+    __7. Ahora imagina un navegador moderno__
+
+    Supongamos que sí soporta:
+
+    ```css id="1s1u0u"
+    min()
+    ```
+
+    Entonces entra aquí:
+
+    ```css id="8e8i5y"
+    .grid {
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(
+            min(var(--minimum), 100%),
+            1fr
+          )
+        );
+    }
+    ```
+
+    Como:
+
+    ```css id="fgy3s8"
+    --minimum: 20ch;
+    ```
+
+    podemos leerlo como:
+
+    ```css id="2d3e9p"
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(
+                min(20ch, 100%),
+                1fr
+            )
+        );
+    ```
+
+    ---
+
+    __8. Vamos de dentro hacia fuera__
+
+    Esta es la mejor forma de leer CSS complejo.
+
+    __Primero:__
+
+    ```css id="8cn0s0"
+    var(--minimum)
+    ```
+
+    ↓
+
+    ```text id="1z2o8x"
+    20ch
+    ```
+
+    __Después:__
+
+    ```css id="4lqckv"
+    min(20ch, 100%)
+    ```
+
+    ↓
+
+    > Escoge el menor entre `20ch` y el ancho disponible.
+
+    __Después:__
+
+    ```css id="9o0j9j"
+    minmax(min(20ch, 100%), 1fr)
+    ```
+
+    ↓
+
+    > La columna tiene ese valor como mínimo y puede crecer.
+
+    __Finalmente:__
+
+    ```css id="r5x4o9"
+    repeat(auto-fit, ...)
+    ```
+
+    ↓
+
+    > Mete tantas columnas como puedan caber.
+
+    ---
+
+    __9. Visualicemos diferentes tamaños__
+
+    Supongamos que:
+
+    ```css id="y4k78t"
+    --minimum: 20ch;
+    ```
+
+    __Contenedor pequeño__
+
+    ```text id="6v7kws"
+    ┌──────────────────┐
+    │        A         │
+    ├──────────────────┤
+    │        B         │
+    ├──────────────────┤
+    │        C         │
+    └──────────────────┘
+    ```
+
+    No cabe más de una columna.
+
+    ---
+
+    __Contenedor mediano__
+
+    Ahora hay suficiente espacio:
+
+    ```text id="k7ay8h"
+    ┌────────────┐   ┌────────────┐
+    │     A      │   │     B      │
+    ├────────────┤   ├────────────┤
+    │     C      │   │     D      │
+    └────────────┘   └────────────┘
+    ```
+
+    Aparecen dos.
+
+    ---
+
+    __Contenedor grande__
+
+    ```text id="sg37n5"
+    ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐
+    │   A    │ │   B    │ │   C    │ │   D    │
+    └────────┘ └────────┘ └────────┘ └────────┘
+    ```
+
+    Puede haber cuatro.
+
+    Y no has escrito:
+
+    ```css
+    @media (min-width: 600px)
+    ```
+
+    ni:
+
+    ```css
+    @media (min-width: 900px)
+    ```
+
+    ni:
+
+    ```css
+    @media (min-width: 1200px)
+    ```
+
+    **La Grid calcula todo automáticamente.**
+
+    ---
+
+    __10. Esto es lo que hace tan interesante el patrón__
+
+    El desarrollador solamente configura:
+
+    ```css id="8lyl2d"
+    --minimum: 20ch;
+    ```
+
+    Y dice:
+
+    > "No quiero que las columnas sean más estrechas que esto."
+
+    El navegador se encarga del resto.
+
+    Es casi como darle una regla:
+
+    ```text id="3b0gj4"
+    "Cada tarjeta necesita aproximadamente este espacio."
+    ```
+
+    Y Grid responde:
+
+    ```text id="2fb0mp"
+    "Perfecto. Yo calculo cuántas caben."
+    ```
+
+    ---
+
+    __11. ¿Por qué utilizar `auto-fit`?__
+
+    Porque:
+
+    ```css id="wj8xvb"
+    repeat(auto-fit, ...)
+    ```
+
+    permite que Grid ajuste automáticamente la cantidad de columnas según el espacio disponible.
+
+    No tienes que saber de antemano si serán:
+
+    ```text id="s05r8r"
+    1
+    2
+    3
+    4
+    5
+    ```
+
+    columnas.
+
+    Grid lo calcula.
+
+    Esto es lo que hace que el componente sea **intrínsecamente responsive**.
+
+    ---
+
+    __12. Mira la filosofía completa__
+
+    El código entero:
+
+    ```css id="6w2i5a"
+    .grid {
+      display: grid;
+      gap: 1rem;
+      --minimum: 20ch;
+    }
+
+    @supports (width: min(var(--minimum), 100%)) {
+      .grid {
+        grid-template-columns:
+          repeat(
+            auto-fit,
+            minmax(
+              min(var(--minimum), 100%),
+              1fr
+            )
+          );
+      }
+    }
+    ```
+
+    puedes traducirlo a lenguaje humano:
+
+    > "Soy una Grid y quiero 1rem de separación. Cada elemento debería tener aproximadamente 20ch como ancho mínimo. Si el navegador entiende `min()`, coloca tantas columnas como puedan caber. Si no entiende `min()`, no pasa nada: mantengo una columna."
+
+    Eso es **progressive enhancement** en estado puro.
+
+    ---
+
+    __13. Y el HTML es deliberadamente aburrido__
+
+    ```html id="a2f8h1"
+    <div class="grid">
+      <div>...</div>
+      <div>...</div>
+      <div>...</div>
+    </div>
+    ```
+
+    Y eso es bueno.
+
+    No necesitas meter clases como:
+
+    ```html
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+    ```
+
+    ni:
+
+    ```html
+    <div class="grid-responsive-small">
+    ```
+
+    ni:
+
+    ```html
+    <div class="grid-responsive-large">
+    ```
+
+    El HTML simplemente dice:
+
+    > "Estos elementos forman una colección."
+
+    Y CSS decide cómo distribuirlos.
+
+    ---
+
+    __14. Esto resume muy bien todo el capítulo de Grid__
+
+    Puedes pensar en el patrón como:
+
+    ```text id="7ahp6k"
+                      GRID
+                        │
+                        ↓
+                display: grid
+                        │
+                        ↓
+                  gap: 1rem
+                        │
+                        ↓
+              ¿soporta min()?
+                /          \
+              NO            SÍ
+              │              │
+              ↓              ↓
+          1 columna       auto-fit
+                              │
+                              ↓
+                        minmax(...)
+                              │
+                              ↓
+                          min(...)
+                              │
+                              ↓
+                    tantas columnas
+                      como quepan
+    ```
+
+    Y aquí hay una idea que conviene que te quede grabada porque aparece una y otra vez en *Every Layout*:
+
+    > **No le dices al navegador exactamente cuándo debe pasar de 1 a 2, de 2 a 3, etc. Le das las restricciones y dejas que el algoritmo de layout encuentre la solución.**
+
+    Eso es justamente lo contrario de construir un responsive basado en una colección interminable de breakpoints.
 
 ## El componente
 
