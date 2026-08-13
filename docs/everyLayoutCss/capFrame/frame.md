@@ -359,7 +359,7 @@ La relación de aspecto es otra constante que surge mucho, especialmente cuando 
 
 ![](ratio.png)
 
-El elemento `<img />` es un *replaced element* ↗; es un elemento *reemplazado* por la fuente cargada externamente a la que apunta.
+El elemento `<img />` es un [*replaced element* ↗](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Images/Replaced_element_properties); es un elemento *reemplazado* por la fuente cargada externamente a la que apunta.
 
 Esta fuente (un archivo de imagen como PNG, JPEG o SVG) tiene ciertas características fuera de tu control como escritor de CSS. La relación de aspecto es una de esas características, y se determina cuando la imagen se crea y recorta originalmente.
 
@@ -1289,7 +1289,7 @@ Lo que podría ser útil es una solución general mediante la cual podamos dibuj
 
 Lo primero que necesitamos hacer es encontrar una forma de darle a un elemento arbitrario una relación de aspecto *sin* codificar su ancho y altura. Esto es, necesitamos hacer que un contenedor se comporte como una imagen (reemplazada).
 
-En el momento de escribir esto, el *CSS Working Group ha propuesto una propiedad `aspect-ratio`* ↗ que tomaría un valor `x/n`:
+En el momento de escribir esto, el [*CSS Working Group ha propuesto una propiedad `aspect-ratio`* ↗](https://www.smashingmagazine.com/2019/03/aspect-ratio-unit-css/) que tomaría un valor `x/n`:
 
 ```css linenums="1"
 .frame {
@@ -1297,7 +1297,7 @@ En el momento de escribir esto, el *CSS Working Group ha propuesto una propiedad
 }
 ```
 
-Es temprano, y ningún navegador ha implementado esta propiedad hasta ahora. Mientras tanto, podemos apoyarnos en una *técnica de relación intrínseca* ↗ escrita por primera vez en 2009. La técnica capitaliza el hecho de que el `padding`, incluso en la dimensión vertical, es relativo al ancho del elemento. Esto es, `padding-bottom: 56.25%` hará que un elemento vacío (sin altura establecida) sea *nueve dieciseisavos más alto que ancho* — una relación de aspecto de `16:9`. Encuentras `56.25%` dividiendo `9` (que representa la altura) por `16` (que representa el ancho) — al revés de encontrar la relación de aspecto en sí misma.
+Es temprano, y ningún navegador ha implementado esta propiedad hasta ahora. Mientras tanto, podemos apoyarnos en una [*técnica de relación intrínseca* ↗](https://alistapart.com/article/creating-intrinsic-ratios-for-video/) escrita por primera vez en 2009. La técnica capitaliza el hecho de que el `padding`, incluso en la dimensión vertical, es relativo al ancho del elemento. Esto es, `padding-bottom: 56.25%` hará que un elemento vacío (sin altura establecida) sea *nueve dieciseisavos más alto que ancho* — una relación de aspecto de `16:9`. Encuentras `56.25%` dividiendo `9` (que representa la altura) por `16` (que representa el ancho) — al revés de encontrar la relación de aspecto en sí misma.
 
 ![](marginauto.png)
 
@@ -3799,7 +3799,7 @@ Ahora cualquier elemento simple se colocará en el centro del `Frame`, y se reco
 
 ## ⚠ Imágenes de fondo
 
-Otra forma de recortar una imagen para que cubra la forma de su padre es suministrarla como imagen de fondo, y usar `background-size: cover`. Para esta implementación, asumimos que la imagen debe tratarse como *contenido* y, por lo tanto, proporcionarse con *alternative text* ↗.
+Otra forma de recortar una imagen para que cubra la forma de su padre es suministrarla como imagen de fondo, y usar `background-size: cover`. Para esta implementación, asumimos que la imagen debe tratarse como *contenido* y, por lo tanto, proporcionarse con [*alternative text* ↗](https://webaim.org/techniques/alttext/).
 
 Las imágenes de fondo no pueden tomar texto alternativo directamente, y también son eliminadas por algunos modos/temas de alto contraste que algunos de tus usuarios pueden estar ejecutando. Usar una imagen "real", a través de una etiqueta `<img />`, es generalmente preferible para la accesibilidad.
 
@@ -4218,7 +4218,7 @@ Es posible lograr esto cambiando los valores de las propiedades personalizadas a
 
 La provisión de Flexbox significa que puedes recortar cualquier tipo de HTML a la relación de aspecto dada, incluyendo elementos `<canvas>` si esos son tus medios elegidos para crear imágenes. Un conjunto de componentes tipo tarjeta podría contener cada uno una imagen o — donde no haya ninguna disponible— un respaldo textual.
 
-*Esta demostración interactiva solo está disponible en el sitio de Every Layout* ↗.
+[*Esta demostración interactiva solo está disponible en el sitio de Every Layout* ↗](https://every-layout.dev/demos/frames-in-cards/).
 
 ??? info "Explicacion"
 
@@ -4789,7 +4789,7 @@ La provisión de Flexbox significa que puedes recortar cualquier tipo de HTML a 
 
 Usa esta herramienta para generar CSS y HTML básicos de Frame.
 
-La herramienta generadora de código solo está disponible en el *sitio de documentación adjunto* ↗. Aquí está la solución básica, con comentarios.
+La herramienta generadora de código solo está disponible en el [*sitio de documentación adjunto* ↗](https://every-layout.dev/layouts/frame/#the-generator). Aquí está la solución básica, con comentarios.
 
 Reemplaza los valores `--n` (numerador) y `--d` (denominador) con los que desees, para crear la relación de aspecto.
 
