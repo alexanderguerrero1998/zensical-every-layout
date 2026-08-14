@@ -1927,11 +1927,6 @@ En su lugar, podemos colocar el elemento *sobre* el área con relleno usando pos
 ```
 ![](positionabsolute.png)
 
-## ⚠ Cuidado con el posicionamiento absoluto
-
-Cuando le das a un elemento `position: absolute`, lo eliminas del flujo natural del documento. Se coloca como si los elementos a su alrededor no existieran. En la mayoría de las circunstancias, esto es altamente indeseable, y puede llevar fácilmente a problemas como superposición y contenido oscurecido.
-
-En este caso, estamos usando el posicionamiento absoluto de manera controlada, fijando el elemento hijo a cada una de las esquinas de su padre. Esperamos que ocurra recorte, y nos negamos a "enmarcar" cualquier contenido que necesite verse en su totalidad.
 
 ??? info "Explicacion"
 
@@ -2424,6 +2419,418 @@ En este caso, estamos usando el posicionamiento absoluto de manera controlada, f
       ```
 
     La clave conceptual es preciosa: **el frame controla el espacio; el contenido no necesita saber qué tamaño tiene la pantalla.** Ese es el mismo principio de Every Layout que vienes estudiando: establecer relaciones y restricciones, en lugar de perseguir coordenadas concretas.
+
+## ⚠ Cuidado con el posicionamiento absoluto
+
+Cuando le das a un elemento `position: absolute`, lo eliminas del flujo natural del documento. Se coloca como si los elementos a su alrededor no existieran. En la mayoría de las circunstancias, esto es altamente indeseable, y puede llevar fácilmente a problemas como superposición y contenido oscurecido.
+
+En este caso, estamos usando el posicionamiento absoluto de manera controlada, fijando el elemento hijo a cada una de las esquinas de su padre. Esperamos que ocurra recorte, y nos negamos a "enmarcar" cualquier contenido que necesite verse en su totalidad.
+
+??? info "Explicacion"
+
+    Exactamente. Esta advertencia está diciendo: **`position: absolute` es una herramienta potente, pero no debes usarla para construir el layout normal de una página.** En este caso concreto sí tiene sentido.
+
+    Vamos a desmenuzarlo.
+
+    ---
+
+    __1. ¿Qué significa "sacarlo del flujo"?__
+
+    Normalmente HTML funciona así:
+
+    ```html
+    <div>Uno</div>
+    <div>Dos</div>
+    <div>Tres</div>
+    ```
+
+    Los elementos participan en el **flujo normal**:
+
+    ```text
+    ┌──────────────┐
+    │     Uno      │
+    ├──────────────┤
+    │     Dos      │
+    ├──────────────┤
+    │    Tres      │
+    └──────────────┘
+    ```
+
+    El navegador calcula:
+
+    > "Uno ocupa este espacio, entonces pongo Dos debajo.
+    > Dos ocupa este espacio, entonces pongo Tres debajo."
+
+    Eso es el **flujo natural**.
+
+    ---
+
+    __2. ¿Qué pasa con `position: absolute`?__
+
+    Si haces:
+
+    ```css
+    .dos {
+        position: absolute;
+    }
+    ```
+
+    `Dos` deja de participar en ese cálculo.
+
+    Es como si le dijeras al navegador:
+
+    > "No tengas en cuenta a `Dos` cuando estés organizando los demás elementos. Yo me encargo de dónde va."
+
+    Entonces puede ocurrir:
+
+    ```text
+    ┌──────────────┐
+    │     Uno      │
+    │              │
+    │     Dos      │
+    │              │
+    │    Tres      │
+    └──────────────┘
+    ```
+
+    `Dos` puede terminar **encima de otros elementos**.
+
+    Por eso la documentación dice:
+
+    > puede llevar fácilmente a problemas como superposición y contenido oscurecido.
+
+    ---
+
+    __3. Un ejemplo clásico de un mal uso__
+
+    Supongamos:
+
+    ```html
+    <section class="header">
+        Header
+    </section>
+
+    <section class="content">
+        Contenido importante
+    </section>
+    ```
+
+    Y haces:
+
+    ```css
+    .header {
+        position: absolute;
+        height: 100px;
+    }
+    ```
+
+    Ahora el `header` ya no ocupa sus 100px dentro del flujo.
+
+    El navegador calcula el contenido como si el header no estuviera:
+
+    ```text
+    ┌───────────────────┐
+    │ HEADER            │
+    │                   │
+    ├───────────────────┤
+    │                   │
+    │ CONTENIDO         │
+    │                   │
+    └───────────────────┘
+    ```
+
+    Pero dependiendo del posicionamiento, el contenido puede quedar **debajo del header**:
+
+    ```text
+    ┌───────────────────┐
+    │ HEADER            │
+    │ CONTENIDO         │ ← superposición
+    │ CONTENIDO         │
+    └───────────────────┘
+    ```
+
+    Eso es normalmente una mala idea.
+
+    Para construir layouts normales tienes herramientas como:
+
+    ```css
+    display: flex;
+    display: grid;
+    margin;
+    padding;
+    gap;
+    ```
+
+    No necesitas sacar elementos del flujo constantemente.
+
+    ---
+
+    __4. Entonces ¿por qué Every Layout lo está usando?__
+
+    Aquí está la parte importante.
+
+    En el ejemplo anterior tenemos:
+
+    ```css
+    .frame {
+        padding-bottom: ...;
+        position: relative;
+    }
+    ```
+
+    y:
+
+    ```css
+    .frame > * {
+        position: absolute;
+        inset: 0;
+    }
+    ```
+
+    Esto está diseñado específicamente para un **Frame**.
+
+    Tenemos:
+
+    ```text
+    FRAME
+    ┌──────────────────────┐
+    │                      │
+    │       CONTENIDO      │
+    │                      │
+    └──────────────────────┘
+    ```
+
+    El padre `.frame` es quien **determina el espacio que ocupa en el documento**.
+
+    El hijo simplemente se coloca **dentro de ese espacio**.
+
+    Por tanto, no estamos intentando organizar:
+
+    ```text
+    Header
+    Nav
+    Main
+    Footer
+    ```
+
+    con `absolute`.
+
+    Estamos diciendo:
+
+    > "Tengo una caja de proporción fija. Quiero que este contenido ocupe exactamente esa caja."
+
+    Ahí `absolute` encaja perfectamente.
+
+    ---
+
+    __5. La frase más importante del texto__
+
+    Dice:
+
+    > "fijando el elemento hijo a cada una de las esquinas de su padre."
+
+    Eso es literalmente:
+
+    ```css
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    ```
+
+    Visualmente:
+
+    ```text
+                    padre
+            ┌─────────────────────┐
+            │●──────────────────●│
+            ││                  ││
+            ││     hijo         ││
+            ││                  ││
+            │●──────────────────●│
+            └─────────────────────┘
+            ↑                  ↑
+          esquinas           esquinas
+    ```
+
+    El hijo está anclado a las cuatro esquinas.
+
+    Y por eso ocupa exactamente el área del padre.
+
+    ---
+
+    __6. ¿Qué significa "esperamos que ocurra recorte"?__
+
+    Esta parte también es importante.
+
+    Supongamos que tienes una imagen:
+
+    ```text
+    imagen original
+
+    ┌─────────────────────────────┐
+    │                             │
+    │           FOTO              │
+    │                             │
+    │                             │
+    └─────────────────────────────┘
+    ```
+
+    Pero tu Frame es más pequeño:
+
+    ```text
+    ┌──────────────────┐
+    │                  │
+    │      FOTO        │
+    │                  │
+    └──────────────────┘
+    ```
+
+    Si obligas a la imagen a ocupar el Frame:
+
+    ```css
+    img {
+        width: 100%;
+        height: 100%;
+    }
+    ```
+
+    puede deformarse.
+
+    Por eso normalmente utilizarías:
+
+    ```css
+    object-fit: cover;
+    ```
+
+    Entonces:
+
+    ```text
+    imagen original
+    ┌─────────────────────────────┐
+    │                             │
+    │                             │
+    │          FOTO               │
+    │                             │
+    │                             │
+    └─────────────────────────────┘
+
+              ↓ cover
+
+    ┌──────────────────┐
+    │      FOTO        │
+    │                  │
+    └──────────────────┘
+    ```
+
+    Parte de la imagen desaparece.
+
+    **Y eso está bien.**
+
+    ---
+
+    __7. ¿Por qué dice "nos negamos a enmarcar cualquier contenido que necesite verse en su totalidad"?__
+
+    Porque este componente tiene una filosofía específica:
+
+    > **El Frame sirve para contenido que puede ser recortado.**
+
+    Por ejemplo:
+
+    * imágenes decorativas
+    * vídeos
+    * fondos
+    * thumbnails
+    * portadas
+
+    Pero imagina que metes esto:
+
+    ```html
+    <div class="frame">
+        <p>
+            Este es un párrafo enorme con información importante...
+        </p>
+    </div>
+    ```
+
+    Y el texto necesita crecer.
+
+    Si el Frame tiene una altura estrictamente determinada:
+
+    ```text
+    ┌──────────────────┐
+    │ Este es un       │
+    │ párrafo enorme   │
+    │ con información  │
+    │ importante...    │
+    │                  │
+    │                  │
+    └──────────────────┘
+    ```
+
+    y el contenido se sale, puedes terminar recortándolo.
+
+    **Eso sería terrible para contenido que necesita leerse completo.**
+
+    Por eso Every Layout dice, básicamente:
+
+    > No uses este patrón para contenido que necesite conservarse íntegramente.
+
+    ---
+
+    __8. La regla mental que quiero que te quede__
+
+    Piensa así:
+
+    __❌ `absolute` para construir el layout general__
+
+    ```text
+    Header
+      ↓
+    absolute
+
+    Nav
+      ↓
+    absolute
+
+    Main
+      ↓
+    absolute
+
+    Footer
+      ↓
+    absolute
+    ```
+
+    Mal enfoque. Te estás peleando contra el flujo natural de CSS.
+
+    __✅ `absolute` para una relación espacial muy concreta__
+
+    ```text
+    Frame
+    │
+    └── Imagen
+          ↓
+        absolute
+        inset: 0
+    ```
+
+    Perfectamente válido.
+
+    Porque aquí existe una relación clara:
+
+    > **"Este elemento debe ocupar exactamente el área de su padre."**
+
+    ---
+
+    __En una frase__
+
+    **`position: absolute` no es malo; usarlo para cosas que deberían resolverse mediante el flujo normal sí suele serlo.**
+
+    En este Frame, Every Layout lo utiliza de forma deliberada: **el padre reserva el espacio y el hijo se superpone dentro de ese espacio para poder recortar su contenido.**
+
+    Y fíjate en algo interesante: esto conecta directamente con lo que has estado aprendiendo de **Every Layout**. La filosofía no es memorizar "usa `absolute` aquí", sino entender **qué relación espacial quieres expresar** y escoger la herramienta CSS que la represente.
+
 
 ## Recorte (Cropping)
 
