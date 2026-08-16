@@ -3732,7 +3732,7 @@ Ahora cualquier elemento simple se colocará en el centro del `Frame`, y se reco
 
     Resultado:
 
-    ```text id="0ow2qy"
+    ```text
     ┌──────────────────────────────┐
     │                              │
     │                              │
@@ -3758,7 +3758,7 @@ Ahora cualquier elemento simple se colocará en el centro del `Frame`, y se reco
 
     El `.frame` crea el rectángulo:
 
-    ```text id="x4f4pg"
+    ```text 
     ┌──────────────────────────────┐
     │                              │
     │                              │
@@ -3790,7 +3790,7 @@ Ahora cualquier elemento simple se colocará en el centro del `Frame`, y se reco
 
     centra **su contenido**.
 
-    ```text id="4k9eoj"
+    ```text 
     ┌──────────────────────────────┐
     │                              │
     │                              │
@@ -3816,7 +3816,7 @@ Ahora cualquier elemento simple se colocará en el centro del `Frame`, y se reco
 
     Por ejemplo, si tenemos un contenido enorme:
 
-    ```text id="j1g27w"
+    ```text 
     CONTENIDO
     ┌────────────────────────────────────────────┐
     │                                            │
@@ -3827,7 +3827,7 @@ Ahora cualquier elemento simple se colocará en el centro del `Frame`, y se reco
 
     pero el Frame solamente permite:
 
-    ```text id="8tqv3c"
+    ```text 
     ┌───────────────────────┐
     │                       │
     │       TEXTO           │
@@ -3837,7 +3837,7 @@ Ahora cualquier elemento simple se colocará en el centro del `Frame`, y se reco
 
     todo lo que queda fuera:
 
-    ```text id="4brp80"
+    ```text 
     ████████████████████████████████
     ████████████████████████████████
     ```
@@ -3869,7 +3869,7 @@ Ahora cualquier elemento simple se colocará en el centro del `Frame`, y se reco
 
     Por ejemplo:
 
-    ```html id="2sh4ph"
+    ```html 
     <div class="frame">
       <div>
         Este es un texto muy grande...
@@ -3879,7 +3879,7 @@ Ahora cualquier elemento simple se colocará en el centro del `Frame`, y se reco
 
     Si el contenido es demasiado alto:
 
-    ```text id="f7xwcx"
+    ```text 
     ┌──────────────────────────────┐
     │                              │
     │         contenido            │
@@ -3906,7 +3906,7 @@ Ahora cualquier elemento simple se colocará en el centro del `Frame`, y se reco
 
     Supongamos que:
 
-    ```text id="9rxrmy"
+    ```text 
     Frame = 300px alto
     contenido = 500px alto
     ```
@@ -3915,7 +3915,7 @@ Ahora cualquier elemento simple se colocará en el centro del `Frame`, y se reco
 
     Como está centrado:
 
-    ```text id="xx4gll"
+    ```text 
         contenido 500px
     ┌──────────────────────┐
     │      ← 100px →       │
@@ -3986,7 +3986,7 @@ Ahora cualquier elemento simple se colocará en el centro del `Frame`, y se reco
 
     Así:
 
-    ```text id="kq8b1n"
+    ```text 
                         FRAME
                           │
               ┌───────────┴───────────┐
@@ -4010,7 +4010,7 @@ Ahora cualquier elemento simple se colocará en el centro del `Frame`, y se reco
 
     Imagina un texto:
 
-    ```text id="48thc0"
+    ```text 
     Este es un texto muy largo que
     puede ocupar varias líneas.
     ```
@@ -4019,7 +4019,7 @@ Ahora cualquier elemento simple se colocará en el centro del `Frame`, y se reco
 
     Entonces, aunque el texto sea muy largo, simplemente puede hacer:
 
-    ```text id="q2o8jh"
+    ```text 
     ┌───────────────────────┐
     │ Este es un texto muy  │
     │ largo que puede       │
@@ -4043,7 +4043,7 @@ Ahora cualquier elemento simple se colocará en el centro del `Frame`, y se reco
 
     Por ejemplo:
 
-    ```css id="f2kkw6"
+    ```css 
     width: 30ch;
     ```
 
@@ -4053,7 +4053,7 @@ Ahora cualquier elemento simple se colocará en el centro del `Frame`, y se reco
 
     Entonces puedes hacer que un texto sea deliberadamente más ancho que el Frame:
 
-    ```css id="x6es3q"
+    ```css 
     .frame > * {
       width: 100ch;
     }
@@ -4061,19 +4061,19 @@ Ahora cualquier elemento simple se colocará en el centro del `Frame`, y se reco
 
     Si el Frame solamente mide:
 
-    ```text id="ck9hkd"
+    ```text 
     30ch
     ```
 
     pero el contenido mide:
 
-    ```text id="o1aj7y"
+    ```text 
     100ch
     ```
 
     entonces sí existe contenido que puede sobresalir horizontalmente:
 
-    ```text id="4jym3j"
+    ```text 
     ┌──────────────────────────┐
     │       CONTENIDO →→→→→→→→│
     └──────────────────────────┘
@@ -4149,7 +4149,7 @@ Ahora cualquier elemento simple se colocará en el centro del `Frame`, y se reco
 
     Y ambos terminan comportándose como una **ventana**:
 
-    ```text id="3j1b0x"
+    ```text 
                         FRAME
           ┌────────────────────────┐
           │                        │
@@ -4176,7 +4176,7 @@ Ahora cualquier elemento simple se colocará en el centro del `Frame`, y se reco
 
     Aquí ya puedes ver el patrón completo de **The Frame**:
 
-    ```text id="j3k8xh"
+    ```text 
             RELACIÓN CONSTANTE
                   ↓
             aspect-ratio
@@ -4277,7 +4277,7 @@ Las imágenes de fondo no pueden tomar texto alternativo directamente, y tambié
 
     Si el Frame es:
 
-    ```text id="5c3v6p"
+    ```text 
     16:9
     ┌──────────────────────────────┐
     │                              │
@@ -4287,7 +4287,7 @@ Las imágenes de fondo no pueden tomar texto alternativo directamente, y tambié
 
     y la imagen es:
 
-    ```text id="75y2fz"
+    ```text 
     1:1
     ┌───────────────┐
     │               │
@@ -4297,7 +4297,7 @@ Las imágenes de fondo no pueden tomar texto alternativo directamente, y tambié
 
     `background-size: cover` la amplía hasta cubrir:
 
-    ```text id="1n5y6a"
+    ```text 
     ┌──────────────────────────────┐
     │                              │
     │           IMAGEN             │
@@ -4423,7 +4423,7 @@ Las imágenes de fondo no pueden tomar texto alternativo directamente, y tambié
 
     Por ejemplo:
 
-    ```text id="ezr1qs"
+    ```text
     ┌─────────────────────────────┐
     │                             │
     │       TÍTULO DEL SITIO      │
@@ -4443,7 +4443,7 @@ Las imágenes de fondo no pueden tomar texto alternativo directamente, y tambié
 
     Si desaparece:
 
-    ```text id="0p3wzo"
+    ```text 
     ┌─────────────────────────────┐
     │                             │
     │       TÍTULO DEL SITIO      │
@@ -4461,7 +4461,7 @@ Las imágenes de fondo no pueden tomar texto alternativo directamente, y tambié
 
     Por ejemplo:
 
-    ```text id="p4es0a"
+    ```text 
     Foto de un producto
     Foto de una persona
     Foto de un lugar
@@ -4506,7 +4506,7 @@ Las imágenes de fondo no pueden tomar texto alternativo directamente, y tambié
 
     y visualmente normalmente:
 
-    ```text id="07e7sg"
+    ```text 
     ┌──────────────────────────────┐
     │                              │
     │          👤                  │
