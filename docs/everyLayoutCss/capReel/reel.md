@@ -134,7 +134,7 @@ Formalicé un [*"carousel" accesible para la BBC* ↗](https://bbc.github.io/gel
 
     ---
 
-  __3. ¿Por qué normalmente hacemos scroll vertical?__
+    __3. ¿Por qué normalmente hacemos scroll vertical?__
 
     Aquí entra algo interesante: **CSS tiene modos de escritura**.
 
