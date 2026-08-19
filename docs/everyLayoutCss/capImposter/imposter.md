@@ -14,6 +14,514 @@ Pero, ¿qué pasa si *querías* ocultar contenido, colocando otro contenido sobr
 
 El propósito del elemento `Imposter` es agregar un elemento de *superposición* de propósito general a tu suite de layouts. Permitirá al autor posicionar centralmente un elemento sobre el viewport, el documento, o un elemento "contenedor de posicionamiento" seleccionado.
 
+
+??? info "Explicaciom"
+
+    Claro. Esta primitiva **Imposter** de *Every Layout* parece complicada por el tema de `position`, pero la idea central es bastante sencilla:
+
+    > **Imposter sirve para poner temporalmente un elemento encima de otro contenido, normalmente centrado, sin que ese elemento participe en el layout normal.**
+
+    La clave es entender **cuándo está justificado romper el flujo normal**.
+
+    ---
+
+    __1. Primero: ¿qué problema intenta resolver?__
+
+    Normalmente, CSS funciona así:
+
+    ```html
+    <div>Contenido A</div>
+    <div>Contenido B</div>
+    <div>Contenido C</div>
+    ```
+
+    El navegador coloca los elementos siguiendo el flujo:
+
+    ```text
+    Contenido A
+    Contenido B
+    Contenido C
+    ```
+
+    Cada elemento ocupa su espacio y los demás saben que existe.
+
+    Eso es lo que *Every Layout* intenta aprovechar: **dejar que los algoritmos del navegador hagan la mayor parte del trabajo**.
+
+    Pero hay situaciones donde **precisamente quieres que algo ignore el flujo**.
+
+    Por ejemplo:
+
+    ```text
+    ┌─────────────────────────────┐
+    │                             │
+    │       CONTENIDO             │
+    │                             │
+    │          ┌───────┐          │
+    │          │ MODAL │          │
+    │          └───────┘          │
+    │                             │
+    └─────────────────────────────┘
+    ```
+
+    El modal tiene que estar **encima** del contenido.
+
+    No quieres esto:
+
+    ```text
+    Contenido
+    Modal
+    Más contenido
+    ```
+
+    Quieres esto:
+
+    ```text
+    Contenido
+      ↑
+    Modal encima
+    ```
+
+    Ahí entra **Imposter**.
+
+    ---
+
+    __2. ¿Por qué se llama "Imposter"?__
+
+    La metáfora es bastante buena.
+
+    Un *impostor* es algo que **se coloca en el lugar de otra cosa** o aparenta estar donde no debería.
+
+    En CSS, el `Imposter` se mete visualmente **encima de otro contenido**, como si fuera una capa independiente.
+
+    Por ejemplo:
+
+    * un modal
+    * un diálogo
+    * un menú desplegable
+    * un tooltip
+    * un botón flotante
+    * un indicador
+    * un overlay
+    * un mensaje temporal
+
+    Todos tienen algo en común:
+
+    > **No quieres que su existencia cambie el layout del contenido que está debajo.**
+
+    ---
+
+    __3. ¿Por qué `position: absolute`?__
+
+    Supongamos que tienes:
+
+    ```html
+    <div class="contenido">
+        Texto
+    </div>
+
+    <div class="modal">
+        Hola
+    </div>
+    ```
+
+    Normalmente:
+
+    ```text
+    ┌───────────────┐
+    │ Texto         │
+    ├───────────────┤
+    │ Hola          │
+    └───────────────┘
+    ```
+
+    Pero si haces:
+
+    ```css
+    .modal {
+        position: absolute;
+    }
+    ```
+
+    el modal sale del flujo normal.
+
+    Ahora el navegador piensa aproximadamente:
+
+    > "Este elemento ya no participa en cómo se distribuyen los demás elementos. Yo me encargo de colocarlo por separado."
+
+    Entonces puedes conseguir:
+
+    ```text
+    ┌──────────────────────────┐
+    │ Texto                    │
+    │                          │
+    │       ┌──────────┐       │
+    │       │  Hola    │       │
+    │       └──────────┘       │
+    │                          │
+    └──────────────────────────┘
+    ```
+
+    Eso es exactamente lo que **sí queremos** en este caso.
+
+    Por eso el texto dice:
+
+    > "¿Qué pasa si querías ocultar contenido colocando otro contenido sobre él?"
+
+    Ahí está la excepción.
+
+    ---
+
+    __4. El problema con `absolute`__
+
+    Aquí está la parte importante de *Every Layout*.
+
+    No está diciendo:
+
+    > "`position: absolute` es malo."
+
+    Está diciendo:
+
+    > **No uses `absolute` para resolver problemas que el layout normal puede resolver.**
+
+    Por ejemplo, esto sería mala idea:
+
+    ```css
+    .card-title {
+        position: absolute;
+        top: 20px;
+        left: 30px;
+    }
+    ```
+
+    si simplemente querías colocar un título dentro de una tarjeta.
+
+    Porque probablemente podrías resolverlo con:
+
+    ```css
+    .card {
+        display: flex;
+        flex-direction: column;
+    }
+    ```
+
+    o Grid, Stack, Center, etc.
+
+    Pero para un modal:
+
+    ```css
+    .modal {
+        position: absolute;
+    }
+    ```
+
+    tiene muchísimo sentido.
+
+    Porque **el modal realmente debe estar fuera del flujo**.
+
+    ---
+
+    __5. ¿Qué significa "centralmente"?__
+
+    El `Imposter` normalmente busca algo como esto:
+
+    ```text
+    ┌──────────────────────────────┐
+    │                              │
+    │                              │
+    │          ┌────────┐          │
+    │          │        │          │
+    │          │Imposter│          │
+    │          │        │          │
+    │          └────────┘          │
+    │                              │
+    │                              │
+    └──────────────────────────────┘
+    ```
+
+    Es decir:
+
+    **centrar un elemento superpuesto dentro de algún contexto.**
+
+    Y ese contexto puede ser:
+
+    __El viewport__
+
+    La ventana del navegador:
+
+    ```text
+    ┌──────────────────────────────┐
+    │                              │
+    │                              │
+    │          ┌────────┐          │
+    │          │ MODAL  │          │
+    │          └────────┘          │
+    │                              │
+    └──────────────────────────────┘
+    ```
+
+    Perfecto para un modal.
+
+    ---
+
+    __El documento__
+
+    También puede posicionarse respecto al documento.
+
+    Esto puede ser útil cuando el elemento debe superponerse pero seguir perteneciendo a una determinada zona de la página.
+
+    ---
+
+    __Un contenedor__
+
+    Esta es una idea muy importante.
+
+    Imagina:
+
+    ```html
+    <div class="card">
+        <img>
+        <div class="imposter">
+            ...
+        </div>
+    </div>
+    ```
+
+    Quieres que el `Imposter` se posicione respecto a `.card`.
+
+    Entonces `.card` se convierte en el **contenedor de posicionamiento**.
+
+    Conceptualmente:
+
+    ```text
+    ┌──────────────────────────────┐
+    │ CARD                         │
+    │                              │
+    │       ┌────────────┐         │
+    │       │ IMPOSTER   │         │
+    │       └────────────┘         │
+    │                              │
+    └──────────────────────────────┘
+    ```
+
+    Esto normalmente se consigue haciendo que el padre establezca el contexto de posicionamiento:
+
+    ```css
+    .card {
+        position: relative;
+    }
+    ```
+
+    y el hijo:
+
+    ```css
+    .imposter {
+        position: absolute;
+    }
+    ```
+
+    Entonces:
+
+    ```text
+    .card
+      │
+      └── establece el contexto
+              │
+              ▼
+          .imposter
+          se posiciona
+          respecto a .card
+    ```
+
+    ---
+
+    __6. Esto conecta directamente con lo que viste en Frame__
+
+    Recuerda la idea de **Frame** que estabas estudiando.
+
+    Frame intenta conseguir algo parecido a:
+
+    ```text
+    ┌────────────────────────────┐
+    │                            │
+    │                            │
+    │         CONTENIDO          │
+    │                            │
+    │                            │
+    └────────────────────────────┘
+    ```
+
+    pero **sin sacar elementos del flujo**.
+
+    Por eso utiliza cosas como:
+
+    ```css
+    display: flex;
+    flex-direction: column;
+    ```
+
+    y:
+
+    ```css
+    margin-block: auto;
+    ```
+
+    para distribuir el espacio.
+
+    Eso es layout normal.
+
+    ---
+
+    __7. Imposter es casi lo contrario__
+
+    Puedes verlo así:
+
+    __Frame__
+
+    > "Navegador, organiza los elementos por mí."
+
+    ```text
+    Layout automático
+          ↓
+    ┌──────────────┐
+    │ elemento     │
+    │ elemento     │
+    │ elemento     │
+    └──────────────┘
+    ```
+
+    __Imposter__
+
+    > "Navegador, este elemento quiero colocarlo yo por encima."
+
+    ```text
+    Layout normal
+          +
+    elemento superpuesto
+    ```
+
+    ```text
+    ┌──────────────────────┐
+    │ contenido             │
+    │       ┌────────┐      │
+    │       │ overlay│      │
+    │       └────────┘      │
+    │ contenido             │
+    └──────────────────────┘
+    ```
+
+    Por eso en *Every Layout* estas primitivas se complementan.
+
+    No son recetas aisladas.
+
+    ---
+
+    __8. Un ejemplo real: modal__
+
+    Supongamos:
+
+    ```html
+    <main>
+        <h1>Mi página</h1>
+        <p>Muchísimo contenido...</p>
+    </main>
+
+    <div class="modal">
+        <h2>¿Eliminar elemento?</h2>
+        <button>Cancelar</button>
+        <button>Eliminar</button>
+    </div>
+    ```
+
+    El contenido de `main` debe seguir existiendo debajo.
+
+    El modal no debe empujar el contenido:
+
+    ❌
+
+    ```text
+    Página
+    Página
+    Página
+    Modal
+    Página
+    ```
+
+    Debe aparecer **encima**:
+
+    ✅
+
+    ```text
+    Página
+    Página
+      ┌───────────────┐
+      │ ¿Eliminar?    │
+      │               │
+      │ Cancelar      │
+      │ Eliminar      │
+      └───────────────┘
+    Página
+    Página
+    ```
+
+    Ahí `Imposter` es exactamente la herramienta adecuada.
+
+    ---
+
+    __9. La frase más importante del texto__
+
+    Esta:
+
+    > "El propósito del elemento `Imposter` es agregar un elemento de superposición de propósito general a tu suite de layouts."
+
+    Traducido a lenguaje más directo:
+
+    > **Imposter es la primitiva que debes usar cuando necesitas romper deliberadamente el flujo para colocar una cosa encima de otra.**
+
+    Ese es el concepto que debes llevarte.
+
+    ---
+
+    __10. ¿Cuándo usarlo?__
+
+    Piensa en esta pregunta:
+
+    > **¿Quiero que este elemento ocupe espacio dentro del layout o quiero que flote encima de él?**
+
+    Si quieres que ocupe espacio:
+
+    ```text
+    Stack
+    Cluster
+    Switcher
+    Sidebar
+    Grid
+    Frame
+    Center
+    ...
+    ```
+
+    Si quieres que esté **encima**:
+
+    ```text
+    Imposter
+    ```
+
+    Por ejemplo:
+
+    | Situación                           | Primitiva    |
+    | ----------------------------------- | ------------ |
+    | Elementos uno debajo de otro        | Stack        |
+    | Elementos agrupados horizontalmente | Cluster      |
+    | Cambiar entre fila/columna          | Switcher     |
+    | Imagen + contenido lateral          | Sidebar      |
+    | Centrar contenido                   | Center       |
+    | Distribuir contenido en una región  | Frame        |
+    | **Poner algo encima de otra cosa**  | **Imposter** |
+
+    Y ahí está la filosofía de *Every Layout*: **no memorizar trucos CSS, sino identificar qué problema de layout tienes y elegir la primitiva adecuada**.
+
+    En tu caso, después de haber entendido `Frame`, `Sidebar`, `Switcher`, `Stack` y demás, **Imposter es una de las pocas primitivas donde realmente sí debes aceptar `position: absolute`**. No estás "haciendo trampa"; estás usando una herramienta especializada para un problema que el flujo normal no puede resolver elegantemente.
+
 ## La solución
 
 Hay muchas formas de posicionar elementos centralmente verticalmente, y muchas más para posicionarlos horizontalmente (algunas alternativas se mencionaron como parte del layout `Center`). Sin embargo, solo hay algunas formas de posicionar elementos centralmente *sobre* otros elementos/contenido.
@@ -21,6 +529,539 @@ Hay muchas formas de posicionar elementos centralmente verticalmente, y muchas m
 El enfoque contemporáneo es *usar CSS Grid* ↗. Una vez que tu grilla está establecida, puedes organizar el contenido por número de línea de grilla. El concepto de *flujo* se vuelve irrelevante, y la superposición es eminentemente alcanzable donde sea deseada.
 
 ![](gridarea.png)
+
+??? info "Explicacion"
+
+    Exactamente. Aquí *Every Layout* está dando un paso más interesante: **ya no está hablando simplemente de `position: absolute`**, sino de una forma moderna de conseguir superposición usando **CSS Grid**.
+
+    La idea fundamental es esta:
+
+    > **Grid permite que varios elementos ocupen la misma celda.**
+
+    Y eso hace que puedan quedar **uno encima del otro sin necesidad de sacarlos del flujo mediante `position: absolute`**.
+
+    ---
+
+    __1. Primero: ¿qué significa "superponer"?__
+
+    Imagina esto:
+
+    ```text
+    ┌──────────────────────────────┐
+    │                              │
+    │        IMAGEN                │
+    │                              │
+    │          ┌──────────┐        │
+    │          │  TEXTO   │        │
+    │          └──────────┘        │
+    │                              │
+    └──────────────────────────────┘
+    ```
+
+    Tenemos:
+
+    * una imagen
+    * texto encima de la imagen
+
+    Con el layout tradicional, los elementos normalmente se colocan:
+
+    ```text
+    Imagen
+
+    Texto
+    ```
+
+    Uno después del otro.
+
+    Pero nosotros queremos:
+
+    ```text
+    Imagen
+      ↑
+    Texto encima
+    ```
+
+    Eso es **superposición**.
+
+    ---
+
+    __2. ¿Cómo lo hacemos con Grid?__
+
+    La magia está en esto:
+
+    ```css
+    .imposter {
+        display: grid;
+    }
+    ```
+
+    Y luego hacemos que los elementos ocupen la misma área:
+
+    ```css
+    .imposter > * {
+        grid-area: 1 / 1;
+    }
+    ```
+
+    Ahora imagina:
+
+    ```html
+    <div class="imposter">
+        <img src="imagen.jpg">
+        <div class="texto">
+            Hola
+        </div>
+    </div>
+    ```
+
+    Normalmente pensarías:
+
+    ```text
+    grid
+    ├── imagen
+    └── texto
+    ```
+
+    Pero ambos tienen:
+
+    ```css
+    grid-area: 1 / 1;
+    ```
+
+    por lo que Grid dice:
+
+    > "Los dos van a la misma área."
+
+    Resultado:
+
+    ```text
+    ┌──────────────────────┐
+    │                      │
+    │       IMAGEN         │
+    │                      │
+    │      ┌────────┐      │
+    │      │  Hola  │      │
+    │      └────────┘      │
+    │                      │
+    └──────────────────────┘
+    ```
+
+    ---
+
+    __3. ¿Qué quiere decir el texto con "el concepto de flujo se vuelve irrelevante"?__
+
+    Esta parte es importante.
+
+    En un layout normal tienes algo como:
+
+    ```text
+    Elemento A
+        ↓
+    Elemento B
+        ↓
+    Elemento C
+    ```
+
+    El orden importa muchísimo.
+
+    El navegador dice:
+
+    > A ocupa este espacio, después pongo B, después C.
+
+    Eso es el **flujo**.
+
+    ---
+
+    Con Grid puedes decir:
+
+    ```text
+    A → área 1
+    B → área 1
+    C → área 2
+    ```
+
+    Por ejemplo:
+
+    ```text
+    ┌──────────────────────┐
+    │                      │
+    │       A + B          │
+    │       superpuestos   │
+    │                      │
+    ├──────────────────────┤
+    │          C           │
+    └──────────────────────┘
+    ```
+
+    A y B **no necesitan estar uno después del otro**.
+
+    Ambos pueden estar en la misma celda.
+
+    Por eso el texto dice:
+
+    > "El concepto de flujo se vuelve irrelevante"
+
+    No significa literalmente que CSS deje de tener flujo. Significa que **para decidir dónde se colocan esos elementos, ya no dependes de que uno tenga que ir después del otro**.
+
+    Grid te permite declarar:
+
+    > "Estos dos pertenecen a esta misma área."
+
+    ---
+
+    __4. ¿Qué significa "por número de línea de grilla"?__
+
+    Aquí entra la parte que probablemente estás viendo en la imagen.
+
+    Una grid tiene líneas:
+
+    ```text
+        línea 1       línea 2       línea 3
+          ↓             ↓             ↓
+          │             │             │
+          │             │             │
+          │             │             │
+          │             │             │
+    ```
+
+    Por ejemplo:
+
+    ```css
+    .container {
+        display: grid;
+    }
+    ```
+
+    Creamos una grid de una columna:
+
+    ```text
+    línea 1
+      │
+      │
+      │
+    línea 2
+    ```
+
+    Entonces:
+
+    ```css
+    .elemento {
+        grid-column: 1;
+    }
+    ```
+
+    significa:
+
+    > ocupa la columna que está entre las líneas 1 y 2.
+
+    ---
+
+    Pero puedes hacer algo mucho más interesante.
+
+    Supongamos una grid:
+
+    ```text
+          1       2       3
+          │       │       │
+          │       │       │
+          │       │       │
+          │       │       │
+    ```
+
+    Puedes decir:
+
+    ```css
+    .imagen {
+        grid-area: 1 / 1 / 3 / 3;
+    }
+    ```
+
+    Y:
+
+    ```css
+    .texto {
+        grid-area: 1 / 1 / 3 / 3;
+    }
+    ```
+
+    Ambos ocupan **exactamente la misma área**.
+
+    Por tanto:
+
+    ```text
+    ┌───────────────────────┐
+    │                       │
+    │       IMAGEN          │
+    │                       │
+    │        TEXTO          │
+    │                       │
+    └───────────────────────┘
+    ```
+
+    ---
+
+    __5. Aquí aparece algo muy importante de Grid__
+
+    Probablemente ya has visto Grid pensando:
+
+    ```css
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    ```
+
+    y lo has asociado con:
+
+    ```text
+    ┌──────┬──────┬──────┐
+    │      │      │      │
+    ├──────┼──────┼──────┤
+    │      │      │      │
+    └──────┴──────┴──────┘
+    ```
+
+    Pero Grid también permite esto:
+
+    ```text
+    ┌──────────────────────┐
+    │                      │
+    │    elemento A        │
+    │       +              │
+    │    elemento B        │
+    │                      │
+    └──────────────────────┘
+    ```
+
+    Es decir:
+
+    **Grid no solamente sirve para repartir elementos. También sirve para hacerlos compartir espacio.**
+
+    Y esto es justamente lo que aprovecha `Imposter`.
+
+    ---
+
+    __6. ¿Y por qué es mejor que `absolute`?__
+
+    Porque con `absolute` tienes que pensar en coordenadas:
+
+    ```css
+    .elemento {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    ```
+
+    Estás básicamente diciendo:
+
+    > "Quiero que este elemento se coloque aquí."
+
+    Eso es **posicionamiento manual**.
+
+    Con Grid dices:
+
+    ```css
+    .container {
+        display: grid;
+    }
+
+    .elemento {
+        grid-area: 1 / 1;
+    }
+    ```
+
+    Y estás diciendo:
+
+    > "Este elemento pertenece a esta misma área que el otro."
+
+    Es una diferencia conceptual importante.
+
+    __`absolute`__
+
+    ```text
+    "Ponlo aquí."
+            ↓
+      coordenadas
+    ```
+
+    __Grid__
+
+    ```text
+    "Ponlo en esta área."
+            ↓
+      algoritmo de layout
+    ```
+
+    Y *Every Layout* prefiere la segunda filosofía cuando es posible.
+
+    ---
+
+    __7. Entonces, ¿Imposter ya no necesita `absolute`?__
+
+    Aquí está el matiz.
+
+    **No necesariamente.**
+
+    El patrón `Imposter` tradicional puede implementarse con `position: absolute`, porque ese es precisamente el mecanismo clásico para crear una superposición.
+
+    Pero el texto está diciendo:
+
+    > **Hoy CSS Grid nos ofrece otra herramienta para conseguir el mismo tipo de composición.**
+
+    Y para determinados casos puede ser incluso más elegante.
+
+    Por ejemplo:
+
+    ```css
+    .imposter {
+        display: grid;
+    }
+
+    .imposter > * {
+        grid-area: 1 / 1;
+    }
+    ```
+
+    Eso crea una especie de "escenario":
+
+    ```text
+                GRID
+                  │
+          ┌───────┴───────┐
+          │               │
+        imagen           texto
+          │               │
+          └───────┬───────┘
+                  ↓
+            misma área
+                  ↓
+          SUPERPOSICIÓN
+    ```
+
+    ---
+
+    __8. Y aquí hay una conexión brutal con diseño__
+
+    Esta técnica aparece muchísimo en interfaces modernas.
+
+    Por ejemplo:
+
+    __Imagen + degradado + texto__
+
+    ```text
+    ┌─────────────────────────┐
+    │                         │
+    │       FOTO              │
+    │                         │
+    │     ┌──────────────┐    │
+    │     │ Título       │    │
+    │     │ Descripción  │    │
+    │     └──────────────┘    │
+    └─────────────────────────┘
+    ```
+
+    Puedes tener:
+
+    ```text
+    Grid area 1
+    ├── imagen
+    ├── overlay
+    └── texto
+    ```
+
+    Todos en la misma área.
+
+    ---
+
+    __Botón sobre imagen__
+
+    ```text
+    ┌─────────────────────────┐
+    │                         │
+    │         FOTO            │
+    │                         │
+    │        [ PLAY ]         │
+    │                         │
+    └─────────────────────────┘
+    ```
+
+    ---
+
+    __Icono sobre avatar__
+
+    ```text
+          ┌──────────┐
+          │          │
+          │   FOTO   │
+          │          │
+          └──────────┘
+                ●
+    ```
+
+    ---
+
+    __Modal__
+
+    ```text
+    ┌─────────────────────────────┐
+    │                             │
+    │      página normal          │
+    │                             │
+    │       ┌────────────┐        │
+    │       │   MODAL    │        │
+    │       └────────────┘        │
+    │                             │
+    └─────────────────────────────┘
+    ```
+
+    Todos son casos de **elementos que comparten una región espacial**.
+
+    ---
+
+    __9. La idea que debes quedarte__
+
+    No memorices:
+
+    ```css
+    grid-area: 1 / 1;
+    ```
+
+    como un truco mágico.
+
+    Quédate con este modelo mental:
+
+    ```text
+    LAYOUT NORMAL
+
+    A
+    ↓
+    B
+    ↓
+    C
+
+    cada uno ocupa su espacio
+    ```
+
+    Mientras que:
+
+    ```text
+    GRID
+
+    A ─────┐
+          ├── misma área
+    B ─────┘
+
+          ↓
+
+    A está encima de B
+    ```
+
+    Y por eso CSS Grid es tan potente para `Imposter`.
+
+    **El navegador sigue haciendo el layout por ti; simplemente le estás diciendo que dos elementos pertenecen a la misma región.**
+
+    Esa es justamente la filosofía de *Every Layout*: **no pelearte con el navegador para colocar píxeles; describe la relación espacial que quieres y deja que CSS resuelva el resto.**
+
 
 ## Orden de fuente y capas
 
