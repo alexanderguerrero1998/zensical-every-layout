@@ -3869,7 +3869,7 @@ Dentro del observer, el `scrollWidth` del `Reel` se compara con su `clientWidth`
 
     Por ejemplo:
 
-    ```text id="lh44ju"
+    ```text 
     ┌──────────────────────┐
     │                      │
     │      viewport        │
@@ -3893,7 +3893,7 @@ Dentro del observer, el `scrollWidth` del `Reel` se compara con su `clientWidth`
 
     Supongamos:
 
-    ```text id="g4d9qn"
+    ```text 
     Contenido real:
 
     [A][B][C][D][E][F][G]
@@ -3914,7 +3914,7 @@ Dentro del observer, el `scrollWidth` del `Reel` se compara con su `clientWidth`
 
     Tenemos:
 
-    ```text id="1f2d8y"
+    ```text 
     scrollWidth
     800
       >
@@ -3938,7 +3938,7 @@ Dentro del observer, el `scrollWidth` del `Reel` se compara con su `clientWidth`
 
     Si:
 
-    ```text id="3sj3ar"
+    ```text
     800 > 500
     ```
 
@@ -3964,7 +3964,7 @@ Dentro del observer, el `scrollWidth` del `Reel` se compara con su `clientWidth`
 
     Si:
 
-    ```text id="q4h3mb"
+    ```text
     400 > 500
     ```
 
@@ -3999,7 +3999,7 @@ Dentro del observer, el `scrollWidth` del `Reel` se compara con su `clientWidth`
 
     Es prácticamente:
 
-    ```text id="xw9n3v"
+    ```text
     condición true
         ↓
     AGREGAR clase
@@ -4027,7 +4027,7 @@ Dentro del observer, el `scrollWidth` del `Reel` se compara con su `clientWidth`
 
     Si no:
 
-    ```text id="f8t9eq"
+    ```text
     No ResizeObserver
           ↓
     no JS adicional
@@ -4045,7 +4045,7 @@ Dentro del observer, el `scrollWidth` del `Reel` se compara con su `clientWidth`
 
     Por ejemplo:
 
-    ```text id="7r5kmb"
+    ```text
     Reel
     500px
       ↓
@@ -4235,7 +4235,7 @@ Dentro del observer, el `scrollWidth` del `Reel` se compara con su `clientWidth`
 
     Ahora podemos ver toda la arquitectura:
 
-    ```text id="skmqub"
+    ```text 
                         REEL
                           │
                 ┌────────┴────────┐
