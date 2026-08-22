@@ -3289,7 +3289,7 @@ Dado que `max-width` y `max-height` anulan `width` y `height` respectivamente, p
 
     Ahora tienes dos grupos de reglas:
 
-    ### Posicionamiento
+    __Posicionamiento__
 
     ```css
     top: 50%;
